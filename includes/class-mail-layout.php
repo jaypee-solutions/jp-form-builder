@@ -59,8 +59,9 @@ final class Mail_Layout {
     }
 
     /** @param array<string,string> $context */
-    public function wrap( string $content, array $context = [] ): string {
-        $layout = $this->sanitize( $this->get_layout() );
+    public function wrap( string $content, array $context = [], ?string $layout_override = null ): string {
+        $layout = null === $layout_override ? $this->get_layout() : $layout_override;
+        $layout = $this->sanitize( $layout );
         $values = [
             '{content}'    => $content,
             '{site_name}'  => esc_html( $context['site_name'] ?? get_bloginfo( 'name' ) ),
