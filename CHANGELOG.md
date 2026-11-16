@@ -17,6 +17,7 @@ extracts it as the GitHub release notes and fails without it.
 - Added the `/mail-preview` REST endpoint for authorized template previews.
 - Added the reusable Form block, Field blocks, and server-rendered accessible Form embeds.
 - Added Form parsing, defaults, published-Form lookup with revision resolution, country data, and the authenticated Forms picker endpoint.
+- Added the block editor UI: Field previews and inspector controls (Field key, required, help text, type-specific options, Select options editor), Form settings with recipient checks and Turnstile-gated Confirmation, and the Form embed picker with a server-side preview.
 
 ## [0.1.0] - 2026-11-16
 
