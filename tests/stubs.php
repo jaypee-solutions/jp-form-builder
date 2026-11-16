@@ -136,6 +136,18 @@ function esc_html( string $text ): string {
     return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
 }
 
+function esc_attr( string $text ): string {
+    return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
+}
+
+function determine_locale(): string {
+    return 'en_US';
+}
+
+function get_privacy_policy_url(): string {
+    return 'https://example.test/privacy';
+}
+
 function esc_html__( string $text, string $domain = 'default' ): string {
     return esc_html( $text );
 }
