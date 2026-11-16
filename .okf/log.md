@@ -1,0 +1,11 @@
+# Form Builder knowledge log
+
+## 2026-11-13
+* **Creation**: PRD, implementation plan and ADRs 0001–0008 for v1.
+* **Review**: Answers 2026-11-13 recorded: country list kept, anti-relay confirmation kept, uninstall deletes forms with backup/restore (ADR 0009), Turnstile-optional fallback (ADR 0003), HTML mail templating in v1 (ADR 0010), block build upstreamed as optional `uses_blocks` template question (ADR 0006).
+* **Reference**: Deployment and tooling facts gathered during PRD grilling (WP 6.6 JSX runtime floor, Exchange Online SMTP AUTH timeline, client mail/platform topology).
+* **Grilling round 1**: WordPress 6.6 minimum (ADR 0006), capability filter and top-level Forms menu (ADR 0001), text field, lazy activation on first interaction (ADR 0002), Confirmation requires Turnstile (ADR 0011), rate limit 10/600 s with proxy CIDRs (ADR 0003), M365 OAuth (ADR 0012, proposed), page-locale REST (ADR 0013), single-site only, PRD open defaults accepted; `GLOSSARY.md` created.
+* **Grilling round 2**: template branch fixes and PR for `v1.5.0`, stale cached markup validated against revisions (ADR 0014), Microsoft 365 via SMTP XOAUTH2 accepted (ADR 0012).
+
+## 2026-11-16
+* **Grilling round 3**: Mail layout, site-default and per-form Body templates edited in the admin with code editor and preview; theme-file override dropped (ADR 0010). Template `v1.5.0` released; P1 absorbs the CPT and its locked REST controller so the Forms menu exists from the start.

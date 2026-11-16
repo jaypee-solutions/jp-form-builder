@@ -1,0 +1,52 @@
+<?php
+/**
+ * Plugin Name:       JayPee Solutions Form Builder
+ * Plugin URI:        https://github.com/jaypee-solutions/jp-form-builder
+ * Description:       JayPee Solutions Form Builder is a WordPress plugin to create basic forms like a contact form.
+ * Version:           0.1.0
+ * Author:            Jan-Peter Alten
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       jp-form-builder
+ * Domain Path:       /languages
+ * Requires at least: 6.4
+ * Requires PHP:      8.0
+ *
+ * @package JayPee\FormBuilder
+ */
+
+declare( strict_types = 1 );
+
+namespace JayPee\FormBuilder;
+
+defined( 'ABSPATH' ) || exit;
+
+const VERSION     = '0.1.0';
+const PLUGIN_FILE = __FILE__;
+const GITHUB_REPO = 'jaypee-solutions/jp-form-builder';
+const UPDATE_URL  = 'https://github.com/jaypee-solutions/jp-form-builder/';
+
+// Bundled by scripts/build-release.sh; present in dev after `composer install`.
+if ( is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
+    require_once __DIR__ . '/vendor/autoload.php';
+}
+
+require_once __DIR__ . '/includes/class-updates.php';
+
+Updates::init();
+
+/**
+ * Bootstrap.
+ */
+add_action(
+    'plugins_loaded',
+    static function (): void {
+        load_plugin_textdomain(
+            'jp-form-builder',
+            false,
+            dirname( plugin_basename( PLUGIN_FILE ) ) . '/languages'
+        );
+
+        // Register the plugin's own features here.
+    }
+);
