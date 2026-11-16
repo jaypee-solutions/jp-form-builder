@@ -13,6 +13,8 @@ defined( 'ABSPATH' ) || exit;
 
 final class Mail_Preview_Controller {
 
+    private const FIELD_TYPES = [ 'name', 'email', 'phone', 'address', 'text', 'select', 'textarea', 'consent' ];
+
     public function init(): void {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
     }
@@ -41,6 +43,8 @@ final class Mail_Preview_Controller {
                     ],
                     // No default on purpose: its presence marks a draft layout preview.
                     'layout'  => [ 'type' => 'string' ],
+                    // Entries are validated one by one in sample_fields(): an invalid entry is dropped, not rejected.
+                    'fields'  => [ 'type' => 'array' ],
                 ],
             ]
         );
@@ -63,8 +67,12 @@ final class Mail_Preview_Controller {
         $context    = [
             'form_title'   => __( 'Sample form', 'jp-form-builder' ),
             'site_name'    => get_bloginfo( 'name' ),
+            'page_url'     => home_url( '/' ),
             'submitted_at' => gmdate( 'Y-m-d H:i' ) . ' UTC',
         ];
+        $fields     = $request->has_param( 'fields' )
+            ? $this->sample_fields_for( (array) $request->get_param( 'fields' ), $context['submitted_at'] )
+            : $this->sample_fields();
         try {
             $mail = 'confirmation' === $request->get_param( 'kind' )
                 ? $builder->confirmation(
@@ -74,7 +82,7 @@ final class Mail_Preview_Controller {
                         'confirmationSubject' => $subject,
                         'confirmationBody'    => $body,
                     ],
-                    $this->sample_fields(),
+                    $fields,
                     $context
                 )
                 : $builder->notification(
@@ -83,7 +91,7 @@ final class Mail_Preview_Controller {
                         'subject'          => $subject,
                         'notificationBody' => $body,
                     ],
-                    $this->sample_fields(),
+                    $fields,
                     $context
                 );
         } catch ( \InvalidArgumentException $exception ) {
@@ -95,6 +103,63 @@ final class Mail_Preview_Controller {
                 'html'    => $mail->html_body(),
             ]
         );
+    }
+
+    /**
+     * Sample Fields for the Form's own Fields, so the preview shows its labels and placeholders.
+     *
+     * @param array<int,mixed> $entries Requested `{key, label, type}` entries; invalid ones are dropped.
+     * @return Submitted_Field[]
+     */
+    private function sample_fields_for( array $entries, string $submitted_at ): array {
+        $fields   = [];
+        $reply_to = false;
+        foreach ( $entries as $entry ) {
+            if ( ! is_array( $entry ) || ! is_string( $entry['key'] ?? null ) || ! is_string( $entry['type'] ?? null ) ) {
+                continue;
+            }
+            $key  = trim( (string) preg_replace( '/[^a-z0-9_]/', '_', strtolower( $entry['key'] ) ), '_' );
+            $type = $entry['type'];
+            if ( '' === $key || isset( $fields[ $key ] ) || ! in_array( $type, self::FIELD_TYPES, true ) ) {
+                continue;
+            }
+            $label = is_string( $entry['label'] ?? null ) ? sanitize_text_field( $entry['label'] ) : '';
+            $is_reply_to = 'email' === $type && ! $reply_to;
+            $reply_to    = $reply_to || $is_reply_to;
+            $fields[ $key ] = new Submitted_Field( $key, '' !== $label ? $label : $key, $type, $this->sample_value( $type, ! empty( $entry['split'] ), $submitted_at ), $is_reply_to );
+        }
+        return array_values( $fields );
+    }
+
+    /** @return string|string[] */
+    private function sample_value( string $type, bool $split_name, string $submitted_at ) {
+        switch ( $type ) {
+            case 'name':
+                return $split_name ? [
+                    'first' => 'Jane',
+                    'last'  => 'Example',
+                ] : 'Jane Example';
+            case 'email':
+                return 'jane@example.test';
+            case 'phone':
+                return '+49821123456';
+            case 'address':
+                return [
+                    'street'   => __( 'Example Street 1', 'jp-form-builder' ),
+                    'postcode' => '86150',
+                    'city'     => __( 'Sampletown', 'jp-form-builder' ),
+                    'country'  => Countries::all()['DE'] ?? 'DE',
+                ];
+            case 'select':
+                return __( 'Sample option', 'jp-form-builder' );
+            case 'textarea':
+                return "Hello,\nthis is a sample message.";
+            case 'consent':
+                /* translators: %s: UTC timestamp of the Submission. */
+                return sprintf( __( 'Yes (%s)', 'jp-form-builder' ), $submitted_at );
+            default:
+                return __( 'Sample text', 'jp-form-builder' );
+        }
     }
 
     /** @return Submitted_Field[] */

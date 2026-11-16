@@ -46,4 +46,96 @@ final class Test_Mail_Preview extends WP_UnitTestCase {
         $this->assertSame( 200, $request( [ 'layout' => '' ] )->get_status() );
         $this->assertSame( [], tests_retrieve_phpmailer_instance()->getToAddresses() );
     }
+
+    /** @param array<string,mixed> $params */
+    private function preview( array $params ): WP_REST_Response {
+        $rest = new WP_REST_Request( 'POST', '/jp-form-builder/v1/mail-preview' );
+        $rest->set_header( 'content-type', 'application/json' );
+        $rest->set_body( wp_json_encode( array_merge( [ 'kind' => 'notification', 'subject' => '', 'body' => '' ], $params ) ) );
+        return rest_get_server()->dispatch( $rest );
+    }
+
+    public function test_preview_with_fields_uses_the_given_labels_and_sample_values(): void {
+        wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+        $response = $this->preview(
+            [
+                'subject' => 'Request from {company_contact}',
+                'body'    => '<p>{all_fields}</p><p>{company_contact} / {#phone_number}{phone_number:label}: {phone_number}{/phone_number}</p>',
+                'fields'  => [
+                    [ 'key' => 'Company Contact', 'label' => 'Your <b>name</b>', 'type' => 'name', 'split' => true ],
+                    [ 'key' => 'work_email', 'label' => 'Work email', 'type' => 'email' ],
+                    [ 'key' => 'phone_number', 'label' => 'Call me on', 'type' => 'phone' ],
+                    [ 'key' => 'where', 'label' => 'Where', 'type' => 'address' ],
+                    [ 'key' => 'agree', 'label' => 'Agree', 'type' => 'consent' ],
+                ],
+            ]
+        );
+
+        $this->assertSame( 200, $response->get_status() );
+        $data = $response->get_data();
+        $this->assertSame( 'Request from Jane Example', $data['subject'] );
+        foreach ( [ 'Your name', 'Work email', 'jane@example.test', 'Call me on', '+49821123456', 'Where', 'Example Street 1 86150 Sampletown Germany', 'Yes (' ] as $expected ) {
+            $this->assertStringContainsString( $expected, $data['html'] );
+        }
+        $this->assertStringNotContainsString( '<b>', $data['html'] );
+        $this->assertStringNotContainsString( 'sample message', $data['html'] );
+    }
+
+    public function test_preview_with_fields_drops_invalid_entries_and_duplicate_keys(): void {
+        wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+        $response = $this->preview(
+            [
+                'body'   => '{all_fields}',
+                'fields' => [
+                    [ 'key' => 'kept', 'label' => 'Kept', 'type' => 'text' ],
+                    [ 'key' => 'kept', 'label' => 'Duplicate', 'type' => 'email' ],
+                    [ 'key' => 'bad_type', 'label' => 'Bad type', 'type' => 'file' ],
+                    [ 'key' => '!!!', 'label' => 'Bad key', 'type' => 'text' ],
+                    [ 'key' => 'no_type', 'label' => 'No type' ],
+                    'not an entry',
+                ],
+            ]
+        );
+
+        $this->assertSame( 200, $response->get_status() );
+        $html = $response->get_data()['html'];
+        $this->assertStringContainsString( 'Kept', $html );
+        foreach ( [ 'Duplicate', 'Bad type', 'Bad key', 'No type', 'Jane Example' ] as $dropped ) {
+            $this->assertStringNotContainsString( $dropped, $html );
+        }
+    }
+
+    public function test_confirmation_preview_with_fields_contains_no_sample_values(): void {
+        wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+
+        $response = $this->preview(
+            [
+                'kind'    => 'confirmation',
+                'subject' => 'Thanks {work_email}',
+                'body'    => '<p>{work_email} {work_email:label} {all_fields} {#work_email}shown{/work_email} {form_title}</p>',
+                'fields'  => [ [ 'key' => 'work_email', 'label' => 'Work email', 'type' => 'email' ] ],
+            ]
+        );
+
+        $this->assertSame( 200, $response->get_status() );
+        $data = $response->get_data();
+        $this->assertStringNotContainsString( 'jane@example.test', $data['html'] );
+        $this->assertStringNotContainsString( 'Work email', $data['html'] );
+        $this->assertStringNotContainsString( 'shown', $data['html'] );
+        $this->assertStringContainsString( 'Sample form', $data['html'] );
+        $this->assertSame( 'Thanks', $data['subject'] );
+    }
+
+    public function test_preview_with_fields_keeps_the_form_capability_requirement(): void {
+        $fields = [ [ 'key' => 'name', 'label' => 'Name', 'type' => 'name' ] ];
+        wp_set_current_user( self::factory()->user->create( [ 'role' => 'editor' ] ) );
+        $this->assertSame( 403, $this->preview( [ 'fields' => $fields ] )->get_status() );
+
+        add_filter( 'jp_form_builder_capability', static fn(): string => 'edit_posts' );
+        $this->assertSame( 200, $this->preview( [ 'fields' => $fields ] )->get_status() );
+        $this->assertSame( 403, $this->preview( [ 'fields' => $fields, 'layout' => '' ] )->get_status() );
+        remove_all_filters( 'jp_form_builder_capability' );
+    }
 }

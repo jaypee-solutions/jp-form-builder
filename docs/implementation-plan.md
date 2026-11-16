@@ -149,7 +149,7 @@ Namespace `jp-form-builder/v1`, no nonce.
   - 409 `jpfb_form_changed` ("This form was updated. Please reload the page.")
   - 500 `jpfb_mail_failed` (generic message)
 - `GET /forms` (`edit_posts`) → `[{id,title}]` for the embed picker.
-- `POST /mail-preview` (Form capability; `manage_options` for the layout) JSON `{form_id?, kind: notification|confirmation, subject, body, layout?}` → `{subject, html}` rendered with sample Field values; nothing is sent.
+- `POST /mail-preview` (Form capability; `manage_options` for the layout) JSON `{form_id?, kind: notification|confirmation, subject, body, layout?, fields?: [{key, label, type, split?}]}` → `{subject, html}` rendered with sample Field values (the given `fields` when present, else name/email/message; invalid entries are dropped); nothing is sent.
 
 ## Submission pipeline
 
