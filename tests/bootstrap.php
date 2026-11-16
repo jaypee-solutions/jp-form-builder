@@ -21,3 +21,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require __DIR__ . '/stubs.php';
 require dirname( __DIR__ ) . '/includes/class-updates.php';
+require dirname( __DIR__ ) . '/includes/class-secret-box.php';
+require dirname( __DIR__ ) . '/includes/class-settings.php';

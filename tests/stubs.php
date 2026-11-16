@@ -50,6 +50,26 @@ function get_option( string $option, $default_value = false ) {
     return $GLOBALS['jp_form_builder_test_options'][ $option ] ?? $default_value;
 }
 
+function wp_salt( string $scheme = 'auth' ): string {
+    return 'unit-test-salt-' . $scheme;
+}
+
+function absint( $value ): int {
+    return abs( (int) $value );
+}
+
+function sanitize_email( string $value ): string {
+    return filter_var( $value, FILTER_SANITIZE_EMAIL );
+}
+
+function sanitize_text_field( string $value ): string {
+    return trim( strip_tags( $value ) );
+}
+
+function sanitize_textarea_field( string $value ): string {
+    return trim( strip_tags( $value ) );
+}
+
 /**
  * @param mixed $value
  * @param mixed $autoload
