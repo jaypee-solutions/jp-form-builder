@@ -13,6 +13,7 @@ final class Test_Mail_Settings extends WP_UnitTestCase {
         parent::set_up();
         update_option( 'home', 'https://example.test' );
         update_option( 'siteurl', 'https://example.test' );
+        update_option( 'jp_form_builder_settings', [ 'from_email' => 'forms@example.test' ] );
         reset_phpmailer_instance();
     }
     private function submit_settings( string $layout ): string {

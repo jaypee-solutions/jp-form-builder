@@ -13,7 +13,7 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
         parent::set_up();
         update_option( 'home', 'https://example.test' );
         update_option( 'siteurl', 'https://example.test' );
-        update_option( 'jp_form_builder_settings', [] );
+        update_option( 'jp_form_builder_settings', [ 'from_email' => 'forms@example.test' ] );
         reset_phpmailer_instance();
     }
 
@@ -54,7 +54,9 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
         update_option( 'home', 'https://www.example.test' );
         update_option( 'siteurl', 'https://www.example.test' );
         update_option( 'jp_form_builder_settings', [ 'from_email' => 'forms@example.test', 'from_name' => 'Forms' ] );
+        add_filter( 'network_home_url', static fn(): string => 'https://www.example.test' );
         $this->assertSame( 'forms@example.test', apply_filters( 'wp_mail_from', 'wordpress@example.test' ) );
+        remove_all_filters( 'network_home_url' );
         $this->assertSame( 'Forms', apply_filters( 'wp_mail_from_name', 'WordPress' ) );
         $this->assertSame( 'caller@example.test', apply_filters( 'wp_mail_from', 'caller@example.test' ) );
         update_option( 'jp_form_builder_settings', [ 'from_email' => 'forms@example.test', 'from_name' => 'Forms', 'force_from' => '1' ] );
