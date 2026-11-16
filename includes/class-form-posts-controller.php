@@ -16,15 +16,12 @@ defined( 'ABSPATH' ) || exit;
 
 final class Form_Posts_Controller extends WP_REST_Posts_Controller {
 
-	public function __construct( string $post_type ) {
-		parent::__construct( $post_type );
-	}
 
-	public function get_item_permissions_check( $request ) {
-		return current_user_can( Form_Post_Type::capability() );
-	}
+    public function get_item_permissions_check( $request ) {
+        return current_user_can( Form_Post_Type::capability() );
+    }
 
-	public function get_items_permissions_check( $request ) {
-		return current_user_can( Form_Post_Type::capability() );
-	}
+    public function get_items_permissions_check( $request ) {
+        return current_user_can( Form_Post_Type::capability() );
+    }
 }

@@ -1,26 +1,68 @@
 <?php
 /**
- * Verifies that Forms are not anonymously readable through the REST API.
+ * Verifies access control for Forms and settings.
  *
  * @package JayPee\FormBuilder
  */
 
 declare( strict_types = 1 );
 
+final class Settings_Page_Denied extends Exception {}
+
 final class Test_Form_Access extends WP_UnitTestCase {
 
-	public function test_anonymous_rest_reads_are_denied(): void {
-		$form_id = self::factory()->post->create( [ 'post_type' => 'jp_form', 'post_status' => 'publish', 'post_title' => 'Private form' ] );
-		wp_set_current_user( 0 );
-		$item = new WP_REST_Request( 'GET', '/wp/v2/jp_form/' . $form_id );
-		$list = new WP_REST_Request( 'GET', '/wp/v2/jp_form' );
-		$this->assertContains( rest_get_server()->dispatch( $item )->get_status(), [ 401, 403 ] );
-		$this->assertContains( rest_get_server()->dispatch( $list )->get_status(), [ 401, 403 ] );
-	}
+    public function test_anonymous_rest_reads_are_denied(): void {
+        $form_id = self::factory()->post->create( [ 'post_type' => 'jp_form', 'post_status' => 'publish', 'post_title' => 'Private form' ] );
+        wp_set_current_user( 0 );
+        $item = new WP_REST_Request( 'GET', '/wp/v2/jp_form/' . $form_id );
+        $list = new WP_REST_Request( 'GET', '/wp/v2/jp_form' );
+        $this->assertContains( rest_get_server()->dispatch( $item )->get_status(), [ 401, 403 ] );
+        $this->assertContains( rest_get_server()->dispatch( $list )->get_status(), [ 401, 403 ] );
+    }
 
-	public function test_settings_page_requires_manage_options(): void {
-		wp_set_current_user( self::factory()->user->create( [ 'role' => 'editor' ] ) );
-		$this->assertFalse( current_user_can( 'manage_options' ) );
-		$this->assertTrue( current_user_can( 'edit_posts' ) );
-	}
+    public function test_editor_requires_form_capability_filter(): void {
+        $form_id = self::factory()->post->create( [ 'post_type' => 'jp_form', 'post_status' => 'publish' ] );
+        $editor  = self::factory()->user->create( [ 'role' => 'editor' ] );
+        wp_set_current_user( $editor );
+        $this->assertFalse( current_user_can( 'edit_post', $form_id ) );
+        add_filter( 'jp_form_builder_capability', static fn(): string => 'edit_posts' );
+        do_action( 'init' );
+        $this->assertTrue( current_user_can( 'edit_post', $form_id ) );
+        remove_all_filters( 'jp_form_builder_capability' );
+    }
+
+    public function test_settings_handler_denies_non_admin_and_saves_allowed_values(): void {
+        $editor = self::factory()->user->create( [ 'role' => 'editor' ] );
+        wp_set_current_user( $editor );
+        add_filter( 'wp_die_handler', static fn(): callable => static function (): void {
+throw new Settings_Page_Denied();
+} );
+        try {
+            do_action( 'admin_post_jp_form_builder_save_settings' );
+            $this->fail( 'Non-admin settings save was not denied.' );
+        } catch ( Settings_Page_Denied $exception ) {
+            $this->assertInstanceOf( Settings_Page_Denied::class, $exception );
+        } finally {
+            remove_all_filters( 'wp_die_handler' );
+        }
+
+        $admin = self::factory()->user->create( [ 'role' => 'administrator' ] );
+        wp_set_current_user( $admin );
+        if ( ! defined( 'JP_FORM_BUILDER_SMTP_HOST' ) ) {
+            define( 'JP_FORM_BUILDER_SMTP_HOST', 'locked.example' );
+        }
+        $_POST = [
+            'action'                     => 'jp_form_builder_save_settings',
+            '_wpnonce'                   => wp_create_nonce( 'jp_form_builder_save_settings' ),
+            'jp_form_builder_settings'   => [ 'smtp_host' => 'overwrite.example', 'smtp_user' => 'saved-user' ],
+        ];
+        try {
+            do_action( 'admin_post_jp_form_builder_save_settings' );
+        } finally {
+            $_POST = [];
+        }
+        $stored = get_option( 'jp_form_builder_settings', [] );
+        $this->assertSame( 'saved-user', $stored['smtp_user'] );
+        $this->assertArrayNotHasKey( 'smtp_host', $stored );
+    }
 }

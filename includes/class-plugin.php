@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) || exit;
 
 final class Plugin {
 
-	public static function init(): void {
-		Form_Post_Type::init();
-		( new Settings_Page() )->init();
-	}
+    public static function init(): void {
+        Form_Post_Type::init();
+        ( new Settings_Page() )->init();
+    }
 }
