@@ -38,6 +38,19 @@ jobs:
       - name: PHPUnit
         run: composer test
 
+  js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint:js
+      - run: npm run lint:css
+      - run: npm run build
+
   integration:
     runs-on: ubuntu-latest
     steps:
@@ -58,6 +71,9 @@ jobs:
 
       - name: Install Node dependencies
         run: npm ci
+
+      - name: Build blocks
+        run: npm run build
 
       - name: Start WordPress
         run: npm run env:start
@@ -91,6 +107,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install Node dependencies
+        run: npm ci
 
       - name: Set up PHP
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0

@@ -1,6 +1,7 @@
 node_modules/
 vendor/
 build/
+blocks/
 playwright-report/
 test-results/
 .wp-env/
@@ -9,8 +10,3 @@ languages/*.mo
 *.log
 .DS_Store
 .agents/
-
-
-# APM dependencies
-apm_modules/
-HANDOFF.md

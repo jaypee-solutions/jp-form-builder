@@ -11,6 +11,9 @@ indent_size = 4
 [*.{ts,js,json,yml,yaml}]
 indent_size = 2
 
+[src/**]
+indent_style = tab
+
 [*.md]
 trim_trailing_whitespace = false
 

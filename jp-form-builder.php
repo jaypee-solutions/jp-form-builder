@@ -9,7 +9,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       jp-form-builder
  * Domain Path:       /languages
- * Requires at least: 6.4
+ * Requires at least: 6.6
  * Requires PHP:      8.0
  *
  * @package JayPee\FormBuilder
@@ -31,6 +31,12 @@ if ( is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
+require_once __DIR__ . '/includes/class-secret-box.php';
+require_once __DIR__ . '/includes/class-settings.php';
+require_once __DIR__ . '/includes/class-form-posts-controller.php';
+require_once __DIR__ . '/includes/class-form-post-type.php';
+require_once __DIR__ . '/includes/class-settings-page.php';
+require_once __DIR__ . '/includes/class-plugin.php';
 require_once __DIR__ . '/includes/class-updates.php';
 
 Updates::init();
@@ -47,6 +53,6 @@ add_action(
             dirname( plugin_basename( PLUGIN_FILE ) ) . '/languages'
         );
 
-        // Register the plugin's own features here.
+        Plugin::init();
     }
 );

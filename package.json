@@ -6,6 +6,11 @@
   "author": "Jan-Peter Alten <support@jaypee.solutions>",
   "private": true,
   "scripts": {
+    "build": "wp-scripts build --source-path=src/blocks --output-path=blocks",
+    "start": "wp-scripts start --source-path=src/blocks --output-path=blocks",
+    "lint:js": "wp-scripts lint-js src/blocks",
+    "lint:css": "wp-scripts lint-style 'src/blocks/**/*.{css,scss}' --allow-empty-input",
+    "i18n:pot": "WP_ENV_HOME=./.wp-env npx --no-install wp-env run cli --env-cwd=wp-content/plugins/$(basename \"$PWD\") wp i18n make-pot . languages/jp-form-builder.pot --domain=jp-form-builder --exclude=src,vendor,node_modules,tests,build,.wp-env",
     "env:start": "scripts/wp-env-ensure.sh start",
     "env:stop": "scripts/wp-env-ensure.sh stop",
     "env:seed": "scripts/wp-env-ensure.sh seed",
@@ -21,9 +26,13 @@
     "build:release": "scripts/build-release.sh",
     "prepare": "husky"
   },
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
     "@wordpress/env": "^12.0.0",
+    "@wordpress/scripts": "^37.1.0",
     "husky": "^9.1.7"
   }
 }

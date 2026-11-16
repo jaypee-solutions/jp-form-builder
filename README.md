@@ -10,7 +10,7 @@ the template, not here.
 ## Requirements
 
 - PHP 8.0+
-- WordPress 6.4+
+- WordPress 6.6+
 - Composer, Node 22.13+ (wp-env 12), and Docker or Podman (for `wp-env`)
 
 ## Development

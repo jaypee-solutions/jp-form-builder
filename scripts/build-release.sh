@@ -39,10 +39,14 @@ ZIP_NAME="${SLUG}-v${VERSION}.zip"
 rm -rf "$BUILD_DIR"
 mkdir -p "$DIST_DIR" "$STAGE_DIR"
 
+# Compile block assets into blocks/ before the copy step below.
+[[ -d "$ROOT_DIR/node_modules" ]] || npm ci --prefix "$ROOT_DIR"
+npm run build --prefix "$ROOT_DIR"
+
 # ── Production files ─────────────────────────────────────────────────────────
 cp "$ROOT_DIR/$SLUG.php" "$DIST_DIR/"
 
-for path in README.md readme.txt LICENSE includes assets admin blocks languages; do
+for path in README.md readme.txt LICENSE includes assets admin blocks languages templates; do
 	if [[ -e "$ROOT_DIR/$path" ]]; then
 		cp -R "$ROOT_DIR/$path" "$DIST_DIR/"
 	fi
