@@ -11,7 +11,8 @@ extracts it as the GitHub release notes and fails without it.
 ## [Unreleased]
 
 ### Added
-- Template block tooling, protected Forms, encrypted settings, and an administration settings page.
+- Added a protected Forms editor with configurable capability and REST read access.
+- Added a settings page with constant-locked fields and encrypted secret storage.
 
 ## [0.1.0] - 2026-11-16
 
