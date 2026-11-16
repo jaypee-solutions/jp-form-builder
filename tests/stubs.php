@@ -144,6 +144,37 @@ function esc_url( string $url ): string {
     return $url;
 }
 
+function wp_kses_allowed_html( string $context ): array {
+    unset( $context );
+    return [ 'p' => [], 'br' => [], 'strong' => [], 'em' => [], 'a' => [ 'href' => true ], 'table' => [], 'tr' => [], 'th' => [], 'td' => [] ];
+}
+
+function wp_kses( string $content, array $allowed_html, array $allowed_protocols = [] ): string {
+    unset( $allowed_html, $allowed_protocols );
+    return strip_tags( $content, '<p><br><strong><em><a><table><tr><th><td>' );
+}
+
+
+function apply_filters( string $hook, $value ) {
+    return $value;
+}
+
+function wp_strip_all_tags( string $text ): string {
+    return strip_tags( $text );
+}
+
+function get_bloginfo( string $show = '' ): string {
+    unset( $show );
+    return 'Example Site';
+}
+
+function home_url( string $path = '/' ): string {
+    return 'https://example.test' . $path;
+}
+function wp_parse_url( string $url, int $component = -1 ) {
+    return parse_url( $url, $component );
+}
+
 function admin_url( string $path = '' ): string {
     return 'https://example.test/wp-admin/' . $path;
 }

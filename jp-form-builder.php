@@ -36,6 +36,12 @@ require_once __DIR__ . '/includes/class-settings.php';
 require_once __DIR__ . '/includes/class-form-posts-controller.php';
 require_once __DIR__ . '/includes/class-form-post-type.php';
 require_once __DIR__ . '/includes/class-settings-page.php';
+require_once __DIR__ . '/includes/class-mail.php';
+require_once __DIR__ . '/includes/class-submitted-field.php';
+require_once __DIR__ . '/includes/class-mail-header-guard.php';
+require_once __DIR__ . '/includes/class-mail-template.php';
+require_once __DIR__ . '/includes/class-mail-layout.php';
+require_once __DIR__ . '/includes/class-mail-builder.php';
 require_once __DIR__ . '/includes/class-plugin.php';
 require_once __DIR__ . '/includes/class-updates.php';
 

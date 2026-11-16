@@ -37,11 +37,11 @@ final class Settings {
         'm365_tenant_id' => [ 'JP_FORM_BUILDER_M365_TENANT_ID', '', 'text' ],
         'm365_client_id' => [ 'JP_FORM_BUILDER_M365_CLIENT_ID', '', 'text' ],
         'm365_client_secret' => [ 'JP_FORM_BUILDER_M365_CLIENT_SECRET', '', 'secret' ],
-        'mail_layout' => [ '', '', 'textarea' ],
+        'mail_layout' => [ '', '', 'mail_layout' ],
         'notification_subject' => [ '', '', 'single_line' ],
-        'notification_body' => [ '', '', 'textarea' ],
+        'notification_body' => [ '', '', 'mail_body' ],
         'confirmation_subject' => [ '', '', 'single_line' ],
-        'confirmation_body' => [ '', '', 'textarea' ],
+        'confirmation_body' => [ '', '', 'mail_body' ],
     ];
 
     /**
@@ -134,6 +134,10 @@ final class Settings {
                 return in_array( $value, [ 'password', 'm365_oauth' ], true ) ? $value : 'password';
             case 'email':
                 return sanitize_email( (string) $value );
+            case 'mail_layout':
+                return '' === trim( (string) $value ) ? '' : ( new Mail_Layout() )->sanitize( (string) $value );
+            case 'mail_body':
+                return ( new Mail_Template() )->sanitize( (string) $value );
             case 'textarea':
                 return sanitize_textarea_field( (string) $value );
             case 'single_line':
