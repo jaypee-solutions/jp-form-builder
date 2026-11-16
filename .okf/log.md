@@ -9,3 +9,4 @@
 
 ## 2026-11-16
 * **Grilling round 3**: Mail layout, site-default and per-form Body templates edited in the admin with code editor and preview; theme-file override dropped (ADR 0010). Template `v1.5.0` released; P1 absorbs the CPT and its locked REST controller so the Forms menu exists from the start.
+* **P1 done**: template v1.5.0 adopted with `uses_blocks`; tooling facts 9–12 added to the template facts reference.

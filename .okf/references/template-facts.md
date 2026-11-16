@@ -1,7 +1,7 @@
 ---
 type: Reference
-title: wp-plugin-template v1.4.0 facts
-description: Verified template conventions that shape the plugin design.
+title: wp-plugin-template facts
+description: Verified template conventions (v1.4.0, block tooling from v1.5.0) that shape the plugin design.
 tags:
   - template
   - tooling
@@ -20,6 +20,10 @@ Facts verified while orienting on the scaffold (slug `jp-form-builder`, namespac
 6. Plugin Update Checker points at github.com/jaypee-solutions/jp-form-builder.
 7. No JS build/lint in the template. jp-catalog-suite ships buildless blocks, `uninstall.php`, `docs/adr` + `.okf`; German is formal "Sie" in `de_DE.po`, byte-identical `de_DE_formal.po`.
 8. CI: lint + unit in a `composer:2` container; integration job with wp-env + E2E; build job zips. Workflows, scripts and lint config are template-owned.
+9. From v1.5.0 the `uses_blocks=true` variant adds `@wordpress/scripts` (build, `lint:js`, `lint:css`, `eslint.config.mjs`), raises the floor to WordPress 6.6 and copies `templates/` into release ZIPs.
+10. `copier update` resolved "in favour of the template" drops local additions to template-owned files: the APM entries in `.gitignore` (`apm_modules/`, `HANDOFF.md`) had to be restored.
+11. The integration PHPUnit run writes `.phpunit.result.cache` into the checkout; it is ignored locally (an upstream fix would set the cache path in `phpunit-integration.xml.dist`).
+12. On this workstation port 8888 can be held by another project's podman container; run wp-env with `WP_ENV_PORT=8912 WP_ENV_TESTS_PORT=8913`.
 
 # Citations
 
