@@ -82,6 +82,9 @@ final class Settings_Page {
 			</form>
 		</div>
 
+        <?php
+    }
+
 	public function notices(): void {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( ! $screen || ( 'jp_form' !== $screen->post_type && 'jp-form-builder-settings' !== $screen->id ) ) {
