@@ -63,9 +63,11 @@ final class Test_Form_Access extends WP_UnitTestCase {
             'jp_form_builder_settings' => [ 'smtp_host' => 'overwrite.example', 'smtp_user' => 'saved-user' ],
         ];
         $_REQUEST = $_POST;
+        add_filter( 'wp_redirect', static fn(): bool => false );
         try {
             do_action( 'admin_post_jp_form_builder_save_settings' );
         } finally {
+            remove_all_filters( 'wp_redirect' );
             $_POST    = [];
             $_REQUEST = [];
         }
