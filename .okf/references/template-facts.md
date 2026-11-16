@@ -24,6 +24,7 @@ Facts verified while orienting on the scaffold (slug `jp-form-builder`, namespac
 10. `copier update` resolved "in favour of the template" drops local additions to template-owned files: the APM entries in `.gitignore` (`apm_modules/`, `HANDOFF.md`) had to be restored.
 11. The integration PHPUnit run writes `.phpunit.result.cache` into the checkout; it is ignored locally (an upstream fix would set the cache path in `phpunit-integration.xml.dist`).
 12. On this workstation port 8888 can be held by another project's podman container; run wp-env with `WP_ENV_PORT=8912 WP_ENV_TESTS_PORT=8913`.
+13. The `uses_blocks` lint scripts only cover `src/blocks/`; this plugin widened them to `src/` and added `@wordpress/*` externals to `import/core-modules` (local edits to template-owned files, to be upstreamed).
 
 # Citations
 

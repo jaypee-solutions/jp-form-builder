@@ -11,3 +11,4 @@
 * **Grilling round 3**: Mail layout, site-default and per-form Body templates edited in the admin with code editor and preview; theme-file override dropped (ADR 0010). Template `v1.5.0` released; P1 absorbs the CPT and its locked REST controller so the Forms menu exists from the start.
 * **P1 done**: template v1.5.0 adopted with `uses_blocks`; tooling facts 9–12 added to the template facts reference.
 * **P2 done**: Mail/SMTP + HTML templating; `wp_mail` facts 4–6 added to the WordPress core facts reference.
+* **P3 done**: blocks, editor UI, Body template modal, Form settings document panel; core fact 7 and template fact 13 added.
