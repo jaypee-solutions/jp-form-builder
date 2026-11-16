@@ -14,9 +14,11 @@ defined( 'ABSPATH' ) || exit;
 final class Settings_Page {
 
     private Settings $settings;
+    private Mailer $mailer;
 
-    public function __construct( ?Settings $settings = null ) {
+    public function __construct( ?Settings $settings = null, ?Mailer $mailer = null ) {
         $this->settings = $settings ?? new Settings();
+        $this->mailer   = $mailer ?? new Mailer( $this->settings );
     }
 
     public function init(): void {
@@ -45,7 +47,7 @@ final class Settings_Page {
         if ( '' === $to ) {
             $to = wp_get_current_user()->user_email;
         }
-        $result = ( new Mailer( $this->settings ) )->send_test( $to );
+        $result = $this->mailer->send_test( $to );
         $url = add_query_arg( 'test-mail', is_wp_error( $result ) ? 'failed' : 'sent', menu_page_url( 'jp-form-builder-settings', false ) );
         wp_safe_redirect( $url );
         exit;

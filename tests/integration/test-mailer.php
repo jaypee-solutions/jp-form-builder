@@ -72,44 +72,36 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
     }
 
     public function test_test_mail_is_html_with_text_alternative_and_plain_mail_resets_alt_body(): void {
+        reset_phpmailer_instance();
         $admin = self::factory()->user->create( [ 'role' => 'administrator' ] );
         wp_set_current_user( $admin );
-        $_POST = [
+        $_POST    = [
             'action'    => 'jp_form_builder_test_mail',
             '_wpnonce'  => wp_create_nonce( 'jp_form_builder_test_mail' ),
             'recipient' => 'recipient@example.test',
         ];
         $_REQUEST = $_POST;
-        $headers = [];
-        $preempt = static function ( $result, array $attributes ) use ( &$headers ): bool {
-            $headers = $attributes['headers'];
-            do_action( 'phpmailer_init', tests_retrieve_phpmailer_instance() );
-            return true;
-        };
-        add_filter( 'pre_wp_mail', $preempt, 10, 2 );
         $redirect = static function ( $location ) {
             throw new Settings_Page_Denied( (string) $location );
         };
         add_filter( 'wp_redirect', $redirect );
         try {
             do_action( 'admin_post_jp_form_builder_test_mail' );
+            $this->fail( 'The test-mail action did not redirect.' );
         } catch ( Settings_Page_Denied $exception ) {
             $this->assertStringContainsString( 'test-mail=sent', $exception->getMessage() );
         } finally {
             remove_filter( 'wp_redirect', $redirect );
-            remove_filter( 'pre_wp_mail', $preempt, 10 );
             $_POST    = [];
             $_REQUEST = [];
         }
+        // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
         $mailer = tests_retrieve_phpmailer_instance();
-        // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-        $this->assertNotSame( '', $mailer->AltBody );
-        // phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-        $this->assertContains( 'Content-Type: text/html; charset=UTF-8', $headers );
-        add_filter( 'pre_wp_mail', $preempt, 10, 2 );
+        $this->assertSame( 'multipart/alternative', $mailer->ContentType );
+        $this->assertStringContainsString( 'This is a test message from Form Builder.', $mailer->AltBody );
+        $this->assertStringContainsString( 'Content-Type: text/html', $mailer->get_sent()->body );
+
         wp_mail( 'recipient@example.test', 'plain', 'plain body' );
-        remove_filter( 'pre_wp_mail', $preempt, 10 );
-        // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
         $this->assertSame( '', tests_retrieve_phpmailer_instance()->AltBody );
         // phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
     }

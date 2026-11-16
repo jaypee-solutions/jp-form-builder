@@ -14,12 +14,15 @@ defined( 'ABSPATH' ) || exit;
 final class Mailer {
 
     private Settings $settings;
+    private Mail_Log $log;
     private ?Mail $pending_mail = null;
     private ?\WP_Error $last_error = null;
     private bool $replaced_default_from = false;
 
-    public function __construct( ?Settings $settings = null ) {
+    /** Hooks bind to this instance, so every plugin mail must go through the one `Plugin::init()` creates. */
+    public function __construct( ?Settings $settings = null, ?Mail_Log $log = null ) {
         $this->settings = $settings ?? new Settings();
+        $this->log      = $log ?? new Mail_Log();
     }
 
     public function init(): void {
@@ -70,8 +73,6 @@ final class Mailer {
         }
         if ( null !== $this->pending_mail ) {
             $mailer->AltBody = $this->pending_mail->text_body();
-        } else {
-            $mailer->AltBody = '';
         }
     }
     // phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
@@ -86,19 +87,20 @@ final class Mailer {
         $this->last_error   = null;
         $headers            = $mail->headers();
         $headers[]          = 'Content-Type: text/html; charset=UTF-8';
-        add_action( 'phpmailer_init', [ $this, 'configure' ], 1001 );
         try {
             $sent = wp_mail( $mail->recipients(), $mail->subject(), $mail->html_body(), $headers );
         } finally {
-            remove_action( 'phpmailer_init', [ $this, 'configure' ], 1001 );
             $this->pending_mail = null;
         }
-        if ( ! $sent && null === $this->last_error ) {
-            $error = new \WP_Error( 'jpfb_mail_failed', __( 'Mail could not be sent.', 'jp-form-builder' ) );
-            do_action( 'wp_mail_failed', $error );
-            $this->last_error = $error;
+        if ( $sent && null === $this->last_error ) {
+            return true;
         }
-        return $sent && null === $this->last_error ? true : $this->last_error;
+        if ( null === $this->last_error ) {
+            // Short-circuited by `pre_wp_mail`: core fires no `wp_mail_failed`, so log it here.
+            $this->last_error = new \WP_Error( 'jpfb_mail_failed', __( 'Mail could not be sent.', 'jp-form-builder' ) );
+            $this->log->record( $this->last_error );
+        }
+        return $this->last_error;
     }
 
     public function send_test( string $to ) {

@@ -17,9 +17,11 @@ defined( 'ABSPATH' ) || exit;
 final class Cli_Command {
 
     private Settings $settings;
+    private Mailer $mailer;
 
-    public function __construct( ?Settings $settings = null ) {
+    public function __construct( ?Settings $settings = null, ?Mailer $mailer = null ) {
         $this->settings = $settings ?? new Settings();
+        $this->mailer   = $mailer ?? new Mailer( $this->settings );
     }
 
     public function init(): void {
@@ -32,7 +34,7 @@ final class Cli_Command {
         if ( ( $args[0] ?? '' ) !== 'test' || empty( $args[1] ) ) {
             WP_CLI::error( 'Usage: wp jp-form-builder mail test <to>' );
         }
-        $result = ( new Mailer( $this->settings ) )->send_test( sanitize_email( $args[1] ) );
+        $result = $this->mailer->send_test( sanitize_email( $args[1] ) );
         if ( is_wp_error( $result ) ) {
             WP_CLI::error( $result->get_error_message() );
         }
