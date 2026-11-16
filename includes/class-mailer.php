@@ -70,6 +70,8 @@ final class Mailer {
         }
         if ( null !== $this->pending_mail ) {
             $mailer->AltBody = $this->pending_mail->text_body();
+        } else {
+            $mailer->AltBody = '';
         }
     }
     // phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase

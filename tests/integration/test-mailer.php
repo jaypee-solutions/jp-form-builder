@@ -54,9 +54,12 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
         update_option( 'home', 'https://www.example.test' );
         update_option( 'siteurl', 'https://www.example.test' );
         update_option( 'jp_form_builder_settings', [ 'from_email' => 'forms@example.test', 'from_name' => 'Forms' ] );
-        add_filter( 'network_home_url', static fn(): string => 'https://www.example.test' );
-        $this->assertSame( 'forms@example.test', apply_filters( 'wp_mail_from', 'wordpress@example.test' ) );
-        remove_all_filters( 'network_home_url' );
+        $network_url = static fn(): string => 'https://www.example.test';
+        add_filter( 'network_home_url', $network_url );
+        $host = wp_parse_url( network_home_url(), PHP_URL_HOST );
+        $default_from = 'wordpress@' . preg_replace( '/^www\./i', '', (string) $host );
+        $this->assertSame( 'forms@example.test', apply_filters( 'wp_mail_from', $default_from ) );
+        remove_filter( 'network_home_url', $network_url );
         $this->assertSame( 'Forms', apply_filters( 'wp_mail_from_name', 'WordPress' ) );
         $this->assertSame( 'caller@example.test', apply_filters( 'wp_mail_from', 'caller@example.test' ) );
         update_option( 'jp_form_builder_settings', [ 'from_email' => 'forms@example.test', 'from_name' => 'Forms', 'force_from' => '1' ] );
@@ -77,6 +80,13 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
             'recipient' => 'recipient@example.test',
         ];
         $_REQUEST = $_POST;
+        $headers = [];
+        $preempt = static function ( $result, array $attributes ) use ( &$headers ): bool {
+            $headers = $attributes['headers'];
+            do_action( 'phpmailer_init', tests_retrieve_phpmailer_instance() );
+            return true;
+        };
+        add_filter( 'pre_wp_mail', $preempt, 10, 2 );
         $redirect = static function ( $location ) {
             throw new Settings_Page_Denied( (string) $location );
         };
@@ -87,6 +97,7 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
             $this->assertStringContainsString( 'test-mail=sent', $exception->getMessage() );
         } finally {
             remove_filter( 'wp_redirect', $redirect );
+            remove_filter( 'pre_wp_mail', $preempt, 10 );
             $_POST    = [];
             $_REQUEST = [];
         }
@@ -94,8 +105,10 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
         // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
         $this->assertNotSame( '', $mailer->AltBody );
         // phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-        $this->assertContains( 'Content-Type: text/html; charset=UTF-8', $mailer->getCustomHeaders() );
+        $this->assertContains( 'Content-Type: text/html; charset=UTF-8', $headers );
+        add_filter( 'pre_wp_mail', $preempt, 10, 2 );
         wp_mail( 'recipient@example.test', 'plain', 'plain body' );
+        remove_filter( 'pre_wp_mail', $preempt, 10 );
         // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
         $this->assertSame( '', tests_retrieve_phpmailer_instance()->AltBody );
         // phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
