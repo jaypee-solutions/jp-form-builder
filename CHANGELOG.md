@@ -10,7 +10,10 @@ extracts it as the GitHub release notes and fails without it.
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-11-13
+### Added
+- Template block tooling, protected Forms, encrypted settings, and an administration settings page.
+
+## [0.1.0] - 2026-11-16
 
 ### Added
 - Initial scaffolding from [wp-plugin-template](https://github.com/jaypee-solutions/wp-plugin-template).
