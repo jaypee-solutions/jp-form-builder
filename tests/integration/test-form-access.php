@@ -34,9 +34,14 @@ final class Test_Form_Access extends WP_UnitTestCase {
     public function test_settings_handler_denies_non_admin_and_saves_allowed_values(): void {
         $editor = self::factory()->user->create( [ 'role' => 'editor' ] );
         wp_set_current_user( $editor );
-        add_filter( 'wp_die_handler', static fn(): callable => static function (): void {
-throw new Settings_Page_Denied();
-} );
+        add_filter(
+            'wp_die_handler',
+            static function (): callable {
+                return static function (): void {
+                    throw new Settings_Page_Denied();
+                };
+            }
+        );
         try {
             do_action( 'admin_post_jp_form_builder_save_settings' );
             $this->fail( 'Non-admin settings save was not denied.' );
@@ -51,15 +56,18 @@ throw new Settings_Page_Denied();
         if ( ! defined( 'JP_FORM_BUILDER_SMTP_HOST' ) ) {
             define( 'JP_FORM_BUILDER_SMTP_HOST', 'locked.example' );
         }
-        $_POST = [
-            'action'                     => 'jp_form_builder_save_settings',
-            '_wpnonce'                   => wp_create_nonce( 'jp_form_builder_save_settings' ),
-            'jp_form_builder_settings'   => [ 'smtp_host' => 'overwrite.example', 'smtp_user' => 'saved-user' ],
+        $nonce   = wp_create_nonce( 'jp_form_builder_save_settings' );
+        $_POST   = [
+            'action'                   => 'jp_form_builder_save_settings',
+            '_wpnonce'                 => $nonce,
+            'jp_form_builder_settings' => [ 'smtp_host' => 'overwrite.example', 'smtp_user' => 'saved-user' ],
         ];
+        $_REQUEST = $_POST;
         try {
             do_action( 'admin_post_jp_form_builder_save_settings' );
         } finally {
-            $_POST = [];
+            $_POST    = [];
+            $_REQUEST = [];
         }
         $stored = get_option( 'jp_form_builder_settings', [] );
         $this->assertSame( 'saved-user', $stored['smtp_user'] );
