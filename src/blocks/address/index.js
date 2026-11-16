@@ -1,3 +1,9 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
-registerBlockType( 'jp-form-builder/address', { edit: ( { attributes } ) => <div { ...useBlockProps() }>{ attributes.label || 'Address' }</div>, save: () => null } );
+function Edit( { attributes } ) {
+	return <div { ...useBlockProps() }>{ attributes.label || 'Address' }</div>;
+}
+registerBlockType( 'jp-form-builder/address', {
+	edit: Edit,
+	save: () => null,
+} );
