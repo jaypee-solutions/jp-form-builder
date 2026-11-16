@@ -22,6 +22,7 @@ final class Blocks {
     public function init(): void {
         add_action( 'init', [ $this, 'register' ] );
         add_action( 'rest_api_init', [ $this, 'routes' ] );
+        add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_editor_data' ] );
     }
 
     public function register(): void {
@@ -43,10 +44,7 @@ final class Blocks {
                         if ( ! $form ) {
                             return '';
                         }
-                        $settings = new Settings();
-                        $site_key = '' !== $settings->get( 'turnstile_site_key' ) && '' !== $settings->get( 'turnstile_secret_key' )
-                            ? (string) $settings->get( 'turnstile_site_key' )
-                            : '';
+                        $site_key = $this->turnstile_site_key( new Settings() );
                         return ( new Form_Renderer() )->render( $form, 0, $site_key );
                     },
                 ]
@@ -58,6 +56,40 @@ final class Blocks {
                 wp_set_script_translations( $block->view_script, 'jp-form-builder', dirname( __DIR__ ) . '/languages' );
             }
         }
+    }
+
+    /**
+     * Hands the editor scripts the data that lives in PHP: translated country names,
+     * whether Turnstile is configured, and what the current user may do with Forms.
+     */
+    public function enqueue_editor_data(): void {
+        $regions = array_intersect_key( Countries::all(), array_flip( [ 'DE', 'AT', 'CH' ] ) );
+        $data    = [
+            'address' => [ 'countries' => Countries::all() ],
+            'phone'   => [ 'regions' => $regions ],
+            'form'    => [ 'turnstileConfigured' => '' !== $this->turnstile_site_key( new Settings() ) ],
+            'embed'   => [
+                'canEditForms' => current_user_can( Form_Post_Type::capability() ),
+                'editFormUrl'  => admin_url( 'post.php' ),
+            ],
+        ];
+        foreach ( $data as $name => $block_data ) {
+            $block_type = \WP_Block_Type_Registry::get_instance()->get_registered( 'jp-form-builder/' . $name );
+            foreach ( $block_type ? $block_type->editor_script_handles : [] as $handle ) {
+                wp_add_inline_script(
+                    $handle,
+                    'window.jpFormBuilderEditor = window.jpFormBuilderEditor || {}; window.jpFormBuilderEditor.' . $name . ' = ' . wp_json_encode( $block_data ) . ';',
+                    'before'
+                );
+            }
+        }
+    }
+
+    /** The Turnstile site key, or '' unless both Turnstile keys are set. */
+    private function turnstile_site_key( Settings $settings ): string {
+        return '' !== $settings->get( 'turnstile_site_key' ) && '' !== $settings->get( 'turnstile_secret_key' )
+            ? (string) $settings->get( 'turnstile_site_key' )
+            : '';
     }
 
     public function routes(): void {
