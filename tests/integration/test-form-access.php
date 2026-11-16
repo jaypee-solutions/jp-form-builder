@@ -53,19 +53,23 @@ final class Test_Form_Access extends WP_UnitTestCase {
 
         $admin = self::factory()->user->create( [ 'role' => 'administrator' ] );
         wp_set_current_user( $admin );
-        if ( ! defined( 'JP_FORM_BUILDER_SMTP_HOST' ) ) {
-            define( 'JP_FORM_BUILDER_SMTP_HOST', 'locked.example' );
-        }
         $nonce   = wp_create_nonce( 'jp_form_builder_save_settings' );
         $_POST   = [
             'action'                   => 'jp_form_builder_save_settings',
             '_wpnonce'                 => $nonce,
-            'jp_form_builder_settings' => [ 'smtp_host' => 'overwrite.example', 'smtp_user' => 'saved-user' ],
+            'jp_form_builder_settings' => [ 'smtp_host' => 'overwrite.example', 'smtp_port' => 465, 'smtp_user' => 'saved-user' ],
         ];
         $_REQUEST = $_POST;
-        add_filter( 'wp_redirect', static fn(): bool => false );
+        add_filter(
+            'wp_redirect',
+            static function ( $location ) {
+                throw new Settings_Page_Denied( (string) $location );
+            }
+        );
         try {
             do_action( 'admin_post_jp_form_builder_save_settings' );
+        } catch ( Settings_Page_Denied $exception ) {
+            $this->assertStringContainsString( 'settings-updated=1', $exception->getMessage() );
         } finally {
             remove_all_filters( 'wp_redirect' );
             $_POST    = [];
@@ -73,6 +77,8 @@ final class Test_Form_Access extends WP_UnitTestCase {
         }
         $stored = get_option( 'jp_form_builder_settings', [] );
         $this->assertSame( 'saved-user', $stored['smtp_user'] );
+        $this->assertSame( 2525, ( new \JayPee\FormBuilder\Settings() )->get( 'smtp_port' ) );
+        $this->assertArrayNotHasKey( 'smtp_port', $stored );
         $this->assertArrayNotHasKey( 'smtp_host', $stored );
     }
 }

@@ -12,6 +12,8 @@ if ( ! defined( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' ) ) {
 }
 
 require dirname( __DIR__, 2 ) . '/vendor/autoload.php';
+// Keep one constant-locked setting available to every test without defining constants mid-suite.
+define( 'JP_FORM_BUILDER_SMTP_PORT', 2525 );
 require_once getenv( 'WP_TESTS_DIR' ) . '/includes/functions.php';
 
 tests_add_filter(
