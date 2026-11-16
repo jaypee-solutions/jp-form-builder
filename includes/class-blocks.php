@@ -15,6 +15,9 @@ final class Blocks {
         $metadata_files = glob( dirname( __DIR__ ) . '/blocks/*/block.json' );
         foreach ( false === $metadata_files ? [] : $metadata_files as $metadata ) {
             $name = basename( dirname( $metadata ) );
+            if ( \WP_Block_Type_Registry::get_instance()->is_registered( 'jp-form-builder/' . $name ) ) {
+                continue;
+            }
             $block = register_block_type( dirname( $metadata ), [
                 'render_callback' => function ( $attributes, $content, $block ) use ( $name ) {
                     unset( $content, $block );

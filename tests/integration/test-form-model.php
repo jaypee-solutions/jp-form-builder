@@ -17,6 +17,7 @@ final class Test_Form_Model extends WP_UnitTestCase {
         $this->assertStringContainsString( 'data-rev="', $rendered );
         $form = ( new Form_Repository() )->find( $id );
         $this->assertNotNull( $form );
+        wp_save_post_revision( $id );
         wp_update_post( [ 'ID' => $id, 'post_content' => '<!-- wp:jp-form-builder/form --><!-- wp:jp-form-builder/name /--><!-- /wp:jp-form-builder/form -->' ] );
         $this->assertNotNull( ( new Form_Repository() )->find_fields( $id, $form->rev ) );
         $this->assertNull( ( new Form_Repository() )->find_fields( $id, '0000000000000000' ) );
