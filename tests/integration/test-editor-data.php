@@ -62,4 +62,18 @@ final class Test_Editor_Data extends WP_UnitTestCase {
         $this->open_form_editor( 'editor' );
         $this->assertFalse( $this->editor_data( 'embed' )['canEditForms'] );
     }
+
+    public function test_form_block_receives_the_code_editor_settings_on_form_screens_only(): void {
+        $this->open_form_editor();
+
+        $this->assertTrue( wp_script_is( 'code-editor', 'enqueued' ) );
+        $this->assertArrayHasKey( 'codemirror', $this->editor_data( 'form' )['codeEditor'] );
+
+        wp_dequeue_script( 'code-editor' );
+        wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+        $GLOBALS['post'] = get_post( self::factory()->post->create( [ 'post_type' => 'page' ] ) );
+        do_action( 'enqueue_block_editor_assets' );
+
+        $this->assertFalse( wp_script_is( 'code-editor', 'enqueued' ) );
+    }
 }

@@ -9,8 +9,10 @@ const wordpressExternals = [
 	'@wordpress/blocks',
 	'@wordpress/components',
 	'@wordpress/data',
+	'@wordpress/editor',
 	'@wordpress/element',
 	'@wordpress/i18n',
+	'@wordpress/plugins',
 	'@wordpress/server-side-render',
 	'@wordpress/url',
 ];

@@ -1,5 +1,6 @@
 export { getEditorData } from './editor-data';
 export { FieldBlock } from './field-block';
+export { FormSettings } from './form-settings';
 export {
 	PreviewControl,
 	PreviewGroup,
@@ -8,7 +9,6 @@ export {
 	PreviewPart,
 } from './field-preview';
 export { OptionsEditor } from './options-editor';
-export { splitRecipients } from './recipients';
 export {
 	addressPartLabels,
 	defaultConsentLinkText,

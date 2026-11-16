@@ -137,3 +137,69 @@
 .jp-form-builder__edit-link {
 	margin: 0.5rem 0 0;
 }
+
+/* Form settings and Body template modal. */
+
+.jp-form-builder__settings-heading {
+	margin: 1.5rem 0 0.75rem;
+	font-size: 13px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.jp-form-builder__settings > .components-base-control {
+	margin-bottom: 1rem;
+}
+
+.jp-form-builder__body-modal-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 1.5rem;
+	min-width: min(80vw, 60rem);
+}
+
+.jp-form-builder__body-modal-preview h2 {
+	margin-top: 0;
+	font-size: 1rem;
+}
+
+.jp-form-builder__mail-preview {
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 22rem;
+	border: 1px solid #ddd;
+	background: #fff;
+}
+
+.jp-form-builder__body-editor {
+	margin-bottom: 1rem;
+}
+
+.jp-form-builder__body-editor-label {
+	display: block;
+	margin-bottom: 0.5rem;
+	font-weight: 600;
+}
+
+.jp-form-builder__body-editor .CodeMirror {
+	height: 18rem;
+	border: 1px solid #949494;
+}
+
+.jp-form-builder__body-editor-fallback textarea {
+	font-family: Menlo, Consolas, monaco, monospace;
+	font-size: 13px;
+}
+
+.jp-form-builder__body-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.5rem;
+	margin-top: 1.5rem;
+}
+
+.jp-form-builder__placeholder-menu {
+	max-height: 20rem;
+	min-width: 16rem;
+	overflow-y: auto;
+}

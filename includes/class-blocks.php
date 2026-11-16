@@ -60,7 +60,8 @@ final class Blocks {
 
     /**
      * Hands the editor scripts the data that lives in PHP: translated country names,
-     * whether Turnstile is configured, and what the current user may do with Forms.
+     * whether Turnstile is configured, what the current user may do with Forms, and, when
+     * editing a Form, the core code editor settings for the Body template modal.
      */
     public function enqueue_editor_data(): void {
         $regions = array_intersect_key( Countries::all(), array_flip( [ 'DE', 'AT', 'CH' ] ) );
@@ -73,6 +74,13 @@ final class Blocks {
                 'editFormUrl'  => admin_url( 'post.php' ),
             ],
         ];
+        if ( 'jp_form' === get_post_type() ) {
+            // False when the user turned syntax highlighting off; the modal then falls back to a plain textarea.
+            $code_editor = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
+            if ( false !== $code_editor ) {
+                $data['form']['codeEditor'] = $code_editor;
+            }
+        }
         foreach ( $data as $name => $block_data ) {
             $block_type = \WP_Block_Type_Registry::get_instance()->get_registered( 'jp-form-builder/' . $name );
             foreach ( $block_type ? $block_type->editor_script_handles : [] as $handle ) {
