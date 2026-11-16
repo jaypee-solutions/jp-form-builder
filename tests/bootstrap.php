@@ -28,4 +28,6 @@ require dirname( __DIR__ ) . '/includes/class-submitted-field.php';
 require dirname( __DIR__ ) . '/includes/class-mail-header-guard.php';
 require dirname( __DIR__ ) . '/includes/class-mail-template.php';
 require dirname( __DIR__ ) . '/includes/class-mail-layout.php';
+require dirname( __DIR__ ) . '/includes/class-mail-log.php';
+require dirname( __DIR__ ) . '/includes/class-mailer.php';
 require dirname( __DIR__ ) . '/includes/class-mail-builder.php';

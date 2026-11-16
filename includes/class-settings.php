@@ -88,6 +88,15 @@ final class Settings {
         return 'constant' === $this->source( $key );
     }
 
+    /** @return string[] */
+    public function keys(): array {
+        return array_keys( self::DEFINITIONS );
+    }
+
+    public function is_secret( string $key ): bool {
+        return isset( self::DEFINITIONS[ $key ] ) && 'secret' === self::DEFINITIONS[ $key ][2];
+    }
+
     /** @param array<string,mixed> $values */
     public function save( array $values ): void {
         $options = get_option( self::OPTION, [] );

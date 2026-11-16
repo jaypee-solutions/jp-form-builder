@@ -13,6 +13,8 @@ extracts it as the GitHub release notes and fails without it.
 ### Added
 - Added a protected Forms editor with configurable capability and REST read access.
 - Added a settings page with constant-locked fields and encrypted secret storage.
+- Added SMTP configuration, HTML mail layout previews, test mail, redacted failure logging, and WP-CLI mail and settings commands.
+- Added the `/mail-preview` REST endpoint for authorized template previews.
 
 ## [0.1.0] - 2026-11-16
 

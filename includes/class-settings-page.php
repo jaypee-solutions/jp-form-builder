@@ -22,7 +22,31 @@ final class Settings_Page {
     public function init(): void {
         add_action( 'admin_menu', [ $this, 'register_menu' ] );
         add_action( 'admin_post_jp_form_builder_save_settings', [ $this, 'save' ] );
+        add_action( 'admin_post_jp_form_builder_test_mail', [ $this, 'test_mail' ] );
+        add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
         add_action( 'admin_notices', [ $this, 'notices' ] );
+    }
+
+    public function enqueue( string $hook ): void {
+        if ( 'jp_form_page_jp-form-builder-settings' !== $hook ) {
+            return;
+        }
+        $editor_settings = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
+        wp_enqueue_script( 'jp-form-builder-mail-settings', plugins_url( 'assets/admin/mail-settings.js', PLUGIN_FILE ), [ 'code-editor', 'wp-api-fetch' ], VERSION, true );
+        wp_localize_script( 'jp-form-builder-mail-settings', 'jpFormBuilderMailEditor', false !== $editor_settings ? $editor_settings : [] );
+        wp_localize_script( 'jp-form-builder-mail-settings', 'wpApiSettings', [ 'root' => esc_url_raw( rest_url() ), 'nonce' => wp_create_nonce( 'wp_rest' ) ] );
+    }
+
+    public function test_mail(): void {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( esc_html__( 'You are not allowed to send test mail.', 'jp-form-builder' ) );
+        }
+        check_admin_referer( 'jp_form_builder_test_mail' );
+        $to = isset( $_POST['recipient'] ) ? sanitize_email( wp_unslash( $_POST['recipient'] ) ) : '';
+        $result = ( new Mailer( $this->settings ) )->send_test( $to );
+        $url = add_query_arg( 'test-mail', is_wp_error( $result ) ? 'failed' : 'sent', menu_page_url( 'jp-form-builder-settings', false ) );
+        wp_safe_redirect( $url );
+        exit;
     }
 
     public function register_menu(): void {
@@ -35,7 +59,12 @@ final class Settings_Page {
         }
         check_admin_referer( 'jp_form_builder_save_settings' );
         $input = isset( $_POST['jp_form_builder_settings'] ) && is_array( $_POST['jp_form_builder_settings'] ) ? wp_unslash( $_POST['jp_form_builder_settings'] ) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- validated per-key by Settings.
-        $this->settings->save( $input );
+        try {
+            $this->settings->save( $input );
+        } catch ( \InvalidArgumentException $exception ) {
+            wp_safe_redirect( add_query_arg( 'settings-error', 'invalid-layout', menu_page_url( 'jp-form-builder-settings', false ) ) );
+            exit;
+        }
         wp_safe_redirect( add_query_arg( 'settings-updated', '1', menu_page_url( 'jp-form-builder-settings', false ) ) );
     }
 
@@ -72,27 +101,42 @@ final class Settings_Page {
             <?php if ( isset( $_GET['settings-updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
                 <div class="notice notice-success"><p><?php esc_html_e( 'Settings saved.', 'jp-form-builder' ); ?></p></div>
             <?php endif; ?>
+            <?php if ( isset( $_GET['test-mail'] ) && 'sent' === $_GET['test-mail'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+                <div class="notice notice-success"><p><?php esc_html_e( 'Test mail sent.', 'jp-form-builder' ); ?></p></div>
+            <?php elseif ( isset( $_GET['test-mail'] ) && 'failed' === $_GET['test-mail'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+                <div class="notice notice-error"><p><?php esc_html_e( 'Test mail failed. Check the mail failure log.', 'jp-form-builder' ); ?></p></div>
+            <?php endif; ?>
+            <?php if ( isset( $_GET['settings-error'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+                <div class="notice notice-error"><p><?php esc_html_e( 'The mail layout must contain {content}; the previous layout was kept.', 'jp-form-builder' ); ?></p></div>
+            <?php endif; ?>
             <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <input type="hidden" name="action" value="jp_form_builder_save_settings" />
                 <?php wp_nonce_field( 'jp_form_builder_save_settings' ); ?>
                 <table class="form-table" role="presentation"><tbody>
                 <?php
                 foreach ( $fields as $key => $label ) :
+                    if ( 'mail_layout' === $key ) :
+                        ?>
+                        <tr><th colspan="2"><h2><?php esc_html_e( 'Mail', 'jp-form-builder' ); ?></h2></th></tr>
+                    <?php endif; ?>
                     $locked = $this->settings->is_locked( $key );
                     $value  = $this->settings->get( $key );
                     $secret = in_array( $key, [ 'smtp_password', 'turnstile_secret_key', 'm365_client_secret' ], true );
                     $type   = in_array( $key, [ 'smtp_auth', 'force_from' ], true ) ? 'checkbox' : ( $secret ? 'password' : ( 'smtp_port' === $key ? 'number' : 'text' ) );
                     ?>
                     <tr><th scope="row"><label for="jpfb-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th><td>
-                    <?php if ( 'checkbox' === $type ) : ?>
+                    <?php if ( in_array( $key, [ 'mail_layout', 'notification_body', 'confirmation_body' ], true ) ) : ?>
+                        <textarea id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" rows="8" class="large-text code" <?php disabled( $locked ); ?>><?php echo esc_textarea( (string) $value ); ?></textarea>
+                        <?php if ( 'mail_layout' === $key ) : ?>
+                            <button type="button" class="button" id="jpfb-reset-mail-layout"><?php esc_html_e( 'Reset to default', 'jp-form-builder' ); ?></button>
+                        <?php endif; ?>
+                    <?php elseif ( 'checkbox' === $type ) : ?>
                         <input type="hidden" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="0" />
                         <input type="checkbox" id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="1" <?php checked( (bool) $value ); ?> <?php disabled( $locked ); ?> />
                     <?php else : ?>
                         <input type="<?php echo esc_attr( $type ); ?>" id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $secret ? '' : (string) $value ); ?>" class="regular-text" <?php disabled( $locked ); ?>
-                        <?php
-                        if ( $secret ) :
-                            ?>
-                            autocomplete="new-password" readonly="readonly" onfocus="this.removeAttribute('readonly');" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" placeholder="<?php echo esc_attr( '' !== (string) $value ? __( 'Saved — overwrite to change', 'jp-form-builder' ) : __( 'Not set', 'jp-form-builder' ) ); ?>"<?php endif; ?> />
+                        <?php if ( $secret ) : ?>
+                            autocomplete="new-password" placeholder="<?php echo esc_attr( '' !== (string) $value ? __( 'Saved — overwrite to change', 'jp-form-builder' ) : __( 'Not set', 'jp-form-builder' ) ); ?>"<?php endif; ?> />
                     <?php endif; ?>
                     <?php
                     if ( $locked ) :
@@ -106,7 +150,20 @@ final class Settings_Page {
                 <?php endforeach; ?>
                 </tbody></table>
                 <?php submit_button( __( 'Save settings', 'jp-form-builder' ) ); ?>
+                <h2><?php esc_html_e( 'Live mail preview', 'jp-form-builder' ); ?></h2>
+                <iframe id="jpfb-mail-preview" title="<?php esc_attr_e( 'Mail preview', 'jp-form-builder' ); ?>" sandbox="" style="width:100%;min-height:360px"></iframe>
             </form>
+            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                <input type="hidden" name="action" value="jp_form_builder_test_mail" />
+                <?php wp_nonce_field( 'jp_form_builder_test_mail' ); ?>
+                <label for="jpfb-test-recipient"><?php esc_html_e( 'Send test mail to', 'jp-form-builder' ); ?></label>
+                <input type="email" id="jpfb-test-recipient" name="recipient" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" required />
+                <?php submit_button( __( 'Send test mail', 'jp-form-builder' ), 'secondary' ); ?>
+            </form>
+            <h2><?php esc_html_e( 'Recent mail failures', 'jp-form-builder' ); ?></h2>
+            <?php foreach ( (array) get_option( 'jp_form_builder_mail_log', [] ) as $failure ) : ?>
+                <p><?php echo esc_html( $failure['time'] . ' — ' . $failure['message'] ); ?></p>
+            <?php endforeach; ?>
         </div>
 
         <?php

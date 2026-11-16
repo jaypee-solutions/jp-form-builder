@@ -87,4 +87,8 @@ final class MailCoreTest extends TestCase {
         $this->assertStringNotContainsString( 'secret', $confirmation->html_body() );
         $this->assertSame( [ 'Reply-To: "" <team@example.test>' ], $confirmation->headers() );
     }
+
+    public function test_mail_log_redacts_every_email_address(): void {
+        $this->assertSame( '[redacted] contacted [redacted]', Mail_Log::redact( 'jane@example.test contacted team@example.org' ) );
+    }
 }
