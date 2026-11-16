@@ -114,6 +114,9 @@ final class Form_Renderer {
             $type  = 'email' === $field->type ? 'email' : ( 'phone' === $field->type ? 'tel' : 'text' );
             $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( (string) ( $attributes['label'] ?? '' ) ) . '</label>';
             $html .= '<input type="' . esc_attr( $type ) . '" id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required;
+            if ( 'phone' === $field->type ) {
+                $html .= ' data-default-region="' . esc_attr( (string) ( $attributes['defaultRegion'] ?? 'DE' ) ) . '"';
+            }
             $html .= ' maxlength="' . esc_attr( (string) ( $attributes['maxLength'] ?? ( 'email' === $field->type ? 254 : 200 ) ) ) . '"';
             if ( ! empty( $attributes['placeholder'] ) ) {
                 $html .= ' placeholder="' . esc_attr( (string) $attributes['placeholder'] ) . '"';

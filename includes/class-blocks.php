@@ -28,7 +28,7 @@ final class Blocks {
                         return ''; }
                     $settings = new Settings();
                     $site_key = '' !== $settings->get( 'turnstile_site_key' ) && '' !== $settings->get( 'turnstile_secret_key' ) ? (string) $settings->get( 'turnstile_site_key' ) : '';
-                    return ( new Form_Renderer() )->render( $form, 1, $site_key );
+                    return ( new Form_Renderer() )->render( $form, 0, $site_key );
                 },
             ] );
             if ( $block && $block->editor_script ) {
