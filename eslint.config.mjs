@@ -3,9 +3,24 @@
 // are not installed as packages and must not fail import resolution.
 import wpScriptsConfig from '@wordpress/scripts/config/eslint.config.cjs';
 
+const wordpressExternals = [
+	'@wordpress/api-fetch',
+	'@wordpress/block-editor',
+	'@wordpress/blocks',
+	'@wordpress/components',
+	'@wordpress/data',
+	'@wordpress/element',
+	'@wordpress/i18n',
+	'@wordpress/server-side-render',
+	'@wordpress/url',
+];
+
 export default [
 	...wpScriptsConfig,
 	{
+		settings: {
+			'import/core-modules': wordpressExternals,
+		},
 		rules: {
 			'import/no-unresolved': [ 'error', { ignore: [ '^@wordpress/' ] } ],
 		},

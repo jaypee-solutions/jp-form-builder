@@ -5,6 +5,7 @@
   "category": "widgets",
   "textdomain": "jp-form-builder",
   "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
   "attributes": {
     "submitLabel": { "type": "string", "default": "" },
     "successMessage": { "type": "string", "default": "" },

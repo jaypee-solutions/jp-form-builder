@@ -1,0 +1,139 @@
+/*
+ * Editor previews of the Field blocks. They echo the front-end markup of
+ * Form_Renderer with plain, theme-neutral styling.
+ */
+
+.jp-form-builder__field {
+	margin-bottom: 1.25rem;
+}
+
+.jp-form-builder__field .jp-form-builder__label {
+	display: block;
+	margin-bottom: 0.35rem;
+	font-weight: 600;
+}
+
+.jp-form-builder__field .jp-form-builder__required {
+	color: #cc1818;
+}
+
+.jp-form-builder__control {
+	box-sizing: border-box;
+	min-height: 2.5rem;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid #8c8f94;
+	border-radius: 2px;
+	background: #fff;
+	color: #1e1e1e;
+	pointer-events: none;
+}
+
+.jp-form-builder__control--placeholder {
+	color: #757575;
+}
+
+.jp-form-builder__control--select {
+	position: relative;
+	padding-right: 2rem;
+	color: #757575;
+}
+
+.jp-form-builder__control--select::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 0.9rem;
+	width: 0.4rem;
+	height: 0.4rem;
+	border-right: 2px solid #1e1e1e;
+	border-bottom: 2px solid #1e1e1e;
+	transform: translateY(-70%) rotate(45deg);
+}
+
+.jp-form-builder__group {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.jp-form-builder__group legend {
+	padding: 0;
+}
+
+.jp-form-builder__part {
+	margin-bottom: 0.75rem;
+}
+
+.jp-form-builder__part .jp-form-builder__label {
+	font-weight: 400;
+}
+
+.jp-form-builder__parts-row {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: 0.75rem;
+}
+
+.jp-form-builder__help {
+	margin: 0.35rem 0 0;
+	font-size: 0.875em;
+	opacity: 0.8;
+}
+
+.jp-form-builder__consent {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5rem;
+}
+
+.jp-form-builder__checkbox {
+	flex: none;
+	box-sizing: border-box;
+	width: 1.1rem;
+	height: 1.1rem;
+	margin-top: 0.2rem;
+	border: 1px solid #8c8f94;
+	border-radius: 2px;
+	background: #fff;
+}
+
+.jp-form-builder__consent .jp-form-builder__label {
+	margin: 0;
+	font-weight: 400;
+}
+
+.jp-form-builder__link {
+	text-decoration: underline;
+}
+
+.jp-form-builder__submit {
+	margin-top: 1.25rem;
+	pointer-events: none;
+}
+
+.jp-form-builder__options-editor {
+	margin: 0 0 1rem;
+	padding: 0;
+	border: 0;
+}
+
+.jp-form-builder__options-editor legend {
+	margin-bottom: 0.5rem;
+	font-weight: 600;
+}
+
+.jp-form-builder__option {
+	margin-bottom: 1rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.jp-form-builder__option-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+}
+
+.jp-form-builder__edit-link {
+	margin: 0.5rem 0 0;
+}
