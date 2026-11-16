@@ -86,9 +86,11 @@ final class Mailer {
         $this->last_error   = null;
         $headers            = $mail->headers();
         $headers[]          = 'Content-Type: text/html; charset=UTF-8';
+        add_action( 'phpmailer_init', [ $this, 'configure' ], 1001 );
         try {
             $sent = wp_mail( $mail->recipients(), $mail->subject(), $mail->html_body(), $headers );
         } finally {
+            remove_action( 'phpmailer_init', [ $this, 'configure' ], 1001 );
             $this->pending_mail = null;
         }
         if ( ! $sent && null === $this->last_error ) {
