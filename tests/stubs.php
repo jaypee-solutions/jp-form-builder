@@ -148,6 +148,11 @@ function get_privacy_policy_url(): string {
     return 'https://example.test/privacy';
 }
 
+function selected( $selected, $current = true, bool $should_echo = true ): string {
+    unset( $should_echo );
+    return (string) $selected === (string) $current ? ' selected="selected"' : '';
+}
+
 function esc_html__( string $text, string $domain = 'default' ): string {
     return esc_html( $text );
 }

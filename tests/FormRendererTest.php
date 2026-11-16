@@ -22,6 +22,8 @@ final class FormRendererTest extends TestCase {
         self::assertStringContainsString( 'aria-describedby="jpfb-12-1-company-help jpfb-12-1-company-error"', $markup );
         self::assertStringContainsString( 'required', $markup );
         self::assertStringContainsString( 'maxlength="40"', $markup );
+        self::assertStringContainsString( 'maxlength="200"', $markup );
+        self::assertStringContainsString( 'pattern="^\\d{5}$"', $markup );
         self::assertStringContainsString( 'tabindex="-1" autocomplete="off"', $markup );
         self::assertStringContainsString( '<noscript>', $markup );
         self::assertStringContainsString( 'class="wp-element-button" disabled', $markup );
