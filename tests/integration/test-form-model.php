@@ -41,7 +41,7 @@ final class Test_Form_Model extends WP_UnitTestCase {
         add_filter( 'gettext', $translation, 10, 3 );
         try {
             $rendered = do_blocks( '<!-- wp:jp-form-builder/embed {"formId":' . $id . '} /-->' );
-            $this->assertStringContainsString( '>E-Mail</label>', $rendered );
+            $this->assertStringContainsString( 'E-Mail <span class="jp-form-builder__required"', $rendered );
         } finally {
             remove_filter( 'gettext', $translation, 10 );
         }
