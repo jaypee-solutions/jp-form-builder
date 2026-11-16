@@ -6,7 +6,12 @@ playwright-report/
 test-results/
 .wp-env/
 .phpunit.cache/
+.phpunit.result.cache
 languages/*.mo
 *.log
 .DS_Store
 .agents/
+
+# APM dependencies
+apm_modules/
+HANDOFF.md
