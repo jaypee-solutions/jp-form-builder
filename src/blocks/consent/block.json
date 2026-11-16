@@ -1,1 +1,19 @@
-{"apiVersion":3,"name":"jp-form-builder/consent","title":"Consent","category":"widgets","textdomain":"jp-form-builder","editorScript":"file:./index.js","parent":["jp-form-builder/form"],"attributes":{"label":{"type":"string","default":"Consent"},"fieldName":{"type":"string","default":""},"required":{"type":"boolean","default":true},"helpText":{"type":"string","default":""},"text":{"type":"string","default":"I agree to {privacy_policy}."},"linkText":{"type":"string","default":"privacy policy"},"privacyUrl":{"type":"string","default":""}},"supports":{"html":false}}
+{
+  "apiVersion": 3,
+  "name": "jp-form-builder/consent",
+  "title": "Consent",
+  "category": "widgets",
+  "textdomain": "jp-form-builder",
+  "editorScript": "file:./index.js",
+  "parent": ["jp-form-builder/form"],
+  "attributes": {
+    "label": { "type": "string", "default": "" },
+    "fieldName": { "type": "string", "default": "" },
+    "required": { "type": "boolean", "default": true },
+    "helpText": { "type": "string", "default": "" },
+    "text": { "type": "string", "default": "" },
+    "linkText": { "type": "string", "default": "" },
+    "privacyUrl": { "type": "string", "default": "" }
+  },
+  "supports": { "html": false }
+}

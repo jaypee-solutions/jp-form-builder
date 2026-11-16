@@ -213,3 +213,7 @@ function add_action( string $hook, $callback, int $priority = 10, int $accepted_
 function is_admin(): bool {
     return false;
 }
+
+function wp_json_encode( $value ): string {
+    return (string) json_encode( $value );
+}

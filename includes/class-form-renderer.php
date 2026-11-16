@@ -21,7 +21,7 @@ final class Form_Renderer {
         }
 
         $attrs = $form->attributes;
-        $html  = '<form data-form-id="' . esc_attr( (string) $form->id ) . '" data-rev="' . esc_attr( $form->rev ) . '" data-locale="' . esc_attr( determine_locale() ) . '"';
+        $html  = '<form method="post" data-form-id="' . esc_attr( (string) $form->id ) . '" data-rev="' . esc_attr( $form->rev ) . '" data-locale="' . esc_attr( determine_locale() ) . '"';
         if ( '' !== $site_key ) {
             $html .= ' data-turnstile-sitekey="' . esc_attr( $site_key ) . '"';
         }
@@ -47,37 +47,61 @@ final class Form_Renderer {
 
     private function render_field( int $form_id, int $instance, Field_Definition $field ): string {
         $attributes = $field->attributes;
-        $id          = 'jpfb-' . $form_id . '-' . $instance . '-' . $field->key;
-        $help_id     = $id . '-help';
-        $error_id    = $id . '-error';
-        $described   = $help_id . ' ' . $error_id;
-        $required    = ! empty( $attributes['required'] ) ? ' required' : '';
-        $html        = '<div class="jp-form-builder__field" data-field-key="' . esc_attr( $field->key ) . '">';
+        $id         = 'jpfb-' . $form_id . '-' . $instance . '-' . $field->key;
+        $error_id   = $id . '-error';
+        $help_text  = trim( (string) ( $attributes['helpText'] ?? '' ) );
+        $described  = ( '' !== $help_text ? $id . '-help ' : '' ) . $error_id;
+        $required   = ! empty( $attributes['required'] ) || 'consent' === $field->type;
+        $required_attribute = $required ? ' required' : '';
+        $indicator  = $required ? ' <span class="jp-form-builder__required" aria-hidden="true">*</span>' : '';
+        $label      = trim( (string) ( $attributes['label'] ?? '' ) );
+        $label_defaults = [
+            'name'     => __( 'Name', 'jp-form-builder' ),
+            'email'    => __( 'Email', 'jp-form-builder' ),
+            'phone'    => __( 'Phone', 'jp-form-builder' ),
+            'address'  => __( 'Address', 'jp-form-builder' ),
+            'text'     => __( 'Text', 'jp-form-builder' ),
+            'select'   => __( 'Select', 'jp-form-builder' ),
+            'textarea' => __( 'Message', 'jp-form-builder' ),
+            'consent'  => __( 'Consent', 'jp-form-builder' ),
+        ];
+        if ( '' === $label ) {
+            $label = $label_defaults[ $field->type ] ?? '';
+        }
+        $html = '<div class="jp-form-builder__field" data-field-key="' . esc_attr( $field->key ) . '">';
 
         if ( 'name' === $field->type && $field->subkeys ) {
-            $html .= '<fieldset><legend>' . esc_html( (string) ( $attributes['label'] ?? '' ) ) . '</legend>';
+            $html .= '<fieldset><legend>' . esc_html( $label ) . $indicator . '</legend>';
             foreach ( $field->subkeys as $subkey ) {
                 $sub_id = $id . '-' . $subkey;
-                $label  = 'first' === $subkey ? ( $attributes['firstLabel'] ?? __( 'First name', 'jp-form-builder' ) ) : ( $attributes['lastLabel'] ?? __( 'Last name', 'jp-form-builder' ) );
-                $html  .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( (string) $label ) . '</label>';
-                $html  .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . esc_attr( $field->key . '[' . $subkey . ']' ) . '"' . $required . ' maxlength="100" aria-describedby="' . esc_attr( $described ) . '">';
+                $label  = 'first' === $subkey
+                    ? ( '' !== (string) ( $attributes['firstLabel'] ?? '' ) ? $attributes['firstLabel'] : __( 'First name', 'jp-form-builder' ) )
+                    : ( '' !== (string) ( $attributes['lastLabel'] ?? '' ) ? $attributes['lastLabel'] : __( 'Last name', 'jp-form-builder' ) );
+                $autocomplete = 'first' === $subkey ? 'given-name' : 'family-name';
+                $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( (string) $label ) . '</label>';
+                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . esc_attr( $field->key . '[' . $subkey . ']' ) . '"' . $required_attribute . ' maxlength="100" autocomplete="' . esc_attr( $autocomplete ) . '" aria-describedby="' . esc_attr( $described ) . '">';
             }
             $html .= '</fieldset>';
         } elseif ( 'address' === $field->type ) {
-            $html .= '<fieldset><legend>' . esc_html( (string) ( $attributes['label'] ?? '' ) ) . '</legend>';
+            $patterns = [];
+            foreach ( Countries::all() as $code => $country_name ) {
+                $patterns[ $code ] = Countries::postcode_pattern( $code );
+            }
+            $html .= '<fieldset data-postcode-patterns="' . esc_attr( (string) wp_json_encode( $patterns ) ) . '"><legend>' . esc_html( $label ) . $indicator . '</legend>';
             $labels = [
                 'street'   => __( 'Street and number', 'jp-form-builder' ),
                 'postcode' => __( 'Postcode', 'jp-form-builder' ),
                 'city'     => __( 'City', 'jp-form-builder' ),
                 'country'  => __( 'Country', 'jp-form-builder' ),
             ];
+            $autocomplete = [ 'street' => 'street-address', 'postcode' => 'postal-code', 'city' => 'address-level2', 'country' => 'country' ];
             foreach ( $field->subkeys as $subkey ) {
                 $sub_id = $id . '-' . $subkey;
-                $html  .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( $labels[ $subkey ] ) . '</label>';
-                $name   = esc_attr( $field->key . '[' . $subkey . ']' );
+                $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( $labels[ $subkey ] ) . ( $required ? $indicator : '' ) . '</label>';
+                $name = esc_attr( $field->key . '[' . $subkey . ']' );
                 if ( 'country' === $subkey ) {
                     $selected = (string) ( $attributes['defaultCountry'] ?? 'DE' );
-                    $html    .= '<select id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required . ' aria-describedby="' . esc_attr( $described ) . '">';
+                    $html .= '<select id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required_attribute . ' autocomplete="country" aria-describedby="' . esc_attr( $described ) . '">';
                     foreach ( Countries::all() as $code => $country_name ) {
                         $html .= '<option value="' . esc_attr( $code ) . '"' . selected( $selected, $code, false ) . '>' . esc_html( $country_name ) . '</option>';
                     }
@@ -85,46 +109,56 @@ final class Form_Renderer {
                     continue;
                 }
                 $maxlength = 'street' === $subkey ? 200 : ( 'city' === $subkey ? 100 : 10 );
-                $pattern   = 'postcode' === $subkey ? ' pattern="' . esc_attr( Countries::postcode_pattern( (string) ( $attributes['defaultCountry'] ?? 'DE' ) ) ) . '"' : '';
-                $html     .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required . ' maxlength="' . $maxlength . '"' . $pattern . ' aria-describedby="' . esc_attr( $described ) . '">';
+                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required_attribute . ' maxlength="' . $maxlength . '" autocomplete="' . esc_attr( $autocomplete[ $subkey ] ) . '" aria-describedby="' . esc_attr( $described ) . '">';
             }
             $html .= '</fieldset>';
         } elseif ( 'consent' === $field->type ) {
-            $url  = ! empty( $attributes['privacyUrl'] ) ? $attributes['privacyUrl'] : get_privacy_policy_url();
-            $link = '<a href="' . esc_url( $url ) . '">' . esc_html( (string) ( $attributes['linkText'] ?? __( 'privacy policy', 'jp-form-builder' ) ) ) . '</a>';
-            $text = str_replace( '{privacy_policy}', $link, esc_html( (string) ( $attributes['text'] ?? '' ) ) );
-            $html .= '<label for="' . esc_attr( $id ) . '"><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '" value="1" required aria-describedby="' . esc_attr( $described ) . '"> ' . $text . '</label>';
+            $url = ! empty( $attributes['privacyUrl'] ) ? $attributes['privacyUrl'] : get_privacy_policy_url();
+            $link_text = '' !== (string) ( $attributes['linkText'] ?? '' ) ? $attributes['linkText'] : __( 'privacy policy', 'jp-form-builder' );
+            $text = '' !== (string) ( $attributes['text'] ?? '' ) ? $attributes['text'] : __( 'I agree to the {privacy_policy}.', 'jp-form-builder' );
+            $link = '<a href="' . esc_url( $url ) . '">' . esc_html( (string) $link_text ) . '</a>';
+            $text = str_replace( '{privacy_policy}', $link, esc_html( (string) $text ) );
+            $html .= '<label for="' . esc_attr( $id ) . '"><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '" value="1" required aria-describedby="' . esc_attr( $described ) . '"> ' . $text . $indicator . '</label>';
         } elseif ( 'select' === $field->type ) {
-            $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( (string) ( $attributes['label'] ?? '' ) ) . '</label>';
-            $html .= '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required . ' aria-describedby="' . esc_attr( $described ) . '">';
+            $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
+            $html .= '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute . ' aria-describedby="' . esc_attr( $described ) . '">';
             $html .= '<option value="">' . esc_html( (string) ( $attributes['placeholder'] ?? '' ) ) . '</option>';
             foreach ( $attributes['options'] ?? [] as $option ) {
                 $html .= '<option value="' . esc_attr( (string) ( $option['value'] ?? '' ) ) . '">' . esc_html( (string) ( $option['label'] ?? '' ) ) . '</option>';
             }
             $html .= '</select>';
         } elseif ( 'textarea' === $field->type ) {
-            $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( (string) ( $attributes['label'] ?? '' ) ) . '</label>';
-            $html .= '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required;
+            $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
+            $html .= '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute;
             $html .= ' rows="' . esc_attr( (string) ( $attributes['rows'] ?? 6 ) ) . '" maxlength="' . esc_attr( (string) ( $attributes['maxLength'] ?? 5000 ) ) . '"';
             if ( ! empty( $attributes['placeholder'] ) ) {
                 $html .= ' placeholder="' . esc_attr( (string) $attributes['placeholder'] ) . '"';
             }
             $html .= ' aria-describedby="' . esc_attr( $described ) . '"></textarea>';
         } else {
-            $type  = 'email' === $field->type ? 'email' : ( 'phone' === $field->type ? 'tel' : 'text' );
-            $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( (string) ( $attributes['label'] ?? '' ) ) . '</label>';
-            $html .= '<input type="' . esc_attr( $type ) . '" id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required;
+            $types = [ 'email' => 'email', 'phone' => 'tel' ];
+            $type  = $types[ $field->type ] ?? 'text';
+            $autocomplete = [ 'name' => 'name', 'email' => 'email', 'phone' => 'tel' ];
+            $auto = 'name' === $field->type && ! $field->subkeys ? 'name' : ( $autocomplete[ $field->type ] ?? '' );
+            $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
+            $html .= '<input type="' . esc_attr( $type ) . '" id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute;
             if ( 'phone' === $field->type ) {
                 $html .= ' data-default-region="' . esc_attr( (string) ( $attributes['defaultRegion'] ?? 'DE' ) ) . '"';
             }
-            $html .= ' maxlength="' . esc_attr( (string) ( $attributes['maxLength'] ?? ( 'email' === $field->type ? 254 : 200 ) ) ) . '"';
+            if ( '' !== $auto ) {
+                $html .= ' autocomplete="' . esc_attr( $auto ) . '"';
+            }
+            $maxlength = 'name' === $field->type ? 100 : ( $attributes['maxLength'] ?? ( 'email' === $field->type ? 254 : 200 ) );
+            $html .= ' maxlength="' . esc_attr( (string) $maxlength ) . '"';
             if ( ! empty( $attributes['placeholder'] ) ) {
                 $html .= ' placeholder="' . esc_attr( (string) $attributes['placeholder'] ) . '"';
             }
             $html .= ' aria-describedby="' . esc_attr( $described ) . '">';
         }
 
-        $html .= '<p id="' . esc_attr( $help_id ) . '">' . esc_html( (string) ( $attributes['helpText'] ?? '' ) ) . '</p>';
+        if ( '' !== $help_text ) {
+            $html .= '<p id="' . esc_attr( $id . '-help' ) . '">' . esc_html( $help_text ) . '</p>';
+        }
         $html .= '<div id="' . esc_attr( $error_id ) . '" class="jp-form-builder__error"></div></div>';
         return $html;
     }

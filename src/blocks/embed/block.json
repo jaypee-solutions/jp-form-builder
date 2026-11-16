@@ -1,1 +1,18 @@
-{"apiVersion":3,"name":"jp-form-builder/embed","title":"Form","category":"widgets","textdomain":"jp-form-builder","editorScript":"file:./index.js","viewScript":"file:./view.js","style":"file:./style-index.css","attributes":{"formId":{"type":"number","default":0}},"supports":{"html":false,"align":["wide"],"spacing":{"margin":true}}}
+{
+  "apiVersion": 3,
+  "name": "jp-form-builder/embed",
+  "title": "Form",
+  "category": "widgets",
+  "textdomain": "jp-form-builder",
+  "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js",
+  "style": "file:./style-index.css",
+  "attributes": {
+    "formId": { "type": "number", "default": 0 }
+  },
+  "supports": {
+    "html": false,
+    "align": ["wide"],
+    "spacing": { "margin": true }
+  }
+}

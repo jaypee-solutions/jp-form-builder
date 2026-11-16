@@ -7,13 +7,16 @@ final class Test_Form_Model extends WP_UnitTestCase {
             'post_type' => $type,
             'post_status' => $status,
             'post_title' => 'Integration Form',
-            'post_content' => '<!-- wp:jp-form-builder/form {"submitLabel":"Send"} --><!-- wp:jp-form-builder/email {"label":"Work Email","fieldName":"email"} /--><!-- /wp:jp-form-builder/form -->',
+            'post_content' => '<!-- wp:jp-form-builder/form {"submitLabel":"Send"} --><!-- wp:jp-form-builder/email {"label":"Work Email","fieldName":"Your E-Mail!"} /--><!-- wp:jp-form-builder/embed {"formId":99} /--><!-- wp:jp-form-builder/consent {"fieldName":"privacy","required":false} /--><!-- /wp:jp-form-builder/form -->',
         ] );
     }
     public function test_embed_renders_only_published_form_and_revision_lookup_works(): void {
         $id = $this->create_form();
         $rendered = do_blocks( '<!-- wp:jp-form-builder/embed {"formId":' . $id . '} /-->' );
         $this->assertStringContainsString( 'Work Email', $rendered );
+        $this->assertStringContainsString( 'data-field-key="your_e_mail"', $rendered );
+        $this->assertStringNotContainsString( 'data-field-key="embed_', $rendered );
+        $this->assertStringContainsString( 'name="privacy" value="1" required', $rendered );
         $this->assertStringContainsString( 'data-rev="', $rendered );
         $form = ( new Form_Repository() )->find( $id );
         $this->assertNotNull( $form );
@@ -22,6 +25,26 @@ final class Test_Form_Model extends WP_UnitTestCase {
         $this->assertNotNull( ( new Form_Repository() )->find_fields( $id, $form->rev ) );
         $this->assertNull( ( new Form_Repository() )->find_fields( $id, '0000000000000000' ) );
         $this->assertSame( '', do_blocks( '<!-- wp:jp-form-builder/form /-->' ) );
+    }
+    public function test_empty_field_label_is_translated_when_rendered(): void {
+        $id = self::factory()->post->create(
+            [
+                'post_type'    => 'jp_form',
+                'post_status'  => 'publish',
+                'post_title'   => 'Kontakt',
+                'post_content' => '<!-- wp:jp-form-builder/form --><!-- wp:jp-form-builder/email /--><!-- /wp:jp-form-builder/form -->',
+            ]
+        );
+        $translation = static function ( $translated, $text, $domain ) {
+            return 'jp-form-builder' === $domain && 'Email' === $text ? 'E-Mail' : $translated;
+        };
+        add_filter( 'gettext', $translation, 10, 3 );
+        try {
+            $rendered = do_blocks( '<!-- wp:jp-form-builder/embed {"formId":' . $id . '} /-->' );
+            $this->assertStringContainsString( '>E-Mail</label>', $rendered );
+        } finally {
+            remove_filter( 'gettext', $translation, 10 );
+        }
     }
     public function test_embed_ignores_unpublished_and_other_post_types(): void {
         $draft = $this->create_form( 'draft' );

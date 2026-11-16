@@ -1,1 +1,18 @@
-{"apiVersion":3,"name":"jp-form-builder/select","title":"Select","category":"widgets","textdomain":"jp-form-builder","editorScript":"file:./index.js","parent":["jp-form-builder/form"],"attributes":{"label":{"type":"string","default":"Select"},"fieldName":{"type":"string","default":""},"required":{"type":"boolean","default":false},"helpText":{"type":"string","default":""},"options":{"type":"array","default":[]},"placeholder":{"type":"string","default":""}},"supports":{"html":false}}
+{
+  "apiVersion": 3,
+  "name": "jp-form-builder/select",
+  "title": "Select",
+  "category": "widgets",
+  "textdomain": "jp-form-builder",
+  "editorScript": "file:./index.js",
+  "parent": ["jp-form-builder/form"],
+  "attributes": {
+    "label": { "type": "string", "default": "" },
+    "fieldName": { "type": "string", "default": "" },
+    "required": { "type": "boolean", "default": false },
+    "helpText": { "type": "string", "default": "" },
+    "options": { "type": "array", "default": [] },
+    "placeholder": { "type": "string", "default": "" }
+  },
+  "supports": { "html": false }
+}
