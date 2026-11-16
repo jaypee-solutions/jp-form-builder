@@ -44,6 +44,6 @@ final class Test_Mail_Preview extends WP_UnitTestCase {
         $this->assertStringNotContainsString( 'sample message', $html );
         $this->assertSame( 400, $request( [ 'layout' => '<p>missing content</p>' ] )->get_status() );
         $this->assertSame( 200, $request( [ 'layout' => '' ] )->get_status() );
-        $this->assertFalse( tests_retrieve_phpmailer_instance()->getSentMIMEMessage() );
+        $this->assertSame( [], tests_retrieve_phpmailer_instance()->getToAddresses() );
     }
 }

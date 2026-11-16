@@ -54,6 +54,7 @@ final class Mail_Layout {
         $allowed['a']['href'] = true;
         $allowed['style']     = [];
         $clean                = wp_kses( $layout, $allowed, [ 'http', 'https', 'mailto' ] );
+        $clean                = (string) preg_replace( '/\s(?:src|href)\s*=\s*(["\'])https?:\/\/.*?\1/i', '', $clean );
         $clean                = (string) preg_replace( '/\ssrc\s*=\s*(["\']).*?\1/i', '', $clean );
         $clean                = (string) preg_replace( '/@import\b[^;]*;?/i', '', $clean );
         $clean                = (string) preg_replace( '/url\(\s*(["\']?)\s*(?:https?:)?\/\/[^)]*\)/i', 'none', $clean );

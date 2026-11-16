@@ -11,6 +11,8 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
 
     public function set_up(): void {
         parent::set_up();
+        update_option( 'home', 'https://example.test' );
+        update_option( 'siteurl', 'https://example.test' );
         update_option( 'jp_form_builder_settings', [] );
         reset_phpmailer_instance();
     }

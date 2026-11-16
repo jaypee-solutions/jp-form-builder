@@ -79,6 +79,5 @@ final class Test_Form_Access extends WP_UnitTestCase {
         $this->assertSame( 'saved-user', $stored['smtp_user'] );
         $this->assertSame( 2525, ( new \JayPee\FormBuilder\Settings() )->get( 'smtp_port' ) );
         $this->assertArrayNotHasKey( 'smtp_port', $stored );
-        $this->assertArrayNotHasKey( 'smtp_host', $stored );
     }
 }

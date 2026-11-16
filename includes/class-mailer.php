@@ -89,7 +89,12 @@ final class Mailer {
         } finally {
             $this->pending_mail = null;
         }
-        return $sent && null === $this->last_error ? true : ( $this->last_error ?? new \WP_Error( 'jpfb_mail_failed', __( 'Mail could not be sent.', 'jp-form-builder' ) ) );
+        if ( ! $sent && null === $this->last_error ) {
+            $error = new \WP_Error( 'jpfb_mail_failed', __( 'Mail could not be sent.', 'jp-form-builder' ) );
+            do_action( 'wp_mail_failed', $error );
+            $this->last_error = $error;
+        }
+        return $sent && null === $this->last_error ? true : $this->last_error;
     }
 
     public function send_test( string $to ) {

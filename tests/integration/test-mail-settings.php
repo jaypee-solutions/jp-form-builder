@@ -9,6 +9,12 @@ declare( strict_types = 1 );
 
 final class Test_Mail_Settings extends WP_UnitTestCase {
 
+    public function set_up(): void {
+        parent::set_up();
+        update_option( 'home', 'https://example.test' );
+        update_option( 'siteurl', 'https://example.test' );
+        reset_phpmailer_instance();
+    }
     private function submit_settings( string $layout ): string {
         $admin = self::factory()->user->create( [ 'role' => 'administrator' ] );
         wp_set_current_user( $admin );
