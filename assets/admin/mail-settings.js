@@ -1,23 +1,69 @@
 ( function () {
 	'use strict';
-	const layout = document.getElementById( 'jpfb-mail_layout' );
-	if ( layout && window.wp && wp.codeEditor ) {
-		wp.codeEditor.initialize( layout, window.jpFormBuilderMailEditor || {} );
-	}
+
+	const layoutField = document.getElementById( 'jpfb-mail_layout' );
+	const subjectField = document.getElementById( 'jpfb-notification_subject' );
+	const bodyField = document.getElementById( 'jpfb-notification_body' );
 	const frame = document.getElementById( 'jpfb-mail-preview' );
-	const subject = document.getElementById( 'jpfb-notification_subject' );
-	const body = document.getElementById( 'jpfb-notification_body' );
-	const update = function () {
-		if ( ! frame || ! subject || ! body || ! window.wpApiSettings ) return;
-		fetch( wpApiSettings.root + 'jp-form-builder/v1/mail-preview', {
-			method: 'POST', credentials: 'same-origin',
-			headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': wpApiSettings.nonce },
-			body: JSON.stringify( { kind: 'notification', subject: subject.value, body: body.value, layout: true, layout_html: layout ? layout.value : '' } ),
-		} ).then( function ( response ) { return response.json(); } ).then( function ( result ) {
-			if ( result.html ) frame.srcdoc = result.html;
-		} );
+	const resetButton = document.getElementById( 'jpfb-reset-mail-layout' );
+
+	const editor =
+		layoutField && window.wp && wp.codeEditor
+			? wp.codeEditor.initialize(
+					layoutField,
+					window.jpFormBuilderMailEditor || {}
+				).codemirror
+			: null;
+
+	const layoutValue = function () {
+		return editor ? editor.getValue() : layoutField.value;
 	};
-	[ subject, body, layout ].forEach( function ( field ) { if ( field ) field.addEventListener( 'input', update ); } );
-	const reset = document.getElementById( 'jpfb-reset-mail-layout' );
-	if ( reset && layout ) reset.addEventListener( 'click', function () { layout.value = ''; } );
-}() );
+
+	let timer = null;
+	const renderPreview = function () {
+		if ( ! frame || ! layoutField || ! window.wp || ! wp.apiFetch ) {
+			return;
+		}
+		wp.apiFetch( {
+			path: '/jp-form-builder/v1/mail-preview',
+			method: 'POST',
+			data: {
+				kind: 'notification',
+				subject: subjectField ? subjectField.value : '',
+				body: bodyField ? bodyField.value : '',
+				layout: layoutValue(),
+			},
+		} )
+			.then( function ( result ) {
+				frame.srcdoc = result.html;
+			} )
+			.catch( function ( error ) {
+				frame.srcdoc = '<p>' + ( error.message || '' ) + '</p>';
+			} );
+	};
+	const schedulePreview = function () {
+		window.clearTimeout( timer );
+		timer = window.setTimeout( renderPreview, 400 );
+	};
+
+	if ( editor ) {
+		editor.on( 'change', schedulePreview );
+	}
+	[ subjectField, bodyField ].forEach( function ( field ) {
+		if ( field ) {
+			field.addEventListener( 'input', schedulePreview );
+		}
+	} );
+	if ( resetButton && layoutField ) {
+		// An empty layout is saved as "use the bundled default".
+		resetButton.addEventListener( 'click', function () {
+			if ( editor ) {
+				editor.setValue( '' );
+			} else {
+				layoutField.value = '';
+			}
+			schedulePreview();
+		} );
+	}
+	renderPreview();
+} )();

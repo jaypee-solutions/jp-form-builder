@@ -16,6 +16,7 @@ final class Mailer {
     private Settings $settings;
     private ?Mail $pending_mail = null;
     private ?\WP_Error $last_error = null;
+    private bool $replaced_default_from = false;
 
     public function __construct( ?Settings $settings = null ) {
         $this->settings = $settings ?? new Settings();
@@ -24,6 +25,27 @@ final class Mailer {
     public function init(): void {
         add_action( 'phpmailer_init', [ $this, 'configure' ], 1000 );
         add_action( 'wp_mail_failed', [ $this, 'capture_failure' ] );
+        add_filter( 'wp_mail_from', [ $this, 'filter_from' ], 1000 );
+        add_filter( 'wp_mail_from_name', [ $this, 'filter_from_name' ], 1000 );
+    }
+
+    public function filter_from( string $from ): string {
+        $configured                  = (string) $this->settings->get( 'from_email' );
+        $this->replaced_default_from = '' !== $configured && ( $this->forces_from() || $this->is_wordpress_default( $from ) );
+        return $this->replaced_default_from ? $configured : $from;
+    }
+
+    // Core applies `wp_mail_from_name` right after `wp_mail_from`, so the name follows the address decision.
+    public function filter_from_name( string $name ): string {
+        $configured = (string) $this->settings->get( 'from_name' );
+        if ( '' === $configured || ! $this->replaced_default_from ) {
+            return $name;
+        }
+        return $this->forces_from() || 'WordPress' === $name ? $configured : $name;
+    }
+
+    private function forces_from(): bool {
+        return (bool) $this->settings->get( 'force_from' );
     }
 
     /** @param object $mailer PHPMailer instance. */
@@ -43,13 +65,12 @@ final class Mailer {
             $mailer->Timeout    = 15;
         }
         $from = (string) $this->settings->get( 'from_email' );
-        if ( '' !== $from && ( (bool) $this->settings->get( 'force_from' ) || $this->is_wordpress_default( (string) $mailer->From ) ) ) {
-            $mailer->setFrom( $from, (string) $this->settings->get( 'from_name' ), false );
-        }
         if ( '' !== $from ) {
             $mailer->Sender = $from;
         }
-        $mailer->AltBody = null !== $this->pending_mail ? $this->pending_mail->text_body() : '';
+        if ( null !== $this->pending_mail ) {
+            $mailer->AltBody = $this->pending_mail->text_body();
+        }
     }
     // phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
@@ -72,13 +93,18 @@ final class Mailer {
     }
 
     public function send_test( string $to ) {
-        $html = ( new Mail_Layout( $this->settings ) )->wrap( '<p>' . esc_html__( 'This is a test message from Form Builder.', 'jp-form-builder' ) . '</p>' );
-        $text = wp_strip_all_tags( $html );
+        $message = '<p>' . esc_html__( 'This is a test message from Form Builder.', 'jp-form-builder' ) . '</p>';
+        $html = ( new Mail_Layout( $this->settings ) )->wrap( $message );
+        $text = ( new Mail_Template() )->render( $message, [], [], 'text' );
         return $this->send( new Mail( [ $to ], __( 'Form Builder test mail', 'jp-form-builder' ), $html, $text ) );
     }
 
+    private function core_default_from(): string {
+        $host = wp_parse_url( network_home_url(), PHP_URL_HOST );
+        return 'wordpress@' . ( is_string( $host ) ? preg_replace( '/^www\./i', '', $host ) : '' );
+    }
+
     private function is_wordpress_default( string $from ): bool {
-        $host = wp_parse_url( home_url(), PHP_URL_HOST );
-        return is_string( $host ) && strtolower( $from ) === strtolower( 'wordpress@' . $host );
+        return strtolower( $from ) === strtolower( $this->core_default_from() );
     }
 }

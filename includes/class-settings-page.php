@@ -34,7 +34,6 @@ final class Settings_Page {
         $editor_settings = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
         wp_enqueue_script( 'jp-form-builder-mail-settings', plugins_url( 'assets/admin/mail-settings.js', PLUGIN_FILE ), [ 'code-editor', 'wp-api-fetch' ], VERSION, true );
         wp_localize_script( 'jp-form-builder-mail-settings', 'jpFormBuilderMailEditor', false !== $editor_settings ? $editor_settings : [] );
-        wp_localize_script( 'jp-form-builder-mail-settings', 'wpApiSettings', [ 'root' => esc_url_raw( rest_url() ), 'nonce' => wp_create_nonce( 'wp_rest' ) ] );
     }
 
     public function test_mail(): void {
@@ -43,6 +42,9 @@ final class Settings_Page {
         }
         check_admin_referer( 'jp_form_builder_test_mail' );
         $to = isset( $_POST['recipient'] ) ? sanitize_email( wp_unslash( $_POST['recipient'] ) ) : '';
+        if ( '' === $to ) {
+            $to = wp_get_current_user()->user_email;
+        }
         $result = ( new Mailer( $this->settings ) )->send_test( $to );
         $url = add_query_arg( 'test-mail', is_wp_error( $result ) ? 'failed' : 'sent', menu_page_url( 'jp-form-builder-settings', false ) );
         wp_safe_redirect( $url );
@@ -66,6 +68,7 @@ final class Settings_Page {
             exit;
         }
         wp_safe_redirect( add_query_arg( 'settings-updated', '1', menu_page_url( 'jp-form-builder-settings', false ) ) );
+        exit;
     }
 
     public function render(): void {
