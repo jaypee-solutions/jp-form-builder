@@ -15,6 +15,7 @@ final class Form_Post_Type {
 
     public static function init(): void {
         add_action( 'init', [ __CLASS__, 'register' ] );
+        add_filter( 'allowed_block_types_all', [ __CLASS__, 'allowed_blocks' ], 10, 2 );
     }
 
     public static function capability(): string {
@@ -42,8 +43,30 @@ final class Form_Post_Type {
                 'supports'           => [ 'title', 'editor', 'revisions' ],
                 'capability_type'    => [ 'jp_form', 'jp_forms' ],
                 'capabilities'       => $caps,
+                'template'           => [ [ 'jp-form-builder/form', [] ] ],
+                'template_lock'      => 'insert',
                 'map_meta_cap'       => false,
             ]
         );
+    }
+
+    /** @param string[]|bool $allowed @param WP_Block_Editor_Context $context */
+    public static function allowed_blocks( $allowed, $context ) {
+        if ( empty( $context->post ) || 'jp_form' !== $context->post->post_type ) {
+            return $allowed;
+        }
+        return [
+            'jp-form-builder/form',
+            'jp-form-builder/name',
+            'jp-form-builder/email',
+            'jp-form-builder/phone',
+            'jp-form-builder/address',
+            'jp-form-builder/text',
+            'jp-form-builder/select',
+            'jp-form-builder/textarea',
+            'jp-form-builder/consent',
+            'core/paragraph',
+            'core/heading',
+        ];
     }
 }

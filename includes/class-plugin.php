@@ -18,6 +18,7 @@ final class Plugin {
         $mailer->init();
         ( new Mail_Log() )->init();
         Form_Post_Type::init();
+        ( new Blocks() )->init();
         ( new Settings_Page( null, $mailer ) )->init();
         ( new Mail_Preview_Controller() )->init();
         if ( defined( 'WP_CLI' ) && WP_CLI ) {

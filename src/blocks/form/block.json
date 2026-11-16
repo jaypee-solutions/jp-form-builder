@@ -1,0 +1,19 @@
+{
+  "apiVersion": 3,
+  "name": "jp-form-builder/form",
+  "title": "Form fields",
+  "category": "widgets",
+  "textdomain": "jp-form-builder",
+  "editorScript": "file:./index.js",
+  "attributes": {
+    "submitLabel": { "type": "string", "default": "" },
+    "successMessage": { "type": "string", "default": "" },
+    "recipients": { "type": "string", "default": "" },
+    "subject": { "type": "string", "default": "" },
+    "notificationBody": { "type": "string", "default": "" },
+    "confirmationEnabled": { "type": "boolean", "default": false },
+    "confirmationSubject": { "type": "string", "default": "" },
+    "confirmationBody": { "type": "string", "default": "" }
+  },
+  "supports": { "html": false, "inserter": false }
+}

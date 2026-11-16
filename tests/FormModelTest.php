@@ -1,0 +1,29 @@
+<?php
+/** Tests parsed Form definitions. */
+use JayPee\FormBuilder\Block_Defaults;
+use JayPee\FormBuilder\Form_Definition_Parser;
+use PHPUnit\Framework\TestCase;
+final class FormModelTest extends TestCase {
+    public function test_defaults_and_field_keys_are_merged_in_document_order(): void {
+        $parser = new Form_Definition_Parser( new Block_Defaults( dirname( __DIR__ ) . '/src/blocks' ) );
+        $blocks = [
+            [
+                'blockName' => 'jp-form-builder/form', 'attrs' => [], 'innerBlocks' => [
+                [ 'blockName' => 'core/paragraph', 'attrs' => [ 'content' => 'Intro' ] ],
+                [ 'blockName' => 'jp-form-builder/name', 'attrs' => [ 'fieldName' => 'person', 'split' => true ] ],
+                [ 'blockName' => 'jp-form-builder/email', 'attrs' => [] ],
+                [ 'blockName' => 'jp-form-builder/email', 'attrs' => [] ],
+                ],
+            ],
+        ];
+        $content = 'definition';
+        $form = $parser->parse( $blocks, 17, 'Contact', $content );
+        self::assertNotNull( $form );
+        self::assertSame( substr( hash( 'sha256', $content ), 0, 16 ), $form->rev );
+        self::assertSame( '', $form->attributes['submitLabel'] );
+        self::assertIsArray( $form->items[0] );
+        self::assertSame( [ 'first', 'last' ], $form->items[1]->subkeys );
+        self::assertSame( 'email_1', $form->items[2]->key );
+        self::assertSame( 'email_2', $form->items[3]->key );
+    }
+}

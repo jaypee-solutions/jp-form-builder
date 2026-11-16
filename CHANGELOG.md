@@ -15,6 +15,8 @@ extracts it as the GitHub release notes and fails without it.
 - Added a settings page with constant-locked fields and encrypted secret storage.
 - Added SMTP configuration, HTML mail layout previews, test mail, redacted failure logging, and WP-CLI mail and settings commands.
 - Added the `/mail-preview` REST endpoint for authorized template previews.
+- Added the reusable Form block, Field blocks, and server-rendered accessible Form embeds.
+- Added Form parsing, defaults, published-Form lookup with revision resolution, country data, and the authenticated Forms picker endpoint.
 
 ## [0.1.0] - 2026-11-16
 
