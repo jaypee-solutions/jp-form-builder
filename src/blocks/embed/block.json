@@ -19,7 +19,9 @@
 		{ "name": "standard", "label": "Standard", "isDefault": true },
 		{ "name": "soft", "label": "Soft" },
 		{ "name": "underlined", "label": "Underlined" },
-		{ "name": "rounded", "label": "Rounded" }
+		{ "name": "rounded", "label": "Rounded" },
+		{ "name": "card", "label": "Card" },
+		{ "name": "glass", "label": "Liquid Glass" }
 	],
 	"supports": {
 		"html": false,

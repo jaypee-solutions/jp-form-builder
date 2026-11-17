@@ -10,7 +10,7 @@ timestamp: 2026-11-17T00:00:00Z
 
 # Overview
 
-Styling belongs to the Form block that places a Form on a page, with site-wide defaults in Site Editor → Styles → Blocks → Form. It uses four block style variations, the core colour, typography, spacing and border supports, Field colours and border attributes, and per-Field widths. All values reach the markup as `--jpfb-*` CSS custom properties that theme.json `settings.custom` can also set; the Form post stays content only.
+Styling belongs to the Form block that places a Form on a page, with site-wide defaults in Site Editor → Styles → Blocks → Form. It uses six block style variations (Standard, Soft, Underlined, Rounded, Card, Liquid Glass), the core colour, typography, spacing and border supports, Field colours and border attributes, and per-Field widths. All values reach the markup as `--jpfb-*` CSS custom properties that theme.json `settings.custom` can also set; Field controls are class-qualified so theme or wp-admin input rules cannot restyle only some of them, and the Form post stays content only.
 
 # Citations
 

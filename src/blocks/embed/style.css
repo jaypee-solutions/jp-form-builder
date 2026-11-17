@@ -15,12 +15,14 @@
 
 	/* Opaque by default: patterned backgrounds never show through a Field. */
 	--jpfb-field-background: var(--wp--custom--jpfb--field-background, var(--wp--preset--color--base, Canvas));
-	--jpfb-field-border-color: var(--wp--custom--jpfb--field-border-color, color-mix(in srgb, currentcolor 60%, transparent));
+	--jpfb-field-border-color: var(--wp--custom--jpfb--field-border-color, color-mix(in srgb, currentcolor 55%, transparent));
 	--jpfb-field-border-width: var(--wp--custom--jpfb--field-border-width, 1px);
-	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 4px);
+	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 6px);
 	--jpfb-focus-color: var(--wp--custom--jpfb--focus-color, currentcolor);
-	--jpfb-field-gap: var(--wp--custom--jpfb--field-gap, 1.25em);
-	--jpfb-label-weight: var(--wp--custom--jpfb--label-weight, 600);
+	--jpfb-field-gap: var(--wp--custom--jpfb--field-gap, 1.5em);
+	--jpfb-label-weight: var(--wp--custom--jpfb--label-weight, 700);
+	--jpfb-label-color: var(--wp--custom--jpfb--label-color, var(--jpfb-text-color));
+	--jpfb-help-color: var(--wp--custom--jpfb--help-color, color-mix(in srgb, currentcolor 72%, transparent));
 	--jpfb-error-color: var(--wp--custom--jpfb--error-color, #b32d2e);
 }
 
@@ -42,6 +44,9 @@
 	--jpfb-focus-color: inherit;
 	--jpfb-field-gap: inherit;
 	--jpfb-label-weight: inherit;
+	--jpfb-label-color: inherit;
+	--jpfb-help-color: inherit;
+	--jpfb-field-shadow: inherit;
 	--jpfb-error-color: inherit;
 	--jpfb-button-radius: inherit;
 }
@@ -64,6 +69,52 @@
 .wp-block-jp-form-builder-embed.is-style-rounded {
 	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 1.25em);
 	--jpfb-button-radius: var(--wp--custom--jpfb--button-radius, 999px);
+}
+
+/* Card: the Form on a raised surface with layered shadows. */
+.wp-block-jp-form-builder-embed.is-style-card {
+	--jpfb-field-background: var(--wp--custom--jpfb--field-background, color-mix(in srgb, currentcolor 3%, var(--wp--preset--color--base, Canvas)));
+	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 8px);
+	padding: clamp(1.25em, 4vw, 2.5em);
+	border: 1px solid color-mix(in srgb, currentcolor 8%, transparent);
+	border-radius: 16px;
+	background-color: var(--wp--preset--color--base, Canvas);
+	box-shadow:
+		0 1px 2px rgb(0 0 0 / 6%),
+		0 4px 12px rgb(0 0 0 / 6%),
+		0 16px 40px rgb(0 0 0 / 10%);
+}
+
+/*
+ * Liquid Glass: a frosted, translucent surface that lets the page show
+ * through. It needs a colourful or photo background to read as glass.
+ */
+.wp-block-jp-form-builder-embed.is-style-glass {
+	--jpfb-field-background: var(--wp--custom--jpfb--field-background, color-mix(in srgb, var(--wp--preset--color--base, Canvas) 62%, transparent));
+	--jpfb-field-border-color: var(--wp--custom--jpfb--field-border-color, color-mix(in srgb, currentcolor 22%, transparent));
+	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 14px);
+	--jpfb-field-shadow: inset 0 1px 1px rgb(255 255 255 / 50%);
+	--jpfb-button-radius: var(--wp--custom--jpfb--button-radius, 999px);
+	padding: clamp(1.25em, 4vw, 2.5em);
+	border: 1px solid rgb(255 255 255 / 55%);
+	border-radius: 28px;
+	background-color: color-mix(in srgb, var(--wp--preset--color--base, Canvas) 42%, transparent);
+	box-shadow:
+		inset 0 1px 0 rgb(255 255 255 / 65%),
+		inset 0 -1px 0 rgb(255 255 255 / 20%),
+		0 10px 36px rgb(0 0 0 / 14%);
+	backdrop-filter: blur(20px) saturate(180%);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+
+	.wp-block-jp-form-builder-embed.is-style-glass {
+		background-color: color-mix(in srgb, var(--wp--preset--color--base, Canvas) 88%, transparent);
+	}
+}
+
+.is-style-glass .jp-form-builder .wp-element-button {
+	box-shadow: inset 0 1px 0 rgb(255 255 255 / 25%), 0 4px 14px rgb(0 0 0 / 18%);
 }
 
 .jp-form-builder,
@@ -134,22 +185,52 @@
 }
 
 /*
- * Low specificity, so the states below and a theme's own rules win without
- * a fight.
+ * Class-qualified on purpose (0,3,0): theme and wp-admin rules such as
+ * `input[type="text"]` or `.editor-styles-wrapper input[type="text"]` must
+ * not reshape only some controls (inputs square, selects rounded). `:where()`
+ * keeps the element list out of the specificity, so the state rules below
+ * win with one extra class or attribute. Themes restyle through the custom
+ * properties instead.
  */
-.jp-form-builder__field :where(
-	input:not([type="checkbox"]),
+.wp-block-jp-form-builder-embed .jp-form-builder .jp-form-builder__field :where(
+	input:not([type="checkbox"]):not([type="radio"]),
 	select,
 	textarea
 ) {
 	box-sizing: border-box;
 	width: 100%;
-	padding: 0.6em 0.8em;
+	min-height: 3.25em;
+	margin: 0;
+	padding: 0.75em 1em;
 	border: var(--jpfb-field-border-width) solid var(--jpfb-field-border-color);
 	border-radius: var(--jpfb-field-radius);
 	background-color: var(--jpfb-field-background);
+	box-shadow: var(--jpfb-field-shadow, none);
 	font: inherit;
+	line-height: 1.5;
 	color: var(--jpfb-text-color);
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* One caret for every browser, drawn in the text color (no image request). */
+.wp-block-jp-form-builder-embed .jp-form-builder .jp-form-builder__field select {
+	appearance: none;
+	padding-inline-end: 2.75em;
+	background-image:
+		linear-gradient(to bottom left, currentcolor 50%, transparent 50%),
+		linear-gradient(to bottom right, currentcolor 50%, transparent 50%);
+	background-position: right 1.4em center, right 1em center;
+	background-size: 0.4em 0.4em;
+	background-repeat: no-repeat;
+}
+
+.wp-block-jp-form-builder-embed .jp-form-builder .jp-form-builder__field textarea {
+	min-height: 8em;
+	resize: vertical;
+}
+
+.wp-block-jp-form-builder-embed .jp-form-builder .jp-form-builder__field :where(input, select, textarea):focus {
+	border-color: var(--jpfb-focus-color);
 }
 
 .jp-form-builder__field :where(input, textarea)::placeholder {
@@ -157,8 +238,8 @@
 	opacity: 1;
 }
 
-.is-style-underlined .jp-form-builder__field :where(
-	input:not([type="checkbox"]),
+.wp-block-jp-form-builder-embed.is-style-underlined .jp-form-builder .jp-form-builder__field :where(
+	input:not([type="checkbox"]):not([type="radio"]),
 	select,
 	textarea
 ) {
@@ -174,13 +255,20 @@
 	accent-color: var(--jpfb-focus-color);
 }
 
+.jp-form-builder__field > label,
+.jp-form-builder__field legend {
+	color: var(--jpfb-label-color);
+}
+
 .jp-form-builder__field p {
-	margin: 0.25em 0 0;
+	margin: 0.35em 0 0;
 	font-size: 0.875em;
+	color: var(--jpfb-help-color);
 }
 
 .jp-form-builder__required {
 	margin-inline-start: 0.125em;
+	color: var(--jpfb-error-color);
 }
 
 /*
@@ -196,24 +284,16 @@
 	outline-offset: 2px;
 }
 
-.is-style-soft .jp-form-builder__field :where(
-	input,
-	select,
-	textarea
-):focus:not([aria-invalid="true"]) {
-	border-color: var(--jpfb-focus-color);
-}
-
 /*
  * The error keeps its meaning in every style: a border in the error color
  * plus the message below the Field.
  */
-.jp-form-builder__field [aria-invalid="true"] {
+.wp-block-jp-form-builder-embed .jp-form-builder .jp-form-builder__field [aria-invalid="true"] {
 	border-color: var(--jpfb-error-color);
 	box-shadow: 0 0 0 1px var(--jpfb-error-color);
 }
 
-.is-style-underlined .jp-form-builder__field [aria-invalid="true"] {
+.wp-block-jp-form-builder-embed.is-style-underlined .jp-form-builder .jp-form-builder__field [aria-invalid="true"] {
 	box-shadow: 0 1px 0 0 var(--jpfb-error-color);
 }
 
@@ -267,13 +347,17 @@
 	margin-block-end: var(--jpfb-field-gap);
 }
 
-.is-style-rounded .jp-form-builder .wp-element-button {
+:is(.is-style-rounded, .is-style-glass) .jp-form-builder .wp-element-button {
 	border-radius: var(--jpfb-button-radius);
 }
 
-.jp-form-builder button[aria-disabled="true"] {
+/*
+ * Before activation the button only waits for the token, and a click then
+ * submits once it is ready, so it keeps its normal look until a send runs.
+ */
+.jp-form-builder[aria-busy="true"] button[type="submit"] {
 	opacity: 0.6;
-	cursor: wait;
+	cursor: progress;
 }
 
 /* After a successful submission only the confirmation stays. */

@@ -26,7 +26,7 @@ final class Test_Form_Styling extends WP_UnitTestCase {
 
     public function test_block_registers_style_variations_and_design_supports(): void {
         $type = WP_Block_Type_Registry::get_instance()->get_registered( 'jp-form-builder/embed' );
-        $this->assertSame( [ 'standard', 'soft', 'underlined', 'rounded' ], array_column( $type->styles, 'name' ) );
+        $this->assertSame( [ 'standard', 'soft', 'underlined', 'rounded', 'card', 'glass' ], array_column( $type->styles, 'name' ) );
         $this->assertSame( [ 'standard' ], array_column( array_filter( $type->styles, static fn( array $style ): bool => ! empty( $style['isDefault'] ) ), 'name' ) );
         foreach ( [ 'color', 'typography', 'spacing', '__experimentalBorder' ] as $support ) {
             $this->assertNotEmpty( $type->supports[ $support ], $support . ' support is registered' );

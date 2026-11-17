@@ -75,7 +75,7 @@ Filters: `jp_form_builder_capability` (capability needed to edit Forms, default 
 The Form follows your theme's fonts, colors and buttons. You can give it its own look at three levels, from the most specific to the most general:
 
 1. **On the Form block** (one placement). Select the **Form** block on a page and open the **Styles** tab:
-   - **Styles**: *Standard*, *Soft* (filled Fields, no border until focus), *Underlined* (a line under each Field) and *Rounded* (rounded Fields, pill button). They also preview in the inserter and the Styles panel.
+   - **Styles**: *Standard*, *Soft* (filled Fields, no border until focus), *Underlined* (a line under each Field), *Rounded* (rounded Fields, pill button), *Card* (the Form on a raised white surface with layered shadows) and *Liquid Glass* (a frosted, translucent surface with blur; it reads as glass over colourful or photo backgrounds, and browsers without `backdrop-filter` get a more opaque surface). They also preview in the inserter and the Styles panel.
    - **Color**: text, background, link and button colors. **Typography**: font size, family, line height. **Dimensions**: padding, margin and *Block spacing*, which is the gap between Fields. **Border**: radius, width, color and style of the whole Form.
    - **Fields**: Field background, Field border, Focus and accent color, Field border radius and width. Palette colors are stored as the palette slug, so a theme's palette change reaches the Form; custom colors are stored as written. Only palette slugs, hex, `rgb()`/`hsl()` colors (sent to the page as hex) and the keywords `transparent`, `currentcolor` and `inherit` are accepted; anything else is dropped.
 2. **In the Form editor** (per Field). Every Field except Consent has a **Width** of full, half or one third. Narrower Fields sit side by side and stack when the Form itself is narrower than 480 px (a container query, so a Form in a sidebar stacks even on a wide screen). Consent, the error summary, the status message and the button are always full width.
@@ -107,19 +107,21 @@ Theme developers set the Field design under `settings.custom.jpfb` (use `setting
 | `jpfb` key | CSS variable | Default |
 | --- | --- | --- |
 | `textColor` | `--jpfb-text-color` | the surrounding text color |
-| `fieldBackground` | `--jpfb-field-background` | the theme's `base` palette color (else the browser's page color), so patterned backgrounds never show through; *Soft*: tinted with 8 % of the text color; *Underlined*: `transparent` |
-| `fieldBorderColor` | `--jpfb-field-border-color` | 60 % of the text color; *Soft*: `transparent` |
+| `fieldBackground` | `--jpfb-field-background` | the theme's `base` palette color (else the browser's page color), so patterned backgrounds never show through; *Soft*: tinted with 8 % of the text color; *Card*: tinted with 3 %; *Liquid Glass*: translucent; *Underlined*: `transparent` |
+| `fieldBorderColor` | `--jpfb-field-border-color` | 55 % of the text color; *Soft*: `transparent`; *Liquid Glass*: 22 % |
 | `fieldBorderWidth` | `--jpfb-field-border-width` | `1px`; *Underlined*: `2px` |
-| `fieldRadius` | `--jpfb-field-radius` | `4px`; *Underlined*: `0`; *Rounded*: `1.25em` |
+| `fieldRadius` | `--jpfb-field-radius` | `6px`; *Underlined*: `0`; *Card*: `8px`; *Liquid Glass*: `14px`; *Rounded*: `1.25em` |
 | `focusColor` | `--jpfb-focus-color` | the surrounding text color; also tints checkboxes |
-| `fieldGap` | `--jpfb-field-gap` | `1.25em` (the *Block spacing* of the block) |
-| `labelWeight` | `--jpfb-label-weight` | `600` |
-| `errorColor` | `--jpfb-error-color` | `#b32d2e` |
-| `buttonRadius` | `--jpfb-button-radius` | *Rounded* only: `999px`; the other styles keep your theme's button |
+| `fieldGap` | `--jpfb-field-gap` | `1.5em` (the *Block spacing* of the block) |
+| `labelWeight` | `--jpfb-label-weight` | `700` |
+| `labelColor` | `--jpfb-label-color` | the text color |
+| `helpColor` | `--jpfb-help-color` | 72 % of the text color |
+| `errorColor` | `--jpfb-error-color` | `#b32d2e`; also colors the required marker |
+| `buttonRadius` | `--jpfb-button-radius` | *Rounded* and *Liquid Glass*: `999px`; the other styles keep your theme's button |
 
 ### CSS for developers
 
-The variables are set on the block wrapper `.wp-block-jp-form-builder-embed`, so a rule on it or on any parent overrides them for that Form. The wrapper carries `is-style-soft`, `is-style-underlined` or `is-style-rounded` (Standard has no class). Inside it, `form.jp-form-builder` holds `.jp-form-builder__fields` (a six-column grid), one `.jp-form-builder__field` per Field with `.jp-form-builder__field--<type>` and, when narrower, `.jp-form-builder__field--width-50` or `--width-33`, then the button. `.jp-form-builder__error-summary`, `.jp-form-builder__status` and `.jp-form-builder__error` style the messages.
+The variables are set on the block wrapper `.wp-block-jp-form-builder-embed`, so a rule on it or on any parent overrides them for that Form. The wrapper carries `is-style-soft`, `is-style-underlined`, `is-style-rounded`, `is-style-card` or `is-style-glass` (Standard has no class). Field controls are styled with class-qualified selectors, so generic theme or wp-admin rules such as `input[type="text"]` cannot reshape only some of them; restyle them through the variables. Inside the wrapper, `form.jp-form-builder` holds `.jp-form-builder__fields` (a six-column grid), one `.jp-form-builder__field` per Field with `.jp-form-builder__field--<type>` and, when narrower, `.jp-form-builder__field--width-50` or `--width-33`, then the button. `.jp-form-builder__error-summary`, `.jp-form-builder__status` and `.jp-form-builder__error` style the messages.
 
 ```css
 .wp-block-jp-form-builder-embed.is-style-soft {

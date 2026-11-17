@@ -4,7 +4,7 @@ import { test, expect, type Page } from './support/fixtures';
 import { wpCli } from './support/wp-cli';
 
 const FORM_PAGE = '/e2e-contact-page/';
-const VARIATIONS = [ 'standard', 'soft', 'underlined', 'rounded' ];
+const VARIATIONS = [ 'standard', 'soft', 'underlined', 'rounded', 'card', 'glass' ];
 const SCREENSHOT_DIR = 'test-results/styling';
 
 async function openNewForm( page: Page ): Promise<void> {
@@ -145,6 +145,8 @@ test.describe( 'Form styling', () => {
 		await expect( page.getByRole( 'button', { name: 'Soft', exact: true } ) ).toBeVisible();
 		await expect( page.getByRole( 'button', { name: 'Underlined', exact: true } ) ).toBeVisible();
 		await expect( page.getByRole( 'button', { name: 'Rounded', exact: true } ) ).toBeVisible();
+		await expect( page.getByRole( 'button', { name: 'Card', exact: true } ) ).toBeVisible();
+		await expect( page.getByRole( 'button', { name: 'Liquid Glass', exact: true } ) ).toBeVisible();
 		await expect( page.getByRole( 'heading', { name: 'Typography' } ) ).toBeVisible();
 	} );
 
@@ -158,21 +160,40 @@ test.describe( 'Form styling', () => {
 
 			await name.focus();
 			const focus = await name.evaluate( ( input ) => {
-				const toChannels = ( color: string ) => ( color.match( /[\d.]+/g ) ?? [] ).slice( 0, 3 ).map( Number );
-				const luminance = ( color: string ) => {
-					const [ red, green, blue ] = toChannels( color ).map( ( value ) => {
+				// A canvas normalises every CSS color syntax (rgb(), color(srgb …), keywords) to RGBA bytes.
+				const context = document.createElement( 'canvas' ).getContext( '2d' ) as CanvasRenderingContext2D;
+				const toRgba = ( color: string ): number[] => {
+					context.clearRect( 0, 0, 1, 1 );
+					context.fillStyle = color;
+					context.fillRect( 0, 0, 1, 1 );
+					const [ red, green, blue, alpha ] = context.getImageData( 0, 0, 1, 1 ).data;
+					return [ red, green, blue, alpha / 255 ];
+				};
+				const luminance = ( [ red, green, blue ]: number[] ) => {
+					const [ r, g, b ] = [ red, green, blue ].map( ( value ) => {
 						const channel = value / 255;
 						return channel <= 0.03928 ? channel / 12.92 : ( ( channel + 0.055 ) / 1.055 ) ** 2.4;
 					} );
-					return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+					return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 				};
-				let background = 'rgba(0, 0, 0, 0)';
-				// The ring sits outside the Field, so it is read against the first opaque ancestor.
-				for ( let node: Element | null = input.parentElement; node && /, 0\)$/.test( background ); node = node.parentElement ) {
-					background = getComputedStyle( node ).backgroundColor;
+				// The ring sits outside the Field: composite every translucent ancestor background
+				// (Liquid Glass, Card) over the first opaque one, as the browser paints it.
+				const layers: number[][] = [];
+				for ( let node: Element | null = input.parentElement; node; node = node.parentElement ) {
+					const layer = toRgba( getComputedStyle( node ).backgroundColor );
+					if ( layer[ 3 ] > 0 ) {
+						layers.push( layer );
+					}
+					if ( layer[ 3 ] === 1 ) {
+						break;
+					}
 				}
+				const background = layers.reduceRight(
+					( below, [ red, green, blue, alpha ] ) => [ red * alpha + below[ 0 ] * ( 1 - alpha ), green * alpha + below[ 1 ] * ( 1 - alpha ), blue * alpha + below[ 2 ] * ( 1 - alpha ) ],
+					[ 255, 255, 255 ]
+				);
 				const style = getComputedStyle( input );
-				const [ lighter, darker ] = [ luminance( style.outlineColor ), luminance( background ) ].sort( ( a, b ) => b - a );
+				const [ lighter, darker ] = [ luminance( toRgba( style.outlineColor ) ), luminance( background ) ].sort( ( a, b ) => b - a );
 				return { style: style.outlineStyle, width: style.outlineWidth, contrast: ( lighter + 0.05 ) / ( darker + 0.05 ) };
 			} );
 			expect( focus.style ).toBe( 'solid' );
@@ -192,7 +213,7 @@ test.describe( 'Form styling', () => {
 		} );
 	}
 
-	test( 'takes screenshots of the four variations', async ( { page } ) => {
+	test( 'takes screenshots of every variation', async ( { page } ) => {
 		await page.setViewportSize( { width: 1280, height: 900 } );
 		for ( const variation of VARIATIONS ) {
 			await page.goto( FORM_PAGE );
