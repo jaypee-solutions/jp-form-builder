@@ -146,8 +146,8 @@ final class Field_Validator {
      */
     private function validate_split_name( Field_Definition $field, array $raw ): array {
         $labels = [
-            'first' => $this->attribute_or( $field, 'firstLabel', __( 'First name', 'jp-form-builder' ) ),
-            'last'  => $this->attribute_or( $field, 'lastLabel', __( 'Last name', 'jp-form-builder' ) ),
+            'first' => Field_Labels::for_part( $field, 'first' ),
+            'last'  => Field_Labels::for_part( $field, 'last' ),
         ];
         $parts  = $this->parts( $field, $raw );
 
@@ -166,12 +166,10 @@ final class Field_Validator {
      * @return array{value: array<string,string>, errors: array<string,string>}
      */
     private function validate_address( Field_Definition $field, array $raw ): array {
-        $labels  = [
-            'street'   => __( 'Street and number', 'jp-form-builder' ),
-            'postcode' => __( 'Postcode', 'jp-form-builder' ),
-            'city'     => __( 'City', 'jp-form-builder' ),
-            'country'  => __( 'Country', 'jp-form-builder' ),
-        ];
+        $labels  = [];
+        foreach ( $field->subkeys as $sub ) {
+            $labels[ $sub ] = Field_Labels::for_part( $field, $sub );
+        }
         $parts   = $this->parts( $field, $raw );
 
         // A country alone is the preselected default, so it does not make an optional address "filled".
@@ -273,12 +271,8 @@ final class Field_Validator {
     }
 
     private function label( Field_Definition $field ): string {
-        return $this->attribute_or( $field, 'label', __( 'This field', 'jp-form-builder' ) );
-    }
-
-    private function attribute_or( Field_Definition $field, string $attribute, string $fallback ): string {
-        $value = Text::single_line( (string) ( $field->attributes[ $attribute ] ?? '' ) );
-        return '' !== $value ? $value : $fallback;
+        $label = Field_Labels::for_field( $field );
+        return '' !== $label ? $label : __( 'This field', 'jp-form-builder' );
     }
 
     private function required_message( string $label ): string {

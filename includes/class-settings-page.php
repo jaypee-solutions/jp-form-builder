@@ -118,12 +118,11 @@ final class Settings_Page {
                 <input type="hidden" name="action" value="jp_form_builder_save_settings" />
                 <?php wp_nonce_field( 'jp_form_builder_save_settings' ); ?>
                 <table class="form-table" role="presentation"><tbody>
-                <?php
-                foreach ( $fields as $key => $label ) :
-                    if ( 'mail_layout' === $key ) :
-                        ?>
+                <?php foreach ( $fields as $key => $label ) : ?>
+                    <?php if ( 'mail_layout' === $key ) : ?>
                         <tr><th colspan="2"><h2><?php esc_html_e( 'Mail', 'jp-form-builder' ); ?></h2></th></tr>
                     <?php endif; ?>
+                    <?php
                     $locked = $this->settings->is_locked( $key );
                     $value  = $this->settings->get( $key );
                     $secret = in_array( $key, [ 'smtp_password', 'turnstile_secret_key', 'm365_client_secret' ], true );
@@ -167,7 +166,7 @@ final class Settings_Page {
             </form>
             <h2><?php esc_html_e( 'Recent mail failures', 'jp-form-builder' ); ?></h2>
             <?php foreach ( (array) get_option( 'jp_form_builder_mail_log', [] ) as $failure ) : ?>
-                <p><?php echo esc_html( $failure['time'] . ' — ' . $failure['message'] ); ?></p>
+                <p><?php echo esc_html( $failure['time'] . ' — ' . ( empty( $failure['form_id'] ) ? '' : sprintf( /* translators: %d: Form ID. */ __( 'Form %d: ', 'jp-form-builder' ), $failure['form_id'] ) ) . $failure['message'] ); ?></p>
             <?php endforeach; ?>
         </div>
 
@@ -179,8 +178,51 @@ final class Settings_Page {
         if ( ! $screen || ( 'jp_form' !== $screen->post_type && 'jp_form_page_jp-form-builder-settings' !== $screen->id ) ) {
             return;
         }
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        $settings_link = '<a href="' . esc_url( admin_url( 'edit.php?post_type=jp_form&page=jp-form-builder-settings' ) ) . '">' . esc_html__( 'Form Builder Settings', 'jp-form-builder' ) . '</a>';
         if ( $this->settings->has_undecryptable_secret() ) {
             printf( '<div class="notice notice-warning"><p>%s</p></div>', esc_html__( 'A saved secret cannot be decrypted. Re-enter it in Form Builder Settings.', 'jp-form-builder' ) );
         }
+        if ( ! $this->settings->turnstile_configured() ) {
+            printf(
+                '<div class="notice notice-warning"><p>%s</p></div>',
+                sprintf(
+                    /* translators: %s: link to the settings page. */
+                    esc_html__( 'Cloudflare Turnstile is not configured. Forms are protected by the honeypot, the minimum fill time and the rate limit only, and Confirmations cannot be sent. Add the site key and secret key in %s.', 'jp-form-builder' ),
+                    $settings_link // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped above.
+                )
+            );
+            $this->confirmation_notice();
+        }
+        $trusted = ( new Client_Ip() )->parse_trusted( (string) $this->settings->tunable( 'trusted_proxies' ) );
+        if ( ( new Client_Ip() )->looks_proxied( $_SERVER, $trusted ) ) {
+            printf(
+                '<div class="notice notice-warning"><p>%s</p></div>',
+                esc_html__( 'This request came through a reverse proxy, but no trusted proxies are set. All visitors would share one rate limit. Define JP_FORM_BUILDER_TRUSTED_PROXIES with the proxy IPs or CIDR ranges (for example 10.0.0.0/8) in wp-config.php.', 'jp-form-builder' )
+            );
+        }
+    }
+
+    /** Lists Forms whose Confirmation cannot be sent while Turnstile is missing (ADR 0011). */
+    private function confirmation_notice(): void {
+        $links = [];
+        foreach ( ( new Form_Repository() )->find_all() as $form ) {
+            if ( ! empty( $form->attributes['confirmationEnabled'] ) ) {
+                $links[] = '<a href="' . esc_url( (string) get_edit_post_link( $form->id ) ) . '">' . esc_html( $form->title ) . '</a>';
+            }
+        }
+        if ( [] === $links ) {
+            return;
+        }
+        printf(
+            '<div class="notice notice-warning"><p>%s</p></div>',
+            sprintf(
+                /* translators: %s: list of Form titles, linked to their editors. */
+                esc_html__( 'These Forms have a Confirmation enabled, but it is not sent while Turnstile is not configured: %s', 'jp-form-builder' ),
+                implode( ', ', $links ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped above.
+            )
+        );
     }
 }

@@ -27,6 +27,18 @@ final class Form_Repository {
         return $this->parser->parse( parse_blocks( $post->post_content ), $id, get_the_title( $post ), $post->post_content );
     }
 
+    /** @return Form_Definition[] Every published Form. */
+    public function find_all(): array {
+        $forms = [];
+        foreach ( get_posts( [ 'post_type' => 'jp_form', 'post_status' => 'publish', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ] ) as $post ) {
+            $form = $this->find( $post->ID );
+            if ( null !== $form ) {
+                $forms[] = $form;
+            }
+        }
+        return $forms;
+    }
+
     public function find_fields( int $id, string $rev ): ?Form_Definition {
         $form = $this->find( $id );
         if ( $form && hash_equals( $form->rev, $rev ) ) {

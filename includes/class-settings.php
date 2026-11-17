@@ -44,6 +44,15 @@ final class Settings {
         'confirmation_body' => [ '', '', 'mail_body' ],
     ];
 
+    /** Constant-only tunables: name => [ constant, default ]. */
+    private const TUNABLES = [
+        'max_payload_bytes' => [ 'JP_FORM_BUILDER_MAX_PAYLOAD_BYTES', 32768 ],
+        'rate_limit'        => [ 'JP_FORM_BUILDER_RATE_LIMIT', 10 ],
+        'rate_window'       => [ 'JP_FORM_BUILDER_RATE_WINDOW', 600 ],
+        'min_fill_seconds'  => [ 'JP_FORM_BUILDER_MIN_FILL_SECONDS', 3 ],
+        'trusted_proxies'   => [ 'JP_FORM_BUILDER_TRUSTED_PROXIES', '' ],
+    ];
+
     /**
      * @param callable(string):array{bool,mixed}|null $constant_lookup
      */
@@ -70,6 +79,22 @@ final class Settings {
             return 'secret' === self::DEFINITIONS[ $key ][2] ? $this->secret_box->decrypt( (string) $value ) : $value;
         }
         return $default;
+    }
+
+    /** Value of a constant-only tunable (limits and trusted proxies), or its default. */
+    /** @return int|string */
+    public function tunable( string $name ) {
+        [ $constant, $default ] = self::TUNABLES[ $name ];
+        [ $defined, $value ]    = ( $this->constant_lookup )( $constant );
+        if ( ! $defined ) {
+            return $default;
+        }
+        return is_int( $default ) ? max( 0, (int) $value ) : (string) $value;
+    }
+
+    /** Whether both Turnstile keys are set. */
+    public function turnstile_configured(): bool {
+        return '' !== (string) $this->get( 'turnstile_site_key' ) && '' !== (string) $this->get( 'turnstile_secret_key' );
     }
 
     public function source( string $key ): string {

@@ -95,9 +95,7 @@ final class Blocks {
 
     /** The Turnstile site key, or '' unless both Turnstile keys are set. */
     private function turnstile_site_key( Settings $settings ): string {
-        return '' !== $settings->get( 'turnstile_site_key' ) && '' !== $settings->get( 'turnstile_secret_key' )
-            ? (string) $settings->get( 'turnstile_site_key' )
-            : '';
+        return $settings->turnstile_configured() ? (string) $settings->get( 'turnstile_site_key' ) : '';
     }
 
     public function routes(): void {

@@ -44,4 +44,5 @@ require dirname( __DIR__ ) . '/includes/class-rate-limiter.php';
 require dirname( __DIR__ ) . '/includes/class-turnstile-verifier.php';
 require dirname( __DIR__ ) . '/includes/class-turnstile-result.php';
 require dirname( __DIR__ ) . '/includes/class-form-token.php';
+require dirname( __DIR__ ) . '/includes/class-field-labels.php';
 require dirname( __DIR__ ) . '/includes/class-form-renderer.php';

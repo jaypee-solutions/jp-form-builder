@@ -54,31 +54,15 @@ final class Form_Renderer {
         $required   = ! empty( $attributes['required'] ) || 'consent' === $field->type;
         $required_attribute = $required ? ' required' : '';
         $indicator  = $required ? ' <span class="jp-form-builder__required" aria-hidden="true">*</span>' : '';
-        $label      = trim( (string) ( $attributes['label'] ?? '' ) );
-        $label_defaults = [
-            'name'     => __( 'Name', 'jp-form-builder' ),
-            'email'    => __( 'Email', 'jp-form-builder' ),
-            'phone'    => __( 'Phone', 'jp-form-builder' ),
-            'address'  => __( 'Address', 'jp-form-builder' ),
-            'text'     => __( 'Text', 'jp-form-builder' ),
-            'select'   => __( 'Select', 'jp-form-builder' ),
-            'textarea' => __( 'Message', 'jp-form-builder' ),
-            'consent'  => __( 'Consent', 'jp-form-builder' ),
-        ];
-        if ( '' === $label ) {
-            $label = $label_defaults[ $field->type ] ?? '';
-        }
+        $label      = Field_Labels::for_field( $field );
         $html = '<div class="jp-form-builder__field" data-field-key="' . esc_attr( $field->key ) . '">';
 
         if ( 'name' === $field->type && $field->subkeys ) {
             $html .= '<fieldset><legend>' . esc_html( $label ) . $indicator . '</legend>';
             foreach ( $field->subkeys as $subkey ) {
                 $sub_id = $id . '-' . $subkey;
-                $label  = 'first' === $subkey
-                    ? ( '' !== (string) ( $attributes['firstLabel'] ?? '' ) ? $attributes['firstLabel'] : __( 'First name', 'jp-form-builder' ) )
-                    : ( '' !== (string) ( $attributes['lastLabel'] ?? '' ) ? $attributes['lastLabel'] : __( 'Last name', 'jp-form-builder' ) );
                 $autocomplete = 'first' === $subkey ? 'given-name' : 'family-name';
-                $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( (string) $label ) . '</label>';
+                $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( Field_Labels::for_part( $field, $subkey ) ) . '</label>';
                 $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . esc_attr( $field->key . '[' . $subkey . ']' ) . '"' . $required_attribute . ' maxlength="100" autocomplete="' . esc_attr( $autocomplete ) . '" aria-describedby="' . esc_attr( $described ) . '">';
             }
             $html .= '</fieldset>';
@@ -88,16 +72,10 @@ final class Form_Renderer {
                 $patterns[ $code ] = Countries::postcode_pattern( $code );
             }
             $html .= '<fieldset data-postcode-patterns="' . esc_attr( (string) wp_json_encode( $patterns ) ) . '"><legend>' . esc_html( $label ) . $indicator . '</legend>';
-            $labels = [
-                'street'   => __( 'Street and number', 'jp-form-builder' ),
-                'postcode' => __( 'Postcode', 'jp-form-builder' ),
-                'city'     => __( 'City', 'jp-form-builder' ),
-                'country'  => __( 'Country', 'jp-form-builder' ),
-            ];
             $autocomplete = [ 'street' => 'street-address', 'postcode' => 'postal-code', 'city' => 'address-level2', 'country' => 'country' ];
             foreach ( $field->subkeys as $subkey ) {
                 $sub_id = $id . '-' . $subkey;
-                $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( $labels[ $subkey ] ) . ( $required ? $indicator : '' ) . '</label>';
+                $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( Field_Labels::for_part( $field, $subkey ) ) . ( $required ? $indicator : '' ) . '</label>';
                 $name = esc_attr( $field->key . '[' . $subkey . ']' );
                 if ( 'country' === $subkey ) {
                     $selected = (string) ( $attributes['defaultCountry'] ?? 'DE' );

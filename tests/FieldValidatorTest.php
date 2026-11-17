@@ -258,10 +258,12 @@ final class FieldValidatorTest extends TestCase {
         $this->assertSame( [ 'subject' => 'Subject is required.' ], $result['errors'] );
     }
 
-    public function test_label_falls_back_when_empty(): void {
-        $field = new Field_Definition( 'text', 'subject', [ 'required' => true, 'label' => '' ] );
+    public function test_label_falls_back_to_the_label_the_form_shows(): void {
+        $field = new Field_Definition( 'email', 'contact', [ 'required' => true, 'label' => '' ] );
+        $this->assertSame( [ 'contact' => 'Email is required.' ], $this->validate_one( $field, [] )['errors'] );
 
-        $this->assertSame( [ 'subject' => 'This field is required.' ], $this->validate_one( $field, [] )['errors'] );
+        $unknown = new Field_Definition( 'unknown', 'subject', [ 'required' => true, 'label' => '' ] );
+        $this->assertSame( [ 'subject' => 'This field is required.' ], $this->validate_one( $unknown, [] )['errors'] );
     }
 
     public function test_invalid_utf8_counts_as_empty(): void {

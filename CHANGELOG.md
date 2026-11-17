@@ -19,6 +19,14 @@ extracts it as the GitHub release notes and fails without it.
 - Added Form parsing, defaults, published-Form lookup with revision resolution, country data, and the authenticated Forms picker endpoint.
 - Added the block editor UI: Field previews and inspector controls (Field key, required, help text, type-specific options, Select options editor), Form settings with recipient checks and Turnstile-gated Confirmation, and the Form embed picker with a server-side preview.
 - Added the Body template modal for Notification and Confirmation (code editor, placeholder inserter, sandboxed live preview with the Form's own Fields), a "Form settings" document sidebar panel that edits the Form block's settings, and an optional `fields` parameter for `/mail-preview`.
+- Added the public Submission REST routes `GET /jp-form-builder/v1/forms/<id>/token` and `POST /jp-form-builder/v1/forms/<id>/submissions` with the spam pipeline (payload size, rate limit per resolved client IP, honeypot, signed fill-time token, Cloudflare Turnstile, per-revision validation), page-locale switching, Notification and Confirmation mails, and `Cache-Control: no-store` on every response.
+- Added settings page notices on the plugin screens for a missing Turnstile configuration, an untrusted reverse proxy, and Forms whose Confirmation cannot be sent.
+- Mail failures of plugin mail are logged with the Form ID.
+
+### Fixed
+- The Reply-To header no longer wraps the display name in extra quotes and drops commas, which `wp_mail()` splits addresses at; the built-in Notification body names the page that held the Form.
+- Validation errors name unlabelled Fields like the Form does ("Email is required.").
+- The settings page rendered its Field loop as text instead of table rows.
 
 ## [0.1.0] - 2026-11-16
 

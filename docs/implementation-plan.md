@@ -229,7 +229,8 @@ Notification:
 
 - To: valid recipients.
 - Subject: placeholders `{<key>}`, `{form_title}`, `{site_name}` (plain text only). Values are single-line, ≤ 200 chars each, subject ≤ 250, unknown placeholders removed.
-- `Reply-To: "<name>" <email>` from the first email field with `replyTo`. The name has `"<>` and CR/LF stripped; the header is omitted if the guard fails.
+- `Reply-To: <name> <email>` from the first non-empty email field with `replyTo`. `wp_mail()` splits address headers at commas and keeps quote characters in the display name, so the name has `"<>,` and CR/LF removed and is not quoted; the header is just the address when the name is empty and omitted if the guard fails.
+- Built-in body also names the page (`Page: <page_url>`) when its host equals the home host.
 - Default body (`{all_fields}`): `Label: value` rows, textarea values multi-line, consent "Yes (<UTC timestamp>)", plus `page_url` only if its host equals the home host.
 
 Confirmation: to the Submitter, Reply-To = first recipient, only while Turnstile is configured and at most one per address per hour (ADR 0011). The render context contains no submitted values (anti-relay, [ADR 0008](adr/0008-no-entry-storage.md)): `{form_title}`, `{site_name}`, `{submitted_at}` only; `{<key>}`, `{all_fields}` and sections resolve to empty.

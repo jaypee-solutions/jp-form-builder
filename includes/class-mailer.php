@@ -81,26 +81,28 @@ final class Mailer {
         $this->last_error = $error;
     }
 
-    /** @return true|\WP_Error */
-    public function send( Mail $mail ) {
+    /**
+     * @param int|null $form_id Form the mail belongs to; recorded with a failure.
+     * @return true|\WP_Error
+     */
+    public function send( Mail $mail, ?int $form_id = null ) {
         $this->pending_mail = $mail;
         $this->last_error   = null;
-        $headers            = $mail->headers();
-        $headers[]          = 'Content-Type: text/html; charset=UTF-8';
+        $this->log->set_form_id( $form_id );
+        $headers   = $mail->headers();
+        $headers[] = 'Content-Type: text/html; charset=UTF-8';
         try {
             $sent = wp_mail( $mail->recipients(), $mail->subject(), $mail->html_body(), $headers );
+            if ( ! $sent && null === $this->last_error ) {
+                // Short-circuited by `pre_wp_mail`: core fires no `wp_mail_failed`, so log it here.
+                $this->last_error = new \WP_Error( 'jpfb_mail_failed', __( 'Mail could not be sent.', 'jp-form-builder' ) );
+                $this->log->record( $this->last_error );
+            }
         } finally {
             $this->pending_mail = null;
+            $this->log->set_form_id( null );
         }
-        if ( $sent && null === $this->last_error ) {
-            return true;
-        }
-        if ( null === $this->last_error ) {
-            // Short-circuited by `pre_wp_mail`: core fires no `wp_mail_failed`, so log it here.
-            $this->last_error = new \WP_Error( 'jpfb_mail_failed', __( 'Mail could not be sent.', 'jp-form-builder' ) );
-            $this->log->record( $this->last_error );
-        }
-        return $this->last_error;
+        return $sent && null === $this->last_error ? true : $this->last_error;
     }
 
     public function send_test( string $to ) {

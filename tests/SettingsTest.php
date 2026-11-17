@@ -28,6 +28,34 @@ final class SettingsTest extends TestCase {
         $this->assertSame( 587, ( new Settings() )->get( 'smtp_port' ) );
     }
 
+    public function test_tunables_use_defaults_unless_a_constant_is_defined(): void {
+        $defaults = new Settings();
+        $this->assertSame( 32768, $defaults->tunable( 'max_payload_bytes' ) );
+        $this->assertSame( 10, $defaults->tunable( 'rate_limit' ) );
+        $this->assertSame( 600, $defaults->tunable( 'rate_window' ) );
+        $this->assertSame( 3, $defaults->tunable( 'min_fill_seconds' ) );
+        $this->assertSame( '', $defaults->tunable( 'trusted_proxies' ) );
+
+        $constants = [
+            'JP_FORM_BUILDER_RATE_LIMIT'      => '25',
+            'JP_FORM_BUILDER_TRUSTED_PROXIES' => '10.0.0.0/8',
+            'JP_FORM_BUILDER_RATE_WINDOW'     => -5,
+        ];
+        $settings  = new Settings( static fn( string $name ): array => isset( $constants[ $name ] ) ? [ true, $constants[ $name ] ] : [ false, null ] );
+        $this->assertSame( 25, $settings->tunable( 'rate_limit' ) );
+        $this->assertSame( '10.0.0.0/8', $settings->tunable( 'trusted_proxies' ) );
+        $this->assertSame( 0, $settings->tunable( 'rate_window' ) );
+        $this->assertSame( 3, $settings->tunable( 'min_fill_seconds' ) );
+    }
+
+    public function test_turnstile_is_configured_only_with_both_keys(): void {
+        $this->assertFalse( ( new Settings() )->turnstile_configured() );
+        $GLOBALS['jp_form_builder_test_options']['jp_form_builder_settings'] = [ 'turnstile_site_key' => 'site' ];
+        $this->assertFalse( ( new Settings() )->turnstile_configured() );
+        ( new Settings() )->save( [ 'turnstile_secret_key' => 'secret' ] );
+        $this->assertTrue( ( new Settings() )->turnstile_configured() );
+    }
+
     public function test_save_ignores_locked_values_and_keeps_empty_secret(): void {
         $settings = new Settings( static fn( string $name ): array => 'JP_FORM_BUILDER_SMTP_HOST' === $name ? [ true, 'locked.test' ] : [ false, null ] );
         $settings->save( [ 'smtp_host' => 'changed.test', 'smtp_password' => 'secret' ] );
