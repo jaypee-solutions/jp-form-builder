@@ -44,6 +44,7 @@ final class Test_Mail_Settings extends WP_UnitTestCase {
     public function test_invalid_layout_redirects_and_preserves_saved_layout(): void {
         update_option( 'jp_form_builder_settings', [ 'mail_layout' => '<main>{content}</main>' ] );
         $location = $this->submit_settings( '<p>no content token</p>' );
+        $this->assertStringStartsWith( admin_url( 'edit.php?post_type=jp_form&page=jp-form-builder-settings' ), $location );
         $this->assertStringContainsString( 'settings-error=invalid-layout', $location );
         $this->assertSame( '<main>{content}</main>', get_option( 'jp_form_builder_settings' )['mail_layout'] );
     }

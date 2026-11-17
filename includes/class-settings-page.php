@@ -134,30 +134,64 @@ final class Settings_Page {
         exit;
     }
 
+    /** @return array<string,array{title:string,description:string,fields:array<string,string>}> */
+    private function sections(): array {
+        return [
+            'smtp'       => [
+                'title'       => __( 'SMTP', 'jp-form-builder' ),
+                'description' => __( 'Leave the host empty to send mail with the default WordPress mailer. Saved secrets are encrypted with a key derived from the site’s salts; if you change the salts, enter them again.', 'jp-form-builder' ),
+                'fields'      => [
+                    'smtp_host'       => __( 'SMTP host', 'jp-form-builder' ),
+                    'smtp_port'       => __( 'SMTP port', 'jp-form-builder' ),
+                    'smtp_encryption' => __( 'Encryption', 'jp-form-builder' ),
+                    'smtp_auth'       => __( 'SMTP authentication', 'jp-form-builder' ),
+                    // Microsoft 365 OAuth settings stay hidden until P2b implements them (ADR 0012).
+                    'smtp_user'       => __( 'SMTP user', 'jp-form-builder' ),
+                    'smtp_password'   => __( 'SMTP password', 'jp-form-builder' ),
+                ],
+            ],
+            'sender'     => [
+                'title'       => __( 'Sender', 'jp-form-builder' ),
+                'description' => __( 'The address and name mail is sent from. Unless forced, they only replace the WordPress default sender (wordpress@your-domain).', 'jp-form-builder' ),
+                'fields'      => [
+                    'from_email' => __( 'From email', 'jp-form-builder' ),
+                    'from_name'  => __( 'From name', 'jp-form-builder' ),
+                    'force_from' => __( 'Force From address', 'jp-form-builder' ),
+                ],
+            ],
+            'turnstile'  => [
+                'title'       => __( 'Spam protection (Cloudflare Turnstile)', 'jp-form-builder' ),
+                'description' => __( 'Create a Turnstile widget in the Cloudflare dashboard and enter its keys. Without both keys, Forms rely on the honeypot, the minimum fill time and the rate limit, and Confirmations are not sent.', 'jp-form-builder' ),
+                'fields'      => [
+                    'turnstile_site_key'   => __( 'Turnstile site key', 'jp-form-builder' ),
+                    'turnstile_secret_key' => __( 'Turnstile secret key', 'jp-form-builder' ),
+                ],
+            ],
+            'recipients' => [
+                'title'       => __( 'Recipients', 'jp-form-builder' ),
+                'description' => __( 'Used by Forms without Recipients of their own. If this is empty too, the site administrator email receives the Notification.', 'jp-form-builder' ),
+                'fields'      => [
+                    'default_recipient' => __( 'Default recipient', 'jp-form-builder' ),
+                ],
+            ],
+            'mail'       => [
+                'title'       => __( 'Mail', 'jp-form-builder' ),
+                'description' => __( 'The layout that frames every mail and the default texts of Forms that do not set their own Body templates.', 'jp-form-builder' ),
+                'fields'      => [
+                    'mail_layout'          => __( 'Mail layout', 'jp-form-builder' ),
+                    'notification_subject' => __( 'Default notification subject', 'jp-form-builder' ),
+                    'notification_body'    => __( 'Default notification body', 'jp-form-builder' ),
+                    'confirmation_subject' => __( 'Default confirmation subject', 'jp-form-builder' ),
+                    'confirmation_body'    => __( 'Default confirmation body', 'jp-form-builder' ),
+                ],
+            ],
+        ];
+    }
+
     public function render(): void {
         if ( ! current_user_can( 'manage_options' ) ) {
             return;
         }
-        $fields = [
-            'smtp_host'             => __( 'SMTP host', 'jp-form-builder' ),
-            'smtp_port'             => __( 'SMTP port', 'jp-form-builder' ),
-            'smtp_encryption'       => __( 'Encryption', 'jp-form-builder' ),
-            'smtp_auth'             => __( 'SMTP authentication', 'jp-form-builder' ),
-            // Microsoft 365 OAuth settings stay hidden until P2b implements them (ADR 0012).
-            'smtp_user'             => __( 'SMTP user', 'jp-form-builder' ),
-            'smtp_password'         => __( 'SMTP password', 'jp-form-builder' ),
-            'from_email'            => __( 'From email', 'jp-form-builder' ),
-            'from_name'             => __( 'From name', 'jp-form-builder' ),
-            'force_from'            => __( 'Force From address', 'jp-form-builder' ),
-            'turnstile_site_key'    => __( 'Turnstile site key', 'jp-form-builder' ),
-            'turnstile_secret_key'  => __( 'Turnstile secret key', 'jp-form-builder' ),
-            'default_recipient'     => __( 'Default recipient', 'jp-form-builder' ),
-            'mail_layout'           => __( 'Mail layout', 'jp-form-builder' ),
-            'notification_subject'  => __( 'Default notification subject', 'jp-form-builder' ),
-            'notification_body'     => __( 'Default notification body', 'jp-form-builder' ),
-            'confirmation_subject'  => __( 'Default confirmation subject', 'jp-form-builder' ),
-            'confirmation_body'     => __( 'Default confirmation body', 'jp-form-builder' ),
-        ];
         ?>
         <div class="wrap">
             <h1><?php esc_html_e( 'Form Builder Settings', 'jp-form-builder' ); ?></h1>
@@ -175,53 +209,23 @@ final class Settings_Page {
             <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <input type="hidden" name="action" value="jp_form_builder_save_settings" />
                 <?php wp_nonce_field( 'jp_form_builder_save_settings' ); ?>
-                <table class="form-table" role="presentation"><tbody>
-                <?php foreach ( $fields as $key => $label ) : ?>
-                    <?php if ( 'mail_layout' === $key ) : ?>
-                        <tr><th colspan="2"><h2><?php esc_html_e( 'Mail', 'jp-form-builder' ); ?></h2></th></tr>
+                <?php foreach ( $this->sections() as $section_id => $section ) : ?>
+                    <h2 class="title" id="jpfb-section-<?php echo esc_attr( $section_id ); ?>"><?php echo esc_html( $section['title'] ); ?></h2>
+                    <p><?php echo esc_html( $section['description'] ); ?></p>
+                    <table class="form-table" role="presentation"><tbody>
+                    <?php foreach ( $section['fields'] as $key => $label ) : ?>
+                        <?php $this->render_field( $key, $label ); ?>
+                    <?php endforeach; ?>
+                    </tbody></table>
+                    <?php if ( 'mail' === $section_id ) : ?>
+                        <h3><?php esc_html_e( 'Live mail preview', 'jp-form-builder' ); ?></h3>
+                        <iframe id="jpfb-mail-preview" title="<?php esc_attr_e( 'Mail preview', 'jp-form-builder' ); ?>" sandbox="" style="width:100%;min-height:360px"></iframe>
                     <?php endif; ?>
-                    <?php
-                    $locked = $this->settings->is_locked( $key );
-                    $value  = $this->settings->get( $key );
-                    $secret = in_array( $key, [ 'smtp_password', 'turnstile_secret_key', 'm365_client_secret' ], true );
-                    $type   = in_array( $key, [ 'smtp_auth', 'force_from' ], true ) ? 'checkbox' : ( $secret ? 'password' : ( 'smtp_port' === $key ? 'number' : 'text' ) );
-                    $choices = $this->choices( $key );
-                    ?>
-                    <tr><th scope="row"><label for="jpfb-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th><td>
-                    <?php if ( in_array( $key, [ 'mail_layout', 'notification_body', 'confirmation_body' ], true ) ) : ?>
-                        <textarea id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" rows="8" class="large-text code" <?php disabled( $locked ); ?>><?php echo esc_textarea( (string) $value ); ?></textarea>
-                        <?php if ( 'mail_layout' === $key ) : ?>
-                            <button type="button" class="button" id="jpfb-reset-mail-layout"><?php esc_html_e( 'Reset to default', 'jp-form-builder' ); ?></button>
-                        <?php endif; ?>
-                    <?php elseif ( $choices ) : ?>
-                        <select id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" <?php disabled( $locked ); ?>>
-                            <?php foreach ( $choices as $choice => $choice_label ) : ?>
-                                <option value="<?php echo esc_attr( $choice ); ?>" <?php selected( (string) $value, $choice ); ?>><?php echo esc_html( $choice_label ); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    <?php elseif ( 'checkbox' === $type ) : ?>
-                        <input type="hidden" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="0" />
-                        <input type="checkbox" id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="1" <?php checked( (bool) $value ); ?> <?php disabled( $locked ); ?> />
-                    <?php else : ?>
-                        <input type="<?php echo esc_attr( $type ); ?>" id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $secret ? '' : (string) $value ); ?>" class="regular-text" <?php disabled( $locked ); ?>
-                        <?php if ( $secret ) : ?>
-                            autocomplete="new-password" placeholder="<?php echo esc_attr( '' !== (string) $value ? __( 'Saved — overwrite to change', 'jp-form-builder' ) : __( 'Not set', 'jp-form-builder' ) ); ?>"<?php endif; ?> />
-                    <?php endif; ?>
-                    <?php
-                    if ( $locked ) :
-                        ?>
-                        <p class="description"><?php esc_html_e( 'Set by constant.', 'jp-form-builder' ); ?></p><?php endif; ?>
-                    <?php
-                    if ( $secret ) :
-                        ?>
-                        <p class="description"><?php echo esc_html( '' !== (string) $value ? __( 'Set. Leave empty to keep the saved secret.', 'jp-form-builder' ) : __( 'Not set.', 'jp-form-builder' ) ); ?></p><?php endif; ?>
-                    </td></tr>
                 <?php endforeach; ?>
-                </tbody></table>
                 <?php submit_button( __( 'Save settings', 'jp-form-builder' ) ); ?>
-                <h2><?php esc_html_e( 'Live mail preview', 'jp-form-builder' ); ?></h2>
-                <iframe id="jpfb-mail-preview" title="<?php esc_attr_e( 'Mail preview', 'jp-form-builder' ); ?>" sandbox="" style="width:100%;min-height:360px"></iframe>
             </form>
+            <h2 class="title" id="jpfb-test-mail"><?php esc_html_e( 'Test mail', 'jp-form-builder' ); ?></h2>
+            <p><?php esc_html_e( 'Save your changes first: the test mail uses the saved settings.', 'jp-form-builder' ); ?></p>
             <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <input type="hidden" name="action" value="jp_form_builder_test_mail" />
                 <?php wp_nonce_field( 'jp_form_builder_test_mail' ); ?>
@@ -229,7 +233,7 @@ final class Settings_Page {
                 <input type="email" id="jpfb-test-recipient" name="recipient" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" required />
                 <?php submit_button( __( 'Send test mail', 'jp-form-builder' ), 'secondary' ); ?>
             </form>
-            <h2 id="jpfb-backup"><?php esc_html_e( 'Backup & restore', 'jp-form-builder' ); ?></h2>
+            <h2 class="title" id="jpfb-backup"><?php esc_html_e( 'Backup & restore', 'jp-form-builder' ); ?></h2>
             <?php $this->render_backup_report(); ?>
             <p><?php esc_html_e( 'A Backup holds every Form and the settings that are not secrets or set by constants. It contains no submissions.', 'jp-form-builder' ); ?></p>
             <p><a class="button" href="<?php echo esc_url( $this->download_url() ); ?>"><?php esc_html_e( 'Download backup', 'jp-form-builder' ); ?></a></p>
@@ -250,13 +254,64 @@ final class Settings_Page {
                 <?php submit_button( __( 'Restore from backup', 'jp-form-builder' ), 'secondary' ); ?>
             </form>
             <p><?php esc_html_e( 'Deleting the plugin removes all Forms and the settings. Download a backup first.', 'jp-form-builder' ); ?></p>
-            <h2><?php esc_html_e( 'Recent mail failures', 'jp-form-builder' ); ?></h2>
-            <?php foreach ( (array) get_option( 'jp_form_builder_mail_log', [] ) as $failure ) : ?>
-                <p><?php echo esc_html( $failure['time'] . ' — ' . ( empty( $failure['form_id'] ) ? '' : sprintf( /* translators: %d: Form ID. */ __( 'Form %d: ', 'jp-form-builder' ), $failure['form_id'] ) ) . $failure['message'] ); ?></p>
-            <?php endforeach; ?>
+            <h2 class="title" id="jpfb-mail-failures"><?php esc_html_e( 'Recent mail failures', 'jp-form-builder' ); ?></h2>
+            <?php $this->render_mail_failures(); ?>
         </div>
-
         <?php
+    }
+
+    /** One settings row; a constant-locked field is disabled and says so, a secret is never printed. */
+    private function render_field( string $key, string $label ): void {
+        $locked  = $this->settings->is_locked( $key );
+        $value   = $this->settings->get( $key );
+        $secret  = $this->settings->is_secret( $key );
+        $type    = in_array( $key, [ 'smtp_auth', 'force_from' ], true ) ? 'checkbox' : ( $secret ? 'password' : ( 'smtp_port' === $key ? 'number' : 'text' ) );
+        $choices = $this->choices( $key );
+        ?>
+        <tr><th scope="row"><label for="jpfb-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th><td>
+        <?php if ( in_array( $key, [ 'mail_layout', 'notification_body', 'confirmation_body' ], true ) ) : ?>
+            <textarea id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" rows="8" class="large-text code" <?php disabled( $locked ); ?>><?php echo esc_textarea( (string) $value ); ?></textarea>
+            <?php if ( 'mail_layout' === $key ) : ?>
+                <button type="button" class="button" id="jpfb-reset-mail-layout"><?php esc_html_e( 'Reset to default', 'jp-form-builder' ); ?></button>
+            <?php endif; ?>
+        <?php elseif ( $choices ) : ?>
+            <select id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" <?php disabled( $locked ); ?>>
+                <?php foreach ( $choices as $choice => $choice_label ) : ?>
+                    <option value="<?php echo esc_attr( $choice ); ?>" <?php selected( (string) $value, $choice ); ?>><?php echo esc_html( $choice_label ); ?></option>
+                <?php endforeach; ?>
+            </select>
+        <?php elseif ( 'checkbox' === $type ) : ?>
+            <input type="hidden" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="0" />
+            <input type="checkbox" id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="1" <?php checked( (bool) $value ); ?> <?php disabled( $locked ); ?> />
+        <?php else : ?>
+            <input type="<?php echo esc_attr( $type ); ?>" id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $secret ? '' : (string) $value ); ?>" class="regular-text" <?php disabled( $locked ); ?>
+            <?php if ( $secret ) : ?>
+                autocomplete="new-password" placeholder="<?php echo esc_attr( '' !== (string) $value ? __( 'Saved — overwrite to change', 'jp-form-builder' ) : __( 'Not set', 'jp-form-builder' ) ); ?>"<?php endif; ?> />
+        <?php endif; ?>
+        <?php if ( $locked ) : ?>
+            <p class="description"><?php esc_html_e( 'Set by constant.', 'jp-form-builder' ); ?></p>
+        <?php endif; ?>
+        <?php if ( $secret ) : ?>
+            <p class="description"><?php echo esc_html( '' !== (string) $value ? __( 'Set. Leave empty to keep the saved secret.', 'jp-form-builder' ) : __( 'Not set.', 'jp-form-builder' ) ); ?></p>
+        <?php endif; ?>
+        </td></tr>
+        <?php
+    }
+
+    private function render_mail_failures(): void {
+        $failures = array_filter( (array) get_option( 'jp_form_builder_mail_log', [] ), 'is_array' );
+        if ( [] === $failures ) {
+            echo '<p>' . esc_html__( 'No mail failures recorded.', 'jp-form-builder' ) . '</p>';
+            return;
+        }
+        echo '<ul class="ul-disc">';
+        foreach ( $failures as $failure ) {
+            $form_id = (int) ( $failure['form_id'] ?? 0 );
+            /* translators: %d: Form ID. */
+            $form = $form_id > 0 ? sprintf( __( 'Form %d: ', 'jp-form-builder' ), $form_id ) : '';
+            echo '<li>' . esc_html( ( $failure['time'] ?? '' ) . ' — ' . $form . ( $failure['message'] ?? '' ) ) . '</li>';
+        }
+        echo '</ul>';
     }
 
     /** Shows the result of the last restore once, after the redirect. */

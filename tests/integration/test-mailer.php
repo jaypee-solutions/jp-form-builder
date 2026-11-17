@@ -92,6 +92,7 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
             do_action( 'admin_post_jp_form_builder_test_mail' );
             $this->fail( 'The test-mail action did not redirect.' );
         } catch ( Settings_Page_Denied $exception ) {
+            $this->assertStringStartsWith( admin_url( 'edit.php?post_type=jp_form&page=jp-form-builder-settings' ), $exception->getMessage() );
             $this->assertStringContainsString( 'test-mail=sent', $exception->getMessage() );
         } finally {
             remove_filter( 'wp_redirect', $redirect );
@@ -163,6 +164,7 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
         try {
             do_action( 'admin_post_jp_form_builder_test_mail' );
         } catch ( Settings_Page_Denied $exception ) {
+            $this->assertStringStartsWith( admin_url( 'edit.php?post_type=jp_form&page=jp-form-builder-settings' ), $exception->getMessage() );
             $this->assertStringContainsString( 'test-mail=failed', $exception->getMessage() );
         } finally {
             remove_filter( 'pre_wp_mail', $failure );

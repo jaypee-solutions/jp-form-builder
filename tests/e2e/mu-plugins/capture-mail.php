@@ -17,6 +17,11 @@ if ( ! defined( 'JP_FORM_BUILDER_RATE_LIMIT' ) ) {
     define( 'JP_FORM_BUILDER_RATE_LIMIT', 1000 );
 }
 
+// A harmless constant the settings E2E test asserts as locked ("Set by constant"); no SMTP host is set, so it changes no behaviour.
+if ( ! defined( 'JP_FORM_BUILDER_SMTP_PORT' ) ) {
+    define( 'JP_FORM_BUILDER_SMTP_PORT', 2525 );
+}
+
 add_filter( 'jp_form_builder_min_fill_seconds', '__return_zero' );
 
 add_filter(
