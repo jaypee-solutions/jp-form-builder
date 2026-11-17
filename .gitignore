@@ -1,7 +1,7 @@
 node_modules/
 vendor/
 build/
-blocks/
+/blocks/
 playwright-report/
 test-results/
 .wp-env/
