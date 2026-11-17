@@ -24,6 +24,9 @@ extracts it as the GitHub release notes and fails without it.
 - Mail failures of plugin mail are logged with the Form ID.
 - Added Backup and restore: a JSON Backup of every Form and the non-secret, non-constant settings, downloadable from the settings page (*Backup & restore*) and the Plugins list (*Back up forms*) or via `wp jp-form-builder backup export`, and restorable from the settings page or `wp jp-form-builder backup restore <file> [--overwrite] [--dry-run]`. Restore validates every Form, keeps free IDs and reports ID mappings. `JP_FORM_BUILDER_MAX_BACKUP_BYTES` limits the upload.
 - Uninstall now removes every Form (any status, with revisions and meta) in addition to the settings, mail log, GitHub token, update checker state and transients; the README describes the backup-first workflow.
+- Added privacy policy suggestion text under Settings → Privacy that describes mail-only Submissions, the hashed rate-limit and Confirmation values, Turnstile, the mail failure log and the update checker.
+- Grouped the settings page into SMTP, Sender, Spam protection, Recipients, Mail, Test mail, Backup & restore and Recent mail failures sections.
+- Documented the constants, WP-CLI commands, Turnstile setup, caching, trusted proxies, privacy snippets (German and English), outbound connections and the WPForms and WP Mail SMTP migration in the README; `readme.txt` now describes the plugin and its features.
 
 ### Fixed
 - The Reply-To header no longer wraps the display name in extra quotes and drops commas, which `wp_mail()` splits addresses at; the built-in Notification body names the page that held the Form.
