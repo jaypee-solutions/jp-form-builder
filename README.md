@@ -5,7 +5,7 @@ A privacy-first WordPress plugin for contact-style forms, built as a lean replac
 ## What it does
 
 - **Forms as blocks.** Forms are edited in the block editor under **Forms** and placed on pages with the **Form** block. Fields: Name (single or first/last), Email, Phone (normalised to E.164), Address (German order, 32 countries), Text, Select, Textarea and Consent with a privacy-policy link. Every Field has a label, required flag, help text and, where it fits, a placeholder.
-- **Accessible and theme-friendly.** Labels, fieldsets, `aria-describedby`/`aria-invalid`, a focused error summary with links, a `role="status"` success message, full keyboard use. The CSS inherits fonts and colours; the button uses `wp-element-button`.
+- **Accessible and theme-friendly.** Labels, fieldsets, `aria-describedby`/`aria-invalid`, a focused error summary with links, a `role="status"` success message, full keyboard use. The CSS inherits fonts and colours; the button uses `wp-element-button`. Four styles, the core design tools and Field widths let you adapt the look (see [Styling](#styling)).
 - **Mail by SMTP.** Notification to the Recipients with Reply-To set to the Submitter, an optional Confirmation to the Submitter, HTML mail with a plain-text alternative, editable Mail layout and Body templates, test mail, redacted failure log.
 - **Spam protection that works behind full-page caches.** Cloudflare Turnstile, honeypot, signed minimum fill time, per-IP rate limit, payload limit, header-injection guard. Submissions use a public REST route without a nonce.
 - **No stored submissions.** A Submission lives in memory until its mails are sent. The only stored personal data are short-lived hashes (see [Privacy](#privacy-dsgvo)).
@@ -69,6 +69,66 @@ Setting keys are what `wp jp-form-builder settings` uses.
 The mail texts (`mail_layout`, `notification_subject`, `notification_body`, `confirmation_subject`, `confirmation_body`) are settings without constants; edit them on the settings page.
 
 Filters: `jp_form_builder_capability` (capability needed to edit Forms, default `manage_options`) and `jp_form_builder_turnstile_hostnames` (hostnames Turnstile may report, default the home URL host).
+
+## Styling
+
+The Form follows your theme's fonts, colors and buttons. You can give it its own look at three levels, from the most specific to the most general:
+
+1. **On the Form block** (one placement). Select the **Form** block on a page and open the **Styles** tab:
+   - **Styles**: *Standard*, *Soft* (filled Fields, no border until focus), *Underlined* (a line under each Field) and *Rounded* (rounded Fields, pill button). They also preview in the inserter and the Styles panel.
+   - **Color**: text, background, link and button colors. **Typography**: font size, family, line height. **Dimensions**: padding, margin and *Block spacing*, which is the gap between Fields. **Border**: radius, width, color and style of the whole Form.
+   - **Fields**: Field background, Field border, Focus and accent color, Field border radius and width. Palette colors are stored as the palette slug, so a theme's palette change reaches the Form; custom colors are stored as written. Only palette slugs, hex, `rgb()`/`hsl()` colors (sent to the page as hex) and the keywords `transparent`, `currentcolor` and `inherit` are accepted; anything else is dropped.
+2. **In the Form editor** (per Field). Every Field except Consent has a **Width** of full, half or one third. Narrower Fields sit side by side and stack when the Form itself is narrower than 480 px (a container query, so a Form in a sidebar stacks even on a wide screen). Consent, the error summary, the status message and the button are always full width.
+3. **Site-wide**: *Appearance → Editor → Styles → Blocks → Form* sets defaults for the block's design tools and for each style variation, and **theme.json** can set the Field design values below. The block's own settings (level 1) win.
+
+### theme.json
+
+Theme developers set the Field design under `settings.custom.jpfb` (use `settings.blocks["jp-form-builder/embed"].custom.jpfb` to limit it to this block). WordPress writes each key as `--wp--custom--jpfb--<key in kebab-case>`, which the Form reads for every style variation:
+
+```json
+{
+	"version": 3,
+	"settings": {
+		"custom": {
+			"jpfb": {
+				"fieldBackground": "var(--wp--preset--color--base)",
+				"fieldBorderColor": "var(--wp--preset--color--contrast)",
+				"fieldBorderWidth": "2px",
+				"fieldRadius": "8px",
+				"focusColor": "var(--wp--preset--color--accent-1)",
+				"fieldGap": "1.5rem",
+				"labelWeight": "500"
+			}
+		}
+	}
+}
+```
+
+| `jpfb` key | CSS variable | Default |
+| --- | --- | --- |
+| `textColor` | `--jpfb-text-color` | the surrounding text color |
+| `fieldBackground` | `--jpfb-field-background` | `transparent`; *Soft*: 8 % of the text color |
+| `fieldBorderColor` | `--jpfb-field-border-color` | 60 % of the text color; *Soft*: `transparent` |
+| `fieldBorderWidth` | `--jpfb-field-border-width` | `1px`; *Underlined*: `2px` |
+| `fieldRadius` | `--jpfb-field-radius` | `4px`; *Underlined*: `0`; *Rounded*: `1.25em` |
+| `focusColor` | `--jpfb-focus-color` | the surrounding text color; also tints checkboxes |
+| `fieldGap` | `--jpfb-field-gap` | `1.25em` (the *Block spacing* of the block) |
+| `labelWeight` | `--jpfb-label-weight` | `600` |
+| `errorColor` | `--jpfb-error-color` | `#b32d2e` |
+| `buttonRadius` | `--jpfb-button-radius` | *Rounded* only: `999px`; the other styles keep your theme's button |
+
+### CSS for developers
+
+The variables are set on the block wrapper `.wp-block-jp-form-builder-embed`, so a rule on it or on any parent overrides them for that Form. The wrapper carries `is-style-soft`, `is-style-underlined` or `is-style-rounded` (Standard has no class). Inside it, `form.jp-form-builder` holds `.jp-form-builder__fields` (a six-column grid), one `.jp-form-builder__field` per Field with `.jp-form-builder__field--<type>` and, when narrower, `.jp-form-builder__field--width-50` or `--width-33`, then the button. `.jp-form-builder__error-summary`, `.jp-form-builder__status` and `.jp-form-builder__error` style the messages.
+
+```css
+.wp-block-jp-form-builder-embed.is-style-soft {
+	--jpfb-field-radius: 12px;
+	--jpfb-focus-color: #b32d2e;
+}
+```
+
+Keep the design accessible: the focus color needs at least 3:1 contrast against the Form's background, Field borders should reach 3:1 as well, and every style keeps the error border and the message under the Field, the required marker and the visible label.
 
 ## WP-CLI
 
