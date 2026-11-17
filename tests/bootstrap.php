@@ -39,4 +39,6 @@ require dirname( __DIR__ ) . '/includes/class-countries.php';
 require dirname( __DIR__ ) . '/includes/class-text.php';
 require dirname( __DIR__ ) . '/includes/class-phone-normalizer.php';
 require dirname( __DIR__ ) . '/includes/class-field-validator.php';
+require dirname( __DIR__ ) . '/includes/class-client-ip.php';
+require dirname( __DIR__ ) . '/includes/class-form-token.php';
 require dirname( __DIR__ ) . '/includes/class-form-renderer.php';

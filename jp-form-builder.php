@@ -55,6 +55,8 @@ require_once __DIR__ . '/includes/class-countries.php';
 require_once __DIR__ . '/includes/class-text.php';
 require_once __DIR__ . '/includes/class-phone-normalizer.php';
 require_once __DIR__ . '/includes/class-field-validator.php';
+require_once __DIR__ . '/includes/class-client-ip.php';
+require_once __DIR__ . '/includes/class-form-token.php';
 require_once __DIR__ . '/includes/class-form-renderer.php';
 require_once __DIR__ . '/includes/class-blocks.php';
 require_once __DIR__ . '/includes/class-plugin.php';
