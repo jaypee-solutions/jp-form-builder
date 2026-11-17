@@ -50,7 +50,7 @@ that. `.husky/pre-commit` runs `composer lint`; `.husky/pre-push` runs `composer
 
 ## Backup, restore and uninstall
 
-Deleting the plugin from the Plugins screen runs `uninstall.php`, which removes **every Form** (any status, including trashed ones, with their revisions), the settings, the mail failure log, the stored GitHub token and all transients. Embed blocks in page content stay and render nothing. Download a Backup first.
+Deleting the plugin from the Plugins screen runs `uninstall.php`, which removes **every Form** (any status, including trashed ones, with their revisions), the settings, the mail failure log, the stored GitHub token, the update checker state and all transients. Embed blocks in page content stay and render nothing. Download a Backup first.
 
 - **Download:** Forms → Settings → *Backup & restore* → *Download backup*, or the *Back up forms* link in the Plugins list. WP-CLI: `wp jp-form-builder backup export [<file>]` (stdout when no file is given).
 - **Contents:** a JSON file with every Form (ID, title, status, slug, content) and the settings that are neither secrets (`smtp_password`, `turnstile_secret_key`, `m365_client_secret`) nor locked by a constant. It contains no submissions. Treat it as configuration: it holds Recipients and Body templates. Re-enter secrets after restoring.

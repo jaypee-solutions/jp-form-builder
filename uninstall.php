@@ -26,6 +26,7 @@ foreach ( $jp_form_builder_form_ids as $jp_form_builder_form_id ) {
 delete_option( 'jp_form_builder_settings' );
 delete_option( 'jp_form_builder_mail_log' );
 delete_option( 'jp_form_builder_github_token' );
+delete_option( 'external_updates-jp-form-builder' ); // Plugin Update Checker state.
 
 global $wpdb;
 foreach ( [ '_transient_jp_form_builder_', '_transient_timeout_jp_form_builder_' ] as $jp_form_builder_prefix ) {

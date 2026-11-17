@@ -370,6 +370,7 @@ final class Test_Form_Backup extends WP_UnitTestCase {
         update_option( 'jp_form_builder_settings', [ 'smtp_host' => 'mail.example.test' ] );
         update_option( 'jp_form_builder_mail_log', [ [ 'time' => 'now', 'message' => 'x' ] ] );
         update_option( 'jp_form_builder_github_token', 'token' );
+        update_option( 'external_updates-jp-form-builder', (object) [ 'lastCheck' => 1 ] );
         update_option( 'unrelated_option', 'stays' );
         set_transient( 'jp_form_builder_rl_abc', 3, 600 );
         set_transient( 'jp_form_builder_confirmation_def', 1, 600 );
@@ -390,7 +391,7 @@ final class Test_Form_Backup extends WP_UnitTestCase {
         }
         $this->assertSame( 0, (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE post_id = %d", $published ) ) );
         $this->assertSame( 0, (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'jp_form'" ) );
-        foreach ( [ 'jp_form_builder_settings', 'jp_form_builder_mail_log', 'jp_form_builder_github_token' ] as $option ) {
+        foreach ( [ 'jp_form_builder_settings', 'jp_form_builder_mail_log', 'jp_form_builder_github_token', 'external_updates-jp-form-builder' ] as $option ) {
             $this->assertFalse( get_option( $option ), $option );
         }
         $like = $wpdb->esc_like( 'jp_form_builder_' ) . '%';
