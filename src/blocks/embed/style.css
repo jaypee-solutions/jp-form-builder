@@ -12,7 +12,9 @@
 .wp-block-jp-form-builder-embed,
 .jp-form-builder__form {
 	--jpfb-text-color: var(--wp--custom--jpfb--text-color, currentcolor);
-	--jpfb-field-background: var(--wp--custom--jpfb--field-background, transparent);
+
+	/* Opaque by default: patterned backgrounds never show through a Field. */
+	--jpfb-field-background: var(--wp--custom--jpfb--field-background, var(--wp--preset--color--base, Canvas));
 	--jpfb-field-border-color: var(--wp--custom--jpfb--field-border-color, color-mix(in srgb, currentcolor 60%, transparent));
 	--jpfb-field-border-width: var(--wp--custom--jpfb--field-border-width, 1px);
 	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 4px);
@@ -49,11 +51,12 @@
  * express.
  */
 .wp-block-jp-form-builder-embed.is-style-soft {
-	--jpfb-field-background: var(--wp--custom--jpfb--field-background, color-mix(in srgb, currentcolor 8%, transparent));
+	--jpfb-field-background: var(--wp--custom--jpfb--field-background, color-mix(in srgb, currentcolor 8%, var(--wp--preset--color--base, Canvas)));
 	--jpfb-field-border-color: var(--wp--custom--jpfb--field-border-color, transparent);
 }
 
 .wp-block-jp-form-builder-embed.is-style-underlined {
+	--jpfb-field-background: var(--wp--custom--jpfb--field-background, transparent);
 	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 0);
 	--jpfb-field-border-width: var(--wp--custom--jpfb--field-border-width, 2px);
 }
@@ -164,7 +167,10 @@
 }
 
 .jp-form-builder__field input[type="checkbox"] {
+	width: 1.15em;
+	height: 1.15em;
 	margin-inline-end: 0.5em;
+	vertical-align: -0.15em;
 	accent-color: var(--jpfb-focus-color);
 }
 

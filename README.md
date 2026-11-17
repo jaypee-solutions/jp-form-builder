@@ -107,7 +107,7 @@ Theme developers set the Field design under `settings.custom.jpfb` (use `setting
 | `jpfb` key | CSS variable | Default |
 | --- | --- | --- |
 | `textColor` | `--jpfb-text-color` | the surrounding text color |
-| `fieldBackground` | `--jpfb-field-background` | `transparent`; *Soft*: 8 % of the text color |
+| `fieldBackground` | `--jpfb-field-background` | the theme's `base` palette color (else the browser's page color), so patterned backgrounds never show through; *Soft*: tinted with 8 % of the text color; *Underlined*: `transparent` |
 | `fieldBorderColor` | `--jpfb-field-border-color` | 60 % of the text color; *Soft*: `transparent` |
 | `fieldBorderWidth` | `--jpfb-field-border-width` | `1px`; *Underlined*: `2px` |
 | `fieldRadius` | `--jpfb-field-radius` | `4px`; *Underlined*: `0`; *Rounded*: `1.25em` |
