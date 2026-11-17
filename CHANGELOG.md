@@ -10,6 +10,8 @@ extracts it as the GitHub release notes and fails without it.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-17
+
 ### Added
 - Styling for the Form block: four style variations (Standard, Soft, Underlined, Rounded), the core color, typography, spacing and border tools, Field background, border and focus colors, Field border radius and width, and a Width (full, half, one third) per Field that stacks when the Form is narrow. Defaults follow the surrounding colors and can be set site-wide in Styles → Blocks → Form or with `settings.custom.jpfb` in theme.json; the README has a Styling section.
 
