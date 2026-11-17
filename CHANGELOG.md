@@ -10,6 +10,10 @@ extracts it as the GitHub release notes and fails without it.
 
 ## [Unreleased]
 
+### Added
+- Conditional groups: a block that holds Fields shown only while a Condition on an earlier Field holds (Select or Radio buttons *is*, *is not*, *is one of*; Checkboxes *includes*; Consent *is ticked*; any Field *is filled* or *is empty*). The editor states the Condition on the canvas and offers only Fields before the group; the server evaluates every Condition itself, so Fields of a hidden group are neither validated nor mailed.
+- Radio buttons and Checkboxes Fields with the options editor, required, help text and width; both appear in the Body template placeholders.
+
 ## [1.2.0] - 2026-11-17
 
 ### Added
