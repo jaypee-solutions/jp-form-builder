@@ -173,4 +173,25 @@ final class Test_Form_Styling extends WP_UnitTestCase {
         $this->assertStringContainsString( 'var(--wp--custom--jpfb--field-radius', $css, 'the style reads the variable theme.json writes' );
         $this->assertStringContainsString( 'var(--wp--custom--jpfb--focus-color', $css );
     }
+
+    public function test_global_styles_block_spacing_reaches_the_field_gap_unless_the_block_sets_its_own(): void {
+        $filter = static fn( WP_Theme_JSON_Data $data ): WP_Theme_JSON_Data => $data->update_with(
+            [
+                'version' => WP_Theme_JSON::LATEST_SCHEMA,
+                'styles'  => [ 'blocks' => [ 'jp-form-builder/embed' => [ 'spacing' => [ 'blockGap' => 'var:preset|spacing|40' ] ] ] ],
+            ]
+        );
+        add_filter( 'wp_theme_json_data_user', $filter );
+        wp_clean_theme_json_cache();
+        try {
+            $id = $this->create_form();
+            $this->assertStringContainsString( '--jpfb-field-gap:var(--wp--preset--spacing--40)', $this->render_embed( $id ) );
+            $own = $this->render_embed( $id, [ 'style' => [ 'spacing' => [ 'blockGap' => '2rem' ] ] ] );
+            $this->assertStringContainsString( '--jpfb-field-gap:2rem', $own );
+            $this->assertStringNotContainsString( 'spacing--40', $own );
+        } finally {
+            remove_filter( 'wp_theme_json_data_user', $filter );
+            wp_clean_theme_json_cache();
+        }
+    }
 }

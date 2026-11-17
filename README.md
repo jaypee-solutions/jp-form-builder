@@ -79,7 +79,7 @@ The Form follows your theme's fonts, colors and buttons. You can give it its own
    - **Color**: text, background, link and button colors. **Typography**: font size, family, line height. **Dimensions**: padding, margin and *Block spacing*, which is the gap between Fields. **Border**: radius, width, color and style of the whole Form.
    - **Fields**: Field background, Field border, Focus and accent color, Field border radius and width. Palette colors are stored as the palette slug, so a theme's palette change reaches the Form; custom colors are stored as written. Only palette slugs, hex, `rgb()`/`hsl()` colors (sent to the page as hex) and the keywords `transparent`, `currentcolor` and `inherit` are accepted; anything else is dropped.
 2. **In the Form editor** (per Field). Every Field except Consent has a **Width** of full, half or one third. Narrower Fields sit side by side and stack when the Form itself is narrower than 480 px (a container query, so a Form in a sidebar stacks even on a wide screen). Consent, the error summary, the status message and the button are always full width.
-3. **Site-wide**: *Appearance → Editor → Styles → Blocks → Form* sets defaults for the block's design tools and for each style variation, and **theme.json** can set the Field design values below. The block's own settings (level 1) win.
+3. **Site-wide**: *Appearance → Editor → Styles → Blocks → Form* sets defaults for the block's design tools (its *Block spacing* becomes the gap between Fields) and for each style variation, and **theme.json** can set the Field design values below. The block's own settings (level 1) win.
 
 ### theme.json
 

@@ -47,7 +47,7 @@ final class Blocks {
                             return '';
                         }
                         $markup = ( new Form_Renderer() )->render( $form, 0, $this->turnstile_site_key(), $this->settings->min_fill_seconds() );
-                        $style  = Form_Style::declarations( $attributes );
+                        $style  = Form_Style::declarations( $this->with_global_gap( $attributes ) );
                         return sprintf( '<div %s>%s</div>', get_block_wrapper_attributes( '' !== $style ? [ 'style' => $style ] : [] ), $markup );
                     },
                 ]
@@ -59,6 +59,20 @@ final class Blocks {
                 wp_set_script_translations( $block->view_script, 'jp-form-builder', dirname( __DIR__ ) . '/languages' );
             }
         }
+    }
+
+    /**
+     * WordPress outputs a block's Global Styles "Block spacing" only as `gap` for blocks with a layout, which the embed
+     * has not, so it reaches the Fields through the same custom property as the block's own setting.
+     *
+     * @param array<string,mixed> $attributes Embed block attributes.
+     * @return array<string,mixed> The attributes, with the Global Styles gap when the block sets none.
+     */
+    private function with_global_gap( array $attributes ): array {
+        if ( '' === Form_Style::gap( $attributes['style']['spacing']['blockGap'] ?? '' ) ) {
+            $attributes['style']['spacing']['blockGap'] = wp_get_global_styles( [ 'spacing', 'blockGap' ], [ 'block_name' => 'jp-form-builder/embed' ] );
+        }
+        return $attributes;
     }
 
     /**

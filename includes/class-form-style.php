@@ -176,7 +176,8 @@ final class Form_Style {
         if ( ! is_string( $value ) ) {
             return '';
         }
-        if ( 1 === preg_match( '/^var:preset\|spacing\|([a-z0-9-]+)$/', trim( $value ), $match ) ) {
+        $value = trim( $value );
+        if ( 1 === preg_match( '/^var:preset\|spacing\|([a-z0-9-]+)$/', $value, $match ) || 1 === preg_match( '/^var\(--wp--preset--spacing--([a-z0-9-]+)\)$/', $value, $match ) ) {
             return 'var(--wp--preset--spacing--' . $match[1] . ')';
         }
         return self::length( $value );

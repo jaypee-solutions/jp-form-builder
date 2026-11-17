@@ -95,6 +95,9 @@ final class FormStyleTest extends TestCase {
     public function test_gap_accepts_spacing_presets_and_lengths(): void {
         self::assertSame( 'var(--wp--preset--spacing--40)', Form_Style::gap( 'var:preset|spacing|40' ) );
         self::assertSame( '2rem', Form_Style::gap( '2rem' ) );
+        self::assertSame( 'var(--wp--preset--spacing--40)', Form_Style::gap( 'var(--wp--preset--spacing--40)' ) );
+        self::assertSame( '', Form_Style::gap( 'var(--wp--preset--spacing--40);}' ) );
+        self::assertSame( '', Form_Style::gap( null ) );
         self::assertSame( '', Form_Style::gap( 'var:preset|color|red' ) );
         self::assertSame( '', Form_Style::gap( 'var:preset|spacing|40;}' ) );
         self::assertSame( '', Form_Style::gap( 'var(--x)' ) );
