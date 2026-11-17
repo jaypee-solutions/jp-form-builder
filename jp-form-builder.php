@@ -66,6 +66,7 @@ require_once __DIR__ . '/includes/class-form-renderer.php';
 require_once __DIR__ . '/includes/class-submission-handler.php';
 require_once __DIR__ . '/includes/class-rest-controller.php';
 require_once __DIR__ . '/includes/class-blocks.php';
+require_once __DIR__ . '/includes/class-privacy.php';
 require_once __DIR__ . '/includes/class-plugin.php';
 require_once __DIR__ . '/includes/class-updates.php';
 
