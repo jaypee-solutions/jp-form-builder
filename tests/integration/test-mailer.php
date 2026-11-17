@@ -51,17 +51,20 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
     }
 
     public function test_from_identity_only_replaces_default_unless_forced(): void {
-        update_option( 'home', 'https://www.example.test' );
-        update_option( 'siteurl', 'https://www.example.test' );
         update_option( 'jp_form_builder_settings', [ 'from_email' => 'forms@example.test', 'from_name' => 'Forms' ] );
-        $network_url = static fn(): string => 'https://www.example.test';
-        add_filter( 'network_home_url', $network_url );
-        $host = wp_parse_url( network_home_url(), PHP_URL_HOST );
-        $default_from = 'wordpress@' . preg_replace( '/^www\./i', '', (string) $host );
-        $this->assertSame( 'forms@example.test', apply_filters( 'wp_mail_from', $default_from ) );
-        remove_filter( 'network_home_url', $network_url );
-        $this->assertSame( 'Forms', apply_filters( 'wp_mail_from_name', 'WordPress' ) );
-        $this->assertSame( 'caller@example.test', apply_filters( 'wp_mail_from', 'caller@example.test' ) );
+        // wp-env pins WP_HOME, so the `home` option cannot move the home host; the filters can.
+        $www_home = static fn(): string => 'https://www.example.test';
+        add_filter( 'home_url', $www_home );
+        add_filter( 'network_home_url', $www_home );
+        try {
+            // The default sender core builds for this home host has no leading "www.".
+            $this->assertSame( 'forms@example.test', apply_filters( 'wp_mail_from', 'wordpress@example.test' ) );
+            $this->assertSame( 'Forms', apply_filters( 'wp_mail_from_name', 'WordPress' ) );
+            $this->assertSame( 'caller@example.test', apply_filters( 'wp_mail_from', 'caller@example.test' ) );
+        } finally {
+            remove_filter( 'home_url', $www_home );
+            remove_filter( 'network_home_url', $www_home );
+        }
         update_option( 'jp_form_builder_settings', [ 'from_email' => 'forms@example.test', 'from_name' => 'Forms', 'force_from' => '1' ] );
         $this->assertSame( 'forms@example.test', apply_filters( 'wp_mail_from', 'caller@example.test' ) );
         $this->assertSame( 'Forms', apply_filters( 'wp_mail_from_name', 'Caller' ) );
