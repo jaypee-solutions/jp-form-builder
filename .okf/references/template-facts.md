@@ -25,6 +25,8 @@ Facts verified while orienting on the scaffold (slug `jp-form-builder`, namespac
 11. The integration PHPUnit run writes `.phpunit.result.cache` into the checkout; it is ignored locally (an upstream fix would set the cache path in `phpunit-integration.xml.dist`).
 12. On this workstation port 8888 can be held by another project's podman container; run wp-env with `WP_ENV_PORT=8912 WP_ENV_TESTS_PORT=8913`.
 13. The `uses_blocks` lint scripts only cover `src/blocks/`; this plugin widened them to `src/` and added `@wordpress/*` externals to `import/core-modules` (local edits to template-owned files, to be upstreamed).
+14. The `uses_blocks` `.gitignore` entry `blocks/` is unanchored and also ignores `src/blocks/`, so new block sources were silently left out of commits; this plugin anchors it as `/blocks/`. Upstream fix needed.
+15. wp-env pins `WP_HOME`/`WP_SITEURL`, so integration tests cannot change the site URL through the `home` option; use the `home_url`/`network_home_url` filters instead.
 
 # Citations
 

@@ -12,3 +12,6 @@
 * **P1 done**: template v1.5.0 adopted with `uses_blocks`; tooling facts 9–12 added to the template facts reference.
 * **P2 done**: Mail/SMTP + HTML templating; `wp_mail` facts 4–6 added to the WordPress core facts reference.
 * **P3 done**: blocks, editor UI, Body template modal, Form settings document panel; core fact 7 and template fact 13 added.
+
+## 2026-11-17
+* **P4 done**: submission pipeline and view.js end to end (E2E 13 passed); template facts 14–15 added.
