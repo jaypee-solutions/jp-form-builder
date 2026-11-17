@@ -29,6 +29,7 @@ Facts verified while orienting on the scaffold (slug `jp-form-builder`, namespac
 15. wp-env pins `WP_HOME`/`WP_SITEURL`, so integration tests cannot change the site URL through the `home` option; use the `home_url`/`network_home_url` filters instead.
 16. The template's `build-release.sh` copy list omits `uninstall.php`, so released ZIPs never clean up; this plugin adds it (upstream fix needed). The template's `i18n:pot` excludes every `build` directory, which also drops `admin/build`; exclude only the release staging paths.
 17. A second wp-scripts entry (`src/admin` → `admin/build/`) serves the settings page, and `npm run test:js` (Node's built-in test runner) checks the JS ports of the Field-key rule and the phone normaliser against fixtures shared with PHPUnit.
+18. The GitHub repo's ruleset protects `main` (pull request required, no approvals or status checks required, no force-push or deletion): every change, including release bumps, goes through a PR; tags are pushed directly. The pre-push hook runs `composer test`. A new repo gets Dependabot security updates that fail on transitive dev-toolchain packages; shipped runtime packages have no advisories (`npm audit --omit=dev`).
 
 # Citations
 
