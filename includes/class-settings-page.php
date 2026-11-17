@@ -127,6 +127,7 @@ final class Settings_Page {
                     $value  = $this->settings->get( $key );
                     $secret = in_array( $key, [ 'smtp_password', 'turnstile_secret_key', 'm365_client_secret' ], true );
                     $type   = in_array( $key, [ 'smtp_auth', 'force_from' ], true ) ? 'checkbox' : ( $secret ? 'password' : ( 'smtp_port' === $key ? 'number' : 'text' ) );
+                    $choices = $this->choices( $key );
                     ?>
                     <tr><th scope="row"><label for="jpfb-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th><td>
                     <?php if ( in_array( $key, [ 'mail_layout', 'notification_body', 'confirmation_body' ], true ) ) : ?>
@@ -134,6 +135,12 @@ final class Settings_Page {
                         <?php if ( 'mail_layout' === $key ) : ?>
                             <button type="button" class="button" id="jpfb-reset-mail-layout"><?php esc_html_e( 'Reset to default', 'jp-form-builder' ); ?></button>
                         <?php endif; ?>
+                    <?php elseif ( $choices ) : ?>
+                        <select id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" <?php disabled( $locked ); ?>>
+                            <?php foreach ( $choices as $choice => $choice_label ) : ?>
+                                <option value="<?php echo esc_attr( $choice ); ?>" <?php selected( (string) $value, $choice ); ?>><?php echo esc_html( $choice_label ); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     <?php elseif ( 'checkbox' === $type ) : ?>
                         <input type="hidden" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="0" />
                         <input type="checkbox" id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="1" <?php checked( (bool) $value ); ?> <?php disabled( $locked ); ?> />
@@ -224,5 +231,24 @@ final class Settings_Page {
                 implode( ', ', $links ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped above.
             )
         );
+    }
+
+    /** @return array<string,string> Option values and labels for settings with a fixed set of values; empty otherwise. */
+    private function choices( string $key ): array {
+        switch ( $key ) {
+            case 'smtp_encryption':
+                return [
+                    'starttls' => __( 'STARTTLS (port 587)', 'jp-form-builder' ),
+                    'smtps'    => __( 'SMTPS / implicit TLS (port 465)', 'jp-form-builder' ),
+                    'none'     => __( 'None', 'jp-form-builder' ),
+                ];
+            case 'smtp_auth_method':
+                return [
+                    'password'   => __( 'Password', 'jp-form-builder' ),
+                    'm365_oauth' => __( 'Microsoft 365 (OAuth)', 'jp-form-builder' ),
+                ];
+            default:
+                return [];
+        }
     }
 }
