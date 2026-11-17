@@ -46,7 +46,7 @@ npm run build --prefix "$ROOT_DIR"
 # ── Production files ─────────────────────────────────────────────────────────
 cp "$ROOT_DIR/$SLUG.php" "$DIST_DIR/"
 
-for path in README.md readme.txt LICENSE includes assets admin blocks languages templates; do
+for path in README.md readme.txt LICENSE uninstall.php includes assets admin blocks languages templates; do
 	if [[ -e "$ROOT_DIR/$path" ]]; then
 		cp -R "$ROOT_DIR/$path" "$DIST_DIR/"
 	fi
