@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JayPee Solutions Form Builder 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jp-forms\n"
-"POT-Creation-Date: 2026-11-17T17:34:37+00:00\n"
+"POT-Creation-Date: 2026-11-17T18:37:01+00:00\n"
 "PO-Revision-Date: 2026-11-17 00:00+0000\n"
 "Last-Translator: JayPee Solutions <support@jaypee.solutions>\n"
 "Language-Team: German\n"
@@ -1785,6 +1785,16 @@ msgstr "Unterstrichen"
 msgctxt "block style label"
 msgid "Rounded"
 msgstr "Abgerundet"
+
+#: blocks/embed/block.json
+msgctxt "block style label"
+msgid "Card"
+msgstr "Karte"
+
+#: blocks/embed/block.json
+msgctxt "block style label"
+msgid "Liquid Glass"
+msgstr "Liquid Glass"
 
 #: blocks/form/block.json
 msgctxt "block title"
