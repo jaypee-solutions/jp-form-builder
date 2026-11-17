@@ -20,3 +20,5 @@
 * **Final review**: two-axis review (Standards 14, Spec 9 findings; blocker: `uninstall.php` missing from the release ZIP) fixed in `737c172..5ea1997`; template facts 16–17 added.
 * **Release 1.0.0**: tagged `v1.0.0` on `9a8f651`; the Release workflow published `jp-form-builder-v1.0.0.zip` (contains `uninstall.php`, `admin/build/`, compiled `de_DE.mo`, scoped vendor); template fact 18 added.
 * **Styling decision**: after v1.0.1 feedback, ADR 0015: styling on the Form block (style variations, design controls, Field widths), site-wide via Global Styles.
+* **Releases 1.0.1–1.2.0**: Form labels instead of Post labels (1.0.1, core fact 9); styling per ADR 0015 (1.1.0); cleaner Standard, Card and Liquid Glass styles, class-qualified Field selectors (1.2.0).
+* **Conditional groups decision**: ADR 0016: one Condition per group on an earlier Field, no nesting, server-side evaluation; Radio buttons and Checkboxes Fields; glossary terms Conditional group and Condition.

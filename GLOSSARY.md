@@ -15,12 +15,20 @@ The placement of one Form on a page (DE: Einbettung).
 _Avoid_: form block, shortcode, form instance
 
 **Field**:
-One input of a Form, such as name, email, phone, address, text, select, message or consent (DE: Feld).
+One input of a Form, such as name, email, phone, address, text, select, radio buttons, checkboxes, message or consent (DE: Feld).
 _Avoid_: input, control, element
 
 **Field key**:
 The stable identifier of a Field inside its Form, used in mail placeholders (DE: Feldschlüssel).
 _Avoid_: field name, slug, id
+
+**Conditional group**:
+A part of a Form that is shown only while its Condition holds (DE: Bedingte Gruppe).
+_Avoid_: section, step, page, conditional field
+
+**Condition**:
+A rule on one earlier Field that decides whether a Conditional group is shown (DE: Bedingung).
+_Avoid_: logic, rule set, trigger
 
 ### Sending
 
