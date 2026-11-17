@@ -36,6 +36,17 @@ $GLOBALS['jp_form_builder_test_http_response'] = [ 'response' => [ 'code' => 200
  */
 $GLOBALS['jp_form_builder_test_http_requests'] = [];
 
+/**
+ * @var array<string,array{value:mixed,expiration:int}> Backing store for the
+ *                          get_transient() / set_transient() stubs.
+ */
+$GLOBALS['jp_form_builder_test_transients'] = [];
+
+/**
+ * @var array<string,callable> Callback per hook name for the apply_filters() stub.
+ */
+$GLOBALS['jp_form_builder_test_filters'] = [];
+
 // Constants the plugin file defines; the tests do not load it (it bootstraps WP).
 const VERSION     = '0.0.0-test';
 const PLUGIN_FILE = __FILE__;
@@ -83,7 +94,7 @@ function update_option( string $option, $value, $autoload = null ): bool {
  * @param array<string,mixed> $args
  * @return mixed
  */
-function wp_remote_get( string $url, array $args = [] ) {
+function stub_http_request( string $url, array $args ) {
     $GLOBALS['jp_form_builder_test_http_requests'][] = [
         'url'  => $url,
         'args' => $args,
@@ -96,6 +107,40 @@ function wp_remote_get( string $url, array $args = [] ) {
     }
 
     return $GLOBALS['jp_form_builder_test_http_response'];
+}
+
+/**
+ * @param array<string,mixed> $args
+ * @return mixed
+ */
+function wp_remote_get( string $url, array $args = [] ) {
+    return stub_http_request( $url, $args );
+}
+
+/**
+ * @param array<string,mixed> $args
+ * @return mixed
+ */
+function wp_remote_post( string $url, array $args = [] ) {
+    return stub_http_request( $url, $args );
+}
+
+/**
+ * @return mixed
+ */
+function get_transient( string $transient ) {
+    return $GLOBALS['jp_form_builder_test_transients'][ $transient ]['value'] ?? false;
+}
+
+/**
+ * @param mixed $value
+ */
+function set_transient( string $transient, $value, int $expiration = 0 ): bool {
+    $GLOBALS['jp_form_builder_test_transients'][ $transient ] = [
+        'value'      => $value,
+        'expiration' => $expiration,
+    ];
+    return true;
 }
 
 /**
@@ -173,7 +218,8 @@ function wp_kses( string $content, array $allowed_html, array $allowed_protocols
 
 
 function apply_filters( string $hook, $value ) {
-    return $value;
+    $callback = $GLOBALS['jp_form_builder_test_filters'][ $hook ] ?? null;
+    return null === $callback ? $value : $callback( $value );
 }
 
 function wp_strip_all_tags( string $text ): string {
