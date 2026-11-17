@@ -20,6 +20,14 @@ final class Test_Submissions extends WP_UnitTestCase {
         . '<!-- wp:jp-form-builder/consent {"fieldName":"privacy"} /-->'
         . '<!-- /wp:jp-form-builder/form -->';
 
+    private const GROUP_CONTENT = '<!-- wp:jp-form-builder/form {"recipients":"team@example.test"} -->'
+        . '<!-- wp:jp-form-builder/radio {"fieldName":"topic","required":true,"options":[{"label":"Sales team","value":"sales"},{"label":"Support","value":"support"}]} /-->'
+        . '<!-- wp:jp-form-builder/checkbox {"fieldName":"extras","options":[{"label":"Brochure","value":"brochure"},{"label":"Call back","value":"callback"}]} /-->'
+        . '<!-- wp:jp-form-builder/conditional {"sourceField":"topic","operator":"is","values":["sales"]} -->'
+        . '<!-- wp:jp-form-builder/text {"fieldName":"budget","label":"Budget","required":true} /-->'
+        . '<!-- /wp:jp-form-builder/conditional -->'
+        . '<!-- /wp:jp-form-builder/form -->';
+
     private int $form_id = 0;
 
     /** @var array<int,array{string,array<string,mixed>}> */
@@ -470,5 +478,88 @@ final class Test_Submissions extends WP_UnitTestCase {
         $_SERVER['REMOTE_ADDR'] = '203.0.113.10';
         unset( $_SERVER['HTTP_X_FORWARDED_FOR'] );
         $this->assertSame( '', trim( $this->render_notices( 'edit-jp_form' ) ), 'A configured, direct setup raises no notice.' );
+    }
+
+    /** @param array<string,mixed> $fields */
+    private function submit_group_form( int $form_id, array $fields ): WP_REST_Response {
+        return $this->submit( $this->payload( [ 'fields' => $fields ], $form_id ), $form_id );
+    }
+
+    public function test_the_embed_renders_the_group_hidden_with_its_condition_for_cached_pages(): void {
+        $form_id = $this->create_form( self::GROUP_CONTENT );
+
+        $markup = do_blocks( '<!-- wp:jp-form-builder/embed {"formId":' . $form_id . '} /-->' );
+
+        $this->assertStringContainsString( '<div class="jp-form-builder__group" data-condition="{&quot;sourceField&quot;:&quot;topic&quot;,&quot;operator&quot;:&quot;is&quot;,&quot;values&quot;:[&quot;sales&quot;]}" hidden>', $markup );
+        $this->assertStringContainsString( 'name="topic" value="sales" required>', $markup );
+        $this->assertStringContainsString( 'name="extras[]" value="callback">', $markup );
+        $this->assertStringContainsString( 'name="budget"', $markup );
+    }
+
+    public function test_a_required_field_in_a_hidden_group_does_not_block_the_submission(): void {
+        $form_id = $this->create_form( self::GROUP_CONTENT );
+
+        $response = $this->submit_group_form( $form_id, [ 'topic' => 'support', 'budget' => '' ] );
+
+        $this->assertSame( 200, $response->get_status() );
+        $this->assertCount( 1, $this->mails() );
+        $this->assertStringContainsString( 'Support', $this->mails()[0]['body'] );
+        $this->assertStringNotContainsString( 'Budget', $this->mails()[0]['body'] );
+    }
+
+    public function test_a_value_posted_for_a_hidden_field_is_not_mailed(): void {
+        $form_id = $this->create_form( self::GROUP_CONTENT );
+
+        $response = $this->submit_group_form( $form_id, [ 'topic' => 'support', 'budget' => 'SECRET-BUDGET' ] );
+
+        $this->assertSame( 200, $response->get_status() );
+        $this->assertCount( 1, $this->mails() );
+        $this->assertStringNotContainsString( 'SECRET-BUDGET', $this->mails()[0]['body'] );
+        $this->assertStringNotContainsString( 'Budget', $this->mails()[0]['body'] );
+    }
+
+    public function test_a_required_field_in_a_shown_group_is_enforced_and_mailed(): void {
+        $form_id = $this->create_form( self::GROUP_CONTENT );
+
+        $missing = $this->submit_group_form( $form_id, [ 'topic' => 'sales', 'budget' => '' ] );
+        $this->assertSame( 422, $missing->get_status() );
+        $this->assertSame( [ 'budget' ], array_keys( $missing->get_data()['data']['errors'] ) );
+        $this->assertSame( 'Budget is required.', $missing->get_data()['data']['errors']['budget'] );
+        $this->assertCount( 0, $this->mails() );
+
+        $ok = $this->submit_group_form( $form_id, [ 'topic' => 'sales', 'budget' => '5000 EUR' ] );
+        $this->assertSame( 200, $ok->get_status() );
+        $this->assertStringContainsString( 'Budget', $this->mails()[0]['body'] );
+        $this->assertStringContainsString( '5000 EUR', $this->mails()[0]['body'] );
+    }
+
+    public function test_invalid_radio_and_checkbox_values_return_422_with_keyed_errors(): void {
+        $form_id = $this->create_form( self::GROUP_CONTENT );
+
+        $response = $this->submit_group_form( $form_id, [ 'topic' => 'nope', 'extras' => [ 'brochure', 'unknown' ] ] );
+        $this->assert_error( $response, 422, 'jpfb_invalid_fields' );
+        $this->assertSame( [ 'extras', 'topic' ], $this->sorted_keys( $response->get_data()['data']['errors'] ) );
+        $this->assertSame( 'Please choose one of the available options.', $response->get_data()['data']['errors']['topic'] );
+
+        $missing = $this->submit_group_form( $form_id, [ 'extras' => 'brochure' ] );
+        $this->assertSame( [ 'topic' ], array_keys( $missing->get_data()['data']['errors'] ) );
+        $this->assertSame( 'Radio buttons is required.', $missing->get_data()['data']['errors']['topic'] );
+
+        $not_a_list = $this->submit_group_form( $form_id, [ 'topic' => 'support', 'extras' => [ [ 'brochure' ] ] ] );
+        $this->assertSame( [ 'extras' ], array_keys( $not_a_list->get_data()['data']['errors'] ) );
+        $this->assertCount( 0, $this->mails() );
+    }
+
+    public function test_the_mail_shows_the_option_labels_not_the_values(): void {
+        $form_id = $this->create_form( self::GROUP_CONTENT );
+
+        $response = $this->submit_group_form( $form_id, [ 'topic' => 'support', 'extras' => [ 'callback', 'brochure' ] ] );
+
+        $this->assertSame( 200, $response->get_status() );
+        $body = $this->mails()[0]['body'];
+        $this->assertStringContainsString( 'Support', $body );
+        $this->assertStringContainsString( 'Brochure, Call back', $body );
+        $this->assertStringNotContainsString( 'callback', $body );
+        $this->assertStringNotContainsString( '>support<', $body );
     }
 }

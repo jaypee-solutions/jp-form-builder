@@ -155,7 +155,10 @@ final class Mail_Preview_Controller {
                     'country'  => Countries::all()['DE'] ?? 'DE',
                 ];
             case 'select':
+            case 'radio':
                 return __( 'Sample option', 'jp-form-builder' );
+            case 'checkbox':
+                return __( 'Sample option', 'jp-form-builder' ) . ', ' . __( 'Another option', 'jp-form-builder' );
             case 'textarea':
                 return "Hello,\nthis is a sample message.";
             case 'consent':

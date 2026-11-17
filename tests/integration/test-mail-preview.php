@@ -138,4 +138,22 @@ final class Test_Mail_Preview extends WP_UnitTestCase {
         $this->assertSame( 403, $this->preview( [ 'fields' => $fields, 'layout' => '' ] )->get_status() );
         remove_all_filters( 'jp_form_builder_capability' );
     }
+
+    public function test_preview_with_fields_accepts_radio_and_checkbox_types(): void {
+        wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+        $response = $this->preview(
+            [
+                'body'   => '{all_fields}',
+                'fields' => [
+                    [ 'key' => 'colour', 'label' => 'Colour', 'type' => 'radio' ],
+                    [ 'key' => 'extras', 'label' => 'Extras', 'type' => 'checkbox' ],
+                ],
+            ]
+        );
+
+        $this->assertSame( 200, $response->get_status() );
+        foreach ( [ 'Colour', 'Extras', 'Sample option', 'Another option' ] as $expected ) {
+            $this->assertStringContainsString( $expected, $response->get_data()['html'] );
+        }
+    }
 }

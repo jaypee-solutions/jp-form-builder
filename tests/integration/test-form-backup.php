@@ -234,6 +234,23 @@ final class Test_Form_Backup extends WP_UnitTestCase {
         $this->assertSame( 'jp_form', get_post( $ids[4] )->post_type );
     }
 
+    public function test_groups_restore_but_a_nested_group_is_rejected(): void {
+        $field  = '<!-- wp:jp-form-builder/text {"fieldName":"x"} /-->';
+        $source = '<!-- wp:jp-form-builder/radio {"fieldName":"topic"} /-->';
+        $group  = '<!-- wp:jp-form-builder/conditional {"sourceField":"topic"} -->' . $field . '<!-- /wp:jp-form-builder/conditional -->';
+        $nested = '<!-- wp:jp-form-builder/conditional {"sourceField":"topic"} -->' . $group . '<!-- /wp:jp-form-builder/conditional -->';
+        $foreign = '<!-- wp:jp-form-builder/conditional --><!-- wp:core/html --><b>x</b><!-- /wp:core/html --><!-- /wp:jp-form-builder/conditional -->';
+        $wrap   = static fn( string $inner ): string => '<!-- wp:jp-form-builder/form -->' . $source . $inner . '<!-- /wp:jp-form-builder/form -->';
+
+        $report = $this->upload( $this->document( [ $this->entry( 910030, $wrap( $group ) ), $this->entry( 910031, $wrap( $nested ) ), $this->entry( 910032, $wrap( $foreign ) ) ] ) );
+
+        $this->assertSame( [ 910030 ], array_column( $report['restored'], 'id' ) );
+        $this->assertSame( [ 910031, 910032 ], array_column( $report['rejected'], 'id' ) );
+        $this->assertNull( get_post( 910031 ) );
+        $this->assertNull( get_post( 910032 ) );
+        $this->assertSame( $wrap( $group ), get_post( 910030 )->post_content );
+    }
+
     public function test_post_type_is_forced_to_jp_form(): void {
         $entry              = $this->entry( 910010 );
         $entry['post_type'] = 'page';

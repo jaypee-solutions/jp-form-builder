@@ -25,35 +25,30 @@ final class Field_Validator {
 
     private Mail_Header_Guard $header_guard;
 
-    public function __construct( ?Phone_Normalizer $phone_normalizer = null, ?Mail_Header_Guard $header_guard = null ) {
+    private Condition_Evaluator $evaluator;
+
+    public function __construct( ?Phone_Normalizer $phone_normalizer = null, ?Mail_Header_Guard $header_guard = null, ?Condition_Evaluator $evaluator = null ) {
         $this->phone_normalizer = $phone_normalizer ?? new Phone_Normalizer();
         $this->header_guard     = $header_guard ?? new Mail_Header_Guard();
+        $this->evaluator        = $evaluator ?? new Condition_Evaluator();
     }
 
     /**
      * Validates submitted values against the Fields; keys not defined by a Field are ignored.
      *
-     * Values hold only valid Fields: a string, or a sub-key map for compound Fields. Errors are keyed
-     * "key" or "key.sub".
+     * Values hold only valid Fields: a string, a list of strings for Checkboxes, or a sub-key map for compound
+     * Fields. Errors are keyed "key" or "key.sub".
      *
      * @param Field_Definition[]  $fields    Fields of the Form.
      * @param array<string,mixed> $submitted Submitted `fields` map.
-     * @return array{values: array<string,string|array<string,string>>, errors: array<string,string>}
+     * @return array{values: array<string,string|array<int|string,string>>, errors: array<string,string>}
      */
     public function validate( array $fields, array $submitted ): array {
         $values = [];
         $errors = [];
 
         foreach ( $fields as $field ) {
-            $raw = $submitted[ $field->key ] ?? null;
-
-            if ( [] === $field->subkeys ) {
-                $result = $this->validate_scalar( $field, is_string( $raw ) ? $raw : '' );
-            } elseif ( 'address' === $field->type ) {
-                $result = $this->validate_address( $field, is_array( $raw ) ? $raw : [] );
-            } else {
-                $result = $this->validate_split_name( $field, is_array( $raw ) ? $raw : [] );
-            }
+            $result = $this->validate_field( $field, $submitted[ $field->key ] ?? null );
 
             if ( [] === $result['errors'] ) {
                 $values[ $field->key ] = $result['value'];
@@ -67,6 +62,85 @@ final class Field_Validator {
         return [
             'values' => $values,
             'errors' => $errors,
+        ];
+    }
+
+    /**
+     * Validates a Form: Fields inside a hidden Conditional group are neither required nor validated, and their
+     * values and errors are dropped. A Condition looks at the cleaned values of the Fields before it.
+     *
+     * @param array<string,mixed> $submitted Submitted `fields` map.
+     * @return array{values: array<string,string|array<int|string,string>>, errors: array<string,string>}
+     */
+    public function validate_form( Form_Definition $form, array $submitted ): array {
+        $checked  = $this->validate( $form->fields(), $submitted );
+        $resolved = $this->evaluator->resolve( $form->groups(), $checked['values'] );
+        $hidden   = array_flip( $resolved['hidden'] );
+
+        return [
+            'values' => $resolved['values'],
+            'errors' => array_filter(
+                $checked['errors'],
+                static fn( string $error_key ): bool => ! isset( $hidden[ explode( '.', $error_key )[0] ] ),
+                ARRAY_FILTER_USE_KEY
+            ),
+        ];
+    }
+
+    /**
+     * @param mixed $raw Submitted value of the Field.
+     * @return array{value: string|array<int|string,string>, errors: array<string,string>}
+     */
+    private function validate_field( Field_Definition $field, $raw ): array {
+        if ( 'checkbox' === $field->type ) {
+            return $this->validate_checkbox( $field, $raw );
+        }
+        if ( [] === $field->subkeys ) {
+            return $this->validate_scalar( $field, is_string( $raw ) ? $raw : '' );
+        }
+        if ( 'address' === $field->type ) {
+            return $this->validate_address( $field, is_array( $raw ) ? $raw : [] );
+        }
+        return $this->validate_split_name( $field, is_array( $raw ) ? $raw : [] );
+    }
+
+    /**
+     * Checkboxes: a list of option values in the order of the options; required means at least one.
+     *
+     * @param mixed $raw Submitted list; a single string counts as a list of one.
+     * @return array{value: string[], errors: array<string,string>}
+     */
+    private function validate_checkbox( Field_Definition $field, $raw ): array {
+        $entries = is_array( $raw ) ? $raw : [ null === $raw ? '' : $raw ];
+        $chosen  = [];
+        foreach ( $entries as $entry ) {
+            if ( ! is_string( $entry ) ) {
+                return $this->checkbox_failure( __( 'Please choose only from the available options.', 'jp-form-builder' ) );
+            }
+            $value = Text::single_line( $entry );
+            if ( '' !== $value ) {
+                $chosen[] = $value;
+            }
+        }
+
+        $options = $this->option_values( $field );
+        if ( [] !== array_diff( $chosen, $options ) ) {
+            return $this->checkbox_failure( __( 'Please choose only from the available options.', 'jp-form-builder' ) );
+        }
+        if ( [] === $chosen && $this->is_required( $field ) ) {
+            return $this->checkbox_failure( $this->required_message( $this->label( $field ) ) );
+        }
+        return [
+            'value'  => array_values( array_intersect( $options, $chosen ) ),
+            'errors' => [],
+        ];
+    }
+
+    /** @return array{value: string[], errors: array<string,string>} */
+    private function checkbox_failure( string $message ): array {
+        return [
+            'value'  => [],
+            'errors' => [ '' => $message ],
         ];
     }
 
@@ -92,6 +166,7 @@ final class Field_Validator {
                     ? $this->failure( '', __( 'Please enter a valid phone number.', 'jp-form-builder' ) )
                     : $this->success( $phone );
             case 'select':
+            case 'radio':
                 return in_array( $value, $this->option_values( $field ), true )
                     ? $this->success( $value )
                     : $this->failure( '', __( 'Please choose one of the available options.', 'jp-form-builder' ) );

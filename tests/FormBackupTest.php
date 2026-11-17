@@ -67,6 +67,9 @@ final class FormBackupTest extends TestCase {
                 $this->block( 'jp-form-builder/address' ),
                 $this->block( 'jp-form-builder/text' ),
                 $this->block( 'jp-form-builder/select' ),
+                $this->block( 'jp-form-builder/radio' ),
+                $this->block( 'jp-form-builder/checkbox' ),
+                $this->block( 'jp-form-builder/conditional', [ $this->block( 'core/heading' ), $this->block( 'jp-form-builder/radio' ), $this->block( 'core/paragraph' ) ] ),
                 $this->block( 'jp-form-builder/textarea' ),
                 $this->block( 'jp-form-builder/consent' ),
                 $this->block( 'core/paragraph' ),
@@ -75,6 +78,23 @@ final class FormBackupTest extends TestCase {
 
         $this->assertNull( ( new Form_Backup() )->content_error( [ $form ] ) );
         $this->assertNull( ( new Form_Backup() )->content_error( [ $this->whitespace(), $form, $this->whitespace() ] ) );
+    }
+
+    /** @dataProvider invalid_groups */
+    public function test_content_error_rejects_groups_that_nest_or_hold_foreign_blocks( array $group ): void {
+        $this->assertIsString( ( new Form_Backup() )->content_error( [ $this->block( 'jp-form-builder/form', [ $group ] ) ] ) );
+    }
+
+    /** @return array<string,array{array<string,mixed>}> */
+    public function invalid_groups(): array {
+        $nested = $this->block( 'jp-form-builder/conditional', [ $this->block( 'jp-form-builder/text' ) ] );
+        return [
+            'nested group'              => [ $this->block( 'jp-form-builder/conditional', [ $nested ] ) ],
+            'Form block in a group'     => [ $this->block( 'jp-form-builder/conditional', [ $this->block( 'jp-form-builder/form' ) ] ) ],
+            'embed in a group'          => [ $this->block( 'jp-form-builder/conditional', [ $this->block( 'jp-form-builder/embed' ) ] ) ],
+            'foreign block in a group'  => [ $this->block( 'jp-form-builder/conditional', [ $this->block( 'core/html' ) ] ) ],
+            'inner blocks of a Field'   => [ $this->block( 'jp-form-builder/conditional', [ $this->block( 'jp-form-builder/text', [ $this->block( 'core/paragraph' ) ] ) ] ) ],
+        ];
     }
 
     /** @dataProvider invalid_content */

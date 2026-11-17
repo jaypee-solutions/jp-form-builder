@@ -99,7 +99,7 @@ final class Submission_Handler {
         }
 
         $submitted = isset( $payload['fields'] ) && is_array( $payload['fields'] ) ? $payload['fields'] : [];
-        $result    = $this->validator->validate( $definition->fields(), $submitted );
+        $result    = $this->validator->validate_form( $definition, $submitted );
         if ( [] !== $result['errors'] ) {
             return $this->error(
                 'jpfb_invalid_fields',
@@ -198,9 +198,12 @@ final class Submission_Handler {
     /**
      * Human-readable value; '' for an empty Field.
      *
-     * @param string|array<string,string> $value Cleaned value.
+     * @param string|array<int|string,string> $value Cleaned value.
      */
     private function mail_value( Field_Definition $field, $value, string $submitted_at ): string {
+        if ( 'checkbox' === $field->type && is_array( $value ) ) {
+            return implode( ', ', array_map( fn( string $chosen ): string => $this->option_label( $field, $chosen ), $value ) );
+        }
         if ( is_array( $value ) ) {
             if ( 'address' !== $field->type ) {
                 return trim( implode( ' ', $value ) );
@@ -218,11 +221,14 @@ final class Submission_Handler {
             /* translators: %s: UTC timestamp of the Submission. */
             return sprintf( __( 'Yes (%s)', 'jp-form-builder' ), $submitted_at );
         }
-        if ( 'select' === $field->type ) {
-            foreach ( (array) ( $field->attributes['options'] ?? [] ) as $option ) {
-                if ( is_array( $option ) && ( $option['value'] ?? null ) === $value && '' !== trim( (string) ( $option['label'] ?? '' ) ) ) {
-                    return (string) $option['label'];
-                }
+        return in_array( $field->type, [ 'select', 'radio' ], true ) ? $this->option_label( $field, $value ) : $value;
+    }
+
+    /** The label of the option with this value; the value itself when the option has no label. */
+    private function option_label( Field_Definition $field, string $value ): string {
+        foreach ( (array) ( $field->attributes['options'] ?? [] ) as $option ) {
+            if ( is_array( $option ) && ( $option['value'] ?? null ) === $value && '' !== trim( (string) ( $option['label'] ?? '' ) ) ) {
+                return (string) $option['label'];
             }
         }
         return $value;

@@ -271,4 +271,140 @@ final class FieldValidatorTest extends TestCase {
 
         $this->assertSame( [ 'subject' => 'Subject is required.' ], $this->validate_one( $field, [ 'subject' => "\xFF\xFE" ] )['errors'] );
     }
+
+    /** @return array<int,array{label:string,value:string}> */
+    private function options(): array {
+        return [
+            [ 'label' => 'Red', 'value' => 'red' ],
+            [ 'label' => 'Green', 'value' => 'green' ],
+            [ 'label' => 'Blue', 'value' => 'blue' ],
+        ];
+    }
+
+    public function test_radio_accepts_an_option_value_only(): void {
+        $field = $this->field( 'radio', 'colour', [ 'required' => true, 'options' => $this->options() ] );
+
+        $this->assertSame( [ 'colour' => 'green' ], $this->validate_one( $field, [ 'colour' => ' green ' ] )['values'] );
+        $this->assertSame( [ 'colour' => 'Colour is required.' ], $this->validate_one( $field, [ 'colour' => '' ] )['errors'] );
+        $this->assertSame( [ 'colour' => 'Colour is required.' ], $this->validate_one( $field, [] )['errors'] );
+        foreach ( [ 'Green', 'yellow', 'Red' ] as $invalid ) {
+            $this->assertSame(
+                [ 'colour' => 'Please choose one of the available options.' ],
+                $this->validate_one( $field, [ 'colour' => $invalid ] )['errors'],
+                $invalid
+            );
+        }
+        $this->assertSame(
+            [ 'colour' => 'Colour is required.' ],
+            $this->validate_one( $field, [ 'colour' => [ 'red' ] ] )['errors'],
+            'A list is not a radio value.'
+        );
+
+        $optional = $this->field( 'radio', 'colour', [ 'options' => $this->options() ] );
+        $this->assertSame( [ 'colour' => '' ], $this->validate_one( $optional, [] )['values'] );
+    }
+
+    public function test_checkbox_accepts_a_list_of_option_values_in_option_order(): void {
+        $field = $this->field( 'checkbox', 'colours', [ 'options' => $this->options() ] );
+
+        $this->assertSame( [ 'colours' => [ 'red', 'blue' ] ], $this->validate_one( $field, [ 'colours' => [ 'blue', ' red ', 'blue', '' ] ] )['values'] );
+        $this->assertSame( [ 'colours' => [ 'green' ] ], $this->validate_one( $field, [ 'colours' => 'green' ] )['values'], 'A single string counts as one choice.' );
+        $this->assertSame( [ 'colours' => [] ], $this->validate_one( $field, [] )['values'] );
+        $this->assertSame( [ 'colours' => [] ], $this->validate_one( $field, [ 'colours' => [] ] )['values'] );
+    }
+
+    public function test_checkbox_rejects_unknown_options_and_non_strings(): void {
+        $field = $this->field( 'checkbox', 'colours', [ 'options' => $this->options() ] );
+
+        foreach ( [ [ 'red', 'yellow' ], [ 'Red' ], [ [ 'red' ] ], [ 5 ] ] as $invalid ) {
+            $result = $this->validate_one( $field, [ 'colours' => $invalid ] );
+            $this->assertSame( [ 'colours' => 'Please choose only from the available options.' ], $result['errors'], (string) json_encode( $invalid ) );
+            $this->assertSame( [], $result['values'] );
+        }
+    }
+
+    public function test_required_checkbox_needs_at_least_one_choice(): void {
+        $field = $this->field( 'checkbox', 'colours', [ 'required' => true, 'options' => $this->options() ] );
+
+        foreach ( [ [], [ 'colours' => [] ], [ 'colours' => [ '', '  ' ] ], [ 'colours' => '' ] ] as $submitted ) {
+            $this->assertSame( [ 'colours' => 'Colours is required.' ], $this->validate_one( $field, $submitted )['errors'], (string) json_encode( $submitted ) );
+        }
+        $this->assertSame( [], $this->validate_one( $field, [ 'colours' => [ 'green' ] ] )['errors'] );
+    }
+
+    /** @param array<int,Field_Definition|Conditional_Group> $items */
+    private function form( array $items ): Form_Definition {
+        return new Form_Definition( 1, 'Contact', 'rev', [], $items );
+    }
+
+    private function trigger_group( string $value, Field_Definition ...$fields ): Conditional_Group {
+        return new Conditional_Group( new Condition( 'topic', 'is', [ $value ] ), $fields );
+    }
+
+    public function test_a_hidden_group_is_neither_required_nor_validated_and_leaves_no_values(): void {
+        $form = $this->form(
+            [
+                $this->field( 'radio', 'topic', [ 'required' => true, 'options' => [ [ 'label' => 'Sales', 'value' => 'sales' ], [ 'label' => 'Help', 'value' => 'help' ] ] ] ),
+                $this->trigger_group(
+                    'sales',
+                    $this->field( 'text', 'budget', [ 'required' => true ] ),
+                    $this->field( 'email', 'contact', [ 'required' => true ] )
+                ),
+            ]
+        );
+
+        $result = $this->validator->validate_form( $form, [ 'topic' => 'help', 'budget' => '', 'contact' => 'not-an-email' ] );
+
+        $this->assertSame( [], $result['errors'] );
+        $this->assertSame( [ 'topic' => 'help' ], $result['values'] );
+
+        $dropped = $this->validator->validate_form( $form, [ 'topic' => 'help', 'budget' => '5000', 'contact' => 'jane@example.test' ] );
+        $this->assertSame( [ 'topic' => 'help' ], $dropped['values'], 'A value posted for a hidden Field is dropped.' );
+    }
+
+    public function test_a_shown_group_is_validated_like_the_rest_of_the_form(): void {
+        $form = $this->form(
+            [
+                $this->field( 'radio', 'topic', [ 'options' => [ [ 'label' => 'Sales', 'value' => 'sales' ] ] ] ),
+                $this->trigger_group(
+                    'sales',
+                    $this->field( 'text', 'budget', [ 'required' => true ] ),
+                    $this->field( 'email', 'contact' )
+                ),
+            ]
+        );
+
+        $result = $this->validator->validate_form( $form, [ 'topic' => 'sales', 'contact' => 'nope' ] );
+
+        $this->assertSame( [ 'budget' => 'Budget is required.', 'contact' => 'Please enter a valid email address.' ], $result['errors'] );
+
+        $valid = $this->validator->validate_form( $form, [ 'topic' => 'sales', 'budget' => '5000' ] );
+        $this->assertSame( [], $valid['errors'] );
+        $this->assertSame( [ 'topic' => 'sales', 'budget' => '5000', 'contact' => '' ], $valid['values'] );
+    }
+
+    public function test_conditions_look_at_cleaned_values_in_document_order(): void {
+        $form = $this->form(
+            [
+                $this->field( 'text', 'topic' ),
+                new Conditional_Group( new Condition( 'topic', 'is_filled', [] ), [ $this->field( 'text', 'budget' ) ] ),
+                new Conditional_Group( new Condition( 'budget', 'is_filled', [] ), [ $this->field( 'text', 'details', [ 'required' => true ] ) ] ),
+            ]
+        );
+
+        $blank = $this->validator->validate_form( $form, [ 'topic' => '   ', 'budget' => 'x', 'details' => '' ] );
+        $this->assertSame( [], $blank['errors'], 'Whitespace is empty, so the chain stays hidden.' );
+        $this->assertSame( [ 'topic' => '' ], $blank['values'] );
+
+        $filled = $this->validator->validate_form( $form, [ 'topic' => 'a', 'budget' => 'x', 'details' => '' ] );
+        $this->assertSame( [ 'details' => 'Details is required.' ], $filled['errors'] );
+    }
+
+    public function test_an_invalid_condition_leaves_the_group_required(): void {
+        $form = $this->form(
+            [ new Conditional_Group( new Condition( 'nope', 'is', [ 'x' ], false ), [ $this->field( 'text', 'budget', [ 'required' => true ] ) ] ) ]
+        );
+
+        $this->assertSame( [ 'budget' => 'Budget is required.' ], $this->validator->validate_form( $form, [] )['errors'] );
+    }
 }

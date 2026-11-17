@@ -151,6 +151,15 @@
 	}
 }
 
+/* A Conditional group spans the grid and lays out its Fields the same way. */
+.jp-form-builder__group > .jp-form-builder__fields {
+	margin-block-end: 0;
+}
+
+.jp-form-builder__group[hidden] {
+	display: none;
+}
+
 .jp-form-builder__field fieldset {
 	margin: 0;
 	padding: 0;
@@ -247,7 +256,7 @@
 	border-width: 0 0 var(--jpfb-field-border-width);
 }
 
-.jp-form-builder__field input[type="checkbox"] {
+.jp-form-builder__field :is(input[type="checkbox"], input[type="radio"]) {
 	width: 1.15em;
 	height: 1.15em;
 	margin-inline-end: 0.5em;

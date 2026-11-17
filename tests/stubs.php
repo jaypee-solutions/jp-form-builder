@@ -271,3 +271,8 @@ function is_admin(): bool {
 function wp_json_encode( $value ): string {
     return (string) json_encode( $value );
 }
+
+/** @param array<string,mixed> $block */
+function render_block( array $block ): string {
+    return (string) ( $block['innerHTML'] ?? '' );
+}
