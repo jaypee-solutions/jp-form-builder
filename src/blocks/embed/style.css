@@ -2,6 +2,134 @@
 	display: block;
 }
 
+/* Fonts and colours come from the theme; the error colour is overridable. */
+.jp-form-builder {
+	--jpfb-error-color: #b32d2e;
+}
+
+.jp-form-builder__field {
+	margin-block-end: 1.25em;
+}
+
+.jp-form-builder__field fieldset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.jp-form-builder__field legend {
+	padding: 0;
+	font-weight: 600;
+}
+
+.jp-form-builder__field label {
+	display: block;
+	margin-block-end: 0.25em;
+}
+
+.jp-form-builder__field fieldset label:not(:first-of-type) {
+	margin-block-start: 0.75em;
+}
+
+.jp-form-builder__field input:not([type="checkbox"]),
+.jp-form-builder__field select,
+.jp-form-builder__field textarea {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 0.5em 0.75em;
+	border: 1px solid currentcolor;
+	border-radius: 2px;
+	background-color: transparent;
+	font: inherit;
+	color: inherit;
+}
+
+.jp-form-builder__field input[type="checkbox"] {
+	margin-inline-end: 0.5em;
+}
+
+.jp-form-builder__field p {
+	margin: 0.25em 0 0;
+	font-size: 0.875em;
+}
+
+.jp-form-builder__required {
+	margin-inline-start: 0.125em;
+}
+
+.jp-form-builder__field :focus-visible,
+.jp-form-builder__error-summary:focus-visible,
+.jp-form-builder__status:focus-visible,
+.jp-form-builder button:focus-visible {
+	outline: 2px solid currentcolor;
+	outline-offset: 2px;
+}
+
+.jp-form-builder__field [aria-invalid="true"] {
+	border-color: var(--jpfb-error-color);
+	box-shadow: 0 0 0 1px var(--jpfb-error-color);
+}
+
+.jp-form-builder__error:empty {
+	display: none;
+}
+
+.jp-form-builder__field .jp-form-builder__error p {
+	color: var(--jpfb-error-color);
+	font-weight: 600;
+}
+
+.jp-form-builder__error-summary:empty,
+.jp-form-builder__status:empty {
+	display: none;
+}
+
+.jp-form-builder__error-summary {
+	margin-block-end: 1.25em;
+	padding: 1em;
+	border: 2px solid var(--jpfb-error-color);
+	border-radius: 2px;
+}
+
+.jp-form-builder__error-summary h2 {
+	margin: 0 0 0.5em;
+	font-size: 1.125em;
+}
+
+.jp-form-builder__error-summary ul {
+	margin: 0;
+	padding-inline-start: 1.25em;
+}
+
+.jp-form-builder__error-summary p {
+	margin: 0;
+}
+
+.jp-form-builder__error-summary a {
+	color: inherit;
+}
+
+.jp-form-builder__status {
+	margin-block-end: 1.25em;
+	padding: 1em;
+	border: 2px solid currentcolor;
+	border-radius: 2px;
+}
+
+.jp-form-builder__turnstile {
+	margin-block-end: 1.25em;
+}
+
+.jp-form-builder button[aria-disabled="true"] {
+	opacity: 0.6;
+	cursor: wait;
+}
+
+/* After a successful submission only the confirmation stays. */
+.jp-form-builder.is-submitted > :not(.jp-form-builder__status) {
+	display: none;
+}
+
 .jp-form-builder__honeypot {
 	position: absolute;
 	left: -10000px;
