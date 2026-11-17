@@ -33,8 +33,12 @@ final class Mail_Builder {
      */
     public function notification( array $recipients, array $form, array $fields, array $context ): Mail {
         $subject_template = $this->choose( $form['subject'] ?? '', $this->settings->get( 'notification_subject' ), __( 'New message via {form_title}', 'jp-form-builder' ) );
-        $body_template    = $this->choose( $form['notificationBody'] ?? '', $this->settings->get( 'notification_body' ), '{all_fields}' );
-        $context = $this->validated_context( $context );
+        $context          = $this->validated_context( $context );
+        $built_in_body    = '' === ( $context['page_url'] ?? '' )
+            ? '{all_fields}'
+            /* translators: %s: placeholder for the address of the page that held the Form. */
+            : '<div>{all_fields}</div><p>' . sprintf( __( 'Page: %s', 'jp-form-builder' ), '{page_url}' ) . '</p>';
+        $body_template    = $this->choose( $form['notificationBody'] ?? '', $this->settings->get( 'notification_body' ), $built_in_body );
         $subject = $this->render_subject( $subject_template, $fields, $context );
         $html    = $this->template->render( $body_template, $fields, $context, 'html' );
         $text    = $this->template->render( $body_template, $fields, $context, 'text' );

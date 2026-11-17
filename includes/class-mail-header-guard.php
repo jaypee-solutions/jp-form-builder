@@ -21,10 +21,8 @@ final class Mail_Header_Guard {
         if ( ! $this->is_safe( $email ) || false === filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
             return null;
         }
-        $name = str_replace( [ '"', '<', '>', "\r", "\n", "\0" ], '', $name );
-        if ( ! $this->is_safe( $name ) ) {
-            return null;
-        }
-        return 'Reply-To: "' . $name . '" <' . $email . '>';
+        // wp_mail() splits address headers at commas and keeps quote characters in the display name; PHPMailer quotes it as needed.
+        $name = trim( (string) preg_replace( '/\s+/', ' ', str_replace( ',', ' ', str_replace( [ '"', '<', '>', "\r", "\n", "\0" ], '', $name ) ) ) );
+        return '' === $name ? 'Reply-To: ' . $email : 'Reply-To: ' . $name . ' <' . $email . '>';
     }
 }

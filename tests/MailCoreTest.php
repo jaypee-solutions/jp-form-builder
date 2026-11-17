@@ -22,7 +22,9 @@ final class MailCoreTest extends TestCase {
         $guard = new Mail_Header_Guard();
         $this->assertTrue( $guard->is_safe( 'okay' ) );
         $this->assertFalse( $guard->is_safe( "bad\rvalue" ) );
-        $this->assertSame( 'Reply-To: "Jane" <jane@example.test>', $guard->reply_to( 'J"<a>ne', 'jane@example.test' ) );
+        $this->assertSame( 'Reply-To: Jane <jane@example.test>', $guard->reply_to( 'J"<a>ne', 'jane@example.test' ) );
+        $this->assertSame( 'Reply-To: Doe John <jane@example.test>', $guard->reply_to( "Doe,\r\n John", 'jane@example.test' ) );
+        $this->assertSame( 'Reply-To: jane@example.test', $guard->reply_to( '', 'jane@example.test' ) );
         $this->assertNull( $guard->reply_to( 'Name', "bad\n@example.test" ) );
     }
 
@@ -66,6 +68,16 @@ final class MailCoreTest extends TestCase {
         $this->assertSame( '', $default_mail->text_body() );
     }
 
+    public function test_built_in_notification_body_names_the_page_only_for_the_home_host(): void {
+        $builder = new Mail_Builder( new Mail_Template(), new Mail_Layout( new Settings(), __DIR__ . '/../templates/mail/layout.html' ) );
+        $fields  = [ new Submitted_Field( 'message', 'Message', 'textarea', 'Hi' ) ];
+        $home    = home_url( '/' );
+        $own     = $builder->notification( [ 'team@example.test' ], [], $fields, [ 'form_title' => 'Contact', 'page_url' => $home . 'contact/' ] );
+        $this->assertStringContainsString( 'Page: ' . $home . 'contact/', $own->text_body() );
+        $foreign = $builder->notification( [ 'team@example.test' ], [], $fields, [ 'form_title' => 'Contact', 'page_url' => 'https://attacker.test/' ] );
+        $this->assertStringNotContainsString( 'Page:', $foreign->text_body() );
+    }
+
     public function test_builder_limits_subject_value_and_total_lengths(): void {
         $builder = new Mail_Builder( new Mail_Template(), new Mail_Layout( new Settings(), __DIR__ . '/../templates/mail/layout.html' ) );
         $value   = str_repeat( 'x', 240 );
@@ -80,12 +92,12 @@ final class MailCoreTest extends TestCase {
         $fields  = [ new Submitted_Field( 'name', 'Name', 'name', 'Ada' ), new Submitted_Field( 'email', 'Email', 'email', 'ada@example.test', true ) ];
         $mail    = $builder->notification( [ 'team@example.test' ], [ 'subject' => '', 'notificationBody' => '' ], $fields, [ 'form_title' => 'Contact', 'site_name' => 'Site' ] );
         $this->assertSame( 'Site Ada', $mail->subject() );
-        $this->assertSame( [ 'Reply-To: "Ada" <ada@example.test>' ], $mail->headers() );
+        $this->assertSame( [ 'Reply-To: Ada <ada@example.test>' ], $mail->headers() );
         $confirmation = $builder->confirmation( 'ada@example.test', [ 'team@example.test' ], [ 'confirmationSubject' => 'Hi {name}', 'confirmationBody' => 'Your value was {email}; {all_fields} {#email}secret{/email}' ], $fields, [ 'form_title' => 'Contact', 'site_name' => 'Site' ] );
         $this->assertSame( 'Hi', $confirmation->subject() );
         $this->assertStringNotContainsString( 'ada@example.test', $confirmation->html_body() );
         $this->assertStringNotContainsString( 'secret', $confirmation->html_body() );
-        $this->assertSame( [ 'Reply-To: "" <team@example.test>' ], $confirmation->headers() );
+        $this->assertSame( [ 'Reply-To: team@example.test' ], $confirmation->headers() );
     }
 
     public function test_mail_log_redacts_every_email_address(): void {
