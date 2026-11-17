@@ -232,6 +232,21 @@ Deleting the plugin from the Plugins screen runs `uninstall.php`, which removes 
 - **Restore:** Forms → Settings → *Backup & restore* (file up to `JP_FORM_BUILDER_MAX_BACKUP_BYTES`, default 2 MiB), or `wp jp-form-builder backup restore <file> [--overwrite] [--dry-run]`. Every Form must be exactly one Form block with allowed Field blocks, otherwise it is rejected and reported. A Form keeps its ID when that ID is free, so existing embeds keep working. If another post holds the ID, the Form gets a new ID and the report shows `old → new`; embeds are not rewritten. A Form with the same ID is skipped unless you overwrite. `--dry-run` validates and reports without writing.
 - **Delete the Forms but keep the plugin:** `wp post delete $(wp post list --post_type=jp_form --post_status=any --format=ids) --force`.
 
+## Translations
+
+The plugin ships a German translation (`de_DE`, formal "Sie"; `de_DE_formal` is a byte-identical copy) for PHP and the block scripts. `.mo` files are compiled by `scripts/build-release.sh` and are not committed; the `.pot`, `.po` and script `.json` files are.
+
+After changing a translatable string, with wp-env running:
+
+```bash
+npm run build        # the extractor reads the built blocks/, not src/
+npm run i18n:pot     # regenerate languages/jp-form-builder.pot
+# update languages/jp-form-builder-de_DE.po, then copy it to jp-form-builder-de_DE_formal.po
+npm run i18n:json    # regenerate the script translations (languages/*.json)
+```
+
+German terms follow [`GLOSSARY.md`](GLOSSARY.md): Formular, Feld, Feldschlüssel, Einsendung, Einsender, Empfänger, Benachrichtigung, Bestätigung, Mail-Layout, Textvorlage, Sicherung.
+
 ## Development
 
 Scaffolded from [jaypee-solutions/wp-plugin-template](https://github.com/jaypee-solutions/wp-plugin-template).

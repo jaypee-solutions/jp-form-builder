@@ -24,6 +24,7 @@ JayPee Solutions Form Builder replaces WPForms Lite and WP Mail SMTP with one le
 * No stored submissions: entries are sent by mail and not kept; only short-lived hashes are stored for the rate limit.
 * Backup and restore of Forms, WP-CLI commands (`mail test`, `settings`, `form list`, `backup`), clean uninstall.
 * Privacy policy suggestion text under Settings → Privacy, and a Turnstile snippet in German and English in the README.
+* German translation (formal "Sie") for the interface, the editor blocks and visitor-facing messages.
 
 **Outbound connections**
 

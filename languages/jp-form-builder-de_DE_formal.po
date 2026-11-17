@@ -1,0 +1,1473 @@
+# Copyright (C) 2026 Jan-Peter Alten
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: JayPee Solutions Form Builder 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jp-forms\n"
+"Last-Translator: JayPee Solutions <support@jaypee.solutions>\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2026-11-17 00:00+0000\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: jp-form-builder\n"
+
+#. Plugin Name of the plugin
+#: jp-form-builder.php
+#: includes/class-privacy.php:21
+msgid "JayPee Solutions Form Builder"
+msgstr "JayPee Solutions Form Builder"
+
+#. Plugin URI of the plugin
+#: jp-form-builder.php
+msgid "https://github.com/jaypee-solutions/jp-form-builder"
+msgstr "https://github.com/jaypee-solutions/jp-form-builder"
+
+#. Description of the plugin
+#: jp-form-builder.php
+msgid "JayPee Solutions Form Builder is a WordPress plugin to create basic forms like a contact form."
+msgstr "JayPee Solutions Form Builder ist ein WordPress-Plugin zum Erstellen einfacher Formulare, etwa eines Kontaktformulars."
+
+#. Author of the plugin
+#: jp-form-builder.php
+msgid "Jan-Peter Alten"
+msgstr "Jan-Peter Alten"
+
+#: includes/class-countries.php:19
+msgid "Austria"
+msgstr "Österreich"
+
+#: includes/class-countries.php:20
+msgid "Belgium"
+msgstr "Belgien"
+
+#: includes/class-countries.php:21
+msgid "Bulgaria"
+msgstr "Bulgarien"
+
+#: includes/class-countries.php:22
+msgid "Croatia"
+msgstr "Kroatien"
+
+#: includes/class-countries.php:23
+msgid "Cyprus"
+msgstr "Zypern"
+
+#: includes/class-countries.php:24
+msgid "Czechia"
+msgstr "Tschechien"
+
+#: includes/class-countries.php:25
+msgid "Denmark"
+msgstr "Dänemark"
+
+#: includes/class-countries.php:26
+msgid "Estonia"
+msgstr "Estland"
+
+#: includes/class-countries.php:27
+msgid "Finland"
+msgstr "Finnland"
+
+#: includes/class-countries.php:28
+msgid "France"
+msgstr "Frankreich"
+
+#: includes/class-countries.php:29
+msgid "Germany"
+msgstr "Deutschland"
+
+#: includes/class-countries.php:30
+msgid "Greece"
+msgstr "Griechenland"
+
+#: includes/class-countries.php:31
+msgid "Hungary"
+msgstr "Ungarn"
+
+#: includes/class-countries.php:32
+msgid "Ireland"
+msgstr "Irland"
+
+#: includes/class-countries.php:33
+msgid "Italy"
+msgstr "Italien"
+
+#: includes/class-countries.php:34
+msgid "Latvia"
+msgstr "Lettland"
+
+#: includes/class-countries.php:35
+msgid "Lithuania"
+msgstr "Litauen"
+
+#: includes/class-countries.php:36
+msgid "Luxembourg"
+msgstr "Luxemburg"
+
+#: includes/class-countries.php:37
+msgid "Malta"
+msgstr "Malta"
+
+#: includes/class-countries.php:38
+msgid "Netherlands"
+msgstr "Niederlande"
+
+#: includes/class-countries.php:39
+msgid "Poland"
+msgstr "Polen"
+
+#: includes/class-countries.php:40
+msgid "Portugal"
+msgstr "Portugal"
+
+#: includes/class-countries.php:41
+msgid "Romania"
+msgstr "Rumänien"
+
+#: includes/class-countries.php:42
+msgid "Slovakia"
+msgstr "Slowakei"
+
+#: includes/class-countries.php:43
+msgid "Slovenia"
+msgstr "Slowenien"
+
+#: includes/class-countries.php:44
+msgid "Spain"
+msgstr "Spanien"
+
+#: includes/class-countries.php:45
+msgid "Sweden"
+msgstr "Schweden"
+
+#: includes/class-countries.php:46
+msgid "Switzerland"
+msgstr "Schweiz"
+
+#: includes/class-countries.php:47
+msgid "Liechtenstein"
+msgstr "Liechtenstein"
+
+#: includes/class-countries.php:48
+msgid "Norway"
+msgstr "Norwegen"
+
+#: includes/class-countries.php:49
+msgid "Iceland"
+msgstr "Island"
+
+#: includes/class-countries.php:50
+msgid "United Kingdom"
+msgstr "Vereinigtes Königreich"
+
+#: includes/class-field-labels.php:24
+#: includes/class-mail-preview-controller.php:168
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Name"
+msgstr "Name"
+
+#: includes/class-field-labels.php:25
+#: includes/class-mail-preview-controller.php:169
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Email"
+msgstr "E-Mail"
+
+#: includes/class-field-labels.php:26
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Phone"
+msgstr "Telefon"
+
+#: includes/class-field-labels.php:27
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Address"
+msgstr "Adresse"
+
+#: includes/class-field-labels.php:28
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Text"
+msgstr "Text"
+
+#: includes/class-field-labels.php:29
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Select"
+msgstr "Auswahl"
+
+#: includes/class-field-labels.php:30
+#: includes/class-mail-preview-controller.php:170
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Message"
+msgstr "Nachricht"
+
+#: includes/class-field-labels.php:31
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Consent"
+msgstr "Einwilligung"
+
+#: includes/class-field-labels.php:40
+#: blocks/name/index.js:1
+msgid "First name"
+msgstr "Vorname"
+
+#: includes/class-field-labels.php:42
+#: blocks/name/index.js:1
+msgid "Last name"
+msgstr "Nachname"
+
+#: includes/class-field-labels.php:44
+#: blocks/address/index.js:1
+msgid "Street and number"
+msgstr "Straße und Hausnummer"
+
+#: includes/class-field-labels.php:46
+#: blocks/address/index.js:1
+msgid "Postcode"
+msgstr "Postleitzahl"
+
+#: includes/class-field-labels.php:48
+#: blocks/address/index.js:1
+msgid "City"
+msgstr "Ort"
+
+#: includes/class-field-labels.php:50
+#: blocks/address/index.js:1
+msgid "Country"
+msgstr "Land"
+
+#: includes/class-field-validator.php:89
+msgid "Please enter a valid phone number."
+msgstr "Bitte geben Sie eine gültige Telefonnummer ein."
+
+#: includes/class-field-validator.php:94
+#: blocks/embed/view.js:2
+msgid "Please choose one of the available options."
+msgstr "Bitte wählen Sie eine der verfügbaren Optionen."
+
+#: includes/class-field-validator.php:112
+#: blocks/embed/view.js:2
+msgid "Please accept to continue."
+msgstr "Bitte stimmen Sie zu, um fortzufahren."
+
+#: includes/class-field-validator.php:117
+#: blocks/embed/view.js:1
+msgid "Please enter a valid email address."
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+
+#: includes/class-field-validator.php:191
+msgid "Please choose a valid country."
+msgstr "Bitte wählen Sie ein gültiges Land."
+
+#: includes/class-field-validator.php:199
+#: blocks/embed/view.js:2
+msgid "Please enter a valid postcode."
+msgstr "Bitte geben Sie eine gültige Postleitzahl ein."
+
+#: includes/class-field-validator.php:275
+#: blocks/embed/view.js:1
+msgid "This field"
+msgstr "Dieses Feld"
+
+#. translators: %s: field label.
+#: includes/class-field-validator.php:280
+#: blocks/embed/view.js:2
+#, php-format,js-format
+msgid "%s is required."
+msgstr "%s ist erforderlich."
+
+#. translators: 1: field label, 2: maximum number of characters.
+#: includes/class-field-validator.php:285
+#: blocks/embed/view.js:2
+#, php-format,js-format
+msgid "%1$s must not be longer than %2$d characters."
+msgstr "%1$s darf nicht länger als %2$d Zeichen sein."
+
+#: includes/class-form-backup.php:91
+#: includes/class-form-backup.php:146
+#: includes/class-settings-page.php:62
+msgid "The Backup file is too large."
+msgstr "Die Sicherungsdatei ist zu groß."
+
+#: includes/class-form-backup.php:95
+msgid "This is not a Form Builder Backup file."
+msgstr "Dies ist keine Sicherungsdatei von Form Builder."
+
+#: includes/class-form-backup.php:98
+msgid "This Backup file has an unsupported version."
+msgstr "Diese Sicherungsdatei hat eine nicht unterstützte Version."
+
+#: includes/class-form-backup.php:101
+msgid "The Backup file is malformed."
+msgstr "Die Sicherungsdatei ist fehlerhaft aufgebaut."
+
+#: includes/class-form-backup.php:121
+msgid "The content must be exactly one Form block."
+msgstr "Der Inhalt muss genau ein Formularblock sein."
+
+#. translators: %s: block name.
+#: includes/class-form-backup.php:127
+#, php-format
+msgid "The block \"%s\" is not allowed in a Form."
+msgstr "Der Block „%s“ ist in einem Formular nicht erlaubt."
+
+#: includes/class-form-backup.php:130
+msgid "Nested blocks are not allowed in a Form."
+msgstr "Verschachtelte Blöcke sind in einem Formular nicht erlaubt."
+
+#: includes/class-form-backup.php:143
+msgid "The Backup file cannot be read."
+msgstr "Die Sicherungsdatei kann nicht gelesen werden."
+
+#: includes/class-form-backup.php:198
+msgid "Dry run: nothing was written."
+msgstr "Testlauf: Es wurde nichts geschrieben."
+
+#. translators: 1: Form title, 2: Form ID.
+#: includes/class-form-backup.php:202
+#, php-format
+msgid "Overwritten: \"%1$s\" (ID %2$d)."
+msgstr "Überschrieben: „%1$s“ (ID %2$d)."
+
+#. translators: 1: Form title, 2: Form ID.
+#: includes/class-form-backup.php:202
+#, php-format
+msgid "Restored: \"%1$s\" (ID %2$d)."
+msgstr "Wiederhergestellt: „%1$s“ (ID %2$d)."
+
+#. translators: 1: Form title, 2: old Form ID.
+#: includes/class-form-backup.php:210
+#, php-format
+msgid "Mapped: \"%1$s\" would get a new ID because ID %2$d is taken by another post. Embeds are not rewritten."
+msgstr "Zugeordnet: „%1$s“ erhielte eine neue ID, weil die ID %2$d von einem anderen Beitrag verwendet wird. Einbettungen werden nicht angepasst."
+
+#. translators: 1: Form title, 2: old Form ID, 3: new Form ID.
+#: includes/class-form-backup.php:212
+#, php-format
+msgid "Mapped: \"%1$s\" ID %2$d → %3$d. Embeds are not rewritten."
+msgstr "Zugeordnet: „%1$s“ ID %2$d → %3$d. Einbettungen werden nicht angepasst."
+
+#. translators: 1: Form title, 2: Form ID, 3: reason.
+#: includes/class-form-backup.php:216
+#, php-format
+msgid "Skipped: \"%1$s\" (ID %2$d): %3$s"
+msgstr "Übersprungen: „%1$s“ (ID %2$d): %3$s"
+
+#. translators: 1: Form title, 2: Form ID, 3: reason.
+#: includes/class-form-backup.php:220
+#, php-format
+msgid "Rejected: \"%1$s\" (ID %2$d): %3$s"
+msgstr "Abgelehnt: „%1$s“ (ID %2$d): %3$s"
+
+#. translators: %s: comma-separated setting keys.
+#: includes/class-form-backup.php:224
+#, php-format
+msgid "Settings restored: %s"
+msgstr "Einstellungen wiederhergestellt: %s"
+
+#. translators: 1: setting key, 2: reason.
+#: includes/class-form-backup.php:228
+#, php-format
+msgid "Setting skipped: %1$s: %2$s"
+msgstr "Einstellung übersprungen: %1$s: %2$s"
+
+#: includes/class-form-backup.php:243
+msgid "The Form entry is missing its ID or content."
+msgstr "Dem Formular in der Sicherung fehlen ID oder Inhalt."
+
+#: includes/class-form-backup.php:265
+msgid "A Form with this ID exists. Overwrite is off."
+msgstr "Ein Formular mit dieser ID existiert bereits. Überschreiben ist deaktiviert."
+
+#: includes/class-form-backup.php:279
+msgid "WordPress could not save the Form."
+msgstr "WordPress konnte das Formular nicht speichern."
+
+#: includes/class-form-backup.php:298
+msgid "Unknown setting."
+msgstr "Unbekannte Einstellung."
+
+#: includes/class-form-backup.php:300
+msgid "Secrets are never restored."
+msgstr "Geheime Werte werden nie wiederhergestellt."
+
+#: includes/class-form-backup.php:302
+msgid "Locked by a constant."
+msgstr "Durch eine Konstante gesperrt."
+
+#: includes/class-form-backup.php:304
+msgid "Invalid value."
+msgstr "Ungültiger Wert."
+
+#: includes/class-form-post-type.php:34
+msgid "Forms"
+msgstr "Formulare"
+
+#: includes/class-form-post-type.php:34
+#: blocks/embed/index.js:1
+#: blocks/form/index.js:2
+msgid "Form"
+msgstr "Formular"
+
+#: includes/class-form-renderer.php:45
+#: blocks/form/index.js:1
+msgid "Submit"
+msgstr "Absenden"
+
+#: includes/class-form-renderer.php:46
+msgid "Leave this field empty"
+msgstr "Dieses Feld leer lassen"
+
+#: includes/class-form-renderer.php:50
+msgid "JavaScript is required to submit this form."
+msgstr "Zum Absenden dieses Formulars ist JavaScript erforderlich."
+
+#: includes/class-form-renderer.php:103
+#: blocks/consent/index.js:1
+msgid "privacy policy"
+msgstr "Datenschutzerklärung"
+
+#: includes/class-form-renderer.php:104
+#: blocks/consent/index.js:1
+msgid "I agree to the {privacy_policy}."
+msgstr "Ich stimme der {privacy_policy} zu."
+
+#: includes/class-mail-builder.php:35
+msgid "New message via {form_title}"
+msgstr "Neue Nachricht über {form_title}"
+
+#. translators: %s: placeholder for the address of the page that held the Form.
+#: includes/class-mail-builder.php:40
+#, php-format
+msgid "Page: %s"
+msgstr "Seite: %s"
+
+#: includes/class-mail-builder.php:72
+msgid "Thank you for contacting us"
+msgstr "Vielen Dank für Ihre Kontaktaufnahme"
+
+#: includes/class-mail-builder.php:73
+msgid "Thank you for your message. We will get back to you soon."
+msgstr "Vielen Dank für Ihre Nachricht. Wir melden uns bald bei Ihnen."
+
+#: includes/class-mail-layout.php:62
+msgid "The mail layout must contain {content}."
+msgstr "Das Mail-Layout muss {content} enthalten."
+
+#: includes/class-mail-preview-controller.php:68
+msgid "Sample form"
+msgstr "Beispielformular"
+
+#: includes/class-mail-preview-controller.php:148
+msgid "Example Street 1"
+msgstr "Musterstraße 1"
+
+#: includes/class-mail-preview-controller.php:150
+msgid "Sampletown"
+msgstr "Musterstadt"
+
+#: includes/class-mail-preview-controller.php:154
+msgid "Sample option"
+msgstr "Beispieloption"
+
+#. translators: %s: UTC timestamp of the Submission.
+#: includes/class-mail-preview-controller.php:159
+#: includes/class-submission-handler.php:219
+#, php-format
+msgid "Yes (%s)"
+msgstr "Ja (%s)"
+
+#: includes/class-mail-preview-controller.php:161
+msgid "Sample text"
+msgstr "Beispieltext"
+
+#: includes/class-mailer.php:98
+msgid "Mail could not be sent."
+msgstr "Die Mail konnte nicht gesendet werden."
+
+#: includes/class-mailer.php:109
+msgid "This is a test message from Form Builder."
+msgstr "Dies ist eine Testnachricht von Form Builder."
+
+#: includes/class-mailer.php:112
+msgid "Form Builder test mail"
+msgstr "Test-Mail von Form Builder"
+
+#: includes/class-privacy.php:26
+msgid "Contact forms"
+msgstr "Kontaktformulare"
+
+#: includes/class-privacy.php:27
+msgid "Form Builder sends what visitors enter into a Form by email. The text below describes this behaviour. Adapt it to your Forms, your mail provider and your legal basis, and remove what does not apply."
+msgstr "Form Builder sendet per E-Mail, was Besucher in ein Formular eingeben. Der folgende Text beschreibt dieses Verhalten. Passen Sie ihn an Ihre Formulare, Ihren Mail-Anbieter und Ihre Rechtsgrundlage an und entfernen Sie, was nicht zutrifft."
+
+#: includes/class-privacy.php:28
+msgid "Suggested text:"
+msgstr "Vorgeschlagener Text:"
+
+#: includes/class-privacy.php:29
+msgid "When you send a contact form, the data you enter is sent by email to the recipients of the form and is not stored on this website. The email is delivered through the mail server configured for this website."
+msgstr "Wenn Sie ein Kontaktformular absenden, werden die von Ihnen eingegebenen Daten per E-Mail an die Empfänger des Formulars gesendet und nicht auf dieser Website gespeichert. Die E-Mail wird über den für diese Website konfigurierten Mailserver zugestellt."
+
+#: includes/class-privacy.php:30
+msgid "To limit abuse, a pseudonymised value derived from your IP address (a keyed hash, not the address itself) is kept for a short time (ten minutes by default) to count how often forms are sent from one connection. If the form sends you a confirmation email, a pseudonymised value derived from your email address is kept for one hour so that no address receives more than one confirmation per hour."
+msgstr "Um Missbrauch einzuschränken, wird ein aus Ihrer IP-Adresse abgeleiteter pseudonymisierter Wert (ein Hash mit Schlüssel, nicht die Adresse selbst) kurzzeitig (standardmäßig zehn Minuten) gespeichert, um zu zählen, wie oft von einem Anschluss aus Formulare gesendet werden. Sendet Ihnen das Formular eine Bestätigungs-E-Mail, wird ein aus Ihrer E-Mail-Adresse abgeleiteter pseudonymisierter Wert eine Stunde lang gespeichert, damit keine Adresse mehr als eine Bestätigung pro Stunde erhält."
+
+#: includes/class-privacy.php:31
+msgid "Forms are protected by Cloudflare Turnstile. When you start filling in a form, your browser loads a script from Cloudflare, Inc., which processes your IP address and technical browser information to tell humans from bots. This website sends only a secret key and the Turnstile response to Cloudflare for verification, not your IP address. Details are in the privacy policy of Cloudflare."
+msgstr "Formulare sind durch Cloudflare Turnstile geschützt. Sobald Sie beginnen, ein Formular auszufüllen, lädt Ihr Browser ein Skript von Cloudflare, Inc., das Ihre IP-Adresse und technische Browserinformationen verarbeitet, um Menschen von Bots zu unterscheiden. Diese Website sendet zur Prüfung nur einen geheimen Schlüssel und die Turnstile-Antwort an Cloudflare, nicht Ihre IP-Adresse. Einzelheiten stehen in der Datenschutzerklärung von Cloudflare."
+
+#: includes/class-privacy.php:32
+msgid "If an email cannot be delivered, the time, the form and the error message are logged in the website database with all email addresses removed."
+msgstr "Kann eine E-Mail nicht zugestellt werden, werden Zeitpunkt, Formular und Fehlermeldung ohne E-Mail-Adressen in der Datenbank der Website protokolliert."
+
+#: includes/class-privacy.php:33
+msgid "The administrator’s server periodically asks github.com whether a new version of this plugin is available. No visitor data is sent."
+msgstr "Der Server des Administrators fragt regelmäßig bei github.com an, ob eine neue Version dieses Plugins verfügbar ist. Es werden keine Besucherdaten gesendet."
+
+#: includes/class-rest-controller.php:60
+#: includes/class-submission-handler.php:59
+msgid "This form does not exist."
+msgstr "Dieses Formular existiert nicht."
+
+#: includes/class-settings-page.php:43
+msgid "Back up forms"
+msgstr "Formulare sichern"
+
+#: includes/class-settings-page.php:64
+msgid "No Backup file was uploaded."
+msgstr "Es wurde keine Sicherungsdatei hochgeladen."
+
+#: includes/class-settings-page.php:75
+msgid "You are not allowed to manage Backups."
+msgstr "Sie dürfen keine Sicherungen verwalten."
+
+#: includes/class-settings-page.php:104
+msgid "You are not allowed to send test mail."
+msgstr "Sie dürfen keine Test-Mails senden."
+
+#: includes/class-settings-page.php:118
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: includes/class-settings-page.php:123
+msgid "You are not allowed to manage these settings."
+msgstr "Sie dürfen diese Einstellungen nicht verwalten."
+
+#: includes/class-settings-page.php:141
+msgid "SMTP"
+msgstr "SMTP"
+
+#: includes/class-settings-page.php:142
+msgid "Leave the host empty to send mail with the default WordPress mailer. Saved secrets are encrypted with a key derived from the site’s salts; if you change the salts, enter them again."
+msgstr "Lassen Sie den Host leer, um Mails mit dem Standard-Mailer von WordPress zu senden. Gespeicherte geheime Werte werden mit einem aus den Sicherheitsschlüsseln (Salts) der Website abgeleiteten Schlüssel verschlüsselt; wenn Sie die Salts ändern, geben Sie die Werte erneut ein."
+
+#: includes/class-settings-page.php:144
+msgid "SMTP host"
+msgstr "SMTP-Host"
+
+#: includes/class-settings-page.php:145
+msgid "SMTP port"
+msgstr "SMTP-Port"
+
+#: includes/class-settings-page.php:146
+msgid "Encryption"
+msgstr "Verschlüsselung"
+
+#: includes/class-settings-page.php:147
+msgid "SMTP authentication"
+msgstr "SMTP-Authentifizierung"
+
+#: includes/class-settings-page.php:149
+msgid "SMTP user"
+msgstr "SMTP-Benutzer"
+
+#: includes/class-settings-page.php:150
+msgid "SMTP password"
+msgstr "SMTP-Passwort"
+
+#: includes/class-settings-page.php:154
+msgid "Sender"
+msgstr "Absender"
+
+#: includes/class-settings-page.php:155
+msgid "The address and name mail is sent from. Unless forced, they only replace the WordPress default sender (wordpress@your-domain)."
+msgstr "Adresse und Name, von denen Mails gesendet werden. Sofern nicht erzwungen, ersetzen sie nur den Standardabsender von WordPress (wordpress@ihre-domain)."
+
+#: includes/class-settings-page.php:157
+msgid "From email"
+msgstr "Absender-E-Mail"
+
+#: includes/class-settings-page.php:158
+msgid "From name"
+msgstr "Absendername"
+
+#: includes/class-settings-page.php:159
+msgid "Force From address"
+msgstr "Absenderadresse erzwingen"
+
+#: includes/class-settings-page.php:163
+msgid "Spam protection (Cloudflare Turnstile)"
+msgstr "Spam-Schutz (Cloudflare Turnstile)"
+
+#: includes/class-settings-page.php:164
+msgid "Create a Turnstile widget in the Cloudflare dashboard and enter its keys. Without both keys, Forms rely on the honeypot, the minimum fill time and the rate limit, and Confirmations are not sent."
+msgstr "Legen Sie im Cloudflare-Dashboard ein Turnstile-Widget an und tragen Sie dessen Schlüssel ein. Ohne beide Schlüssel verlassen sich Formulare auf das Honeypot-Feld, die Mindestausfüllzeit und das Ratenlimit, und Bestätigungen werden nicht gesendet."
+
+#: includes/class-settings-page.php:166
+msgid "Turnstile site key"
+msgstr "Turnstile-Site-Key"
+
+#: includes/class-settings-page.php:167
+msgid "Turnstile secret key"
+msgstr "Turnstile-Secret-Key"
+
+#: includes/class-settings-page.php:171
+#: blocks/form/index.js:1
+msgid "Recipients"
+msgstr "Empfänger"
+
+#: includes/class-settings-page.php:172
+msgid "Used by Forms without Recipients of their own. If this is empty too, the site administrator email receives the Notification."
+msgstr "Wird von Formularen ohne eigene Empfänger verwendet. Ist auch dieses Feld leer, erhält die E-Mail-Adresse des Website-Administrators die Benachrichtigung."
+
+#: includes/class-settings-page.php:174
+msgid "Default recipient"
+msgstr "Standardempfänger"
+
+#: includes/class-settings-page.php:178
+msgid "Mail"
+msgstr "Mail"
+
+#: includes/class-settings-page.php:179
+msgid "The layout that frames every mail and the default texts of Forms that do not set their own Body templates."
+msgstr "Das Layout, das jede Mail umgibt, und die Standardtexte von Formularen, die keine eigenen Textvorlagen festlegen."
+
+#: includes/class-settings-page.php:181
+msgid "Mail layout"
+msgstr "Mail-Layout"
+
+#: includes/class-settings-page.php:182
+msgid "Default notification subject"
+msgstr "Standardbetreff der Benachrichtigung"
+
+#: includes/class-settings-page.php:183
+msgid "Default notification body"
+msgstr "Standardtext der Benachrichtigung"
+
+#: includes/class-settings-page.php:184
+msgid "Default confirmation subject"
+msgstr "Standardbetreff der Bestätigung"
+
+#: includes/class-settings-page.php:185
+msgid "Default confirmation body"
+msgstr "Standardtext der Bestätigung"
+
+#: includes/class-settings-page.php:197
+#: includes/class-settings-page.php:358
+msgid "Form Builder Settings"
+msgstr "Form-Builder-Einstellungen"
+
+#: includes/class-settings-page.php:199
+msgid "Settings saved."
+msgstr "Einstellungen gespeichert."
+
+#: includes/class-settings-page.php:202
+msgid "Test mail sent."
+msgstr "Test-Mail gesendet."
+
+#: includes/class-settings-page.php:204
+msgid "Test mail failed. Check the mail failure log."
+msgstr "Die Test-Mail ist fehlgeschlagen. Prüfen Sie das Mail-Fehlerprotokoll."
+
+#: includes/class-settings-page.php:207
+msgid "The mail layout must contain {content}; the previous layout was kept."
+msgstr "Das Mail-Layout muss {content} enthalten; das vorherige Layout wurde beibehalten."
+
+#: includes/class-settings-page.php:221
+msgid "Live mail preview"
+msgstr "Live-Mail-Vorschau"
+
+#: includes/class-settings-page.php:222
+#: blocks/form/index.js:1
+msgid "Mail preview"
+msgstr "Mail-Vorschau"
+
+#: includes/class-settings-page.php:225
+msgid "Save settings"
+msgstr "Einstellungen speichern"
+
+#: includes/class-settings-page.php:227
+msgid "Test mail"
+msgstr "Test-Mail"
+
+#: includes/class-settings-page.php:228
+msgid "Save your changes first: the test mail uses the saved settings."
+msgstr "Speichern Sie zuerst Ihre Änderungen: Die Test-Mail verwendet die gespeicherten Einstellungen."
+
+#: includes/class-settings-page.php:232
+msgid "Send test mail to"
+msgstr "Test-Mail senden an"
+
+#: includes/class-settings-page.php:234
+msgid "Send test mail"
+msgstr "Test-Mail senden"
+
+#: includes/class-settings-page.php:236
+msgid "Backup & restore"
+msgstr "Sicherung & Wiederherstellung"
+
+#: includes/class-settings-page.php:238
+msgid "A Backup holds every Form and the settings that are not secrets or set by constants. It contains no submissions."
+msgstr "Eine Sicherung enthält jedes Formular und die Einstellungen, die weder geheime Werte noch durch Konstanten gesetzt sind. Sie enthält keine Einsendungen."
+
+#: includes/class-settings-page.php:239
+msgid "Download backup"
+msgstr "Sicherung herunterladen"
+
+#: includes/class-settings-page.php:244
+msgid "Backup file"
+msgstr "Sicherungsdatei"
+
+#. translators: %s: maximum Backup file size, for example "2 MB".
+#: includes/class-settings-page.php:250
+#, php-format
+msgid "Maximum file size: %s."
+msgstr "Maximale Dateigröße: %s."
+
+#: includes/class-settings-page.php:253
+msgid "Overwrite Forms with the same ID"
+msgstr "Formulare mit derselben ID überschreiben"
+
+#: includes/class-settings-page.php:254
+msgid "Restore from backup"
+msgstr "Aus Sicherung wiederherstellen"
+
+#: includes/class-settings-page.php:256
+msgid "Deleting the plugin removes all Forms and the settings. Download a backup first."
+msgstr "Beim Löschen des Plugins werden alle Formulare und die Einstellungen entfernt. Laden Sie vorher eine Sicherung herunter."
+
+#: includes/class-settings-page.php:257
+msgid "Recent mail failures"
+msgstr "Letzte Mail-Fehler"
+
+#: includes/class-settings-page.php:275
+msgid "Reset to default"
+msgstr "Auf Standard zurücksetzen"
+
+#: includes/class-settings-page.php:289
+#: includes/class-updates.php:158
+msgid "Saved — overwrite to change"
+msgstr "Gespeichert – zum Ändern überschreiben"
+
+#: includes/class-settings-page.php:289
+msgid "Not set"
+msgstr "Nicht gesetzt"
+
+#: includes/class-settings-page.php:292
+msgid "Set by constant."
+msgstr "Durch Konstante gesetzt."
+
+#: includes/class-settings-page.php:295
+msgid "Set. Leave empty to keep the saved secret."
+msgstr "Gesetzt. Leer lassen, um den gespeicherten Wert zu behalten."
+
+#: includes/class-settings-page.php:295
+msgid "Not set."
+msgstr "Nicht gesetzt."
+
+#: includes/class-settings-page.php:304
+msgid "No mail failures recorded."
+msgstr "Keine Mail-Fehler aufgezeichnet."
+
+#. translators: %d: Form ID.
+#: includes/class-settings-page.php:311
+#, php-format
+msgid "Form %d: "
+msgstr "Formular %d: "
+
+#: includes/class-settings-page.php:338
+msgid "The Backup file contains nothing to restore."
+msgstr "Die Sicherungsdatei enthält nichts zum Wiederherstellen."
+
+#: includes/class-settings-page.php:360
+msgid "A saved secret cannot be decrypted. Re-enter it in Form Builder Settings."
+msgstr "Ein gespeicherter geheimer Wert kann nicht entschlüsselt werden. Geben Sie ihn in den Form-Builder-Einstellungen erneut ein."
+
+#. translators: %s: link to the settings page.
+#: includes/class-settings-page.php:367
+#, php-format
+msgid "Cloudflare Turnstile is not configured. Forms are protected by the honeypot, the minimum fill time and the rate limit only, and Confirmations cannot be sent. Add the site key and secret key in %s."
+msgstr "Cloudflare Turnstile ist nicht konfiguriert. Formulare sind nur durch das Honeypot-Feld, die Mindestausfüllzeit und das Ratenlimit geschützt, und Bestätigungen können nicht gesendet werden. Tragen Sie den Site-Key und den Secret-Key in %s ein."
+
+#: includes/class-settings-page.php:377
+msgid "This request came through a reverse proxy, but no trusted proxies are set. All visitors would share one rate limit. Define JP_FORM_BUILDER_TRUSTED_PROXIES with the proxy IPs or CIDR ranges (for example 10.0.0.0/8) in wp-config.php."
+msgstr "Diese Anfrage kam über einen Reverse-Proxy, aber es sind keine vertrauenswürdigen Proxys gesetzt. Alle Besucher würden sich ein Ratenlimit teilen. Definieren Sie JP_FORM_BUILDER_TRUSTED_PROXIES mit den Proxy-IPs oder CIDR-Bereichen (zum Beispiel 10.0.0.0/8) in der wp-config.php."
+
+#. translators: %s: list of Form titles, linked to their editors.
+#: includes/class-settings-page.php:397
+#, php-format
+msgid "These Forms have a Confirmation enabled, but it is not sent while Turnstile is not configured: %s"
+msgstr "Bei diesen Formularen ist eine Bestätigung aktiviert, sie wird aber nicht gesendet, solange Turnstile nicht konfiguriert ist: %s"
+
+#: includes/class-settings-page.php:408
+msgid "STARTTLS (port 587)"
+msgstr "STARTTLS (Port 587)"
+
+#: includes/class-settings-page.php:409
+msgid "SMTPS / implicit TLS (port 465)"
+msgstr "SMTPS / implizites TLS (Port 465)"
+
+#: includes/class-settings-page.php:410
+msgid "None"
+msgstr "Keine"
+
+#: includes/class-submission-handler.php:54
+msgid "The request is too large."
+msgstr "Die Anfrage ist zu groß."
+
+#: includes/class-submission-handler.php:79
+msgid "Too many attempts. Please try again later."
+msgstr "Zu viele Versuche. Bitte versuchen Sie es später erneut."
+
+#: includes/class-submission-handler.php:88
+msgid "Your session could not be verified. Please reload the page and try again."
+msgstr "Ihre Sitzung konnte nicht überprüft werden. Bitte laden Sie die Seite neu und versuchen Sie es erneut."
+
+#: includes/class-submission-handler.php:98
+msgid "This form was updated. Please reload the page."
+msgstr "Dieses Formular wurde aktualisiert. Bitte laden Sie die Seite neu."
+
+#: includes/class-submission-handler.php:106
+#: blocks/embed/view.js:1
+msgid "Please correct the marked fields."
+msgstr "Bitte korrigieren Sie die markierten Felder."
+
+#: includes/class-submission-handler.php:124
+msgid "Your message could not be sent. Please try again later or contact us another way."
+msgstr "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns auf anderem Weg."
+
+#: includes/class-submission-handler.php:139
+msgid "The spam protection check is currently unavailable. Please try again later."
+msgstr "Die Spam-Schutz-Prüfung ist derzeit nicht verfügbar. Bitte versuchen Sie es später erneut."
+
+#: includes/class-submission-handler.php:142
+msgid "The spam protection check failed. Please try again."
+msgstr "Die Spam-Schutz-Prüfung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
+
+#: includes/class-submission-handler.php:255
+msgid "Thank you! Your message has been sent."
+msgstr "Vielen Dank! Ihre Nachricht wurde gesendet."
+
+#: includes/class-updates.php:93
+#: includes/class-updates.php:94
+msgid "JayPee Solutions Form Builder Updates"
+msgstr "JayPee Solutions Form Builder Updates"
+
+#: includes/class-updates.php:128
+msgid "JayPee Solutions Form Builder – Updates"
+msgstr "JayPee Solutions Form Builder – Updates"
+
+#: includes/class-updates.php:130
+msgid "Saved."
+msgstr "Gespeichert."
+
+#: includes/class-updates.php:142
+msgid "GitHub Token"
+msgstr "GitHub-Token"
+
+#: includes/class-updates.php:158
+msgid "Paste token"
+msgstr "Token einfügen"
+
+#: includes/class-updates.php:161
+msgid "Read-only GitHub token used for private plugin auto-updates. Not shown again after saving."
+msgstr "Schreibgeschützter GitHub-Token für automatische Updates privater Plugins. Wird nach dem Speichern nicht mehr angezeigt."
+
+#: includes/class-updates.php:163
+msgid "\"Test token\" checks the token against the repository without saving it — a classic token needs the \"repo\" scope, a fine-grained one needs this repository with \"Contents: Read-only\"."
+msgstr "„Token testen“ prüft den Token gegen das Repository, ohne ihn zu speichern – ein klassischer Token benötigt den Scope „repo“, ein feingranularer Token dieses Repository mit „Contents: Read-only“."
+
+#: includes/class-updates.php:169
+#: blocks/form/index.js:1
+msgid "Save"
+msgstr "Speichern"
+
+#: includes/class-updates.php:171
+msgid "Test token"
+msgstr "Token testen"
+
+#: includes/class-updates.php:260
+msgid "No GitHub token is saved. Paste one into the field above, then save or test it."
+msgstr "Es ist kein GitHub-Token gespeichert. Fügen Sie oben einen ein und speichern oder testen Sie ihn."
+
+#. translators: %s: error message from the HTTP request.
+#: includes/class-updates.php:274
+#, php-format
+msgid "Could not reach api.github.com: %s"
+msgstr "api.github.com ist nicht erreichbar: %s"
+
+#: includes/class-updates.php:292
+msgid "GitHub rejected the token (401): it is invalid, expired, or was revoked. Create a new token and save it here."
+msgstr "GitHub hat den Token abgelehnt (401): Er ist ungültig, abgelaufen oder wurde widerrufen. Erstellen Sie einen neuen Token und speichern Sie ihn hier."
+
+#: includes/class-updates.php:304
+msgid "GitHub rate limit reached (403). Try again later; the token itself may be fine."
+msgstr "GitHub-Ratenlimit erreicht (403). Versuchen Sie es später erneut; der Token selbst ist möglicherweise in Ordnung."
+
+#: includes/class-updates.php:305
+msgid "GitHub refused the request (403). The token exists but is not allowed to read this repository."
+msgstr "GitHub hat die Anfrage verweigert (403). Der Token existiert, darf dieses Repository aber nicht lesen."
+
+#. translators: %s: repository in owner/name form.
+#: includes/class-updates.php:314
+#, php-format
+msgid "The token cannot see %s (404). GitHub returns this for private repositories when the token has no access: a classic token needs the full \"repo\" scope, a fine-grained token needs this repository selected with \"Contents: Read-only\"."
+msgstr "Der Token kann %s nicht sehen (404). GitHub antwortet so bei privaten Repositories, wenn der Token keinen Zugriff hat: Ein klassischer Token braucht den vollständigen Scope „repo“, ein feingranularer Token dieses Repository mit „Contents: Read-only“."
+
+#. translators: %d: HTTP status code.
+#: includes/class-updates.php:324
+#, php-format
+msgid "Unexpected answer from GitHub (HTTP %d)."
+msgstr "Unerwartete Antwort von GitHub (HTTP %d)."
+
+#. translators: 1: repository, 2: installed plugin version.
+#: includes/class-updates.php:346
+#, php-format
+msgid "The token works and can read %1$s, but the repository has no release to update to yet. This site runs %2$s."
+msgstr "Der Token funktioniert und kann %1$s lesen, aber das Repository hat noch kein Release, auf das aktualisiert werden könnte. Diese Website läuft mit %2$s."
+
+#. translators: 1: repository, 2: latest release tag on GitHub, 3: installed plugin version.
+#: includes/class-updates.php:354
+#, php-format
+msgid "The token works. %1$s reports %2$s as the latest release; this site runs %3$s."
+msgstr "Der Token funktioniert. %1$s meldet %2$s als neuestes Release; diese Website läuft mit %3$s."
+
+#: includes/class-updates.php:401
+msgid "Open the Updates settings"
+msgstr "Update-Einstellungen öffnen"
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Field"
+msgstr "Feld"
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Label"
+msgstr "Beschriftung"
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Field key"
+msgstr "Feldschlüssel"
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Another Field in this Form already uses this key. Choose a unique one."
+msgstr "Ein anderes Feld in diesem Formular verwendet diesen Schlüssel bereits. Wählen Sie einen eindeutigen."
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Used in mail placeholders. Lowercase letters, numbers and underscores; unique within this Form."
+msgstr "Wird in Mail-Platzhaltern verwendet. Kleinbuchstaben, Ziffern und Unterstriche; eindeutig innerhalb dieses Formulars."
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Required"
+msgstr "Pflichtfeld"
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "A consent checkbox is always required."
+msgstr "Ein Einwilligungs-Kontrollkästchen ist immer ein Pflichtfeld."
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Help text"
+msgstr "Hilfetext"
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Placeholder"
+msgstr "Platzhaltertext"
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Field options"
+msgstr "Feldoptionen"
+
+#: blocks/address/index.js:1
+msgid "Default country"
+msgstr "Standardland"
+
+#: blocks/consent/index.js:1
+msgid "Consent text"
+msgstr "Einwilligungstext"
+
+#: blocks/consent/index.js:1
+msgid "The text must contain {privacy_policy}; without it the link would be lost. The previous text is restored when you leave this field."
+msgstr "Der Text muss {privacy_policy} enthalten, sonst ginge der Link verloren. Beim Verlassen dieses Feldes wird der vorherige Text wiederhergestellt."
+
+#: blocks/consent/index.js:1
+msgid "Write {privacy_policy} where the privacy-policy link should appear."
+msgstr "Schreiben Sie {privacy_policy} dorthin, wo der Link zur Datenschutzerklärung erscheinen soll."
+
+#: blocks/consent/index.js:1
+msgid "Link text"
+msgstr "Linktext"
+
+#: blocks/consent/index.js:1
+msgid "Privacy policy URL"
+msgstr "URL der Datenschutzerklärung"
+
+#: blocks/consent/index.js:1
+msgid "Leave empty to link to the site’s privacy policy page."
+msgstr "Leer lassen, um auf die Datenschutzseite der Website zu verlinken."
+
+#: blocks/email/index.js:1
+msgid "Use as Reply-To address"
+msgstr "Als Antwortadresse (Reply-To) verwenden"
+
+#: blocks/email/index.js:1
+msgid "Replying to the Notification then answers the Submitter."
+msgstr "Eine Antwort auf die Benachrichtigung geht dann an den Einsender."
+
+#: blocks/embed/index.js:1
+msgid "Choose a Form…"
+msgstr "Formular auswählen …"
+
+#: blocks/embed/index.js:1
+msgid "(no title)"
+msgstr "(kein Titel)"
+
+#: blocks/embed/index.js:1
+msgid "Edit form"
+msgstr "Formular bearbeiten"
+
+#: blocks/embed/index.js:1
+msgid "The list of Forms could not be loaded."
+msgstr "Die Formularliste konnte nicht geladen werden."
+
+#: blocks/embed/index.js:1
+msgid "Choose the Form to show here."
+msgstr "Wählen Sie das Formular aus, das hier angezeigt werden soll."
+
+#: blocks/embed/index.js:1
+msgid "There is no published Form yet. Create and publish one under Forms first."
+msgstr "Es gibt noch kein veröffentlichtes Formular. Erstellen und veröffentlichen Sie zuerst eines unter „Formulare“."
+
+#: blocks/embed/index.js:1
+msgid "The chosen Form no longer exists or is not published. Choose another one or remove this block."
+msgstr "Das gewählte Formular existiert nicht mehr oder ist nicht veröffentlicht. Wählen Sie ein anderes oder entfernen Sie diesen Block."
+
+#: blocks/embed/view.js:2
+msgid "Please wait…"
+msgstr "Bitte warten …"
+
+#: blocks/embed/view.js:2
+msgid "The spam protection check could not be loaded. Please reload the page and try again."
+msgstr "Die Spam-Schutz-Prüfung konnte nicht geladen werden. Bitte laden Sie die Seite neu und versuchen Sie es erneut."
+
+#: blocks/embed/view.js:2
+msgid "Your message could not be sent. Please check your connection and try again."
+msgstr "Ihre Nachricht konnte nicht gesendet werden. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+
+#: blocks/embed/view.js:2
+msgid "Your session could not be verified. Please submit the form again."
+msgstr "Ihre Sitzung konnte nicht überprüft werden. Bitte senden Sie das Formular erneut ab."
+
+#: blocks/form/index.js:1
+msgid "Title of the Form"
+msgstr "Titel des Formulars"
+
+#: blocks/form/index.js:1
+msgid "Name of the site"
+msgstr "Name der Website"
+
+#: blocks/form/index.js:1
+msgid "Time of the Submission"
+msgstr "Zeitpunkt der Einsendung"
+
+#: blocks/form/index.js:1
+msgid "Table of all Fields and their values"
+msgstr "Tabelle aller Felder und ihrer Werte"
+
+#: blocks/form/index.js:1
+msgid "Page the Form was sent from"
+msgstr "Seite, von der das Formular gesendet wurde"
+
+#: blocks/form/index.js:1
+msgid "Insert placeholder"
+msgstr "Platzhalter einfügen"
+
+#: blocks/form/index.js:1
+msgid "General"
+msgstr "Allgemein"
+
+#: blocks/form/index.js:1
+msgid "Value"
+msgstr "Wert"
+
+#: blocks/form/index.js:1
+msgid "Section, only shown when filled in"
+msgstr "Abschnitt, nur angezeigt, wenn ausgefüllt"
+
+#: blocks/form/index.js:1
+msgid "Confirmation Body template"
+msgstr "Textvorlage der Bestätigung"
+
+#: blocks/form/index.js:1
+#: blocks/form/index.js:2
+msgid "Confirmation subject"
+msgstr "Betreff der Bestätigung"
+
+#: blocks/form/index.js:1
+msgid "Confirmation body"
+msgstr "Text der Bestätigung"
+
+#: blocks/form/index.js:1
+msgid "Notification Body template"
+msgstr "Textvorlage der Benachrichtigung"
+
+#: blocks/form/index.js:1
+#: blocks/form/index.js:2
+msgid "Notification subject"
+msgstr "Betreff der Benachrichtigung"
+
+#: blocks/form/index.js:1
+msgid "Notification body"
+msgstr "Text der Benachrichtigung"
+
+#: blocks/form/index.js:1
+msgid "Leave the subject or body empty to use the site default, or the built-in text when the site has no default."
+msgstr "Lassen Sie Betreff oder Text leer, um den Standard der Website zu verwenden, oder den integrierten Text, wenn die Website keinen Standard hat."
+
+#: blocks/form/index.js:1
+msgid "A Confirmation never contains submitted content, so Field placeholders are not available here."
+msgstr "Eine Bestätigung enthält nie übermittelte Inhalte, daher sind hier keine Feld-Platzhalter verfügbar."
+
+#: blocks/form/index.js:1
+msgid "Preview"
+msgstr "Vorschau"
+
+#: blocks/form/index.js:1
+msgid "Subject:"
+msgstr "Betreff:"
+
+#: blocks/form/index.js:1
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. translators: %s: comma-separated list of entries that are not email addresses.
+#: blocks/form/index.js:2
+#, js-format
+msgid "Not a valid email address: %s"
+msgstr "Keine gültige E-Mail-Adresse: %s"
+
+#: blocks/form/index.js:2
+msgid "Separate several addresses with commas. Leave empty to use the site default."
+msgstr "Trennen Sie mehrere Adressen mit Kommas. Lassen Sie das Feld leer, um den Standard der Website zu verwenden."
+
+#: blocks/form/index.js:2
+msgid "Submit button label"
+msgstr "Beschriftung der Schaltfläche zum Absenden"
+
+#: blocks/form/index.js:2
+msgid "Success message"
+msgstr "Erfolgsmeldung"
+
+#: blocks/form/index.js:2
+msgid "Shown after a successful submission. Leave empty for the default message."
+msgstr "Wird nach einer erfolgreichen Einsendung angezeigt. Leer lassen für die Standardmeldung."
+
+#: blocks/form/index.js:2
+msgid "Notification"
+msgstr "Benachrichtigung"
+
+#: blocks/form/index.js:2
+msgid "Leave empty for the default subject."
+msgstr "Leer lassen für den Standardbetreff."
+
+#: blocks/form/index.js:2
+msgid "Edit Notification Body template"
+msgstr "Textvorlage der Benachrichtigung bearbeiten"
+
+#: blocks/form/index.js:2
+msgid "Confirmation"
+msgstr "Bestätigung"
+
+#: blocks/form/index.js:2
+msgid "Send a confirmation to the Submitter"
+msgstr "Eine Bestätigung an den Einsender senden"
+
+#: blocks/form/index.js:2
+msgid "The Submitter receives a short acknowledgement without the submitted content."
+msgstr "Der Einsender erhält eine kurze Empfangsbestätigung ohne die übermittelten Inhalte."
+
+#: blocks/form/index.js:2
+msgid "Not available: confirmations go to an address the visitor enters, so they need Cloudflare Turnstile as bot protection. Add the Turnstile keys in the settings first."
+msgstr "Nicht verfügbar: Bestätigungen gehen an eine Adresse, die der Besucher eingibt, und brauchen daher Cloudflare Turnstile als Bot-Schutz. Tragen Sie zuerst die Turnstile-Schlüssel in den Einstellungen ein."
+
+#: blocks/form/index.js:2
+msgid "Edit Confirmation Body template"
+msgstr "Textvorlage der Bestätigung bearbeiten"
+
+#: blocks/form/index.js:2
+msgid "Form settings"
+msgstr "Formulareinstellungen"
+
+#: blocks/name/index.js:1
+msgid "Ask for first and last name separately"
+msgstr "Vor- und Nachnamen getrennt abfragen"
+
+#: blocks/name/index.js:1
+msgid "First name label"
+msgstr "Beschriftung Vorname"
+
+#: blocks/name/index.js:1
+msgid "Last name label"
+msgstr "Beschriftung Nachname"
+
+#: blocks/phone/index.js:1
+msgid "Default region"
+msgstr "Standardregion"
+
+#: blocks/phone/index.js:1
+msgid "Numbers without a country code are read as belonging to this country."
+msgstr "Nummern ohne Ländervorwahl werden diesem Land zugeordnet."
+
+#: blocks/select/index.js:1
+msgid "Options"
+msgstr "Optionen"
+
+#. translators: %d: position of the option in the list.
+#: blocks/select/index.js:2
+#, js-format
+msgid "Option %d label"
+msgstr "Beschriftung der Option %d"
+
+#. translators: %d: position of the option in the list.
+#: blocks/select/index.js:3
+#, js-format
+msgid "Option %d value"
+msgstr "Wert der Option %d"
+
+#. translators: %s: option label.
+#: blocks/select/index.js:4
+#, js-format
+msgid "Move up: %s"
+msgstr "Nach oben: %s"
+
+#: blocks/select/index.js:4
+msgid "Move up"
+msgstr "Nach oben"
+
+#. translators: %s: option label.
+#: blocks/select/index.js:5
+#, js-format
+msgid "Move down: %s"
+msgstr "Nach unten: %s"
+
+#: blocks/select/index.js:5
+msgid "Move down"
+msgstr "Nach unten"
+
+#. translators: %s: option label.
+#: blocks/select/index.js:6
+#, js-format
+msgid "Remove: %s"
+msgstr "Entfernen: %s"
+
+#: blocks/select/index.js:6
+msgid "Remove"
+msgstr "Entfernen"
+
+#: blocks/select/index.js:6
+msgid "Add option"
+msgstr "Option hinzufügen"
+
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Maximum length"
+msgstr "Maximale Länge"
+
+#: blocks/textarea/index.js:1
+msgid "Rows"
+msgstr "Zeilen"
+
+#: blocks/address/block.json
+msgctxt "block title"
+msgid "Address"
+msgstr "Adresse"
+
+#: blocks/consent/block.json
+msgctxt "block title"
+msgid "Consent"
+msgstr "Einwilligung"
+
+#: blocks/email/block.json
+msgctxt "block title"
+msgid "Email"
+msgstr "E-Mail"
+
+#: blocks/embed/block.json
+msgctxt "block title"
+msgid "Form"
+msgstr "Formular"
+
+#: blocks/form/block.json
+msgctxt "block title"
+msgid "Form fields"
+msgstr "Formularfelder"
+
+#: blocks/name/block.json
+msgctxt "block title"
+msgid "Name"
+msgstr "Name"
+
+#: blocks/phone/block.json
+msgctxt "block title"
+msgid "Phone"
+msgstr "Telefon"
+
+#: blocks/select/block.json
+msgctxt "block title"
+msgid "Select"
+msgstr "Auswahl"
+
+#: blocks/text/block.json
+msgctxt "block title"
+msgid "Text"
+msgstr "Text"
+
+#: blocks/textarea/block.json
+msgctxt "block title"
+msgid "Textarea"
+
+msgstr "Mehrzeiliger Text"

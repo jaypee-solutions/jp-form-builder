@@ -27,6 +27,7 @@ extracts it as the GitHub release notes and fails without it.
 - Added privacy policy suggestion text under Settings → Privacy that describes mail-only Submissions, the hashed rate-limit and Confirmation values, Turnstile, the mail failure log and the update checker.
 - Grouped the settings page into SMTP, Sender, Spam protection, Recipients, Mail, Test mail, Backup & restore and Recent mail failures sections.
 - Documented the constants, WP-CLI commands, Turnstile setup, caching, trusted proxies, privacy snippets (German and English), outbound connections and the WPForms and WP Mail SMTP migration in the README; `readme.txt` now describes the plugin and its features.
+- Added a German translation (`de_DE`, formal "Sie", plus a byte-identical `de_DE_formal`) with `.pot`, `.po` and script `.json` files, `npm run i18n:json`, and a Translations section in the README.
 
 ### Fixed
 - The Reply-To header no longer wraps the display name in extra quotes and drops commas, which `wp_mail()` splits addresses at; the built-in Notification body names the page that held the Form.
