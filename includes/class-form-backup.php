@@ -134,13 +134,25 @@ final class Form_Backup {
     }
 
     /**
-     * Restores Forms and settings from a Backup document.
+     * Restores from a Backup file, refusing files over the size limit before reading them.
      *
-     * @return array<string,mixed> The report; see {@see self::describe()}.
+     * @return array<string,mixed> The report.
      */
-    public function restore( string $json, bool $overwrite = false, bool $dry_run = false ): array {
-        $report = [
-            'error'    => '',
+    public function restore_file( string $path, bool $overwrite = false, bool $dry_run = false ): array {
+        if ( ! is_readable( $path ) || is_dir( $path ) ) {
+            return $this->failed( __( 'The Backup file cannot be read.', 'jp-form-builder' ), $dry_run );
+        }
+        if ( (int) filesize( $path ) > (int) $this->settings->tunable( 'max_backup_bytes' ) ) {
+            return $this->failed( __( 'The Backup file is too large.', 'jp-form-builder' ), $dry_run );
+        }
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reads a local upload or CLI file.
+        return $this->restore( (string) file_get_contents( $path ), $overwrite, $dry_run );
+    }
+
+    /** @return array<string,mixed> An empty report, with the error message when the restore could not start. */
+    public function failed( string $message, bool $dry_run = false ): array {
+        return [
+            'error'    => $message,
             'dry_run'  => $dry_run,
             'restored' => [],
             'skipped'  => [],
@@ -148,6 +160,22 @@ final class Form_Backup {
             'mapped'   => [],
             'settings' => [ 'restored' => [], 'skipped' => [] ],
         ];
+    }
+
+    /** The Backup document as pretty-printed JSON. */
+    public function export_json(): string {
+        $document             = $this->export();
+        $document['settings'] = (object) $document['settings'];
+        return (string) wp_json_encode( $document, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+    }
+
+    /**
+     * Restores Forms and settings from a Backup document.
+     *
+     * @return array<string,mixed> The report; see {@see self::describe()}.
+     */
+    public function restore( string $json, bool $overwrite = false, bool $dry_run = false ): array {
+        $report = $this->failed( '', $dry_run );
         try {
             $document = $this->decode( $json, (int) $this->settings->tunable( 'max_backup_bytes' ) );
         } catch ( \InvalidArgumentException $exception ) {

@@ -48,6 +48,15 @@ until `npm run env:start` has downloaded it; CI fetches it.
 `npm install` runs Husky, which points Git at `.husky/`; `composer hooks:check` verifies
 that. `.husky/pre-commit` runs `composer lint`; `.husky/pre-push` runs `composer test`.
 
+## Backup, restore and uninstall
+
+Deleting the plugin from the Plugins screen runs `uninstall.php`, which removes **every Form** (any status, including trashed ones, with their revisions), the settings, the mail failure log, the stored GitHub token and all transients. Embed blocks in page content stay and render nothing. Download a Backup first.
+
+- **Download:** Forms → Settings → *Backup & restore* → *Download backup*, or the *Back up forms* link in the Plugins list. WP-CLI: `wp jp-form-builder backup export [<file>]` (stdout when no file is given).
+- **Contents:** a JSON file with every Form (ID, title, status, slug, content) and the settings that are neither secrets (`smtp_password`, `turnstile_secret_key`, `m365_client_secret`) nor locked by a constant. It contains no submissions. Treat it as configuration: it holds Recipients and Body templates. Re-enter secrets after restoring.
+- **Restore:** Forms → Settings → *Backup & restore* (file up to `JP_FORM_BUILDER_MAX_BACKUP_BYTES`, default 2 MiB), or `wp jp-form-builder backup restore <file> [--overwrite] [--dry-run]`. Every Form must be exactly one Form block with allowed Field blocks, otherwise it is rejected and reported. A Form keeps its ID when that ID is free, so existing embeds keep working. If another post holds the ID, the Form gets a new ID and the report shows `old → new`; embeds are not rewritten. A Form with the same ID is skipped unless you overwrite. `--dry-run` validates and reports without writing.
+- **Delete the Forms but keep the plugin:** `wp post delete $(wp post list --post_type=jp_form --post_status=any --format=ids) --force`.
+
 ## Release
 
 1. Bump the version in **both** places in `jp-form-builder.php` (the

@@ -15,18 +15,79 @@ final class Settings_Page {
 
     private Settings $settings;
     private Mailer $mailer;
+    private Form_Backup $backup;
 
-    public function __construct( ?Settings $settings = null, ?Mailer $mailer = null ) {
+    public function __construct( ?Settings $settings = null, ?Mailer $mailer = null, ?Form_Backup $backup = null ) {
         $this->settings = $settings ?? new Settings();
         $this->mailer   = $mailer ?? new Mailer( $this->settings );
+        $this->backup   = $backup ?? new Form_Backup( $this->settings );
     }
 
     public function init(): void {
         add_action( 'admin_menu', [ $this, 'register_menu' ] );
         add_action( 'admin_post_jp_form_builder_save_settings', [ $this, 'save' ] );
         add_action( 'admin_post_jp_form_builder_test_mail', [ $this, 'test_mail' ] );
+        add_action( 'admin_post_jp_form_builder_download_backup', [ $this, 'download_backup' ] );
+        add_action( 'admin_post_jp_form_builder_restore_backup', [ $this, 'restore_backup' ] );
+        add_filter( 'plugin_action_links_' . plugin_basename( PLUGIN_FILE ), [ $this, 'plugin_action_links' ] );
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
         add_action( 'admin_notices', [ $this, 'notices' ] );
+    }
+
+    /**
+     * @param string[] $links Row actions of the Plugins list.
+     * @return string[]
+     */
+    public function plugin_action_links( array $links ): array {
+        if ( current_user_can( 'manage_options' ) ) {
+            $links['jp-form-builder-backup'] = '<a href="' . esc_url( $this->download_url() ) . '">' . esc_html__( 'Back up forms', 'jp-form-builder' ) . '</a>';
+        }
+        return $links;
+    }
+
+    public function download_backup(): void {
+        $this->authorize_backup( 'jp_form_builder_download_backup' );
+        nocache_headers();
+        header( 'Content-Type: application/json; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename="jp-form-builder-backup-' . gmdate( 'Y-m-d' ) . '.json"' );
+        echo $this->backup->export_json(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON download, not HTML.
+        exit;
+    }
+
+    public function restore_backup(): void {
+        $this->authorize_backup( 'jp_form_builder_restore_backup' );
+        $file = isset( $_FILES['jp_form_builder_backup'] ) && is_array( $_FILES['jp_form_builder_backup'] ) ? $_FILES['jp_form_builder_backup'] : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- Nonce checked in authorize_backup(); only the PHP-provided tmp_name, size and error are read.
+        $error = (int) ( $file['error'] ?? UPLOAD_ERR_NO_FILE );
+        if ( UPLOAD_ERR_INI_SIZE === $error || UPLOAD_ERR_FORM_SIZE === $error ) {
+            $report = $this->backup->failed( __( 'The Backup file is too large.', 'jp-form-builder' ) );
+        } elseif ( UPLOAD_ERR_OK !== $error || ! is_string( $file['tmp_name'] ?? null ) ) {
+            $report = $this->backup->failed( __( 'No Backup file was uploaded.', 'jp-form-builder' ) );
+        } else {
+            $report = $this->backup->restore_file( $file['tmp_name'], ! empty( $_POST['jp_form_builder_overwrite'] ), false ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Checked in authorize_backup().
+        }
+        set_transient( $this->report_key(), $report, 5 * MINUTE_IN_SECONDS );
+        wp_safe_redirect( add_query_arg( 'backup', 'restored', $this->settings_url() ) );
+        exit;
+    }
+
+    private function authorize_backup( string $nonce_action ): void {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( esc_html__( 'You are not allowed to manage Backups.', 'jp-form-builder' ) );
+        }
+        check_admin_referer( $nonce_action );
+    }
+
+    private function download_url(): string {
+        return wp_nonce_url( admin_url( 'admin-post.php?action=jp_form_builder_download_backup' ), 'jp_form_builder_download_backup' );
+    }
+
+    /** The settings page URL; menu_page_url() is empty in admin-post requests, where admin_menu has not run. */
+    private function settings_url(): string {
+        return admin_url( 'edit.php?post_type=jp_form&page=jp-form-builder-settings' );
+    }
+
+    private function report_key(): string {
+        return 'jp_form_builder_backup_report_' . get_current_user_id();
     }
 
     public function enqueue( string $hook ): void {
@@ -48,7 +109,7 @@ final class Settings_Page {
             $to = wp_get_current_user()->user_email;
         }
         $result = $this->mailer->send_test( $to );
-        $url = add_query_arg( 'test-mail', is_wp_error( $result ) ? 'failed' : 'sent', menu_page_url( 'jp-form-builder-settings', false ) );
+        $url = add_query_arg( 'test-mail', is_wp_error( $result ) ? 'failed' : 'sent', $this->settings_url() );
         wp_safe_redirect( $url );
         exit;
     }
@@ -66,10 +127,10 @@ final class Settings_Page {
         try {
             $this->settings->save( $input );
         } catch ( \InvalidArgumentException $exception ) {
-            wp_safe_redirect( add_query_arg( 'settings-error', 'invalid-layout', menu_page_url( 'jp-form-builder-settings', false ) ) );
+            wp_safe_redirect( add_query_arg( 'settings-error', 'invalid-layout', $this->settings_url() ) );
             exit;
         }
-        wp_safe_redirect( add_query_arg( 'settings-updated', '1', menu_page_url( 'jp-form-builder-settings', false ) ) );
+        wp_safe_redirect( add_query_arg( 'settings-updated', '1', $this->settings_url() ) );
         exit;
     }
 
@@ -168,12 +229,66 @@ final class Settings_Page {
                 <input type="email" id="jpfb-test-recipient" name="recipient" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" required />
                 <?php submit_button( __( 'Send test mail', 'jp-form-builder' ), 'secondary' ); ?>
             </form>
+            <h2 id="jpfb-backup"><?php esc_html_e( 'Backup & restore', 'jp-form-builder' ); ?></h2>
+            <?php $this->render_backup_report(); ?>
+            <p><?php esc_html_e( 'A Backup holds every Form and the settings that are not secrets or set by constants. It contains no submissions.', 'jp-form-builder' ); ?></p>
+            <p><a class="button" href="<?php echo esc_url( $this->download_url() ); ?>"><?php esc_html_e( 'Download backup', 'jp-form-builder' ); ?></a></p>
+            <form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                <input type="hidden" name="action" value="jp_form_builder_restore_backup" />
+                <?php wp_nonce_field( 'jp_form_builder_restore_backup' ); ?>
+                <p>
+                    <label for="jpfb-backup-file"><?php esc_html_e( 'Backup file', 'jp-form-builder' ); ?></label>
+                    <input type="file" id="jpfb-backup-file" name="jp_form_builder_backup" accept=".json,application/json" required aria-describedby="jpfb-backup-limit" />
+                </p>
+                <p class="description" id="jpfb-backup-limit">
+                    <?php
+                    /* translators: %s: maximum Backup file size, for example "2 MB". */
+                    echo esc_html( sprintf( __( 'Maximum file size: %s.', 'jp-form-builder' ), size_format( (int) $this->settings->tunable( 'max_backup_bytes' ) ) ) );
+                    ?>
+                </p>
+                <p><label><input type="checkbox" name="jp_form_builder_overwrite" value="1" /> <?php esc_html_e( 'Overwrite Forms with the same ID', 'jp-form-builder' ); ?></label></p>
+                <?php submit_button( __( 'Restore from backup', 'jp-form-builder' ), 'secondary' ); ?>
+            </form>
+            <p><?php esc_html_e( 'Deleting the plugin removes all Forms and the settings. Download a backup first.', 'jp-form-builder' ); ?></p>
             <h2><?php esc_html_e( 'Recent mail failures', 'jp-form-builder' ); ?></h2>
             <?php foreach ( (array) get_option( 'jp_form_builder_mail_log', [] ) as $failure ) : ?>
                 <p><?php echo esc_html( $failure['time'] . ' — ' . ( empty( $failure['form_id'] ) ? '' : sprintf( /* translators: %d: Form ID. */ __( 'Form %d: ', 'jp-form-builder' ), $failure['form_id'] ) ) . $failure['message'] ); ?></p>
             <?php endforeach; ?>
         </div>
 
+        <?php
+    }
+
+    /** Shows the result of the last restore once, after the redirect. */
+    private function render_backup_report(): void {
+        if ( ! isset( $_GET['backup'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Display only; the report is stored per user.
+            return;
+        }
+        $report = get_transient( $this->report_key() );
+        delete_transient( $this->report_key() );
+        if ( ! is_array( $report ) ) {
+            return;
+        }
+        $lines = $this->backup->describe( $report );
+        if ( '' !== $report['error'] ) {
+            $class = 'notice-error';
+        } elseif ( [] !== $report['rejected'] ) {
+            $class = 'notice-warning';
+        } else {
+            $class = 'notice-success';
+        }
+        ?>
+        <div class="notice <?php echo esc_attr( $class ); ?>">
+            <?php if ( [] === $lines ) : ?>
+                <p><?php esc_html_e( 'The Backup file contains nothing to restore.', 'jp-form-builder' ); ?></p>
+            <?php else : ?>
+                <ul>
+                    <?php foreach ( $lines as $line ) : ?>
+                        <li><?php echo esc_html( $line ); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
         <?php
     }
 

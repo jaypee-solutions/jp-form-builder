@@ -18,10 +18,12 @@ final class Cli_Command {
 
     private Settings $settings;
     private Mailer $mailer;
+    private Form_Backup $backup;
 
-    public function __construct( ?Settings $settings = null, ?Mailer $mailer = null ) {
+    public function __construct( ?Settings $settings = null, ?Mailer $mailer = null, ?Form_Backup $backup = null ) {
         $this->settings = $settings ?? new Settings();
         $this->mailer   = $mailer ?? new Mailer( $this->settings );
+        $this->backup   = $backup ?? new Form_Backup( $this->settings );
     }
 
     public function init(): void {
@@ -88,5 +90,40 @@ final class Cli_Command {
         $posts = get_posts( [ 'post_type' => 'jp_form', 'post_status' => 'any', 'numberposts' => -1 ] );
         $rows = array_map( static fn( \WP_Post $post ): array => [ 'id' => $post->ID, 'title' => $post->post_title, 'status' => $post->post_status ], $posts );
         Utils\format_items( $assoc_args['format'] ?? 'table', $rows, [ 'id', 'title', 'status' ] );
+    }
+
+    /** Exports a Backup (`backup export [<file>]`) or restores one (`backup restore <file> [--overwrite] [--dry-run]`). */
+    public function backup( array $args, array $assoc_args ): void {
+        $action = $args[0] ?? '';
+        $file   = $args[1] ?? '';
+        if ( 'export' === $action ) {
+            $json = $this->backup->export_json();
+            if ( '' === $file ) {
+                WP_CLI::line( $json );
+                return;
+            }
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- CLI writes the file the operator named.
+            if ( false === file_put_contents( $file, $json . "\n" ) ) {
+                WP_CLI::error( 'Cannot write ' . $file . '.' );
+            }
+            WP_CLI::success( 'Backup written to ' . $file . '.' );
+            return;
+        }
+        if ( 'restore' === $action && '' !== $file ) {
+            $dry_run = (bool) Utils\get_flag_value( $assoc_args, 'dry-run', false );
+            $report  = $this->backup->restore_file( $file, (bool) Utils\get_flag_value( $assoc_args, 'overwrite', false ), $dry_run );
+            if ( '' !== $report['error'] ) {
+                WP_CLI::error( $report['error'] );
+            }
+            foreach ( $this->backup->describe( $report ) as $line ) {
+                WP_CLI::line( $line );
+            }
+            if ( [] !== $report['rejected'] ) {
+                WP_CLI::warning( count( $report['rejected'] ) . ' Form(s) rejected.' );
+            }
+            WP_CLI::success( $dry_run ? 'Dry run finished.' : 'Restore finished.' );
+            return;
+        }
+        WP_CLI::error( 'Usage: wp jp-form-builder backup export [<file>] | backup restore <file> [--overwrite] [--dry-run]' );
     }
 }
