@@ -4,7 +4,7 @@ Tags: forms, contact form, smtp, privacy, turnstile
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ Requires PHP 8.0 and WordPress 6.6. Single-site only. Microsoft 365 mailboxes ar
 4. Create a Form under Forms → Add Form and add the Form block to a page.
 
 == Changelog ==
+
+= 1.0.1 =
+* Fixed: the Forms admin screens use Form labels ("Add Form") instead of Post labels, also in German.
 
 = 1.0.0 =
 * First release: Forms as blocks, SMTP delivery, cache-safe spam protection, HTML mail templates, Backup and restore, German translation.

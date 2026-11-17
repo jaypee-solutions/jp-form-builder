@@ -10,6 +10,11 @@ extracts it as the GitHub release notes and fails without it.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-17
+
+### Fixed
+- The Forms admin screens say "Add Form", "All Forms", "Form published." and so on instead of WordPress's Post labels ("Add Post"), also in the German translation; bulk actions report Forms instead of Posts.
+
 ## [1.0.0] - 2026-11-17
 
 First release: contact-style Forms as blocks, SMTP delivery and spam protection without third-party services beyond Cloudflare Turnstile.
