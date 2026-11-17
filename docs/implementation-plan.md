@@ -281,7 +281,7 @@ What `uses_blocks=true` provides:
 
 Stays plugin-local (not upstreamed): `.wp-env.json` `env.development.mappings` for the E2E mail-capture mu-plugin (`tests/e2e/mu-plugins/capture-mail.php`: `pre_wp_mail` → option `jp_form_builder_e2e_last_mail`, min-fill filter → 0).
 
-Template follow-ups: v1.5.0 shipped the WP 6.6 floor and `templates/` in release ZIPs (PRs #31, #32). Still to upstream: `.gitignore` must anchor the build output as `/blocks/` (unanchored `blocks/` also hides `src/blocks/`); `lint:js`/`lint:css` cover `src/` instead of `src/blocks/` (shared editor code lives in `src/shared/`); `eslint.config.mjs` lists the used `@wordpress/*` externals under `import/core-modules`; `phpunit-integration.xml.dist` should keep `.phpunit.result.cache` out of the checkout.
+Template follow-ups: v1.5.0 shipped the WP 6.6 floor and `templates/` in release ZIPs (PRs #31, #32). Still to upstream: `uninstall.php` in the `build-release.sh` copy list (blocker for every template plugin with an uninstall); `.gitignore` must anchor the build output as `/blocks/` (unanchored `blocks/` also hides `src/blocks/`); `lint:js`/`lint:css` cover `src/` instead of `src/blocks/` (shared editor code lives in `src/shared/`); `eslint.config.mjs` lists the used `@wordpress/*` externals under `import/core-modules`; `i18n:pot` excludes only the release staging paths, not every `build` directory; optional `npm run test:js` step in the CI `js` job; `phpunit-integration.xml.dist` should keep `.phpunit.result.cache` out of the checkout.
 
 ## Test plan
 

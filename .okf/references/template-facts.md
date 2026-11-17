@@ -27,6 +27,8 @@ Facts verified while orienting on the scaffold (slug `jp-form-builder`, namespac
 13. The `uses_blocks` lint scripts only cover `src/blocks/`; this plugin widened them to `src/` and added `@wordpress/*` externals to `import/core-modules` (local edits to template-owned files, to be upstreamed).
 14. The `uses_blocks` `.gitignore` entry `blocks/` is unanchored and also ignores `src/blocks/`, so new block sources were silently left out of commits; this plugin anchors it as `/blocks/`. Upstream fix needed.
 15. wp-env pins `WP_HOME`/`WP_SITEURL`, so integration tests cannot change the site URL through the `home` option; use the `home_url`/`network_home_url` filters instead.
+16. The template's `build-release.sh` copy list omits `uninstall.php`, so released ZIPs never clean up; this plugin adds it (upstream fix needed). The template's `i18n:pot` excludes every `build` directory, which also drops `admin/build`; exclude only the release staging paths.
+17. A second wp-scripts entry (`src/admin` → `admin/build/`) serves the settings page, and `npm run test:js` (Node's built-in test runner) checks the JS ports of the Field-key rule and the phone normaliser against fixtures shared with PHPUnit.
 
 # Citations
 

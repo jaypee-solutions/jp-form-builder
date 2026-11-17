@@ -17,3 +17,4 @@
 * **P4 done**: submission pipeline and view.js end to end (E2E 13 passed); template facts 14–15 added.
 * **P5 done**: backup/restore/uninstall (E2E 16 passed); core fact 8 added (admin-post redirect target).
 * **P6 done**: Privacy text, README, settings sections, German translation (formal Sie, 302 msgids, JS JSON); German terms added to `GLOSSARY.md`.
+* **Final review**: two-axis review (Standards 14, Spec 9 findings; blocker: `uninstall.php` missing from the release ZIP) fixed in `737c172..5ea1997`; template facts 16–17 added.
