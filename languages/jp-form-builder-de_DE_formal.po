@@ -164,7 +164,8 @@ msgid "United Kingdom"
 msgstr "Vereinigtes Königreich"
 
 #: includes/class-field-labels.php:24
-#: includes/class-mail-preview-controller.php:168
+#: includes/class-mail-preview-controller.php:172
+#: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/email/index.js:1
@@ -178,7 +179,8 @@ msgid "Name"
 msgstr "Name"
 
 #: includes/class-field-labels.php:25
-#: includes/class-mail-preview-controller.php:169
+#: includes/class-mail-preview-controller.php:173
+#: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/email/index.js:1
@@ -244,7 +246,8 @@ msgid "Select"
 msgstr "Auswahl"
 
 #: includes/class-field-labels.php:30
-#: includes/class-mail-preview-controller.php:170
+#: includes/class-mail-preview-controller.php:174
+#: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/email/index.js:1
@@ -300,166 +303,167 @@ msgstr "Ort"
 msgid "Country"
 msgstr "Land"
 
-#: includes/class-field-validator.php:89
+#: includes/class-field-validator.php:92
+#: blocks/embed/view.js:2
 msgid "Please enter a valid phone number."
 msgstr "Bitte geben Sie eine gültige Telefonnummer ein."
 
-#: includes/class-field-validator.php:94
+#: includes/class-field-validator.php:97
 #: blocks/embed/view.js:2
 msgid "Please choose one of the available options."
 msgstr "Bitte wählen Sie eine der verfügbaren Optionen."
 
-#: includes/class-field-validator.php:112
+#: includes/class-field-validator.php:111
 #: blocks/embed/view.js:2
 msgid "Please accept to continue."
 msgstr "Bitte stimmen Sie zu, um fortzufahren."
 
-#: includes/class-field-validator.php:117
+#: includes/class-field-validator.php:116
 #: blocks/embed/view.js:1
 msgid "Please enter a valid email address."
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
-#: includes/class-field-validator.php:191
+#: includes/class-field-validator.php:189
 msgid "Please choose a valid country."
 msgstr "Bitte wählen Sie ein gültiges Land."
 
-#: includes/class-field-validator.php:199
+#: includes/class-field-validator.php:197
 #: blocks/embed/view.js:2
 msgid "Please enter a valid postcode."
 msgstr "Bitte geben Sie eine gültige Postleitzahl ein."
 
-#: includes/class-field-validator.php:275
+#: includes/class-field-validator.php:296
 #: blocks/embed/view.js:1
 msgid "This field"
 msgstr "Dieses Feld"
 
 #. translators: %s: field label.
-#: includes/class-field-validator.php:280
+#: includes/class-field-validator.php:301
 #: blocks/embed/view.js:2
 #, php-format,js-format
 msgid "%s is required."
 msgstr "%s ist erforderlich."
 
 #. translators: 1: field label, 2: maximum number of characters.
-#: includes/class-field-validator.php:285
+#: includes/class-field-validator.php:306
 #: blocks/embed/view.js:2
 #, php-format,js-format
 msgid "%1$s must not be longer than %2$d characters."
 msgstr "%1$s darf nicht länger als %2$d Zeichen sein."
 
-#: includes/class-form-backup.php:91
-#: includes/class-form-backup.php:146
-#: includes/class-settings-page.php:62
+#: includes/class-form-backup.php:78
+#: includes/class-form-backup.php:133
+#: includes/class-settings-page.php:68
 msgid "The Backup file is too large."
 msgstr "Die Sicherungsdatei ist zu groß."
 
-#: includes/class-form-backup.php:95
+#: includes/class-form-backup.php:82
 msgid "This is not a Form Builder Backup file."
 msgstr "Dies ist keine Sicherungsdatei von Form Builder."
 
-#: includes/class-form-backup.php:98
+#: includes/class-form-backup.php:85
 msgid "This Backup file has an unsupported version."
 msgstr "Diese Sicherungsdatei hat eine nicht unterstützte Version."
 
-#: includes/class-form-backup.php:101
+#: includes/class-form-backup.php:88
 msgid "The Backup file is malformed."
 msgstr "Die Sicherungsdatei ist fehlerhaft aufgebaut."
 
-#: includes/class-form-backup.php:121
+#: includes/class-form-backup.php:108
 msgid "The content must be exactly one Form block."
 msgstr "Der Inhalt muss genau ein Formularblock sein."
 
 #. translators: %s: block name.
-#: includes/class-form-backup.php:127
+#: includes/class-form-backup.php:114
 #, php-format
 msgid "The block \"%s\" is not allowed in a Form."
 msgstr "Der Block „%s“ ist in einem Formular nicht erlaubt."
 
-#: includes/class-form-backup.php:130
+#: includes/class-form-backup.php:117
 msgid "Nested blocks are not allowed in a Form."
 msgstr "Verschachtelte Blöcke sind in einem Formular nicht erlaubt."
 
-#: includes/class-form-backup.php:143
+#: includes/class-form-backup.php:130
 msgid "The Backup file cannot be read."
 msgstr "Die Sicherungsdatei kann nicht gelesen werden."
 
-#: includes/class-form-backup.php:198
+#: includes/class-form-backup.php:190
 msgid "Dry run: nothing was written."
 msgstr "Testlauf: Es wurde nichts geschrieben."
 
 #. translators: 1: Form title, 2: Form ID.
-#: includes/class-form-backup.php:202
+#: includes/class-form-backup.php:194
 #, php-format
 msgid "Overwritten: \"%1$s\" (ID %2$d)."
 msgstr "Überschrieben: „%1$s“ (ID %2$d)."
 
 #. translators: 1: Form title, 2: Form ID.
-#: includes/class-form-backup.php:202
+#: includes/class-form-backup.php:194
 #, php-format
 msgid "Restored: \"%1$s\" (ID %2$d)."
 msgstr "Wiederhergestellt: „%1$s“ (ID %2$d)."
 
 #. translators: 1: Form title, 2: old Form ID.
-#: includes/class-form-backup.php:210
+#: includes/class-form-backup.php:202
 #, php-format
 msgid "Mapped: \"%1$s\" would get a new ID because ID %2$d is taken by another post. Embeds are not rewritten."
 msgstr "Zugeordnet: „%1$s“ erhielte eine neue ID, weil die ID %2$d von einem anderen Beitrag verwendet wird. Einbettungen werden nicht angepasst."
 
 #. translators: 1: Form title, 2: old Form ID, 3: new Form ID.
-#: includes/class-form-backup.php:212
+#: includes/class-form-backup.php:204
 #, php-format
 msgid "Mapped: \"%1$s\" ID %2$d → %3$d. Embeds are not rewritten."
 msgstr "Zugeordnet: „%1$s“ ID %2$d → %3$d. Einbettungen werden nicht angepasst."
 
 #. translators: 1: Form title, 2: Form ID, 3: reason.
-#: includes/class-form-backup.php:216
+#: includes/class-form-backup.php:208
 #, php-format
 msgid "Skipped: \"%1$s\" (ID %2$d): %3$s"
 msgstr "Übersprungen: „%1$s“ (ID %2$d): %3$s"
 
 #. translators: 1: Form title, 2: Form ID, 3: reason.
-#: includes/class-form-backup.php:220
+#: includes/class-form-backup.php:212
 #, php-format
 msgid "Rejected: \"%1$s\" (ID %2$d): %3$s"
 msgstr "Abgelehnt: „%1$s“ (ID %2$d): %3$s"
 
 #. translators: %s: comma-separated setting keys.
-#: includes/class-form-backup.php:224
+#: includes/class-form-backup.php:216
 #, php-format
 msgid "Settings restored: %s"
 msgstr "Einstellungen wiederhergestellt: %s"
 
 #. translators: 1: setting key, 2: reason.
-#: includes/class-form-backup.php:228
+#: includes/class-form-backup.php:220
 #, php-format
 msgid "Setting skipped: %1$s: %2$s"
 msgstr "Einstellung übersprungen: %1$s: %2$s"
 
-#: includes/class-form-backup.php:243
-msgid "The Form entry is missing its ID or content."
-msgstr "Dem Formular in der Sicherung fehlen ID oder Inhalt."
+#: includes/class-form-backup.php:235
+msgid "A Form in the Backup is missing its ID or content."
+msgstr "Einem Formular in der Sicherung fehlen ID oder Inhalt."
 
-#: includes/class-form-backup.php:265
+#: includes/class-form-backup.php:257
 msgid "A Form with this ID exists. Overwrite is off."
 msgstr "Ein Formular mit dieser ID existiert bereits. Überschreiben ist deaktiviert."
 
-#: includes/class-form-backup.php:279
+#: includes/class-form-backup.php:271
 msgid "WordPress could not save the Form."
 msgstr "WordPress konnte das Formular nicht speichern."
 
-#: includes/class-form-backup.php:298
+#: includes/class-form-backup.php:290
 msgid "Unknown setting."
 msgstr "Unbekannte Einstellung."
 
-#: includes/class-form-backup.php:300
+#: includes/class-form-backup.php:292
 msgid "Secrets are never restored."
 msgstr "Geheime Werte werden nie wiederhergestellt."
 
-#: includes/class-form-backup.php:302
+#: includes/class-form-backup.php:294
 msgid "Locked by a constant."
 msgstr "Durch eine Konstante gesperrt."
 
-#: includes/class-form-backup.php:304
+#: includes/class-form-backup.php:296
 msgid "Invalid value."
 msgstr "Ungültiger Wert."
 
@@ -486,62 +490,62 @@ msgstr "Dieses Feld leer lassen"
 msgid "JavaScript is required to submit this form."
 msgstr "Zum Absenden dieses Formulars ist JavaScript erforderlich."
 
-#: includes/class-form-renderer.php:103
+#: includes/class-form-renderer.php:102
 #: blocks/consent/index.js:1
 msgid "privacy policy"
 msgstr "Datenschutzerklärung"
 
-#: includes/class-form-renderer.php:104
+#: includes/class-form-renderer.php:103
 #: blocks/consent/index.js:1
 msgid "I agree to the {privacy_policy}."
 msgstr "Ich stimme der {privacy_policy} zu."
 
-#: includes/class-mail-builder.php:35
+#: includes/class-mail-builder.php:38
 msgid "New message via {form_title}"
 msgstr "Neue Nachricht über {form_title}"
 
 #. translators: %s: placeholder for the address of the page that held the Form.
-#: includes/class-mail-builder.php:40
+#: includes/class-mail-builder.php:43
 #, php-format
 msgid "Page: %s"
 msgstr "Seite: %s"
 
-#: includes/class-mail-builder.php:72
+#: includes/class-mail-builder.php:75
 msgid "Thank you for contacting us"
 msgstr "Vielen Dank für Ihre Kontaktaufnahme"
 
-#: includes/class-mail-builder.php:73
+#: includes/class-mail-builder.php:76
 msgid "Thank you for your message. We will get back to you soon."
 msgstr "Vielen Dank für Ihre Nachricht. Wir melden uns bald bei Ihnen."
 
-#: includes/class-mail-layout.php:62
+#: includes/class-mail-layout.php:59
 msgid "The mail layout must contain {content}."
 msgstr "Das Mail-Layout muss {content} enthalten."
 
-#: includes/class-mail-preview-controller.php:68
+#: includes/class-mail-preview-controller.php:72
 msgid "Sample form"
 msgstr "Beispielformular"
 
-#: includes/class-mail-preview-controller.php:148
+#: includes/class-mail-preview-controller.php:152
 msgid "Example Street 1"
 msgstr "Musterstraße 1"
 
-#: includes/class-mail-preview-controller.php:150
+#: includes/class-mail-preview-controller.php:154
 msgid "Sampletown"
 msgstr "Musterstadt"
 
-#: includes/class-mail-preview-controller.php:154
+#: includes/class-mail-preview-controller.php:158
 msgid "Sample option"
 msgstr "Beispieloption"
 
 #. translators: %s: UTC timestamp of the Submission.
-#: includes/class-mail-preview-controller.php:159
+#: includes/class-mail-preview-controller.php:163
 #: includes/class-submission-handler.php:219
 #, php-format
 msgid "Yes (%s)"
 msgstr "Ja (%s)"
 
-#: includes/class-mail-preview-controller.php:161
+#: includes/class-mail-preview-controller.php:165
 msgid "Sample text"
 msgstr "Beispieltext"
 
@@ -594,297 +598,293 @@ msgstr "Der Server des Administrators fragt regelmäßig bei github.com an, ob e
 msgid "This form does not exist."
 msgstr "Dieses Formular existiert nicht."
 
-#: includes/class-settings-page.php:43
+#: includes/class-settings-page.php:49
 msgid "Back up forms"
 msgstr "Formulare sichern"
 
-#: includes/class-settings-page.php:64
+#: includes/class-settings-page.php:70
 msgid "No Backup file was uploaded."
 msgstr "Es wurde keine Sicherungsdatei hochgeladen."
 
-#: includes/class-settings-page.php:75
+#: includes/class-settings-page.php:81
 msgid "You are not allowed to manage Backups."
 msgstr "Sie dürfen keine Sicherungen verwalten."
 
-#: includes/class-settings-page.php:104
+#: includes/class-settings-page.php:127
 msgid "You are not allowed to send test mail."
 msgstr "Sie dürfen keine Test-Mails senden."
 
-#: includes/class-settings-page.php:118
+#: includes/class-settings-page.php:141
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: includes/class-settings-page.php:123
+#: includes/class-settings-page.php:146
 msgid "You are not allowed to manage these settings."
 msgstr "Sie dürfen diese Einstellungen nicht verwalten."
 
-#: includes/class-settings-page.php:141
+#: includes/class-settings-page.php:167
 msgid "SMTP"
 msgstr "SMTP"
 
-#: includes/class-settings-page.php:142
+#: includes/class-settings-page.php:168
 msgid "Leave the host empty to send mail with the default WordPress mailer. Saved secrets are encrypted with a key derived from the site’s salts; if you change the salts, enter them again."
 msgstr "Lassen Sie den Host leer, um Mails mit dem Standard-Mailer von WordPress zu senden. Gespeicherte geheime Werte werden mit einem aus den Sicherheitsschlüsseln (Salts) der Website abgeleiteten Schlüssel verschlüsselt; wenn Sie die Salts ändern, geben Sie die Werte erneut ein."
 
-#: includes/class-settings-page.php:144
+#: includes/class-settings-page.php:170
 msgid "SMTP host"
 msgstr "SMTP-Host"
 
-#: includes/class-settings-page.php:145
+#: includes/class-settings-page.php:171
 msgid "SMTP port"
 msgstr "SMTP-Port"
 
-#: includes/class-settings-page.php:146
+#: includes/class-settings-page.php:172
 msgid "Encryption"
 msgstr "Verschlüsselung"
 
-#: includes/class-settings-page.php:147
+#: includes/class-settings-page.php:173
 msgid "SMTP authentication"
 msgstr "SMTP-Authentifizierung"
 
-#: includes/class-settings-page.php:149
+#: includes/class-settings-page.php:175
 msgid "SMTP user"
 msgstr "SMTP-Benutzer"
 
-#: includes/class-settings-page.php:150
+#: includes/class-settings-page.php:176
 msgid "SMTP password"
 msgstr "SMTP-Passwort"
 
-#: includes/class-settings-page.php:154
+#: includes/class-settings-page.php:180
 msgid "Sender"
 msgstr "Absender"
 
-#: includes/class-settings-page.php:155
+#: includes/class-settings-page.php:181
 msgid "The address and name mail is sent from. Unless forced, they only replace the WordPress default sender (wordpress@your-domain)."
 msgstr "Adresse und Name, von denen Mails gesendet werden. Sofern nicht erzwungen, ersetzen sie nur den Standardabsender von WordPress (wordpress@ihre-domain)."
 
-#: includes/class-settings-page.php:157
+#: includes/class-settings-page.php:183
 msgid "From email"
 msgstr "Absender-E-Mail"
 
-#: includes/class-settings-page.php:158
+#: includes/class-settings-page.php:184
 msgid "From name"
 msgstr "Absendername"
 
-#: includes/class-settings-page.php:159
+#: includes/class-settings-page.php:185
 msgid "Force From address"
 msgstr "Absenderadresse erzwingen"
 
-#: includes/class-settings-page.php:163
+#: includes/class-settings-page.php:189
 msgid "Spam protection (Cloudflare Turnstile)"
 msgstr "Spam-Schutz (Cloudflare Turnstile)"
 
-#: includes/class-settings-page.php:164
+#: includes/class-settings-page.php:190
 msgid "Create a Turnstile widget in the Cloudflare dashboard and enter its keys. Without both keys, Forms rely on the honeypot, the minimum fill time and the rate limit, and Confirmations are not sent."
 msgstr "Legen Sie im Cloudflare-Dashboard ein Turnstile-Widget an und tragen Sie dessen Schlüssel ein. Ohne beide Schlüssel verlassen sich Formulare auf das Honeypot-Feld, die Mindestausfüllzeit und das Ratenlimit, und Bestätigungen werden nicht gesendet."
 
-#: includes/class-settings-page.php:166
+#: includes/class-settings-page.php:192
 msgid "Turnstile site key"
 msgstr "Turnstile-Site-Key"
 
-#: includes/class-settings-page.php:167
+#: includes/class-settings-page.php:193
 msgid "Turnstile secret key"
 msgstr "Turnstile-Secret-Key"
 
-#: includes/class-settings-page.php:171
+#: includes/class-settings-page.php:197
 #: blocks/form/index.js:1
 msgid "Recipients"
 msgstr "Empfänger"
 
-#: includes/class-settings-page.php:172
+#: includes/class-settings-page.php:198
 msgid "Used by Forms without Recipients of their own. If this is empty too, the site administrator email receives the Notification."
 msgstr "Wird von Formularen ohne eigene Empfänger verwendet. Ist auch dieses Feld leer, erhält die E-Mail-Adresse des Website-Administrators die Benachrichtigung."
 
-#: includes/class-settings-page.php:174
+#: includes/class-settings-page.php:200
 msgid "Default recipient"
 msgstr "Standardempfänger"
 
-#: includes/class-settings-page.php:178
+#: includes/class-settings-page.php:204
 msgid "Mail"
 msgstr "Mail"
 
-#: includes/class-settings-page.php:179
+#: includes/class-settings-page.php:205
 msgid "The layout that frames every mail and the default texts of Forms that do not set their own Body templates."
 msgstr "Das Layout, das jede Mail umgibt, und die Standardtexte von Formularen, die keine eigenen Textvorlagen festlegen."
 
-#: includes/class-settings-page.php:181
+#: includes/class-settings-page.php:207
+#: admin/build/settings.js:1
 msgid "Mail layout"
 msgstr "Mail-Layout"
 
-#: includes/class-settings-page.php:182
+#: includes/class-settings-page.php:208
 msgid "Default notification subject"
 msgstr "Standardbetreff der Benachrichtigung"
 
-#: includes/class-settings-page.php:183
+#: includes/class-settings-page.php:209
 msgid "Default notification body"
 msgstr "Standardtext der Benachrichtigung"
 
-#: includes/class-settings-page.php:184
+#: includes/class-settings-page.php:210
 msgid "Default confirmation subject"
 msgstr "Standardbetreff der Bestätigung"
 
-#: includes/class-settings-page.php:185
+#: includes/class-settings-page.php:211
 msgid "Default confirmation body"
 msgstr "Standardtext der Bestätigung"
 
-#: includes/class-settings-page.php:197
-#: includes/class-settings-page.php:358
+#: includes/class-settings-page.php:223
+#: includes/class-settings-page.php:383
 msgid "Form Builder Settings"
 msgstr "Form-Builder-Einstellungen"
 
-#: includes/class-settings-page.php:199
+#: includes/class-settings-page.php:225
 msgid "Settings saved."
 msgstr "Einstellungen gespeichert."
 
-#: includes/class-settings-page.php:202
+#: includes/class-settings-page.php:228
 msgid "Test mail sent."
 msgstr "Test-Mail gesendet."
 
-#: includes/class-settings-page.php:204
+#: includes/class-settings-page.php:230
 msgid "Test mail failed. Check the mail failure log."
 msgstr "Die Test-Mail ist fehlgeschlagen. Prüfen Sie das Mail-Fehlerprotokoll."
 
-#: includes/class-settings-page.php:207
-msgid "The mail layout must contain {content}; the previous layout was kept."
-msgstr "Das Mail-Layout muss {content} enthalten; das vorherige Layout wurde beibehalten."
+#: includes/class-settings-page.php:233
+msgid "The mail layout must contain {content}, so the previous layout was kept. All other settings were saved."
+msgstr "Das Mail-Layout muss {content} enthalten, daher wurde das vorherige Layout beibehalten. Alle übrigen Einstellungen wurden gespeichert."
 
-#: includes/class-settings-page.php:221
-msgid "Live mail preview"
-msgstr "Live-Mail-Vorschau"
+#: includes/class-settings-page.php:235
+msgid "Some values were not valid and were not saved. All other settings were saved."
+msgstr "Einige Werte waren ungültig und wurden nicht gespeichert. Alle übrigen Einstellungen wurden gespeichert."
 
-#: includes/class-settings-page.php:222
-#: blocks/form/index.js:1
-msgid "Mail preview"
-msgstr "Mail-Vorschau"
-
-#: includes/class-settings-page.php:225
+#: includes/class-settings-page.php:252
 msgid "Save settings"
 msgstr "Einstellungen speichern"
 
-#: includes/class-settings-page.php:227
+#: includes/class-settings-page.php:254
 msgid "Test mail"
 msgstr "Test-Mail"
 
-#: includes/class-settings-page.php:228
+#: includes/class-settings-page.php:255
 msgid "Save your changes first: the test mail uses the saved settings."
 msgstr "Speichern Sie zuerst Ihre Änderungen: Die Test-Mail verwendet die gespeicherten Einstellungen."
 
-#: includes/class-settings-page.php:232
+#: includes/class-settings-page.php:259
 msgid "Send test mail to"
 msgstr "Test-Mail senden an"
 
-#: includes/class-settings-page.php:234
+#: includes/class-settings-page.php:261
 msgid "Send test mail"
 msgstr "Test-Mail senden"
 
-#: includes/class-settings-page.php:236
+#: includes/class-settings-page.php:263
 msgid "Backup & restore"
 msgstr "Sicherung & Wiederherstellung"
 
-#: includes/class-settings-page.php:238
+#: includes/class-settings-page.php:265
 msgid "A Backup holds every Form and the settings that are not secrets or set by constants. It contains no submissions."
 msgstr "Eine Sicherung enthält jedes Formular und die Einstellungen, die weder geheime Werte noch durch Konstanten gesetzt sind. Sie enthält keine Einsendungen."
 
-#: includes/class-settings-page.php:239
+#: includes/class-settings-page.php:266
 msgid "Download backup"
 msgstr "Sicherung herunterladen"
 
-#: includes/class-settings-page.php:244
+#: includes/class-settings-page.php:271
 msgid "Backup file"
 msgstr "Sicherungsdatei"
 
 #. translators: %s: maximum Backup file size, for example "2 MB".
-#: includes/class-settings-page.php:250
+#: includes/class-settings-page.php:277
 #, php-format
 msgid "Maximum file size: %s."
 msgstr "Maximale Dateigröße: %s."
 
-#: includes/class-settings-page.php:253
+#: includes/class-settings-page.php:280
 msgid "Overwrite Forms with the same ID"
 msgstr "Formulare mit derselben ID überschreiben"
 
-#: includes/class-settings-page.php:254
+#: includes/class-settings-page.php:281
 msgid "Restore from backup"
 msgstr "Aus Sicherung wiederherstellen"
 
-#: includes/class-settings-page.php:256
+#: includes/class-settings-page.php:283
 msgid "Deleting the plugin removes all Forms and the settings. Download a backup first."
 msgstr "Beim Löschen des Plugins werden alle Formulare und die Einstellungen entfernt. Laden Sie vorher eine Sicherung herunter."
 
-#: includes/class-settings-page.php:257
+#: includes/class-settings-page.php:284
 msgid "Recent mail failures"
 msgstr "Letzte Mail-Fehler"
 
-#: includes/class-settings-page.php:275
-msgid "Reset to default"
-msgstr "Auf Standard zurücksetzen"
-
-#: includes/class-settings-page.php:289
+#: includes/class-settings-page.php:314
 #: includes/class-updates.php:158
 msgid "Saved — overwrite to change"
 msgstr "Gespeichert – zum Ändern überschreiben"
 
-#: includes/class-settings-page.php:289
+#: includes/class-settings-page.php:314
 msgid "Not set"
 msgstr "Nicht gesetzt"
 
-#: includes/class-settings-page.php:292
+#: includes/class-settings-page.php:317
 msgid "Set by constant."
 msgstr "Durch Konstante gesetzt."
 
-#: includes/class-settings-page.php:295
+#: includes/class-settings-page.php:320
 msgid "Set. Leave empty to keep the saved secret."
 msgstr "Gesetzt. Leer lassen, um den gespeicherten Wert zu behalten."
 
-#: includes/class-settings-page.php:295
+#: includes/class-settings-page.php:320
 msgid "Not set."
 msgstr "Nicht gesetzt."
 
-#: includes/class-settings-page.php:304
+#: includes/class-settings-page.php:329
 msgid "No mail failures recorded."
 msgstr "Keine Mail-Fehler aufgezeichnet."
 
 #. translators: %d: Form ID.
-#: includes/class-settings-page.php:311
+#: includes/class-settings-page.php:336
 #, php-format
 msgid "Form %d: "
 msgstr "Formular %d: "
 
-#: includes/class-settings-page.php:338
+#: includes/class-settings-page.php:363
 msgid "The Backup file contains nothing to restore."
 msgstr "Die Sicherungsdatei enthält nichts zum Wiederherstellen."
 
-#: includes/class-settings-page.php:360
+#: includes/class-settings-page.php:385
 msgid "A saved secret cannot be decrypted. Re-enter it in Form Builder Settings."
 msgstr "Ein gespeicherter geheimer Wert kann nicht entschlüsselt werden. Geben Sie ihn in den Form-Builder-Einstellungen erneut ein."
 
 #. translators: %s: link to the settings page.
-#: includes/class-settings-page.php:367
+#: includes/class-settings-page.php:392
 #, php-format
 msgid "Cloudflare Turnstile is not configured. Forms are protected by the honeypot, the minimum fill time and the rate limit only, and Confirmations cannot be sent. Add the site key and secret key in %s."
 msgstr "Cloudflare Turnstile ist nicht konfiguriert. Formulare sind nur durch das Honeypot-Feld, die Mindestausfüllzeit und das Ratenlimit geschützt, und Bestätigungen können nicht gesendet werden. Tragen Sie den Site-Key und den Secret-Key in %s ein."
 
-#: includes/class-settings-page.php:377
+#: includes/class-settings-page.php:401
 msgid "This request came through a reverse proxy, but no trusted proxies are set. All visitors would share one rate limit. Define JP_FORM_BUILDER_TRUSTED_PROXIES with the proxy IPs or CIDR ranges (for example 10.0.0.0/8) in wp-config.php."
 msgstr "Diese Anfrage kam über einen Reverse-Proxy, aber es sind keine vertrauenswürdigen Proxys gesetzt. Alle Besucher würden sich ein Ratenlimit teilen. Definieren Sie JP_FORM_BUILDER_TRUSTED_PROXIES mit den Proxy-IPs oder CIDR-Bereichen (zum Beispiel 10.0.0.0/8) in der wp-config.php."
 
 #. translators: %s: list of Form titles, linked to their editors.
-#: includes/class-settings-page.php:397
+#: includes/class-settings-page.php:421
 #, php-format
 msgid "These Forms have a Confirmation enabled, but it is not sent while Turnstile is not configured: %s"
 msgstr "Bei diesen Formularen ist eine Bestätigung aktiviert, sie wird aber nicht gesendet, solange Turnstile nicht konfiguriert ist: %s"
 
-#: includes/class-settings-page.php:408
+#: includes/class-settings-page.php:431
 msgid "STARTTLS (port 587)"
 msgstr "STARTTLS (Port 587)"
 
-#: includes/class-settings-page.php:409
+#: includes/class-settings-page.php:432
 msgid "SMTPS / implicit TLS (port 465)"
 msgstr "SMTPS / implizites TLS (Port 465)"
 
-#: includes/class-settings-page.php:410
+#: includes/class-settings-page.php:433
 msgid "None"
 msgstr "Keine"
+
+#: includes/class-settings.php:255
+msgid "Use true or false (also 1/0, yes/no, on/off)."
+msgstr "Verwenden Sie true oder false (auch 1/0, yes/no, on/off)."
 
 #: includes/class-submission-handler.php:54
 msgid "The request is too large."
@@ -919,7 +919,7 @@ msgstr "Die Spam-Schutz-Prüfung ist derzeit nicht verfügbar. Bitte versuchen S
 msgid "The spam protection check failed. Please try again."
 msgstr "Die Spam-Schutz-Prüfung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
 
-#: includes/class-submission-handler.php:255
+#: includes/class-submission-handler.php:249
 msgid "Thank you! Your message has been sent."
 msgstr "Vielen Dank! Ihre Nachricht wurde gesendet."
 
@@ -1011,17 +1011,57 @@ msgstr "Der Token funktioniert. %1$s meldet %2$s als neuestes Release; diese Web
 msgid "Open the Updates settings"
 msgstr "Update-Einstellungen öffnen"
 
-#: blocks/address/index.js:1
-#: blocks/consent/index.js:1
-#: blocks/email/index.js:1
-#: blocks/name/index.js:1
-#: blocks/phone/index.js:1
-#: blocks/select/index.js:1
-#: blocks/text/index.js:1
-#: blocks/textarea/index.js:1
-msgid "Field"
-msgstr "Feld"
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Subject:"
+msgstr "Betreff:"
 
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Mail preview"
+msgstr "Mail-Vorschau"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Title of the Form"
+msgstr "Titel des Formulars"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Name of the site"
+msgstr "Name der Website"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Time of the Submission"
+msgstr "Zeitpunkt der Einsendung"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Table of all Fields and their values"
+msgstr "Tabelle aller Felder und ihrer Werte"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Page the Form was sent from"
+msgstr "Seite, von der das Formular gesendet wurde"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Insert placeholder"
+msgstr "Platzhalter einfügen"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "General"
+msgstr "Allgemein"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Value"
+msgstr "Wert"
+
+#: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/email/index.js:1
@@ -1033,6 +1073,82 @@ msgstr "Feld"
 #: blocks/textarea/index.js:1
 msgid "Label"
 msgstr "Beschriftung"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Section, only shown when filled in"
+msgstr "Abschnitt, nur angezeigt, wenn ausgefüllt"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+#: blocks/form/index.js:2
+msgid "Confirmation subject"
+msgstr "Betreff der Bestätigung"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Confirmation body"
+msgstr "Text der Bestätigung"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+#: blocks/form/index.js:2
+msgid "Notification subject"
+msgstr "Betreff der Benachrichtigung"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Notification body"
+msgstr "Text der Benachrichtigung"
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "A Confirmation never contains submitted content, so Field placeholders are not available here."
+msgstr "Eine Bestätigung enthält nie übermittelte Inhalte, daher sind hier keine Feld-Platzhalter verfügbar."
+
+#: admin/build/settings.js:1
+msgid "The frame around every mail. It must contain {content}. Leave it empty to use the bundled layout."
+msgstr "Der Rahmen um jede Mail. Er muss {content} enthalten. Lassen Sie ihn leer, um das mitgelieferte Layout zu verwenden."
+
+#: admin/build/settings.js:1
+msgid "Reset to default"
+msgstr "Auf Standard zurücksetzen"
+
+#: admin/build/settings.js:1
+msgid "Live mail preview"
+msgstr "Live-Mail-Vorschau"
+
+#: admin/build/settings.js:1
+msgid "Default notification"
+msgstr "Standard-Benachrichtigung"
+
+#: admin/build/settings.js:1
+msgid "Used by Forms that set no subject or Body template of their own. Leave empty for the built-in text. The Field placeholders use the Field keys of your Forms; the examples assume the keys name, email and message."
+msgstr "Wird von Formularen verwendet, die weder einen eigenen Betreff noch eine eigene Textvorlage festlegen. Lassen Sie das Feld leer, um den eingebauten Text zu verwenden. Die Feld-Platzhalter verwenden die Feldschlüssel Ihrer Formulare; die Beispiele gehen von den Schlüsseln name, email und message aus."
+
+#: admin/build/settings.js:1
+#: blocks/form/index.js:1
+msgid "Preview"
+msgstr "Vorschau"
+
+#: admin/build/settings.js:1
+msgid "Default confirmation"
+msgstr "Standard-Bestätigung"
+
+#: admin/build/settings.js:1
+msgid "Used by Forms that send a Confirmation without a subject or Body template of their own. Leave empty for the built-in text."
+msgstr "Wird von Formularen verwendet, die eine Bestätigung senden, aber weder einen eigenen Betreff noch eine eigene Textvorlage haben. Lassen Sie das Feld leer, um den eingebauten Text zu verwenden."
+
+#: blocks/address/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/email/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Field"
+msgstr "Feld"
 
 #: blocks/address/index.js:1
 #: blocks/consent/index.js:1
@@ -1203,82 +1319,16 @@ msgid "Your session could not be verified. Please submit the form again."
 msgstr "Ihre Sitzung konnte nicht überprüft werden. Bitte senden Sie das Formular erneut ab."
 
 #: blocks/form/index.js:1
-msgid "Title of the Form"
-msgstr "Titel des Formulars"
-
-#: blocks/form/index.js:1
-msgid "Name of the site"
-msgstr "Name der Website"
-
-#: blocks/form/index.js:1
-msgid "Time of the Submission"
-msgstr "Zeitpunkt der Einsendung"
-
-#: blocks/form/index.js:1
-msgid "Table of all Fields and their values"
-msgstr "Tabelle aller Felder und ihrer Werte"
-
-#: blocks/form/index.js:1
-msgid "Page the Form was sent from"
-msgstr "Seite, von der das Formular gesendet wurde"
-
-#: blocks/form/index.js:1
-msgid "Insert placeholder"
-msgstr "Platzhalter einfügen"
-
-#: blocks/form/index.js:1
-msgid "General"
-msgstr "Allgemein"
-
-#: blocks/form/index.js:1
-msgid "Value"
-msgstr "Wert"
-
-#: blocks/form/index.js:1
-msgid "Section, only shown when filled in"
-msgstr "Abschnitt, nur angezeigt, wenn ausgefüllt"
-
-#: blocks/form/index.js:1
 msgid "Confirmation Body template"
 msgstr "Textvorlage der Bestätigung"
-
-#: blocks/form/index.js:1
-#: blocks/form/index.js:2
-msgid "Confirmation subject"
-msgstr "Betreff der Bestätigung"
-
-#: blocks/form/index.js:1
-msgid "Confirmation body"
-msgstr "Text der Bestätigung"
 
 #: blocks/form/index.js:1
 msgid "Notification Body template"
 msgstr "Textvorlage der Benachrichtigung"
 
 #: blocks/form/index.js:1
-#: blocks/form/index.js:2
-msgid "Notification subject"
-msgstr "Betreff der Benachrichtigung"
-
-#: blocks/form/index.js:1
-msgid "Notification body"
-msgstr "Text der Benachrichtigung"
-
-#: blocks/form/index.js:1
 msgid "Leave the subject or body empty to use the site default, or the built-in text when the site has no default."
 msgstr "Lassen Sie Betreff oder Text leer, um den Standard der Website zu verwenden, oder den integrierten Text, wenn die Website keinen Standard hat."
-
-#: blocks/form/index.js:1
-msgid "A Confirmation never contains submitted content, so Field placeholders are not available here."
-msgstr "Eine Bestätigung enthält nie übermittelte Inhalte, daher sind hier keine Feld-Platzhalter verfügbar."
-
-#: blocks/form/index.js:1
-msgid "Preview"
-msgstr "Vorschau"
-
-#: blocks/form/index.js:1
-msgid "Subject:"
-msgstr "Betreff:"
 
 #: blocks/form/index.js:1
 msgid "Cancel"
@@ -1469,5 +1519,4 @@ msgstr "Text"
 #: blocks/textarea/block.json
 msgctxt "block title"
 msgid "Textarea"
-
 msgstr "Mehrzeiliger Text"

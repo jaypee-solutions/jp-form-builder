@@ -29,7 +29,21 @@ extracts it as the GitHub release notes and fails without it.
 - Documented the constants, WP-CLI commands, Turnstile setup, caching, trusted proxies, privacy snippets (German and English), outbound connections and the WPForms and WP Mail SMTP migration in the README; `readme.txt` now describes the plugin and its features.
 - Added a German translation (`de_DE`, formal "Sie", plus a byte-identical `de_DE_formal`) with `.pot`, `.po` and script `.json` files, `npm run i18n:json`, and a Translations section in the README.
 
+### Changed
+- The settings page's Mail layout and the site-default Notification and Confirmation subjects and Body templates now use the same code editor, placeholder inserter and live preview as the Form editor's Body template modal (the Confirmation preview shows only the safe placeholders). The script is built by wp-scripts into `admin/build/` and replaces `assets/admin/mail-settings.js`.
+- The Field key rule is now one rule in PHP and in the editor: lowercase, `ä ö ü ß` become `ae oe ue ss`, other Latin accents are removed, anything else outside `a-z 0-9 _` becomes `_`. Existing keys with umlauts or accents change when the Form is next parsed; set the key explicitly to keep an old one.
+- `Plugin::init()` shares one `Settings`, `Form_Repository` and `Client_Ip`; block defaults are read lazily once and the secret key is derived on first use.
+
 ### Fixed
+- The release ZIP now contains `uninstall.php`, so deleting the plugin removes its data.
+- The default recipient setting keeps a comma-separated list of addresses instead of merging them into one invalid address.
+- The Form embed is wrapped in the block wrapper, so its alignment and margin apply on the front end.
+- Body templates no longer keep `video`/`audio` sources, posters or remote CSS `url()` values; Body templates and the Mail layout share one remote-asset stripper.
+- `wp jp-form-builder settings set smtp_auth false` stores false; yes/no settings are read from `true/false/1/0/yes/no/on/off` in one place, also on Backup restore, and anything else is refused.
+- Mail subjects are shortened by characters, so multibyte text is never cut in half.
+- A Mail layout without `{content}` no longer discards the other settings of the same save; only the old layout is kept and the notice says so.
+- The browser checks phone numbers with the server's rules, so an obviously invalid number no longer costs a rate-limit attempt.
+- A Form in a Backup that lacks its ID or content is reported as "A Form in the Backup is missing its ID or content."
 - The Reply-To header no longer wraps the display name in extra quotes and drops commas, which `wp_mail()` splits addresses at; the built-in Notification body names the page that held the Form.
 - Validation errors name unlabelled Fields like the Form does ("Email is required.").
 - The settings page rendered its Field loop as text instead of table rows.

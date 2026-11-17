@@ -84,7 +84,7 @@ wp jp-form-builder backup restore <file> [--overwrite] [--dry-run]
 
 - `mail test` sends the test mail through the configured SMTP and exits non-zero with the error on failure.
 - `settings list` prints key, value and source (`constant`, `option` or `default`); secrets show as `********` or `not set`.
-- `settings set` stores the value. Omit `<value>` to read it from STDIN, which keeps secrets out of the process list and shell history: `printf '%s' "$SMTP_PASSWORD" | wp jp-form-builder settings set smtp_password`. It fails for unknown keys and for settings locked by a constant.
+- `settings set` stores the value. Omit `<value>` to read it from STDIN, which keeps secrets out of the process list and shell history: `printf '%s' "$SMTP_PASSWORD" | wp jp-form-builder settings set smtp_password`. Yes/no settings take `true`, `false`, `1`, `0`, `yes`, `no`, `on` or `off`. It fails for unknown keys, for settings locked by a constant and for values a setting cannot take.
 - `settings delete` removes the saved value, so the default applies again.
 - `form list` prints ID, title and status of every Form.
 - `backup export` writes a Backup to `<file>`, or to stdout without a file; `backup restore` is described under [Backup, restore and uninstall](#backup-restore-and-uninstall).
@@ -239,7 +239,7 @@ The plugin ships a German translation (`de_DE`, formal "Sie"; `de_DE_formal` is 
 After changing a translatable string, with wp-env running:
 
 ```bash
-npm run build        # the extractor reads the built blocks/, not src/
+npm run build        # the extractor reads the built blocks/ and admin/build/, not src/
 npm run i18n:pot     # regenerate languages/jp-form-builder.pot
 # update languages/jp-form-builder-de_DE.po, then copy it to jp-form-builder-de_DE_formal.po
 npm run i18n:json    # regenerate the script translations (languages/*.json)
@@ -264,7 +264,8 @@ composer lint          # PHPCS (WordPress Coding Standards)
 composer lint:fix      # PHPCBF
 composer test          # PHPUnit
 
-npm run build          # blocks: src/blocks → blocks/ (gitignored)
+npm run build          # blocks: src/blocks → blocks/, settings page: src/admin → admin/build/ (both gitignored)
+npm run test:js        # Node test runner: Field keys and the phone check, against the fixtures PHPUnit uses
 npm run lint:js
 npm run lint:css
 
