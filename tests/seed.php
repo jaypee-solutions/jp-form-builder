@@ -87,4 +87,19 @@ jpfb_seed_post(
     '<!-- wp:jp-form-builder/embed {"formId":' . $jpfb_form_id . '} /-->'
 );
 
+$jpfb_phone_form_id = jpfb_seed_post(
+    'jp_form',
+    'e2e-phone',
+    'E2E phone',
+    '<!-- wp:jp-form-builder/form {"recipients":"owner@example.test"} -->'
+    . '<!-- wp:jp-form-builder/phone {"fieldName":"phone","required":true} /-->'
+    . '<!-- /wp:jp-form-builder/form -->'
+);
+jpfb_seed_post(
+    'page',
+    'e2e-phone-page',
+    'E2E phone page',
+    '<!-- wp:jp-form-builder/embed {"formId":' . $jpfb_phone_form_id . '} /-->'
+);
+
 WP_CLI::success( 'Seed complete.' );

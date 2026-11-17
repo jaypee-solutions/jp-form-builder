@@ -1,5 +1,6 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { controlValue, fieldControls, fieldWrappers, labelOf } from './dom';
+import { isPlausiblePhoneNumber } from './phone';
 
 const codePoints = ( text ) => [ ...text ].length;
 
@@ -28,6 +29,12 @@ function invalidValueMessage( form, control, value, postcodePatterns ) {
 	}
 	if ( control.maxLength > 0 && codePoints( value ) > control.maxLength ) {
 		return tooLongMessage( labelOf( form, control ), control.maxLength );
+	}
+	if (
+		control.type === 'tel' &&
+		! isPlausiblePhoneNumber( value, control.dataset.defaultRegion || 'DE' )
+	) {
+		return __( 'Please enter a valid phone number.', 'jp-form-builder' );
 	}
 	if ( control.tagName === 'SELECT' ) {
 		const isOption = [ ...control.options ].some(

@@ -176,6 +176,31 @@ test.describe( 'Form submission', () => {
 		await expect( email ).toBeFocused();
 	} );
 
+	test( 'an implausible phone number is caught in the browser and costs no attempt', async ( { page } ) => {
+		clearCapturedMail();
+		const submissions = requestsTo( page, SUBMISSIONS_ROUTE );
+		await page.goto( '/e2e-phone-page/' );
+		const form = page.locator( 'form[data-form-id]' );
+		const phone = form.getByRole( 'textbox', { name: 'Phone', exact: true } );
+		const summary = form.locator( '.jp-form-builder__error-summary' );
+		const submit = form.getByRole( 'button', { name: 'Submit' } );
+
+		for ( const invalid of [ 'abc', '12345', '0821 12x456', '+49 123' ] ) {
+			await phone.fill( invalid );
+			await submit.click( { force: true } );
+			await expect( summary.getByRole( 'link' ) ).toHaveText( [ 'Please enter a valid phone number.' ] );
+			await expect( phone ).toHaveAttribute( 'aria-invalid', 'true' );
+		}
+		expect( submissions ).toEqual( [] );
+
+		await phone.fill( '0821 123456' );
+		await expect( submit ).not.toHaveAttribute( 'aria-disabled', 'true' );
+		await submit.click();
+		await expect( form.locator( '[role="status"]' ) ).toHaveText( 'Thank you! Your message has been sent.' );
+		expect( submissions ).toHaveLength( 1 );
+		expect( capturedMail().message ).toContain( '+49821123456' );
+	} );
+
 	test( 'with Turnstile configured, the widget loads on first interaction and renews after a failed attempt', async ( { page } ) => {
 		const original = wpCli(
 			'eval',
