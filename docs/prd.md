@@ -108,6 +108,8 @@ Review round 3, answered 2026-11-16:
 3. Site-default subjects and bodies on the settings page; a Form's empty field uses them, then the built-in default.
 4. `{all_fields}` stays generated and is not separately editable.
 
+Implementation note, 2026-11-17: Microsoft 365 OAuth (P2b) is deferred because the first customer does not use Microsoft 365. It must ship before a client on Exchange Online needs it (Basic auth off by default from the end of December 2026); until then its settings are hidden.
+
 ## Open questions
 
-None. Template `v1.5.0` is released; implementation starts with P1.
+None.

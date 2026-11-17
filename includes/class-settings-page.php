@@ -82,12 +82,9 @@ final class Settings_Page {
             'smtp_port'             => __( 'SMTP port', 'jp-form-builder' ),
             'smtp_encryption'       => __( 'Encryption', 'jp-form-builder' ),
             'smtp_auth'             => __( 'SMTP authentication', 'jp-form-builder' ),
-            'smtp_auth_method'      => __( 'SMTP authentication method', 'jp-form-builder' ),
+            // Microsoft 365 OAuth settings stay hidden until P2b implements them (ADR 0012).
             'smtp_user'             => __( 'SMTP user', 'jp-form-builder' ),
             'smtp_password'         => __( 'SMTP password', 'jp-form-builder' ),
-            'm365_tenant_id'        => __( 'Microsoft 365 tenant ID', 'jp-form-builder' ),
-            'm365_client_id'        => __( 'Microsoft 365 client ID', 'jp-form-builder' ),
-            'm365_client_secret'    => __( 'Microsoft 365 client secret', 'jp-form-builder' ),
             'from_email'            => __( 'From email', 'jp-form-builder' ),
             'from_name'             => __( 'From name', 'jp-form-builder' ),
             'force_from'            => __( 'Force From address', 'jp-form-builder' ),
@@ -241,11 +238,6 @@ final class Settings_Page {
                     'starttls' => __( 'STARTTLS (port 587)', 'jp-form-builder' ),
                     'smtps'    => __( 'SMTPS / implicit TLS (port 465)', 'jp-form-builder' ),
                     'none'     => __( 'None', 'jp-form-builder' ),
-                ];
-            case 'smtp_auth_method':
-                return [
-                    'password'   => __( 'Password', 'jp-form-builder' ),
-                    'm365_oauth' => __( 'Microsoft 365 (OAuth)', 'jp-form-builder' ),
                 ];
             default:
                 return [];
