@@ -11,6 +11,7 @@
 		"fieldName": { "type": "string", "default": "" },
 		"required": { "type": "boolean", "default": true },
 		"helpText": { "type": "string", "default": "" },
+		"width": { "type": "string", "enum": ["100", "50", "33"], "default": "100" },
 		"placeholder": { "type": "string", "default": "" },
 		"replyTo": { "type": "boolean", "default": true }
 	},

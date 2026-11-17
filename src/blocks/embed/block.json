@@ -8,11 +8,53 @@
 	"viewScript": "file:./view.js",
 	"style": "file:./style-index.css",
 	"attributes": {
-		"formId": { "type": "number", "default": 0 }
+		"formId": { "type": "number", "default": 0 },
+		"fieldBackground": { "type": "string", "default": "" },
+		"fieldBorderColor": { "type": "string", "default": "" },
+		"focusColor": { "type": "string", "default": "" },
+		"fieldRadius": { "type": "string", "default": "" },
+		"fieldBorderWidth": { "type": "string", "default": "" }
 	},
+	"styles": [
+		{ "name": "standard", "label": "Standard", "isDefault": true },
+		{ "name": "soft", "label": "Soft" },
+		{ "name": "underlined", "label": "Underlined" },
+		{ "name": "rounded", "label": "Rounded" }
+	],
 	"supports": {
 		"html": false,
 		"align": ["wide"],
-		"spacing": { "margin": true }
-	}
+		"color": {
+			"text": true,
+			"background": true,
+			"link": true,
+			"button": true,
+			"__experimentalDefaultControls": { "text": true, "background": true }
+		},
+		"typography": {
+			"fontSize": true,
+			"__experimentalFontFamily": true,
+			"lineHeight": true,
+			"__experimentalDefaultControls": { "fontSize": true }
+		},
+		"spacing": {
+			"padding": true,
+			"margin": true,
+			"blockGap": true,
+			"__experimentalDefaultControls": { "padding": true }
+		},
+		"__experimentalBorder": {
+			"radius": true,
+			"width": true,
+			"color": true,
+			"style": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"radius": true,
+				"width": true,
+				"style": true
+			}
+		}
+	},
+	"example": {}
 }

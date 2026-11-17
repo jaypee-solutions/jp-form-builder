@@ -1,12 +1,14 @@
 import { InspectorControls } from '@wordpress/block-editor';
 import {
 	PanelBody,
+	SelectControl,
 	TextControl,
 	TextareaControl,
 	ToggleControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { normalizeFieldKey, sanitizeFieldKeyInput } from './field-key';
+import { fieldWidthOptions } from './field-width';
 import { defaultLabel } from './labels';
 import { useDuplicateFieldKey } from './use-field-key';
 
@@ -100,6 +102,18 @@ export function FieldInspector( {
 						label={ __( 'Placeholder', 'jp-form-builder' ) }
 						value={ attributes.placeholder }
 						onChange={ set( 'placeholder' ) }
+					/>
+				) }
+				{ ! isConsent && (
+					<SelectControl
+						label={ __( 'Width', 'jp-form-builder' ) }
+						value={ attributes.width }
+						options={ fieldWidthOptions() }
+						onChange={ set( 'width' ) }
+						help={ __(
+							'Narrower Fields sit side by side and stack on narrow screens.',
+							'jp-form-builder'
+						) }
 					/>
 				) }
 			</PanelBody>
