@@ -221,15 +221,16 @@
 	transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* One caret for every browser, drawn in the text color (no image request). */
+/*
+ * One caret for every browser, drawn in the text color (no image request):
+ * a single conic gradient, so there is no seam between two halves.
+ */
 .wp-block-jp-form-builder-embed .jp-form-builder .jp-form-builder__field select {
 	appearance: none;
 	padding-inline-end: 2.75em;
-	background-image:
-		linear-gradient(to bottom left, currentcolor 50%, transparent 50%),
-		linear-gradient(to bottom right, currentcolor 50%, transparent 50%);
-	background-position: right 1.4em center, right 1em center;
-	background-size: 0.4em 0.4em;
+	background-image: conic-gradient(from -45deg at 50% 100%, currentcolor 90deg, transparent 0);
+	background-position: right 1em center;
+	background-size: 0.7em 0.35em;
 	background-repeat: no-repeat;
 }
 
