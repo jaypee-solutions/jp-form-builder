@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 final class Test_Submissions extends WP_UnitTestCase {
 
+    use Plugin_Test_Helpers;
+
     private const FORM_CONTENT = '<!-- wp:jp-form-builder/form {"recipients":"team@example.test"} -->'
         . '<!-- wp:jp-form-builder/name {"fieldName":"name","required":true} /-->'
         . '<!-- wp:jp-form-builder/email {"fieldName":"email","required":true} /-->'
@@ -88,21 +90,11 @@ final class Test_Submissions extends WP_UnitTestCase {
     }
 
     private function enable_turnstile(): void {
-        $settings = get_option( 'jp_form_builder_settings', [] );
-        update_option(
-            'jp_form_builder_settings',
-            array_merge(
-                $settings,
-                [
-                    'turnstile_site_key'   => 'site-key',
-                    'turnstile_secret_key' => ( new \JayPee\FormBuilder\Secret_Box() )->encrypt( 'secret-key' ),
-                ]
-            )
-        );
+        $this->save_settings( [ 'turnstile_site_key' => 'site-key', 'turnstile_secret_key' => 'secret-key' ] );
     }
 
     private function rev( int $form_id ): string {
-        return ( new \JayPee\FormBuilder\Form_Repository() )->find( $form_id )->rev;
+        return $this->embedded_rev( $form_id );
     }
 
     private function fetch_token( ?int $form_id = null ): string {

@@ -1,7 +1,30 @@
 <?php
 /** Tests Form model behavior through WordPress. */
-use JayPee\FormBuilder\Form_Repository;
 final class Test_Form_Model extends WP_UnitTestCase {
+    use Plugin_Test_Helpers;
+
+    /** Submits an empty Submission for the Form as a visitor who loaded it at `$rev`. */
+    private function submit_with_rev( int $form_id, string $rev ): WP_REST_Response {
+        wp_set_current_user( 0 );
+        $remote_addr            = $_SERVER['REMOTE_ADDR'] ?? null;
+        $_SERVER['REMOTE_ADDR'] = '203.0.113.20';
+        add_filter( 'jp_form_builder_min_fill_seconds', '__return_zero' );
+        $token   = rest_get_server()->dispatch( new WP_REST_Request( 'GET', '/jp-form-builder/v1/forms/' . $form_id . '/token' ) )->get_data()['token'];
+        $request = new WP_REST_Request( 'POST', '/jp-form-builder/v1/forms/' . $form_id . '/submissions' );
+        $request->set_header( 'content-type', 'application/json' );
+        $request->set_body( wp_json_encode( [ 'token' => $token, 'hp' => '', 'rev' => $rev, 'fields' => [] ] ) );
+        try {
+            return rest_get_server()->dispatch( $request );
+        } finally {
+            remove_filter( 'jp_form_builder_min_fill_seconds', '__return_zero' );
+            if ( null === $remote_addr ) {
+                unset( $_SERVER['REMOTE_ADDR'] );
+            } else {
+                $_SERVER['REMOTE_ADDR'] = $remote_addr;
+            }
+        }
+    }
+
     private function create_form( string $status = 'publish', string $type = 'jp_form' ): int {
         return self::factory()->post->create( [
             'post_type' => $type,
@@ -18,13 +41,23 @@ final class Test_Form_Model extends WP_UnitTestCase {
         $this->assertStringNotContainsString( 'data-field-key="embed_', $rendered );
         $this->assertStringContainsString( 'name="privacy" value="1" required', $rendered );
         $this->assertStringContainsString( 'data-rev="', $rendered );
-        $form = ( new Form_Repository() )->find( $id );
-        $this->assertNotNull( $form );
+        $rev = $this->embedded_rev( $id );
         wp_save_post_revision( $id );
         wp_update_post( [ 'ID' => $id, 'post_content' => '<!-- wp:jp-form-builder/form --><!-- wp:jp-form-builder/name /--><!-- /wp:jp-form-builder/form -->' ] );
-        $this->assertNotNull( ( new Form_Repository() )->find_fields( $id, $form->rev ) );
-        $this->assertNull( ( new Form_Repository() )->find_fields( $id, '0000000000000000' ) );
+        $this->assertNotSame( $rev, $this->embedded_rev( $id ), 'the rev follows the content' );
+        $stale = $this->submit_with_rev( $id, $rev );
+        $this->assertSame( 422, $stale->get_status() );
+        $this->assertArrayHasKey( 'privacy', $stale->get_data()['data']['errors'], 'the old rev still validates against the Fields the visitor saw' );
+        $this->assertSame( 'jpfb_form_changed', $this->submit_with_rev( $id, '0000000000000000' )->get_data()['code'] );
         $this->assertSame( '', do_blocks( '<!-- wp:jp-form-builder/form /-->' ) );
+    }
+    public function test_embed_is_wrapped_in_the_block_wrapper_so_alignment_and_margin_apply(): void {
+        $id     = $this->create_form();
+        $markup = do_blocks( '<!-- wp:jp-form-builder/embed {"formId":' . $id . ',"align":"wide","style":{"spacing":{"margin":{"top":"10px"}}}} /-->' );
+        $this->assertMatchesRegularExpression( '/^<div [^>]*class="[^"]*\bwp-block-jp-form-builder-embed\b[^"]*"[^>]*><form /', $markup );
+        $this->assertMatchesRegularExpression( '/^<div [^>]*class="[^"]*\balignwide\b/', $markup );
+        $this->assertStringContainsString( 'margin-top:10px', $markup );
+        $this->assertStringEndsWith( '</form></div>', trim( $markup ) );
     }
     public function test_empty_field_label_is_translated_when_rendered(): void {
         $id = self::factory()->post->create(

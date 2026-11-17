@@ -24,6 +24,7 @@ tests_add_filter(
 );
 
 require getenv( 'WP_TESTS_DIR' ) . '/includes/bootstrap.php';
+require __DIR__ . '/helpers.php';
 
 /**
  * Detect handlers that terminate PHP before PHPUnit can report a result.

@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 final class Test_Editor_Data extends WP_UnitTestCase {
 
+    use Plugin_Test_Helpers;
+
     /** @return array<string,mixed> */
     private function editor_data( string $block ): array {
         $block_type = WP_Block_Type_Registry::get_instance()->get_registered( 'jp-form-builder/' . $block );
@@ -47,7 +49,7 @@ final class Test_Editor_Data extends WP_UnitTestCase {
         $this->open_form_editor();
         $this->assertFalse( $this->editor_data( 'form' )['turnstileConfigured'] );
 
-        ( new \JayPee\FormBuilder\Settings() )->save( [ 'turnstile_site_key' => 'site-key', 'turnstile_secret_key' => 'secret-key' ] );
+        $this->save_settings( [ 'turnstile_site_key' => 'site-key', 'turnstile_secret_key' => 'secret-key' ] );
         do_action( 'enqueue_block_editor_assets' );
 
         $this->assertTrue( $this->editor_data( 'form' )['turnstileConfigured'] );

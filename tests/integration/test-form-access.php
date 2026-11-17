@@ -77,7 +77,9 @@ final class Test_Form_Access extends WP_UnitTestCase {
         }
         $stored = get_option( 'jp_form_builder_settings', [] );
         $this->assertSame( 'saved-user', $stored['smtp_user'] );
-        $this->assertSame( 2525, ( new \JayPee\FormBuilder\Settings() )->get( 'smtp_port' ) );
+        $mailer = tests_retrieve_phpmailer_instance();
+        do_action( 'phpmailer_init', $mailer );
+        $this->assertSame( 2525, $mailer->Port ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- PHPMailer property.
         $this->assertArrayNotHasKey( 'smtp_port', $stored );
     }
 }

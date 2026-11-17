@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 final class Test_Mailer_Integration extends WP_UnitTestCase {
 
+    use Plugin_Test_Helpers;
+
     public function set_up(): void {
         parent::set_up();
         update_option( 'home', 'https://example.test' );
@@ -19,12 +21,13 @@ final class Test_Mailer_Integration extends WP_UnitTestCase {
 
     public function test_smtp_configuration_and_no_smtp_fallback(): void {
         foreach ( [ 'none' => '', 'starttls' => 'tls', 'smtps' => 'ssl' ] as $encryption => $secure ) {
-            update_option( 'jp_form_builder_settings', [
+            update_option( 'jp_form_builder_settings', [] );
+            $this->save_settings( [
                 'smtp_host'       => 'smtp.example.test',
                 'smtp_encryption' => $encryption,
                 'smtp_auth'       => '1',
                 'smtp_user'       => 'mailer-user',
-                'smtp_password'   => ( new \JayPee\FormBuilder\Secret_Box() )->encrypt( 'mailer-secret' ),
+                'smtp_password'   => 'mailer-secret',
             ] );
             // PHPMailer uses camel-case configuration properties.
             // phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
