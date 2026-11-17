@@ -2,6 +2,7 @@ export { getEditorData } from './editor-data';
 export { FieldBlock } from './field-block';
 export { FormSettings } from './form-settings';
 export {
+	PreviewChoices,
 	PreviewControl,
 	PreviewGroup,
 	PreviewHelp,

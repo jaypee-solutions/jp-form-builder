@@ -17,8 +17,11 @@ final class Form_Blocks {
 
     public const FORM = 'jp-form-builder/form';
 
+    /** The Conditional group block; it sits in the Form and holds Fields, never another group. */
+    public const CONDITIONAL = 'jp-form-builder/conditional';
+
     /** Field types; each has the block `jp-form-builder/<type>`. */
-    public const FIELD_TYPES = [ 'name', 'email', 'phone', 'address', 'text', 'select', 'textarea', 'consent' ];
+    public const FIELD_TYPES = [ 'name', 'email', 'phone', 'address', 'text', 'select', 'radio', 'checkbox', 'textarea', 'consent' ];
 
     /** Core blocks that may sit between Fields and are rendered as they are. */
     public const PASS_THROUGH = [ 'core/paragraph', 'core/heading' ];
@@ -32,10 +35,15 @@ final class Form_Blocks {
         return in_array( $type, self::FIELD_TYPES, true ) ? $type : '';
     }
 
-    /** @return string[] Blocks allowed inside the Form block: Field blocks and pass-through blocks. */
-    public static function allowed_children(): array {
+    /** @return string[] Blocks allowed inside a Conditional group: Field blocks and pass-through blocks. */
+    public static function group_children(): array {
         $fields = array_map( static fn( string $type ): string => self::NAMESPACE_PREFIX . $type, self::FIELD_TYPES );
         return array_merge( $fields, self::PASS_THROUGH );
+    }
+
+    /** @return string[] Blocks allowed inside the Form block: Field blocks, pass-through blocks and Conditional groups. */
+    public static function allowed_children(): array {
+        return array_merge( self::group_children(), [ self::CONDITIONAL ] );
     }
 
     /** @return string[] Blocks allowed in the editor of a Form. */

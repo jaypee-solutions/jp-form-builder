@@ -1,0 +1,147 @@
+{
+	"conditions": [
+		{ "name": "select is: same option", "source": "select", "operator": "is", "values": ["sales"], "value": "sales", "expected": true },
+		{ "name": "select is: other option", "source": "select", "operator": "is", "values": ["sales"], "value": "support", "expected": false },
+		{ "name": "select is: nothing chosen", "source": "select", "operator": "is", "values": ["sales"], "value": "", "expected": false },
+		{ "name": "select is: compares the value, not a prefix", "source": "select", "operator": "is", "values": ["sales"], "value": "sales2", "expected": false },
+		{ "name": "select is: case matters", "source": "select", "operator": "is", "values": ["sales"], "value": "Sales", "expected": false },
+		{ "name": "select is: no value to compare with", "source": "select", "operator": "is", "values": [], "value": "sales", "expected": false },
+		{ "name": "select is: only the first value counts", "source": "select", "operator": "is", "values": ["sales", "support"], "value": "support", "expected": false },
+		{ "name": "select is_not: same option", "source": "select", "operator": "is_not", "values": ["sales"], "value": "sales", "expected": false },
+		{ "name": "select is_not: other option", "source": "select", "operator": "is_not", "values": ["sales"], "value": "support", "expected": true },
+		{ "name": "select is_not: nothing chosen", "source": "select", "operator": "is_not", "values": ["sales"], "value": "", "expected": true },
+		{ "name": "select is_not: no value to compare with", "source": "select", "operator": "is_not", "values": [], "value": "sales", "expected": true },
+		{ "name": "select is_one_of: listed", "source": "select", "operator": "is_one_of", "values": ["sales", "support"], "value": "support", "expected": true },
+		{ "name": "select is_one_of: not listed", "source": "select", "operator": "is_one_of", "values": ["sales", "support"], "value": "other", "expected": false },
+		{ "name": "select is_one_of: no values", "source": "select", "operator": "is_one_of", "values": [], "value": "sales", "expected": false },
+		{ "name": "select includes: a single value is a list of one", "source": "select", "operator": "includes", "values": ["sales", "support"], "value": "sales", "expected": true },
+		{ "name": "select includes: nothing chosen", "source": "select", "operator": "includes", "values": ["sales"], "value": "", "expected": false },
+		{ "name": "select is_filled: chosen", "source": "select", "operator": "is_filled", "values": [], "value": "sales", "expected": true },
+		{ "name": "select is_empty: nothing chosen", "source": "select", "operator": "is_empty", "values": [], "value": "", "expected": true },
+		{ "name": "select is_empty: chosen", "source": "select", "operator": "is_empty", "values": [], "value": "sales", "expected": false },
+		{ "name": "radio is: same option", "source": "radio", "operator": "is", "values": ["yes"], "value": "yes", "expected": true },
+		{ "name": "radio is: other option", "source": "radio", "operator": "is", "values": ["yes"], "value": "no", "expected": false },
+		{ "name": "radio is_not: other option", "source": "radio", "operator": "is_not", "values": ["yes"], "value": "no", "expected": true },
+		{ "name": "radio is_not: none chosen", "source": "radio", "operator": "is_not", "values": ["yes"], "value": "", "expected": true },
+		{ "name": "radio is_one_of: listed", "source": "radio", "operator": "is_one_of", "values": ["yes", "maybe"], "value": "maybe", "expected": true },
+		{ "name": "radio is_one_of: none chosen", "source": "radio", "operator": "is_one_of", "values": ["yes", "maybe"], "value": "", "expected": false },
+		{ "name": "radio is_filled: none chosen", "source": "radio", "operator": "is_filled", "values": [], "value": "", "expected": false },
+		{ "name": "radio is_filled: chosen", "source": "radio", "operator": "is_filled", "values": [], "value": "no", "expected": true },
+		{ "name": "checkbox includes: one of several listed is checked", "source": "checkbox", "operator": "includes", "values": ["a", "b"], "value": ["b", "c"], "expected": true },
+		{ "name": "checkbox includes: only unlisted options are checked", "source": "checkbox", "operator": "includes", "values": ["a", "b"], "value": ["c"], "expected": false },
+		{ "name": "checkbox includes: nothing checked", "source": "checkbox", "operator": "includes", "values": ["a"], "value": [], "expected": false },
+		{ "name": "checkbox includes: no values", "source": "checkbox", "operator": "includes", "values": [], "value": ["a"], "expected": false },
+		{ "name": "checkbox is_filled: one checked", "source": "checkbox", "operator": "is_filled", "values": [], "value": ["a"], "expected": true },
+		{ "name": "checkbox is_filled: nothing checked", "source": "checkbox", "operator": "is_filled", "values": [], "value": [], "expected": false },
+		{ "name": "checkbox is_empty: nothing checked", "source": "checkbox", "operator": "is_empty", "values": [], "value": [], "expected": true },
+		{ "name": "checkbox is_empty: one checked", "source": "checkbox", "operator": "is_empty", "values": [], "value": ["a", "b"], "expected": false },
+		{ "name": "checkbox is: a list never equals a single value", "source": "checkbox", "operator": "is", "values": ["a"], "value": ["a"], "expected": false },
+		{ "name": "checkbox is_not: a list never equals a single value", "source": "checkbox", "operator": "is_not", "values": ["a"], "value": ["a"], "expected": true },
+		{ "name": "consent is_checked: ticked", "source": "consent", "operator": "is_checked", "values": [], "value": "1", "expected": true },
+		{ "name": "consent is_checked: not ticked", "source": "consent", "operator": "is_checked", "values": [], "value": "", "expected": false },
+		{ "name": "consent is_not_checked: ticked", "source": "consent", "operator": "is_not_checked", "values": [], "value": "1", "expected": false },
+		{ "name": "consent is_not_checked: not ticked", "source": "consent", "operator": "is_not_checked", "values": [], "value": "", "expected": true },
+		{ "name": "text is_filled: has text", "source": "text", "operator": "is_filled", "values": [], "value": "Acme", "expected": true },
+		{ "name": "text is_filled: empty", "source": "text", "operator": "is_filled", "values": [], "value": "", "expected": false },
+		{ "name": "text is_filled: only spaces", "source": "text", "operator": "is_filled", "values": [], "value": "   ", "expected": false },
+		{ "name": "text is_empty: empty", "source": "text", "operator": "is_empty", "values": [], "value": "", "expected": true },
+		{ "name": "text is_empty: only spaces", "source": "text", "operator": "is_empty", "values": [], "value": "  ", "expected": true },
+		{ "name": "text is_empty: has text", "source": "text", "operator": "is_empty", "values": [], "value": "Acme", "expected": false },
+		{ "name": "textarea is_filled: has text", "source": "textarea", "operator": "is_filled", "values": [], "value": "Hello,\nworld", "expected": true },
+		{ "name": "email is_filled: has an address", "source": "email", "operator": "is_filled", "values": [], "value": "jane@example.test", "expected": true },
+		{ "name": "phone is_empty: empty", "source": "phone", "operator": "is_empty", "values": [], "value": "", "expected": true },
+		{ "name": "name (split) is_filled: first part only", "source": "name", "operator": "is_filled", "values": [], "value": { "first": "Jane", "last": "" }, "expected": true },
+		{ "name": "name (split) is_filled: both parts empty", "source": "name", "operator": "is_filled", "values": [], "value": { "first": "", "last": "" }, "expected": false },
+		{ "name": "name (split) is_empty: both parts empty", "source": "name", "operator": "is_empty", "values": [], "value": { "first": "", "last": "" }, "expected": true },
+		{ "name": "name (split) is_empty: last part only", "source": "name", "operator": "is_empty", "values": [], "value": { "first": "", "last": "Doe" }, "expected": false },
+		{ "name": "address is_filled: city only", "source": "address", "operator": "is_filled", "values": [], "value": { "street": "", "postcode": "", "city": "Augsburg", "country": "" }, "expected": true },
+		{ "name": "address is_filled: all parts empty", "source": "address", "operator": "is_filled", "values": [], "value": { "street": "", "postcode": "", "city": "", "country": "" }, "expected": false },
+		{ "name": "address is_empty: all parts empty", "source": "address", "operator": "is_empty", "values": [], "value": { "street": "", "postcode": "", "city": "", "country": "" }, "expected": true }
+	],
+	"groups": [
+		{
+			"name": "a group is shown while its Condition holds",
+			"groups": [ { "condition": { "sourceField": "topic", "operator": "is", "values": ["sales"] }, "fields": ["budget"] } ],
+			"values": { "topic": "sales", "budget": "10000" },
+			"shown": [true],
+			"hidden": [],
+			"visibleValues": { "topic": "sales", "budget": "10000" }
+		},
+		{
+			"name": "a hidden group drops its Fields' values",
+			"groups": [ { "condition": { "sourceField": "topic", "operator": "is", "values": ["sales"] }, "fields": ["budget", "deadline"] } ],
+			"values": { "topic": "support", "budget": "10000", "deadline": "soon" },
+			"shown": [false],
+			"hidden": ["budget", "deadline"],
+			"visibleValues": { "topic": "support" }
+		},
+		{
+			"name": "an invalid Condition leaves the group shown",
+			"groups": [ { "condition": null, "fields": ["budget"] } ],
+			"values": { "budget": "10000" },
+			"shown": [true],
+			"hidden": [],
+			"visibleValues": { "budget": "10000" }
+		},
+		{
+			"name": "a Field of a hidden group counts as empty for a later Condition",
+			"groups": [
+				{ "condition": { "sourceField": "topic", "operator": "is", "values": ["sales"] }, "fields": ["budget"] },
+				{ "condition": { "sourceField": "budget", "operator": "is_filled", "values": [] }, "fields": ["details"] }
+			],
+			"values": { "topic": "support", "budget": "10000", "details": "text" },
+			"shown": [false, false],
+			"hidden": ["budget", "details"],
+			"visibleValues": { "topic": "support" }
+		},
+		{
+			"name": "a Field of a shown group drives a later Condition",
+			"groups": [
+				{ "condition": { "sourceField": "topic", "operator": "is", "values": ["sales"] }, "fields": ["budget"] },
+				{ "condition": { "sourceField": "budget", "operator": "is_filled", "values": [] }, "fields": ["details"] }
+			],
+			"values": { "topic": "sales", "budget": "10000", "details": "text" },
+			"shown": [true, true],
+			"hidden": [],
+			"visibleValues": { "topic": "sales", "budget": "10000", "details": "text" }
+		},
+		{
+			"name": "a hidden source makes is_empty hold",
+			"groups": [
+				{ "condition": { "sourceField": "topic", "operator": "is", "values": ["sales"] }, "fields": ["budget"] },
+				{ "condition": { "sourceField": "budget", "operator": "is_empty", "values": [] }, "fields": ["fallback"] }
+			],
+			"values": { "topic": "support", "budget": "10000", "fallback": "x" },
+			"shown": [false, true],
+			"hidden": ["budget"],
+			"visibleValues": { "topic": "support", "fallback": "x" }
+		},
+		{
+			"name": "a missing value counts as empty",
+			"groups": [ { "condition": { "sourceField": "topic", "operator": "is_empty", "values": [] }, "fields": ["budget"] } ],
+			"values": { "budget": "1" },
+			"shown": [true],
+			"hidden": [],
+			"visibleValues": { "budget": "1" }
+		},
+		{
+			"name": "a Checkboxes source shows its group while one listed option is checked",
+			"groups": [ { "condition": { "sourceField": "interests", "operator": "includes", "values": ["a", "b"] }, "fields": ["more"] } ],
+			"values": { "interests": ["c", "b"], "more": "x" },
+			"shown": [true],
+			"hidden": [],
+			"visibleValues": { "interests": ["c", "b"], "more": "x" }
+		},
+		{
+			"name": "groups without Fields are evaluated too",
+			"groups": [
+				{ "condition": { "sourceField": "agree", "operator": "is_checked", "values": [] }, "fields": [] },
+				{ "condition": { "sourceField": "agree", "operator": "is_not_checked", "values": [] }, "fields": ["note"] }
+			],
+			"values": { "agree": "1", "note": "x" },
+			"shown": [true, false],
+			"hidden": ["note"],
+			"visibleValues": { "agree": "1" }
+		}
+	]
+}

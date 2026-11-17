@@ -46,6 +46,34 @@ export function PreviewGroup( { legend, required, children } ) {
 	);
 }
 
+/**
+ * Non-interactive option list of a Radio buttons or Checkboxes Field.
+ *
+ * @param {Object}   props         Component props.
+ * @param {string}   props.variant `radio` or `checkbox`.
+ * @param {Object[]} props.options The Field's `{ label, value }` options.
+ */
+export function PreviewChoices( { variant, options } ) {
+	return (
+		<div className="jp-form-builder__choices">
+			{ options.map( ( option, index ) => (
+				<div
+					className={ `jp-form-builder__choice jp-form-builder__choice--${ variant }` }
+					// Options have no stable id and are edited in place.
+
+					key={ index }
+				>
+					<span
+						className="jp-form-builder__choice-input"
+						aria-hidden="true"
+					/>
+					{ option.label || option.value }
+				</div>
+			) ) }
+		</div>
+	);
+}
+
 export function PreviewPart( { label, children } ) {
 	return (
 		<div className="jp-form-builder__part">

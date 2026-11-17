@@ -16,6 +16,10 @@ export function defaultLabel( type ) {
 			return __( 'Text', 'jp-form-builder' );
 		case 'select':
 			return __( 'Select', 'jp-form-builder' );
+		case 'radio':
+			return __( 'Radio buttons', 'jp-form-builder' );
+		case 'checkbox':
+			return __( 'Checkboxes', 'jp-form-builder' );
 		case 'textarea':
 			return __( 'Message', 'jp-form-builder' );
 		case 'consent':

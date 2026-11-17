@@ -3,6 +3,8 @@ import { normalizeFieldKey, uniqueFieldKey } from './field-key';
 
 const BLOCK_NAMESPACE = 'jp-form-builder/';
 
+export const CONDITIONAL_BLOCK = 'jp-form-builder/conditional';
+
 export const FIELD_TYPES = [
 	'name',
 	'email',
@@ -10,9 +12,25 @@ export const FIELD_TYPES = [
 	'address',
 	'text',
 	'select',
+	'radio',
+	'checkbox',
 	'textarea',
 	'consent',
 ];
+
+/**
+ * The blocks of a Form in document order with Conditional groups replaced by their children.
+ *
+ * @param {Object[]} blocks The Form block's inner blocks.
+ * @return {Object[]} Field and pass-through blocks; groups are flattened.
+ */
+export function flattenFieldBlocks( blocks ) {
+	return blocks.flatMap( ( block ) =>
+		block.name === CONDITIONAL_BLOCK
+			? flattenFieldBlocks( block.innerBlocks )
+			: [ block ]
+	);
+}
 
 /**
  * Lists a Form's Fields the way Form_Definition_Parser keys them: an empty key
@@ -26,7 +44,7 @@ export function collectFormFields( blocks ) {
 	const takenKeys = [];
 	const fields = [];
 
-	for ( const block of blocks ) {
+	for ( const block of flattenFieldBlocks( blocks ) ) {
 		const type = block.name.startsWith( BLOCK_NAMESPACE )
 			? block.name.slice( BLOCK_NAMESPACE.length )
 			: '';

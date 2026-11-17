@@ -22,12 +22,12 @@ final class Form_Definition {
     /** @var array<string,mixed> */
     public array $attributes;
 
-    /** @var array<int,Field_Definition|array<string,mixed>> */
+    /** @var array<int,Field_Definition|Conditional_Group|array<string,mixed>> */
     public array $items;
 
     /**
-     * @param array<string,mixed>                            $attributes Form attributes.
-     * @param array<int,Field_Definition|array<string,mixed>> $items      Ordered Form contents.
+     * @param array<string,mixed>                                                $attributes Form attributes.
+     * @param array<int,Field_Definition|Conditional_Group|array<string,mixed>> $items      Ordered Form contents.
      */
     public function __construct( int $id, string $title, string $rev, array $attributes, array $items ) {
         $this->id         = $id;
@@ -42,8 +42,21 @@ final class Form_Definition {
         return substr( hash( 'sha256', $content ), 0, 16 );
     }
 
-    /** @return Field_Definition[] */
+    /** @return Field_Definition[] Every Field in document order, including those inside Conditional groups. */
     public function fields(): array {
-        return array_values( array_filter( $this->items, static fn( $item ) => $item instanceof Field_Definition ) );
+        $fields = [];
+        foreach ( $this->items as $item ) {
+            if ( $item instanceof Field_Definition ) {
+                $fields[] = $item;
+            } elseif ( $item instanceof Conditional_Group ) {
+                array_push( $fields, ...$item->fields() );
+            }
+        }
+        return $fields;
+    }
+
+    /** @return Conditional_Group[] In document order. */
+    public function groups(): array {
+        return array_values( array_filter( $this->items, static fn( $item ) => $item instanceof Conditional_Group ) );
     }
 }
