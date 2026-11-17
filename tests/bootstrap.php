@@ -36,4 +36,6 @@ require dirname( __DIR__ ) . '/includes/class-form-definition.php';
 require dirname( __DIR__ ) . '/includes/class-block-defaults.php';
 require dirname( __DIR__ ) . '/includes/class-form-definition-parser.php';
 require dirname( __DIR__ ) . '/includes/class-countries.php';
+require dirname( __DIR__ ) . '/includes/class-text.php';
+require dirname( __DIR__ ) . '/includes/class-phone-normalizer.php';
 require dirname( __DIR__ ) . '/includes/class-form-renderer.php';

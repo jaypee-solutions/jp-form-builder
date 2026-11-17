@@ -52,6 +52,8 @@ require_once __DIR__ . '/includes/class-block-defaults.php';
 require_once __DIR__ . '/includes/class-form-definition-parser.php';
 require_once __DIR__ . '/includes/class-form-repository.php';
 require_once __DIR__ . '/includes/class-countries.php';
+require_once __DIR__ . '/includes/class-text.php';
+require_once __DIR__ . '/includes/class-phone-normalizer.php';
 require_once __DIR__ . '/includes/class-form-renderer.php';
 require_once __DIR__ . '/includes/class-blocks.php';
 require_once __DIR__ . '/includes/class-plugin.php';
