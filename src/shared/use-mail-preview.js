@@ -10,10 +10,11 @@ const PREVIEW_DELAY = 400;
  * @param {string}   input.kind    `notification` or `confirmation`.
  * @param {string}   input.subject Subject template.
  * @param {string}   input.body    Body template.
- * @param {Object[]} input.fields  The Form's Fields as `{key, label, type, split}`.
+ * @param {Object[]} input.fields  The Fields as `{key, label, type, split}`; omit for the sample Fields.
+ * @param {string}   input.layout  Unsaved Mail layout to preview with, where '' means the bundled default; omit for the saved one.
  * @return {{subject: string, html: string, error: string}} The latest result; `error` is set when the request failed.
  */
-export function useMailPreview( { kind, subject, body, fields } ) {
+export function useMailPreview( { kind, subject, body, fields, layout } ) {
 	const [ preview, setPreview ] = useState( {
 		subject: '',
 		html: '',
@@ -26,7 +27,7 @@ export function useMailPreview( { kind, subject, body, fields } ) {
 			apiFetch( {
 				path: '/jp-form-builder/v1/mail-preview',
 				method: 'POST',
-				data: { kind, subject, body, fields },
+				data: { kind, subject, body, fields, layout },
 			} )
 				.then(
 					( result ) =>
@@ -51,7 +52,7 @@ export function useMailPreview( { kind, subject, body, fields } ) {
 			current = false;
 			clearTimeout( timer );
 		};
-	}, [ kind, subject, body, fields ] );
+	}, [ kind, subject, body, fields, layout ] );
 
 	return preview;
 }

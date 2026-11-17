@@ -1,22 +1,14 @@
-import { Button, Modal, Notice, TextControl } from '@wordpress/components';
-import { useRef, useState } from '@wordpress/element';
+import { Button, Modal } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { BodyEditor } from './body-editor';
-import { PlaceholderInserter } from './placeholder-inserter';
+import { MailPreview } from './mail-preview';
+import { MailTemplateEditor } from './mail-template-editor';
 import { useMailPreview } from './use-mail-preview';
 
-function kindLabels( kind ) {
+function modalTitle( kind ) {
 	return kind === 'confirmation'
-		? {
-				title: __( 'Confirmation Body template', 'jp-form-builder' ),
-				subject: __( 'Confirmation subject', 'jp-form-builder' ),
-				body: __( 'Confirmation body', 'jp-form-builder' ),
-			}
-		: {
-				title: __( 'Notification Body template', 'jp-form-builder' ),
-				subject: __( 'Notification subject', 'jp-form-builder' ),
-				body: __( 'Notification body', 'jp-form-builder' ),
-			};
+		? __( 'Confirmation Body template', 'jp-form-builder' )
+		: __( 'Notification Body template', 'jp-form-builder' );
 }
 
 /**
@@ -39,87 +31,45 @@ export function BodyTemplateModal( {
 	onSave,
 	onClose,
 } ) {
-	const [ subject, setSubject ] = useState( savedSubject );
-	const [ body, setBody ] = useState( savedBody );
-	const editor = useRef( null );
-	const preview = useMailPreview( { kind, subject, body, fields } );
-	const labels = kindLabels( kind );
+	const [ draft, setDraft ] = useState( {
+		subject: savedSubject,
+		body: savedBody,
+	} );
+	const preview = useMailPreview( { kind, ...draft, fields } );
 
 	return (
 		<Modal
-			title={ labels.title }
+			title={ modalTitle( kind ) }
 			onRequestClose={ onClose }
 			size="large"
 			className="jp-form-builder__body-modal"
 		>
 			<div className="jp-form-builder__body-modal-layout">
-				<div className="jp-form-builder__body-modal-form">
+				<MailTemplateEditor
+					kind={ kind }
+					id="jp-form-builder-modal"
+					subject={ draft.subject }
+					body={ draft.body }
+					fields={ fields }
+					onChange={ setDraft }
+				>
 					<p>
 						{ __(
 							'Leave the subject or body empty to use the site default, or the built-in text when the site has no default.',
 							'jp-form-builder'
 						) }
 					</p>
-					{ kind === 'confirmation' && (
-						<p>
-							{ __(
-								'A Confirmation never contains submitted content, so Field placeholders are not available here.',
-								'jp-form-builder'
-							) }
-						</p>
-					) }
-					<TextControl
-						label={ labels.subject }
-						value={ subject }
-						onChange={ setSubject }
-					/>
-					<BodyEditor
-						ref={ editor }
-						label={ labels.body }
-						value={ body }
-						onChange={ setBody }
-					/>
-					<PlaceholderInserter
-						kind={ kind }
-						fields={ fields }
-						onInsert={ ( text ) => editor.current.insert( text ) }
-					/>
-				</div>
+				</MailTemplateEditor>
 				<div className="jp-form-builder__body-modal-preview">
 					<h2>{ __( 'Preview', 'jp-form-builder' ) }</h2>
-					{ preview.error ? (
-						<Notice status="error" isDismissible={ false }>
-							{ preview.error }
-						</Notice>
-					) : (
-						<>
-							<p className="jp-form-builder__preview-subject">
-								<strong>
-									{ __( 'Subject:', 'jp-form-builder' ) }
-								</strong>{ ' ' }
-								{ preview.subject }
-							</p>
-							<iframe
-								className="jp-form-builder__mail-preview"
-								title={ __(
-									'Mail preview',
-									'jp-form-builder'
-								) }
-								sandbox=""
-								srcDoc={ preview.html }
-							/>
-						</>
-					) }
+					<MailPreview preview={ preview } />
 				</div>
 			</div>
 			<div className="jp-form-builder__body-modal-actions">
 				<Button variant="tertiary" onClick={ onClose }>
 					{ __( 'Cancel', 'jp-form-builder' ) }
 				</Button>
-				<Button
-					variant="primary"
-					onClick={ () => onSave( { subject, body } ) }
-				>
+				<Button variant="primary" onClick={ () => onSave( draft ) }>
 					{ __( 'Save', 'jp-form-builder' ) }
 				</Button>
 			</div>

@@ -15,13 +15,14 @@ import { getEditorData } from './editor-data';
  * The value is only read on mount; changes arrive through `onChange`.
  *
  * @param {Object}                  props          Component props.
+ * @param {string}                  props.id       Id of the textarea; unique on the page.
  * @param {string}                  props.label    Accessible name.
  * @param {string}                  props.value    Initial text.
  * @param {(value: string) => void} props.onChange Called with the whole text after each edit.
  * @param {import('react').Ref}     ref            Receives `{ insert }`.
  */
 export const BodyEditor = forwardRef( function BodyEditorField(
-	{ label, value, onChange },
+	{ id, label, value, onChange },
 	ref
 ) {
 	const codeEditorSettings = getEditorData( 'form' ).codeEditor;
@@ -95,14 +96,11 @@ export const BodyEditor = forwardRef( function BodyEditorField(
 				<>
 					<label
 						className="jp-form-builder__body-editor-label"
-						htmlFor="jp-form-builder-body-template"
+						htmlFor={ id }
 					>
 						{ label }
 					</label>
-					<textarea
-						id="jp-form-builder-body-template"
-						defaultValue={ value }
-					/>
+					<textarea id={ id } defaultValue={ value } />
 				</>
 			) : (
 				<TextareaControl

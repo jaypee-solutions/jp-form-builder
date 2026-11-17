@@ -118,9 +118,10 @@ export default function Edit( { attributes, setAttributes } ) {
 	} else {
 		content = (
 			<Disabled>
+				{ /* Only the Form: the block wrapper's alignment and margin are already on blockProps. */ }
 				<ServerSideRender
 					block="jp-form-builder/embed"
-					attributes={ attributes }
+					attributes={ { formId } }
 				/>
 			</Disabled>
 		);

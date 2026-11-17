@@ -1,0 +1,35 @@
+/* The mail editors: Body template editor, placeholder menu and mail preview. */
+
+.jp-form-builder__mail-preview {
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 22rem;
+	border: 1px solid #ddd;
+	background: #fff;
+}
+
+.jp-form-builder__body-editor {
+	margin-bottom: 1rem;
+}
+
+.jp-form-builder__body-editor-label {
+	display: block;
+	margin-bottom: 0.5rem;
+	font-weight: 600;
+}
+
+.jp-form-builder__body-editor .CodeMirror {
+	height: 18rem;
+	border: 1px solid #949494;
+}
+
+.jp-form-builder__body-editor-fallback textarea {
+	font-family: Menlo, Consolas, monaco, monospace;
+	font-size: 13px;
+}
+
+.jp-form-builder__placeholder-menu {
+	max-height: 20rem;
+	min-width: 16rem;
+	overflow-y: auto;
+}
