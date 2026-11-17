@@ -18,6 +18,7 @@ okf_version: "0.1"
 * [Microsoft 365 SMTP with OAuth](decisions/0012-m365-smtp-oauth.md) - XOAUTH2 client-credentials for Microsoft 365 SMTP.
 * [Per-language forms and REST locale](decisions/0013-per-language-forms-rest-locale.md) - REST switches to the page locale; one Form per language.
 * [Stale cached forms validate against their revision](decisions/0014-stale-markup-revision-validation.md) - Cached markup carries a content hash; server validates against the matching revision.
+* [Form styling with block design tools](decisions/0015-form-styling-with-block-design-tools.md) - Style variations, block supports, Field colours and widths on the Form block.
 * [Domain language](references/domain-language.md) - Canonical terms; see GLOSSARY.md.
 * [Template facts](references/template-facts.md) - wp-plugin-template v1.4.0 conventions.
 * [Phone library evaluation](references/phone-library-evaluation.md) - Measured libphonenumber facts.

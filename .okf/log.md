@@ -19,3 +19,4 @@
 * **P6 done**: Privacy text, README, settings sections, German translation (formal Sie, 302 msgids, JS JSON); German terms added to `GLOSSARY.md`.
 * **Final review**: two-axis review (Standards 14, Spec 9 findings; blocker: `uninstall.php` missing from the release ZIP) fixed in `737c172..5ea1997`; template facts 16–17 added.
 * **Release 1.0.0**: tagged `v1.0.0` on `9a8f651`; the Release workflow published `jp-form-builder-v1.0.0.zip` (contains `uninstall.php`, `admin/build/`, compiled `de_DE.mo`, scoped vendor); template fact 18 added.
+* **Styling decision**: after v1.0.1 feedback, ADR 0015: styling on the Form block (style variations, design controls, Field widths), site-wide via Global Styles.
