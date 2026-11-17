@@ -35,6 +35,7 @@ require_once __DIR__ . '/includes/class-secret-box.php';
 require_once __DIR__ . '/includes/class-settings.php';
 require_once __DIR__ . '/includes/class-form-posts-controller.php';
 require_once __DIR__ . '/includes/class-form-post-type.php';
+require_once __DIR__ . '/includes/class-form-backup.php';
 require_once __DIR__ . '/includes/class-settings-page.php';
 require_once __DIR__ . '/includes/class-mail.php';
 require_once __DIR__ . '/includes/class-submitted-field.php';

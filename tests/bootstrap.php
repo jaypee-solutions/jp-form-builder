@@ -23,6 +23,7 @@ require __DIR__ . '/stubs.php';
 require dirname( __DIR__ ) . '/includes/class-updates.php';
 require dirname( __DIR__ ) . '/includes/class-secret-box.php';
 require dirname( __DIR__ ) . '/includes/class-settings.php';
+require dirname( __DIR__ ) . '/includes/class-form-backup.php';
 require dirname( __DIR__ ) . '/includes/class-mail.php';
 require dirname( __DIR__ ) . '/includes/class-submitted-field.php';
 require dirname( __DIR__ ) . '/includes/class-mail-header-guard.php';

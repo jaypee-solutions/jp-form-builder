@@ -51,6 +51,7 @@ final class Settings {
         'rate_window'       => [ 'JP_FORM_BUILDER_RATE_WINDOW', 600 ],
         'min_fill_seconds'  => [ 'JP_FORM_BUILDER_MIN_FILL_SECONDS', 3 ],
         'trusted_proxies'   => [ 'JP_FORM_BUILDER_TRUSTED_PROXIES', '' ],
+        'max_backup_bytes'  => [ 'JP_FORM_BUILDER_MAX_BACKUP_BYTES', 2097152 ],
     ];
 
     /**
