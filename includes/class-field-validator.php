@@ -1,0 +1,312 @@
+<?php
+/**
+ * Validates and cleans submitted Field values.
+ *
+ * @package JayPee\FormBuilder
+ */
+
+declare( strict_types = 1 );
+
+namespace JayPee\FormBuilder;
+
+defined( 'ABSPATH' ) || exit;
+
+final class Field_Validator {
+
+    private const MAX_EMAIL_LENGTH  = 254;
+    private const MAX_NAME_LENGTH   = 100;
+    private const MAX_STREET_LENGTH = 200;
+    private const MAX_CITY_LENGTH   = 100;
+
+    private Phone_Normalizer $phone_normalizer;
+
+    private Mail_Header_Guard $header_guard;
+
+    public function __construct( ?Phone_Normalizer $phone_normalizer = null, ?Mail_Header_Guard $header_guard = null ) {
+        $this->phone_normalizer = $phone_normalizer ?? new Phone_Normalizer();
+        $this->header_guard     = $header_guard ?? new Mail_Header_Guard();
+    }
+
+    /**
+     * Validates submitted values against the Fields; keys not defined by a Field are ignored.
+     *
+     * Values hold only valid Fields: a string, or a sub-key map for compound Fields. Errors are keyed
+     * "key" or "key.sub".
+     *
+     * @param Field_Definition[]  $fields    Fields of the Form.
+     * @param array<string,mixed> $submitted Submitted `fields` map.
+     * @return array{values: array<string,string|array<string,string>>, errors: array<string,string>}
+     */
+    public function validate( array $fields, array $submitted ): array {
+        $values = [];
+        $errors = [];
+
+        foreach ( $fields as $field ) {
+            $raw = $submitted[ $field->key ] ?? null;
+
+            if ( [] === $field->subkeys ) {
+                $result = $this->validate_scalar( $field, is_string( $raw ) ? $raw : '' );
+            } elseif ( 'address' === $field->type ) {
+                $result = $this->validate_address( $field, is_array( $raw ) ? $raw : [] );
+            } else {
+                $result = $this->validate_split_name( $field, is_array( $raw ) ? $raw : [] );
+            }
+
+            if ( [] === $result['errors'] ) {
+                $values[ $field->key ] = $result['value'];
+                continue;
+            }
+            foreach ( $result['errors'] as $sub => $message ) {
+                $errors[ '' === $sub ? $field->key : $field->key . '.' . $sub ] = $message;
+            }
+        }
+
+        return [
+            'values' => $values,
+            'errors' => $errors,
+        ];
+    }
+
+    /** @return array{value: string, errors: array<string,string>} Errors keyed by sub-key; '' for the Field itself. */
+    private function validate_scalar( Field_Definition $field, string $raw ): array {
+        $label = $this->label( $field );
+
+        if ( 'consent' === $field->type ) {
+            return $this->validate_consent( $field, $raw );
+        }
+
+        $value = 'textarea' === $field->type ? Text::multi_line( $raw ) : Text::single_line( $raw );
+        if ( '' === $value ) {
+            return $this->is_required( $field ) ? $this->failure( '', $this->required_message( $label ) ) : $this->success( '' );
+        }
+
+        switch ( $field->type ) {
+            case 'email':
+                return $this->validate_email( $raw, $value );
+            case 'phone':
+                $phone = $this->phone_normalizer->normalize( $value, (string) ( $field->attributes['defaultRegion'] ?? 'DE' ) );
+                return null === $phone
+                    ? $this->failure( '', __( 'Please enter a valid phone number.', 'jp-form-builder' ) )
+                    : $this->success( $phone );
+            case 'select':
+                return in_array( $value, $this->option_values( $field ), true )
+                    ? $this->success( $value )
+                    : $this->failure( '', __( 'Please choose one of the available options.', 'jp-form-builder' ) );
+            case 'textarea':
+                return $this->check_length( $value, $this->max_length( $field, 5000 ), $label );
+            case 'text':
+                return $this->check_length( $value, $this->max_length( $field, 200 ), $label );
+            default:
+                return $this->check_length( $value, self::MAX_NAME_LENGTH, $label );
+        }
+    }
+
+    /** @return array{value: string, errors: array<string,string>} */
+    private function validate_consent( Field_Definition $field, string $raw ): array {
+        if ( '1' === $raw ) {
+            return $this->success( '1' );
+        }
+        if ( '' === $raw && ! $this->is_required( $field ) ) {
+            return $this->success( '' );
+        }
+        return $this->failure( '', __( 'Please accept to continue.', 'jp-form-builder' ) );
+    }
+
+    /** @return array{value: string, errors: array<string,string>} */
+    private function validate_email( string $raw, string $value ): array {
+        $invalid = $this->failure( '', __( 'Please enter a valid email address.', 'jp-form-builder' ) );
+
+        // Text::single_line() would silently remove line breaks; an address carrying them is an injection attempt.
+        if ( ! $this->header_guard->is_safe( $raw ) ) {
+            return $invalid;
+        }
+
+        $at = strrpos( $value, '@' );
+        if ( false === $at ) {
+            return $invalid;
+        }
+        $domain = substr( $value, $at + 1 );
+        if ( 1 === preg_match( '/[^\x00-\x7F]/', $domain ) && function_exists( 'idn_to_ascii' ) ) {
+            $ascii_domain = idn_to_ascii( $domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46 );
+            if ( false === $ascii_domain ) {
+                return $invalid;
+            }
+            $value = substr( $value, 0, $at + 1 ) . $ascii_domain;
+        }
+
+        if ( strlen( $value ) > self::MAX_EMAIL_LENGTH || false === filter_var( $value, FILTER_VALIDATE_EMAIL ) ) {
+            return $invalid;
+        }
+        return $this->success( $value );
+    }
+
+    /**
+     * @param array<mixed> $raw Submitted sub-key map.
+     * @return array{value: array<string,string>, errors: array<string,string>}
+     */
+    private function validate_split_name( Field_Definition $field, array $raw ): array {
+        $labels = [
+            'first' => $this->attribute_or( $field, 'firstLabel', __( 'First name', 'jp-form-builder' ) ),
+            'last'  => $this->attribute_or( $field, 'lastLabel', __( 'Last name', 'jp-form-builder' ) ),
+        ];
+        $parts  = $this->parts( $field, $raw );
+
+        return $this->validate_parts(
+            $field,
+            $parts,
+            $labels,
+            static fn( string $sub, string $value, string $label ): ?string => Text::length( $value ) > self::MAX_NAME_LENGTH
+                ? self::too_long_message( $label, self::MAX_NAME_LENGTH )
+                : null
+        );
+    }
+
+    /**
+     * @param array<mixed> $raw Submitted sub-key map.
+     * @return array{value: array<string,string>, errors: array<string,string>}
+     */
+    private function validate_address( Field_Definition $field, array $raw ): array {
+        $labels  = [
+            'street'   => __( 'Street and number', 'jp-form-builder' ),
+            'postcode' => __( 'Postcode', 'jp-form-builder' ),
+            'city'     => __( 'City', 'jp-form-builder' ),
+            'country'  => __( 'Country', 'jp-form-builder' ),
+        ];
+        $parts   = $this->parts( $field, $raw );
+
+        // A country alone is the preselected default, so it does not make an optional address "filled".
+        if ( ! $this->is_required( $field ) && '' === $parts['street'] . $parts['postcode'] . $parts['city'] ) {
+            return $this->success( array_fill_keys( $field->subkeys, '' ) );
+        }
+
+        return $this->validate_parts(
+            $field,
+            $parts,
+            $labels,
+            static function ( string $sub, string $value, string $label ) use ( $parts ): ?string {
+                switch ( $sub ) {
+                    case 'street':
+                        return Text::length( $value ) > self::MAX_STREET_LENGTH ? self::too_long_message( $label, self::MAX_STREET_LENGTH ) : null;
+                    case 'city':
+                        return Text::length( $value ) > self::MAX_CITY_LENGTH ? self::too_long_message( $label, self::MAX_CITY_LENGTH ) : null;
+                    case 'country':
+                        return isset( Countries::all()[ $value ] ) ? null : __( 'Please choose a valid country.', 'jp-form-builder' );
+                    default:
+                        // Postcode: only checkable against a valid country.
+                        if ( ! isset( Countries::all()[ $parts['country'] ] ) ) {
+                            return null;
+                        }
+                        return 1 === preg_match( '~' . Countries::postcode_pattern( $parts['country'] ) . '~D', $value )
+                            ? null
+                            : __( 'Please enter a valid postcode.', 'jp-form-builder' );
+                }
+            }
+        );
+    }
+
+    /**
+     * Shared compound logic: a compound Field is empty only when every part is; otherwise each empty part is missing.
+     *
+     * @param array<string,string>                    $parts   Cleaned parts keyed by sub-key.
+     * @param array<string,string>                    $labels  Part labels keyed by sub-key.
+     * @param callable(string,string,string):?string $check   Returns an error message for a non-empty part.
+     * @return array{value: array<string,string>, errors: array<string,string>}
+     */
+    private function validate_parts( Field_Definition $field, array $parts, array $labels, callable $check ): array {
+        $is_empty = '' === implode( '', $parts );
+        if ( $is_empty && ! $this->is_required( $field ) ) {
+            return $this->success( $parts );
+        }
+
+        $errors = [];
+        foreach ( $parts as $sub => $value ) {
+            $message = '' === $value ? $this->required_message( $labels[ $sub ] ) : $check( $sub, $value, $labels[ $sub ] );
+            if ( null !== $message ) {
+                $errors[ $sub ] = $message;
+            }
+        }
+        return [
+            'value'  => $parts,
+            'errors' => $errors,
+        ];
+    }
+
+    /**
+     * @param array<mixed> $raw Submitted sub-key map.
+     * @return array<string,string>
+     */
+    private function parts( Field_Definition $field, array $raw ): array {
+        $parts = [];
+        foreach ( $field->subkeys as $sub ) {
+            $value         = $raw[ $sub ] ?? '';
+            $parts[ $sub ] = is_string( $value ) ? Text::single_line( $value ) : '';
+        }
+        return $parts;
+    }
+
+    /** @return array{value: string, errors: array<string,string>} */
+    private function check_length( string $value, int $max, string $label ): array {
+        return Text::length( $value ) > $max
+            ? $this->failure( '', self::too_long_message( $label, $max ) )
+            : $this->success( $value );
+    }
+
+    private function is_required( Field_Definition $field ): bool {
+        return ! empty( $field->attributes['required'] );
+    }
+
+    private function max_length( Field_Definition $field, int $fallback ): int {
+        $max = (int) ( $field->attributes['maxLength'] ?? $fallback );
+        return $max > 0 ? $max : $fallback;
+    }
+
+    /** @return string[] */
+    private function option_values( Field_Definition $field ): array {
+        $options = $field->attributes['options'] ?? [];
+        $values  = [];
+        foreach ( is_array( $options ) ? $options : [] as $option ) {
+            if ( is_array( $option ) && isset( $option['value'] ) && is_string( $option['value'] ) ) {
+                $values[] = $option['value'];
+            }
+        }
+        return $values;
+    }
+
+    private function label( Field_Definition $field ): string {
+        return $this->attribute_or( $field, 'label', __( 'This field', 'jp-form-builder' ) );
+    }
+
+    private function attribute_or( Field_Definition $field, string $attribute, string $fallback ): string {
+        $value = Text::single_line( (string) ( $field->attributes[ $attribute ] ?? '' ) );
+        return '' !== $value ? $value : $fallback;
+    }
+
+    private function required_message( string $label ): string {
+        /* translators: %s: field label. */
+        return sprintf( __( '%s is required.', 'jp-form-builder' ), $label );
+    }
+
+    private static function too_long_message( string $label, int $max ): string {
+        /* translators: 1: field label, 2: maximum number of characters. */
+        return sprintf( __( '%1$s must not be longer than %2$d characters.', 'jp-form-builder' ), $label, $max );
+    }
+
+    /**
+     * @param string|array<string,string> $value Cleaned value.
+     * @return array{value: string|array<string,string>, errors: array<string,string>}
+     */
+    private function success( $value ): array {
+        return [
+            'value'  => $value,
+            'errors' => [],
+        ];
+    }
+
+    /** @return array{value: string, errors: array<string,string>} */
+    private function failure( string $sub, string $message ): array {
+        return [
+            'value'  => '',
+            'errors' => [ $sub => $message ],
+        ];
+    }
+}
