@@ -92,6 +92,11 @@ final class Settings {
         return is_int( $default ) ? max( 0, (int) $value ) : (string) $value;
     }
 
+    /** Minimum seconds between loading a Form and submitting it, after the `jp_form_builder_min_fill_seconds` filter. */
+    public function min_fill_seconds(): int {
+        return max( 0, (int) apply_filters( 'jp_form_builder_min_fill_seconds', $this->tunable( 'min_fill_seconds' ) ) );
+    }
+
     /** Whether both Turnstile keys are set. */
     public function turnstile_configured(): bool {
         return '' !== (string) $this->get( 'turnstile_site_key' ) && '' !== (string) $this->get( 'turnstile_secret_key' );

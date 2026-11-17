@@ -48,6 +48,17 @@ final class SettingsTest extends TestCase {
         $this->assertSame( 3, $settings->tunable( 'min_fill_seconds' ) );
     }
 
+    public function test_min_fill_seconds_applies_the_filter_and_never_goes_negative(): void {
+        $this->assertSame( 3, ( new Settings() )->min_fill_seconds() );
+
+        $GLOBALS['jp_form_builder_test_filters']['jp_form_builder_min_fill_seconds'] = static fn() => 0;
+        $this->assertSame( 0, ( new Settings() )->min_fill_seconds() );
+
+        $GLOBALS['jp_form_builder_test_filters']['jp_form_builder_min_fill_seconds'] = static fn() => -4;
+        $this->assertSame( 0, ( new Settings() )->min_fill_seconds() );
+        unset( $GLOBALS['jp_form_builder_test_filters']['jp_form_builder_min_fill_seconds'] );
+    }
+
     public function test_turnstile_is_configured_only_with_both_keys(): void {
         $this->assertFalse( ( new Settings() )->turnstile_configured() );
         $GLOBALS['jp_form_builder_test_options']['jp_form_builder_settings'] = [ 'turnstile_site_key' => 'site' ];

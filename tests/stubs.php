@@ -238,6 +238,10 @@ function wp_parse_url( string $url, int $component = -1 ) {
     return parse_url( $url, $component );
 }
 
+function rest_url( string $path = '' ): string {
+    return 'https://example.test/wp-json/' . $path;
+}
+
 function admin_url( string $path = '' ): string {
     return 'https://example.test/wp-admin/' . $path;
 }

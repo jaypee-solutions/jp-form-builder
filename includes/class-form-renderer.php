@@ -15,13 +15,18 @@ final class Form_Renderer {
 
     private static int $instances = 0;
 
-    public function render( Form_Definition $form, int $instance = 0, string $site_key = '' ): string {
+    /**
+     * @param int    $instance Instance number for DOM ids; 0 assigns the next free one.
+     * @param string $site_key Turnstile site key; '' renders no Turnstile container.
+     * @param int    $min_fill Seconds the script waits after fetching the token before it submits.
+     */
+    public function render( Form_Definition $form, int $instance = 0, string $site_key = '', int $min_fill = 0 ): string {
         if ( $instance < 1 ) {
             $instance = ++self::$instances;
         }
 
         $attrs = $form->attributes;
-        $html  = '<form method="post" data-form-id="' . esc_attr( (string) $form->id ) . '" data-rev="' . esc_attr( $form->rev ) . '" data-locale="' . esc_attr( determine_locale() ) . '"';
+        $html  = '<form method="post" class="jp-form-builder" data-form-id="' . esc_attr( (string) $form->id ) . '" data-rev="' . esc_attr( $form->rev ) . '" data-locale="' . esc_attr( determine_locale() ) . '" data-rest-root="' . esc_url( rest_url( 'jp-form-builder/v1/' ) ) . '" data-min-fill="' . esc_attr( (string) $min_fill ) . '"';
         if ( '' !== $site_key ) {
             $html .= ' data-turnstile-sitekey="' . esc_attr( $site_key ) . '"';
         }
@@ -39,6 +44,9 @@ final class Form_Renderer {
             ? (string) $attrs['submitLabel']
             : __( 'Submit', 'jp-form-builder' );
         $html .= '<div class="jp-form-builder__honeypot" aria-hidden="true"><label>' . esc_html__( 'Leave this field empty', 'jp-form-builder' ) . '<input type="text" name="_jpfb_field_914" tabindex="-1" autocomplete="off"></label></div>';
+        if ( '' !== $site_key ) {
+            $html .= '<div class="jp-form-builder__turnstile"></div>';
+        }
         $html .= '<noscript>' . esc_html__( 'JavaScript is required to submit this form.', 'jp-form-builder' ) . '</noscript>';
         $html .= '<button type="submit" class="wp-element-button" disabled>' . esc_html( $submit_label ) . '</button></form>';
 

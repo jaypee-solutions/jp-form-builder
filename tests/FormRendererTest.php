@@ -21,6 +21,9 @@ final class FormRendererTest extends TestCase {
         self::assertStringContainsString( 'data-rev="1234567890abcdef"', $markup );
         self::assertStringContainsString( 'data-locale="en_US"', $markup );
         self::assertStringNotContainsString( 'data-turnstile-sitekey', $markup );
+        self::assertStringNotContainsString( 'jp-form-builder__turnstile', $markup );
+        self::assertStringContainsString( 'data-rest-root="https://example.test/wp-json/jp-form-builder/v1/"', $markup );
+        self::assertStringContainsString( 'data-min-fill="0"', $markup );
         self::assertStringContainsString( '&lt;script&gt;bad&lt;/script&gt;', $markup );
         self::assertStringContainsString( 'id="jpfb-12-1-company"', $markup );
         self::assertStringContainsString( 'for="jpfb-12-1-company"', $markup );
@@ -53,5 +56,17 @@ final class FormRendererTest extends TestCase {
         ] );
         $markup = ( new Form_Renderer() )->render( $form );
         self::assertStringContainsString( '>Email</label>', $markup );
+    }
+
+    public function test_script_markup_carries_the_min_fill_time_and_a_turnstile_container_only_with_a_site_key(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [ new Field_Definition( 'email', 'email', [ 'label' => 'Email' ] ) ] );
+
+        $configured = ( new Form_Renderer() )->render( $form, 1, 'site-key', 3 );
+        self::assertStringContainsString( 'data-turnstile-sitekey="site-key"', $configured );
+        self::assertStringContainsString( 'data-min-fill="3"', $configured );
+        self::assertSame( 1, substr_count( $configured, 'class="jp-form-builder__turnstile"' ) );
+
+        $plain = ( new Form_Renderer() )->render( $form, 1 );
+        self::assertStringNotContainsString( 'jp-form-builder__turnstile', $plain );
     }
 }

@@ -84,8 +84,7 @@ final class Submission_Handler {
             return $success;
         }
 
-        $min_fill = (int) apply_filters( 'jp_form_builder_min_fill_seconds', $this->settings->tunable( 'min_fill_seconds' ) );
-        if ( ! $this->token->verify( $this->string_param( $payload, 'token' ), $form->id, time(), $min_fill, Form_Token::MAX_AGE, wp_salt( 'nonce' ) ) ) {
+        if ( ! $this->token->verify( $this->string_param( $payload, 'token' ), $form->id, time(), $this->settings->min_fill_seconds(), Form_Token::MAX_AGE, wp_salt( 'nonce' ) ) ) {
             return $this->error( 'jpfb_token_invalid', __( 'Your session could not be verified. Please reload the page and try again.', 'jp-form-builder' ), 400 );
         }
 

@@ -44,8 +44,8 @@ final class Blocks {
                         if ( ! $form ) {
                             return '';
                         }
-                        $site_key = $this->turnstile_site_key( new Settings() );
-                        return ( new Form_Renderer() )->render( $form, 0, $site_key );
+                        $settings = new Settings();
+                        return ( new Form_Renderer() )->render( $form, 0, $this->turnstile_site_key( $settings ), $settings->min_fill_seconds() );
                     },
                 ]
             );
