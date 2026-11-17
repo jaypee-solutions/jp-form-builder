@@ -15,3 +15,4 @@
 
 ## 2026-11-17
 * **P4 done**: submission pipeline and view.js end to end (E2E 13 passed); template facts 14–15 added.
+* **P5 done**: backup/restore/uninstall (E2E 16 passed); core fact 8 added (admin-post redirect target).

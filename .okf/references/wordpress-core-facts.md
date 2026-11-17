@@ -18,6 +18,7 @@ timestamp: 2026-11-13T00:00:00Z
 5. A `pre_wp_mail` short-circuit skips `phpmailer_init` and fires no `wp_mail_failed`; failures it causes must be logged by the caller. With an `AltBody`, PHPMailer sends `multipart/alternative`, so tests assert the HTML part in the sent MIME body, not `ContentType === 'text/html'`.
 6. Hooks bind to object instances: a second `new Mailer()` that is not hooked never sees `phpmailer_init` or `wp_mail_failed`, so plugin mail goes through the one instance `Plugin::init()` registers.
 7. The block editor drops unknown keys from block editor settings, so plugin data for block scripts goes in an inline script on `enqueue_block_editor_assets`. A block's `style` CSS is only emitted by wp-scripts when the block's `index.js` imports it.
+8. `menu_page_url()` returns an empty string during `admin-post.php` requests (no admin menu is built there), so admin-post handlers must redirect to `admin_url( 'edit.php?post_type=…&page=…' )` instead.
 
 # Citations
 
