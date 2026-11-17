@@ -1,6 +1,7 @@
 <?php
 /** Tests accessible form rendering. */
 use JayPee\FormBuilder\Field_Definition;
+use JayPee\FormBuilder\Field_Validator;
 use JayPee\FormBuilder\Form_Definition;
 use JayPee\FormBuilder\Form_Renderer;
 use PHPUnit\Framework\TestCase;
@@ -48,6 +49,27 @@ final class FormRendererTest extends TestCase {
         self::assertStringContainsString( 'tabindex="-1" autocomplete="off"', $markup );
         self::assertStringContainsString( '<noscript>', $markup );
         self::assertStringContainsString( 'class="wp-element-button" disabled', $markup );
+    }
+
+    public function test_maxlength_attributes_come_from_the_validator_limits(): void {
+        $form   = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'name', 'person', [ 'label' => 'Name', 'split' => true ], [ 'first', 'last' ] ),
+            new Field_Definition( 'email', 'email', [ 'label' => 'Email' ] ),
+            new Field_Definition( 'phone', 'phone', [ 'label' => 'Phone' ] ),
+            new Field_Definition( 'text', 'company', [ 'label' => 'Company' ] ),
+            new Field_Definition( 'textarea', 'message', [ 'label' => 'Message' ] ),
+            new Field_Definition( 'address', 'home', [ 'label' => 'Address' ], [ 'street', 'postcode', 'city', 'country' ] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form );
+        foreach ( [ 'first', 'last' ] as $part ) {
+            self::assertStringContainsString( 'name="person[' . $part . ']" maxlength="' . Field_Validator::MAX_NAME_LENGTH . '"', $markup );
+        }
+        self::assertStringContainsString( 'name="email" maxlength="' . Field_Validator::MAX_EMAIL_LENGTH . '"', str_replace( ' autocomplete="email"', '', $markup ) );
+        self::assertStringContainsString( 'name="company" maxlength="' . Field_Validator::DEFAULT_TEXT_LENGTH . '"', $markup );
+        self::assertStringContainsString( 'maxlength="' . Field_Validator::DEFAULT_TEXTAREA_LENGTH . '"', $markup );
+        foreach ( [ 'street' => Field_Validator::MAX_STREET_LENGTH, 'postcode' => Field_Validator::MAX_POSTCODE_LENGTH, 'city' => Field_Validator::MAX_CITY_LENGTH ] as $part => $limit ) {
+            self::assertStringContainsString( 'name="home[' . $part . ']" maxlength="' . $limit . '"', str_replace( ' required', '', $markup ) );
+        }
     }
 
     public function test_empty_label_uses_a_translated_default(): void {

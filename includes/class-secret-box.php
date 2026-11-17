@@ -13,16 +13,25 @@ defined( 'ABSPATH' ) || exit;
 
 final class Secret_Box {
 
-    private string $key;
+    private ?string $salt;
+
+    /** Derived on first use: most requests never touch a secret. */
+    private ?string $key = null;
 
     public function __construct( ?string $salt = null ) {
-        $salt       = null === $salt ? wp_salt( 'secure_auth' ) : $salt;
-        $this->key = sodium_crypto_generichash( $salt, '', SODIUM_CRYPTO_SECRETBOX_KEYBYTES );
+        $this->salt = $salt;
+    }
+
+    private function key(): string {
+        if ( null === $this->key ) {
+            $this->key = sodium_crypto_generichash( $this->salt ?? wp_salt( 'secure_auth' ), '', SODIUM_CRYPTO_SECRETBOX_KEYBYTES );
+        }
+        return $this->key;
     }
 
     public function encrypt( string $value ): string {
         $nonce      = random_bytes( SODIUM_CRYPTO_SECRETBOX_NONCEBYTES );
-        $ciphertext = sodium_crypto_secretbox( $value, $nonce, $this->key );
+        $ciphertext = sodium_crypto_secretbox( $value, $nonce, $this->key() );
 
         return 'v1:' . base64_encode( $nonce . $ciphertext ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
     }
@@ -39,7 +48,7 @@ final class Secret_Box {
 
         $nonce      = substr( $decoded, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES );
         $ciphertext = substr( $decoded, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES );
-        $plaintext  = sodium_crypto_secretbox_open( $ciphertext, $nonce, $this->key );
+        $plaintext  = sodium_crypto_secretbox_open( $ciphertext, $nonce, $this->key() );
 
         return false === $plaintext ? '' : $plaintext;
     }

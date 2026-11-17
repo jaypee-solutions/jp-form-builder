@@ -1,18 +1,18 @@
 {
-  "apiVersion": 3,
-  "name": "jp-form-builder/email",
-  "title": "Email",
-  "category": "widgets",
-  "textdomain": "jp-form-builder",
-  "editorScript": "file:./index.js",
-  "parent": ["jp-form-builder/form"],
-  "attributes": {
-    "label": { "type": "string", "default": "" },
-    "fieldName": { "type": "string", "default": "" },
-    "required": { "type": "boolean", "default": true },
-    "helpText": { "type": "string", "default": "" },
-    "placeholder": { "type": "string", "default": "" },
-    "replyTo": { "type": "boolean", "default": true }
-  },
-  "supports": { "html": false }
+	"apiVersion": 3,
+	"name": "jp-form-builder/email",
+	"title": "Email",
+	"category": "widgets",
+	"textdomain": "jp-form-builder",
+	"editorScript": "file:./index.js",
+	"parent": ["jp-form-builder/form"],
+	"attributes": {
+		"label": { "type": "string", "default": "" },
+		"fieldName": { "type": "string", "default": "" },
+		"required": { "type": "boolean", "default": true },
+		"helpText": { "type": "string", "default": "" },
+		"placeholder": { "type": "string", "default": "" },
+		"replyTo": { "type": "boolean", "default": true }
+	},
+	"supports": { "html": false }
 }

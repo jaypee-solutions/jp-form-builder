@@ -37,13 +37,12 @@ final class Mail_Layout {
 
     /**
      * Keeps tables, inline styles and a `<style>` block, but nothing that makes a mail client
-     * fetch remote content (images, embeds, `src` attributes, remote CSS `url()` or `@import`).
+     * fetch remote content (see {@see Mail_Remote_Assets}) and no remote link.
      *
      * @throws \InvalidArgumentException When {content} is absent.
      */
     public function sanitize( string $layout ): string {
-        $allowed = wp_kses_allowed_html( 'post' );
-        unset( $allowed['img'], $allowed['picture'], $allowed['source'], $allowed['video'], $allowed['audio'], $allowed['iframe'], $allowed['object'], $allowed['embed'], $allowed['form'] );
+        $allowed = Mail_Remote_Assets::without_fetching_tags( wp_kses_allowed_html( 'post' ) );
         $tags = [ 'body', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'div', 'span', 'p', 'a', 'strong', 'em', 'br', 'h1', 'h2', 'h3', 'ul', 'ol', 'li' ];
         foreach ( $tags as $tag ) {
             $allowed[ $tag ] = [ 'style' => true, 'class' => true, 'role' => true, 'align' => true, 'valign' => true, 'cellpadding' => true, 'cellspacing' => true, 'border' => true, 'width' => true, 'height' => true ];
@@ -54,10 +53,8 @@ final class Mail_Layout {
         $allowed['a']['href'] = true;
         $allowed['style']     = [];
         $clean                = wp_kses( $layout, $allowed, [ 'http', 'https', 'mailto' ] );
-        $clean                = (string) preg_replace( '/\s(?:src|href)\s*=\s*(["\'])https?:\/\/.*?\1/i', '', $clean );
-        $clean                = (string) preg_replace( '/\ssrc\s*=\s*(["\']).*?\1/i', '', $clean );
-        $clean                = (string) preg_replace( '/@import\b[^;]*;?/i', '', $clean );
-        $clean                = (string) preg_replace( '/url\(\s*(["\']?)\s*(?:https?:)?\/\/[^)]*\)/i', 'none', $clean );
+        $clean                = Mail_Remote_Assets::strip( $clean );
+        $clean                = (string) preg_replace( '/\shref\s*=\s*(["\'])https?:\/\/.*?\1/i', '', $clean );
         if ( false === strpos( $clean, '{content}' ) ) {
             throw new \InvalidArgumentException( esc_html__( 'The mail layout must contain {content}.', 'jp-form-builder' ) );
         }

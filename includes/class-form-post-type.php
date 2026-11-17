@@ -55,18 +55,6 @@ final class Form_Post_Type {
         if ( empty( $context->post ) || 'jp_form' !== $context->post->post_type ) {
             return $allowed;
         }
-        return [
-            'jp-form-builder/form',
-            'jp-form-builder/name',
-            'jp-form-builder/email',
-            'jp-form-builder/phone',
-            'jp-form-builder/address',
-            'jp-form-builder/text',
-            'jp-form-builder/select',
-            'jp-form-builder/textarea',
-            'jp-form-builder/consent',
-            'core/paragraph',
-            'core/heading',
-        ];
+        return Form_Blocks::allowed_in_editor();
     }
 }

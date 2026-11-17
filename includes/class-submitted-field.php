@@ -49,6 +49,11 @@ final class Submitted_Field {
         return $this->value;
     }
 
+    /** The value as one string: the parts of a compound Field joined with spaces. */
+    public function as_text(): string {
+        return is_array( $this->value ) ? implode( ' ', array_map( 'strval', $this->value ) ) : $this->value;
+    }
+
     public function is_reply_to(): bool {
         return $this->reply_to;
     }

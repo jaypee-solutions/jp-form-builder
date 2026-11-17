@@ -85,6 +85,22 @@ final class MailCoreTest extends TestCase {
         $this->assertSame( 250, strlen( $mail->subject() ) );
     }
 
+    public function test_subjects_are_cut_by_characters_not_bytes(): void {
+        $builder = new Mail_Builder( new Mail_Template(), new Mail_Layout( new Settings(), __DIR__ . '/../templates/mail/layout.html' ) );
+        $mail    = $builder->notification( [], [ 'subject' => str_repeat( 'ä', 300 ) . ' {name}' ], [ new Submitted_Field( 'name', 'Name', 'text', str_repeat( 'ö', 300 ) ) ], [] );
+        $this->assertSame( 250, mb_strlen( $mail->subject(), 'UTF-8' ) );
+        $this->assertSame( str_repeat( 'ä', 250 ), $mail->subject() );
+        $this->assertTrue( Text::is_valid_utf8( $mail->subject() ) );
+
+        $value_mail = $builder->notification( [], [ 'subject' => '{name}' ], [ new Submitted_Field( 'name', 'Name', 'text', str_repeat( 'ö', 300 ) ) ], [] );
+        $this->assertSame( str_repeat( 'ö', 200 ), $value_mail->subject() );
+    }
+
+    public function test_submitted_fields_read_as_text(): void {
+        $this->assertSame( 'Ada', ( new Submitted_Field( 'name', 'Name', 'name', 'Ada' ) )->as_text() );
+        $this->assertSame( 'Ada Lovelace', ( new Submitted_Field( 'name', 'Name', 'name', [ 'first' => 'Ada', 'last' => 'Lovelace' ] ) )->as_text() );
+    }
+
     public function test_builder_uses_site_defaults_and_confirmation_never_renders_fields(): void {
         $settings = new Settings();
         $settings->save( [ 'notification_subject' => 'Site {name}', 'notification_body' => 'Hi {name}' ] );

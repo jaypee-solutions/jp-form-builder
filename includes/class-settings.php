@@ -32,7 +32,7 @@ final class Settings {
         'force_from' => [ 'JP_FORM_BUILDER_FORCE_FROM', false, 'bool' ],
         'turnstile_site_key' => [ 'JP_FORM_BUILDER_TURNSTILE_SITE_KEY', '', 'text' ],
         'turnstile_secret_key' => [ 'JP_FORM_BUILDER_TURNSTILE_SECRET_KEY', '', 'secret' ],
-        'default_recipient' => [ 'JP_FORM_BUILDER_DEFAULT_RECIPIENT', '', 'email' ],
+        'default_recipient' => [ 'JP_FORM_BUILDER_DEFAULT_RECIPIENT', '', 'email_list' ],
         'smtp_auth_method' => [ 'JP_FORM_BUILDER_SMTP_AUTH_METHOD', 'password', 'auth_method' ],
         'm365_tenant_id' => [ 'JP_FORM_BUILDER_M365_TENANT_ID', '', 'text' ],
         'm365_client_id' => [ 'JP_FORM_BUILDER_M365_CLIENT_ID', '', 'text' ],
@@ -82,8 +82,11 @@ final class Settings {
         return $default;
     }
 
-    /** Value of a constant-only tunable (limits and trusted proxies), or its default. */
-    /** @return int|string */
+    /**
+     * Value of a constant-only tunable (limits and trusted proxies), or its default.
+     *
+     * @return int|string
+     */
     public function tunable( string $name ) {
         [ $constant, $default ] = self::TUNABLES[ $name ];
         [ $defined, $value ]    = ( $this->constant_lookup )( $constant );
@@ -125,27 +128,66 @@ final class Settings {
     }
 
     public function is_secret( string $key ): bool {
-        return isset( self::DEFINITIONS[ $key ] ) && 'secret' === self::DEFINITIONS[ $key ][2];
+        return 'secret' === $this->type( $key );
     }
 
-    /** @param array<string,mixed> $values */
-    public function save( array $values ): void {
-        $options = get_option( self::OPTION, [] );
-        $options = is_array( $options ) ? $options : [];
+    /** @return string The kind of value a setting holds, which decides its control and how it is sanitised; '' for an unknown key. */
+    public function type( string $key ): string {
+        return self::DEFINITIONS[ $key ][2] ?? '';
+    }
+
+    /**
+     * Saves the values that are valid; a value that is not does not stop the others.
+     *
+     * Unknown keys and keys locked by a constant are ignored. An empty secret keeps the saved one.
+     *
+     * @param array<string,mixed> $values
+     * @return array<string,string> The reason for each value that was rejected, by key.
+     */
+    public function save( array $values ): array {
+        $options  = get_option( self::OPTION, [] );
+        $options  = is_array( $options ) ? $options : [];
+        $rejected = [];
         foreach ( $values as $key => $value ) {
             if ( ! isset( self::DEFINITIONS[ $key ] ) || $this->is_locked( $key ) ) {
                 continue;
             }
-            [ , , $type ] = self::DEFINITIONS[ $key ];
-            if ( 'secret' === $type ) {
+            if ( $this->is_secret( $key ) ) {
                 if ( '' !== trim( (string) $value ) ) {
                     $options[ $key ] = $this->secret_box->encrypt( trim( (string) $value ) );
                 }
                 continue;
             }
-            $options[ $key ] = $this->sanitize( $type, $value );
+            try {
+                $options[ $key ] = $this->sanitize( $this->type( $key ), $value );
+            } catch ( \InvalidArgumentException $exception ) {
+                $rejected[ $key ] = $exception->getMessage();
+            }
         }
         update_option( self::OPTION, $options, false );
+        return $rejected;
+    }
+
+    /**
+     * @param mixed $value
+     * @return string|null Why {@see self::save()} would reject the value, or null when it would accept it.
+     */
+    public function rejection( string $key, $value ): ?string {
+        try {
+            $this->sanitize( $this->type( $key ), $value );
+        } catch ( \InvalidArgumentException $exception ) {
+            return $exception->getMessage();
+        }
+        return null;
+    }
+
+    /** Removes the saved value, so the default applies again. A constant is not affected. */
+    public function delete( string $key ): void {
+        $options = get_option( self::OPTION, [] );
+        if ( is_array( $options ) && array_key_exists( $key, $options ) ) {
+            unset( $options[ $key ] );
+            update_option( self::OPTION, $options, false );
+        }
     }
 
     public function has_undecryptable_secret(): bool {
@@ -161,11 +203,16 @@ final class Settings {
         return false;
     }
 
-    /** @param mixed $value @return mixed */
+    /**
+     * @param mixed $value
+     * @return mixed
+     * @throws \InvalidArgumentException With a translated reason when the value is not acceptable.
+     */
     private function sanitize( string $type, $value ) {
+        // phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Reasons are plain translated text, escaped where they are shown.
         switch ( $type ) {
             case 'bool':
-                return (bool) $value;
+                return $this->parse_bool( $value );
             case 'port':
                 return max( 1, min( 65535, absint( $value ) ) );
             case 'encryption':
@@ -174,16 +221,37 @@ final class Settings {
                 return in_array( $value, [ 'password', 'm365_oauth' ], true ) ? $value : 'password';
             case 'email':
                 return sanitize_email( (string) $value );
+            case 'email_list':
+                return implode( ', ', Recipient_List::parse( (string) $value ) );
             case 'mail_layout':
-                return '' === trim( (string) $value ) ? '' : ( new Mail_Layout() )->sanitize( (string) $value );
+                return '' === trim( (string) $value ) ? '' : ( new Mail_Layout( $this ) )->sanitize( (string) $value );
             case 'mail_body':
                 return ( new Mail_Template() )->sanitize( (string) $value );
-            case 'textarea':
-                return sanitize_textarea_field( (string) $value );
-            case 'single_line':
-                return sanitize_text_field( (string) $value );
             default:
                 return sanitize_text_field( (string) $value );
         }
+        // phpcs:enable WordPress.Security.EscapeOutput.ExceptionNotEscaped
+    }
+
+    /**
+     * The one place that reads a yes/no value from a string, a number or a boolean.
+     *
+     * @param mixed $value
+     * @throws \InvalidArgumentException When the value is none of true/false, 1/0, yes/no, on/off.
+     */
+    private function parse_bool( $value ): bool {
+        if ( is_bool( $value ) ) {
+            return $value;
+        }
+        if ( is_int( $value ) || is_string( $value ) ) {
+            $word = strtolower( trim( (string) $value ) );
+            if ( in_array( $word, [ '1', 'true', 'yes', 'on' ], true ) ) {
+                return true;
+            }
+            if ( in_array( $word, [ '0', 'false', 'no', 'off' ], true ) ) {
+                return false;
+            }
+        }
+        throw new \InvalidArgumentException( __( 'Use true or false (also 1/0, yes/no, on/off).', 'jp-form-builder' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Plain translated text.
     }
 }

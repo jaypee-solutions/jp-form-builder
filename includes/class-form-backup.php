@@ -16,19 +16,6 @@ final class Form_Backup {
     public const FORMAT  = 'jp-form-builder-backup';
     public const VERSION = 1;
 
-    private const ALLOWED_CHILDREN = [
-        'jp-form-builder/name',
-        'jp-form-builder/email',
-        'jp-form-builder/phone',
-        'jp-form-builder/address',
-        'jp-form-builder/text',
-        'jp-form-builder/select',
-        'jp-form-builder/textarea',
-        'jp-form-builder/consent',
-        'core/paragraph',
-        'core/heading',
-    ];
-
     private const STATUSES = [ 'publish', 'draft', 'pending', 'private' ];
 
     private Settings $settings;
@@ -117,12 +104,12 @@ final class Form_Backup {
                 static fn( array $block ): bool => null !== ( $block['blockName'] ?? null ) || '' !== trim( (string) ( $block['innerHTML'] ?? '' ) )
             )
         );
-        if ( 1 !== count( $top_level ) || 'jp-form-builder/form' !== ( $top_level[0]['blockName'] ?? null ) ) {
+        if ( 1 !== count( $top_level ) || Form_Blocks::FORM !== ( $top_level[0]['blockName'] ?? null ) ) {
             return __( 'The content must be exactly one Form block.', 'jp-form-builder' );
         }
         foreach ( $top_level[0]['innerBlocks'] ?? [] as $child ) {
             $name = (string) ( $child['blockName'] ?? '' );
-            if ( ! in_array( $name, self::ALLOWED_CHILDREN, true ) ) {
+            if ( ! in_array( $name, Form_Blocks::allowed_children(), true ) ) {
                 /* translators: %s: block name. */
                 return sprintf( __( 'The block "%s" is not allowed in a Form.', 'jp-form-builder' ), '' === $name ? 'freeform' : $name );
             }
@@ -149,10 +136,15 @@ final class Form_Backup {
         return $this->restore( (string) file_get_contents( $path ), $overwrite, $dry_run );
     }
 
-    /** @return array<string,mixed> An empty report, with the error message when the restore could not start. */
+    /** @return array<string,mixed> A report of a restore that could not start. */
     public function failed( string $message, bool $dry_run = false ): array {
+        return array_merge( $this->empty_report( $dry_run ), [ 'error' => $message ] );
+    }
+
+    /** @return array<string,mixed> A report with nothing restored, skipped or rejected, and no error. */
+    public function empty_report( bool $dry_run = false ): array {
         return [
-            'error'    => $message,
+            'error'    => '',
             'dry_run'  => $dry_run,
             'restored' => [],
             'skipped'  => [],
@@ -175,7 +167,7 @@ final class Form_Backup {
      * @return array<string,mixed> The report; see {@see self::describe()}.
      */
     public function restore( string $json, bool $overwrite = false, bool $dry_run = false ): array {
-        $report = $this->failed( '', $dry_run );
+        $report = $this->empty_report( $dry_run );
         try {
             $document = $this->decode( $json, (int) $this->settings->tunable( 'max_backup_bytes' ) );
         } catch ( \InvalidArgumentException $exception ) {
@@ -240,7 +232,7 @@ final class Form_Backup {
         $label = [ 'id' => $id, 'title' => $title ];
 
         if ( $id <= 0 || ! is_string( $entry['content'] ?? null ) ) {
-            $report['rejected'][] = $label + [ 'reason' => __( 'The Form entry is missing its ID or content.', 'jp-form-builder' ) ];
+            $report['rejected'][] = $label + [ 'reason' => __( 'A Form in the Backup is missing its ID or content.', 'jp-form-builder' ) ];
             return;
         }
         $error = $this->content_error( parse_blocks( $entry['content'] ) );
@@ -303,13 +295,11 @@ final class Form_Backup {
             } elseif ( ! is_scalar( $value ) ) {
                 $report['settings']['skipped'][ $key ] = __( 'Invalid value.', 'jp-form-builder' );
             } else {
-                try {
-                    if ( ! $dry_run ) {
-                        $this->settings->save( [ $key => $value ] );
-                    }
+                $rejection = $dry_run ? $this->settings->rejection( $key, $value ) : ( $this->settings->save( [ $key => $value ] )[ $key ] ?? null );
+                if ( null === $rejection ) {
                     $report['settings']['restored'][] = $key;
-                } catch ( \InvalidArgumentException $exception ) {
-                    $report['settings']['skipped'][ $key ] = $exception->getMessage();
+                } else {
+                    $report['settings']['skipped'][ $key ] = $rejection;
                 }
             }
         }

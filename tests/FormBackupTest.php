@@ -147,4 +147,39 @@ final class FormBackupTest extends TestCase {
         $this->assertSame( [], $report['restored'] );
         $this->assertSame( [ $report['error'] ], ( new Form_Backup() )->describe( $report ) );
     }
+
+    public function test_restore_reads_booleans_from_strings_and_skips_unreadable_ones(): void {
+        $json   = (string) json_encode(
+            [
+                'format'   => 'jp-form-builder-backup',
+                'version'  => 1,
+                'forms'    => [],
+                'settings' => [ 'smtp_auth' => 'false', 'force_from' => 'maybe', 'from_name' => 'Restored' ],
+            ]
+        );
+        $backup = new Form_Backup();
+
+        $dry_run = $backup->restore( $json, false, true );
+        $this->assertSame( [ 'smtp_auth', 'from_name' ], $dry_run['settings']['restored'] );
+        $this->assertSame( [ 'force_from' ], array_keys( $dry_run['settings']['skipped'] ) );
+        $this->assertSame( 'default', ( new Settings() )->source( 'smtp_auth' ), 'a dry run writes nothing' );
+
+        $report = $backup->restore( $json );
+        $this->assertSame( [ 'smtp_auth', 'from_name' ], $report['settings']['restored'] );
+        $this->assertSame( [ 'force_from' ], array_keys( $report['settings']['skipped'] ) );
+        $this->assertFalse( ( new Settings() )->get( 'smtp_auth' ) );
+        $this->assertSame( 'Restored', ( new Settings() )->get( 'from_name' ) );
+    }
+
+    public function test_reports_start_empty_and_a_failed_report_carries_only_the_error(): void {
+        $backup = new Form_Backup();
+        $empty  = $backup->empty_report( true );
+        $this->assertSame( '', $empty['error'] );
+        $this->assertTrue( $empty['dry_run'] );
+        $this->assertSame( [], $backup->describe( $backup->empty_report() ) );
+
+        $failed = $backup->failed( 'Nope' );
+        $this->assertSame( 'Nope', $failed['error'] );
+        $this->assertSame( array_diff_key( $empty, [ 'error' => 1, 'dry_run' => 1 ] ), array_diff_key( $failed, [ 'error' => 1, 'dry_run' => 1 ] ) );
+    }
 }

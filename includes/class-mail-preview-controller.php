@@ -13,7 +13,11 @@ defined( 'ABSPATH' ) || exit;
 
 final class Mail_Preview_Controller {
 
-    private const FIELD_TYPES = [ 'name', 'email', 'phone', 'address', 'text', 'select', 'textarea', 'consent' ];
+    private Settings $settings;
+
+    public function __construct( ?Settings $settings = null ) {
+        $this->settings = $settings ?? new Settings();
+    }
 
     public function init(): void {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
@@ -43,7 +47,7 @@ final class Mail_Preview_Controller {
                     ],
                     // No default on purpose: its presence marks a draft layout preview.
                     'layout'  => [ 'type' => 'string' ],
-                    // Entries are validated one by one in sample_fields(): an invalid entry is dropped, not rejected.
+                    // Entries are validated one by one in sample_fields_for(): an invalid entry is dropped, not rejected.
                     'fields'  => [ 'type' => 'array' ],
                 ],
             ]
@@ -56,11 +60,11 @@ final class Mail_Preview_Controller {
 
     /** @return \WP_REST_Response|\WP_Error */
     public function preview( \WP_REST_Request $request ) {
-        $layout = new Mail_Layout();
+        $layout = new Mail_Layout( $this->settings );
         if ( $request->has_param( 'layout' ) ) {
             $layout = $layout->with_draft( (string) $request->get_param( 'layout' ) );
         }
-        $builder    = new Mail_Builder( null, $layout );
+        $builder    = new Mail_Builder( null, $layout, null, $this->settings );
         $subject    = (string) $request->get_param( 'subject' );
         $body       = (string) $request->get_param( 'body' );
         $recipients = [ (string) get_option( 'admin_email' ) ];
@@ -118,9 +122,9 @@ final class Mail_Preview_Controller {
             if ( ! is_array( $entry ) || ! is_string( $entry['key'] ?? null ) || ! is_string( $entry['type'] ?? null ) ) {
                 continue;
             }
-            $key  = trim( (string) preg_replace( '/[^a-z0-9_]/', '_', strtolower( $entry['key'] ) ), '_' );
+            $key  = Field_Key::normalize( $entry['key'] );
             $type = $entry['type'];
-            if ( '' === $key || isset( $fields[ $key ] ) || ! in_array( $type, self::FIELD_TYPES, true ) ) {
+            if ( '' === $key || isset( $fields[ $key ] ) || ! in_array( $type, Form_Blocks::FIELD_TYPES, true ) ) {
                 continue;
             }
             $label = is_string( $entry['label'] ?? null ) ? sanitize_text_field( $entry['label'] ) : '';

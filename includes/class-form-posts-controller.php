@@ -10,12 +10,10 @@ declare( strict_types = 1 );
 namespace JayPee\FormBuilder;
 
 use WP_REST_Posts_Controller;
-use WP_REST_Request;
 
 defined( 'ABSPATH' ) || exit;
 
 final class Form_Posts_Controller extends WP_REST_Posts_Controller {
-
 
     public function get_item_permissions_check( $request ) {
         return current_user_can( Form_Post_Type::capability() );

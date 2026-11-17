@@ -16,11 +16,17 @@ final class Settings_Page {
     private Settings $settings;
     private Mailer $mailer;
     private Form_Backup $backup;
+    private Form_Repository $repository;
+    private Client_Ip $client_ip;
+    private Mail_Log $mail_log;
 
-    public function __construct( ?Settings $settings = null, ?Mailer $mailer = null, ?Form_Backup $backup = null ) {
-        $this->settings = $settings ?? new Settings();
-        $this->mailer   = $mailer ?? new Mailer( $this->settings );
-        $this->backup   = $backup ?? new Form_Backup( $this->settings );
+    public function __construct( ?Settings $settings = null, ?Mailer $mailer = null, ?Form_Backup $backup = null, ?Form_Repository $repository = null, ?Client_Ip $client_ip = null, ?Mail_Log $mail_log = null ) {
+        $this->settings   = $settings ?? new Settings();
+        $this->mailer     = $mailer ?? new Mailer( $this->settings );
+        $this->backup     = $backup ?? new Form_Backup( $this->settings );
+        $this->repository = $repository ?? new Form_Repository();
+        $this->client_ip  = $client_ip ?? Client_Ip::from_settings( $this->settings );
+        $this->mail_log   = $mail_log ?? new Mail_Log();
     }
 
     public function init(): void {
@@ -90,13 +96,30 @@ final class Settings_Page {
         return 'jp_form_builder_backup_report_' . get_current_user_id();
     }
 
+    /** Loads the mail editors (see src/admin): the core code editor, the components they use and their translations. */
     public function enqueue( string $hook ): void {
         if ( 'jp_form_page_jp-form-builder-settings' !== $hook ) {
             return;
         }
-        $editor_settings = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
-        wp_enqueue_script( 'jp-form-builder-mail-settings', plugins_url( 'assets/admin/mail-settings.js', PLUGIN_FILE ), [ 'code-editor', 'wp-api-fetch' ], VERSION, true );
-        wp_localize_script( 'jp-form-builder-mail-settings', 'jpFormBuilderMailEditor', false !== $editor_settings ? $editor_settings : [] );
+        $asset_file = dirname( PLUGIN_FILE ) . '/admin/build/settings.asset.php';
+        if ( ! is_readable( $asset_file ) ) {
+            return;
+        }
+        $asset  = require $asset_file;
+        $handle = 'jp-form-builder-settings';
+        wp_enqueue_script( $handle, plugins_url( 'admin/build/settings.js', PLUGIN_FILE ), $asset['dependencies'], $asset['version'], true );
+        wp_set_script_translations( $handle, 'jp-form-builder', dirname( PLUGIN_FILE ) . '/languages' );
+        wp_enqueue_style( 'wp-components' );
+        if ( is_readable( dirname( PLUGIN_FILE ) . '/admin/build/settings.css' ) ) {
+            wp_enqueue_style( $handle, plugins_url( 'admin/build/settings.css', PLUGIN_FILE ), [ 'wp-components' ], $asset['version'] );
+        }
+        // False when the user turned syntax highlighting off; the editors then fall back to plain textareas.
+        $code_editor = wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
+        wp_add_inline_script(
+            $handle,
+            'window.jpFormBuilderEditor = window.jpFormBuilderEditor || {}; window.jpFormBuilderEditor.form = ' . wp_json_encode( false !== $code_editor ? [ 'codeEditor' => $code_editor ] : [] ) . ';',
+            'before'
+        );
     }
 
     public function test_mail(): void {
@@ -124,13 +147,16 @@ final class Settings_Page {
         }
         check_admin_referer( 'jp_form_builder_save_settings' );
         $input = isset( $_POST['jp_form_builder_settings'] ) && is_array( $_POST['jp_form_builder_settings'] ) ? wp_unslash( $_POST['jp_form_builder_settings'] ) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- validated per-key by Settings.
-        try {
-            $this->settings->save( $input );
-        } catch ( \InvalidArgumentException $exception ) {
-            wp_safe_redirect( add_query_arg( 'settings-error', 'invalid-layout', $this->settings_url() ) );
-            exit;
+        // Valid values are saved even when another one is not; the notice names what was kept.
+        $rejected = $this->settings->save( $input );
+        if ( isset( $rejected['mail_layout'] ) ) {
+            $query = [ 'settings-error' => 'invalid-layout' ];
+        } elseif ( [] !== $rejected ) {
+            $query = [ 'settings-error' => 'invalid-value' ];
+        } else {
+            $query = [ 'settings-updated' => '1' ];
         }
-        wp_safe_redirect( add_query_arg( 'settings-updated', '1', $this->settings_url() ) );
+        wp_safe_redirect( add_query_arg( $query, $this->settings_url() ) );
         exit;
     }
 
@@ -203,8 +229,10 @@ final class Settings_Page {
             <?php elseif ( isset( $_GET['test-mail'] ) && 'failed' === $_GET['test-mail'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
                 <div class="notice notice-error"><p><?php esc_html_e( 'Test mail failed. Check the mail failure log.', 'jp-form-builder' ); ?></p></div>
             <?php endif; ?>
-            <?php if ( isset( $_GET['settings-error'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-                <div class="notice notice-error"><p><?php esc_html_e( 'The mail layout must contain {content}; the previous layout was kept.', 'jp-form-builder' ); ?></p></div>
+            <?php if ( isset( $_GET['settings-error'] ) && 'invalid-layout' === $_GET['settings-error'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+                <div class="notice notice-error"><p><?php esc_html_e( 'The mail layout must contain {content}, so the previous layout was kept. All other settings were saved.', 'jp-form-builder' ); ?></p></div>
+            <?php elseif ( isset( $_GET['settings-error'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+                <div class="notice notice-error"><p><?php esc_html_e( 'Some values were not valid and were not saved. All other settings were saved.', 'jp-form-builder' ); ?></p></div>
             <?php endif; ?>
             <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <input type="hidden" name="action" value="jp_form_builder_save_settings" />
@@ -212,15 +240,14 @@ final class Settings_Page {
                 <?php foreach ( $this->sections() as $section_id => $section ) : ?>
                     <h2 class="title" id="jpfb-section-<?php echo esc_attr( $section_id ); ?>"><?php echo esc_html( $section['title'] ); ?></h2>
                     <p><?php echo esc_html( $section['description'] ); ?></p>
+                    <?php // The script takes over the mail section; the plain fields below are what works without it and what it reads its values from. ?>
+                    <div<?php echo 'mail' === $section_id ? ' id="jpfb-mail-settings"' : ''; ?>>
                     <table class="form-table" role="presentation"><tbody>
                     <?php foreach ( $section['fields'] as $key => $label ) : ?>
                         <?php $this->render_field( $key, $label ); ?>
                     <?php endforeach; ?>
                     </tbody></table>
-                    <?php if ( 'mail' === $section_id ) : ?>
-                        <h3><?php esc_html_e( 'Live mail preview', 'jp-form-builder' ); ?></h3>
-                        <iframe id="jpfb-mail-preview" title="<?php esc_attr_e( 'Mail preview', 'jp-form-builder' ); ?>" sandbox="" style="width:100%;min-height:360px"></iframe>
-                    <?php endif; ?>
+                    </div>
                 <?php endforeach; ?>
                 <?php submit_button( __( 'Save settings', 'jp-form-builder' ) ); ?>
             </form>
@@ -260,31 +287,29 @@ final class Settings_Page {
         <?php
     }
 
-    /** One settings row; a constant-locked field is disabled and says so, a secret is never printed. */
+    /** One settings row; the control follows the setting's type. A constant-locked field is disabled and says so, a secret is never printed. */
     private function render_field( string $key, string $label ): void {
         $locked  = $this->settings->is_locked( $key );
         $value   = $this->settings->get( $key );
-        $secret  = $this->settings->is_secret( $key );
-        $type    = in_array( $key, [ 'smtp_auth', 'force_from' ], true ) ? 'checkbox' : ( $secret ? 'password' : ( 'smtp_port' === $key ? 'number' : 'text' ) );
-        $choices = $this->choices( $key );
+        $type    = $this->settings->type( $key );
+        $secret  = 'secret' === $type;
+        $name    = 'jp_form_builder_settings[' . $key . ']';
+        $choices = $this->choices( $type );
         ?>
         <tr><th scope="row"><label for="jpfb-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th><td>
-        <?php if ( in_array( $key, [ 'mail_layout', 'notification_body', 'confirmation_body' ], true ) ) : ?>
-            <textarea id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" rows="8" class="large-text code" <?php disabled( $locked ); ?>><?php echo esc_textarea( (string) $value ); ?></textarea>
-            <?php if ( 'mail_layout' === $key ) : ?>
-                <button type="button" class="button" id="jpfb-reset-mail-layout"><?php esc_html_e( 'Reset to default', 'jp-form-builder' ); ?></button>
-            <?php endif; ?>
+        <?php if ( 'mail_layout' === $type || 'mail_body' === $type ) : ?>
+            <textarea id="jpfb-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>" rows="8" class="large-text code" <?php disabled( $locked ); ?>><?php echo esc_textarea( (string) $value ); ?></textarea>
         <?php elseif ( $choices ) : ?>
-            <select id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" <?php disabled( $locked ); ?>>
+            <select id="jpfb-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>" <?php disabled( $locked ); ?>>
                 <?php foreach ( $choices as $choice => $choice_label ) : ?>
                     <option value="<?php echo esc_attr( $choice ); ?>" <?php selected( (string) $value, $choice ); ?>><?php echo esc_html( $choice_label ); ?></option>
                 <?php endforeach; ?>
             </select>
-        <?php elseif ( 'checkbox' === $type ) : ?>
-            <input type="hidden" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="0" />
-            <input type="checkbox" id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="1" <?php checked( (bool) $value ); ?> <?php disabled( $locked ); ?> />
+        <?php elseif ( 'bool' === $type ) : ?>
+            <input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="0" />
+            <input type="checkbox" id="jpfb-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>" value="1" <?php checked( (bool) $value ); ?> <?php disabled( $locked ); ?> />
         <?php else : ?>
-            <input type="<?php echo esc_attr( $type ); ?>" id="jpfb-<?php echo esc_attr( $key ); ?>" name="jp_form_builder_settings[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $secret ? '' : (string) $value ); ?>" class="regular-text" <?php disabled( $locked ); ?>
+            <input type="<?php echo esc_attr( $secret ? 'password' : ( 'port' === $type ? 'number' : 'text' ) ); ?>" id="jpfb-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $secret ? '' : (string) $value ); ?>" class="regular-text" <?php disabled( $locked ); ?>
             <?php if ( $secret ) : ?>
                 autocomplete="new-password" placeholder="<?php echo esc_attr( '' !== (string) $value ? __( 'Saved — overwrite to change', 'jp-form-builder' ) : __( 'Not set', 'jp-form-builder' ) ); ?>"<?php endif; ?> />
         <?php endif; ?>
@@ -299,7 +324,7 @@ final class Settings_Page {
     }
 
     private function render_mail_failures(): void {
-        $failures = array_filter( (array) get_option( 'jp_form_builder_mail_log', [] ), 'is_array' );
+        $failures = $this->mail_log->entries();
         if ( [] === $failures ) {
             echo '<p>' . esc_html__( 'No mail failures recorded.', 'jp-form-builder' ) . '</p>';
             return;
@@ -370,8 +395,7 @@ final class Settings_Page {
             );
             $this->confirmation_notice();
         }
-        $trusted = ( new Client_Ip() )->parse_trusted( (string) $this->settings->tunable( 'trusted_proxies' ) );
-        if ( ( new Client_Ip() )->looks_proxied( $_SERVER, $trusted ) ) {
+        if ( $this->client_ip->looks_proxied( $_SERVER ) ) {
             printf(
                 '<div class="notice notice-warning"><p>%s</p></div>',
                 esc_html__( 'This request came through a reverse proxy, but no trusted proxies are set. All visitors would share one rate limit. Define JP_FORM_BUILDER_TRUSTED_PROXIES with the proxy IPs or CIDR ranges (for example 10.0.0.0/8) in wp-config.php.', 'jp-form-builder' )
@@ -382,7 +406,7 @@ final class Settings_Page {
     /** Lists Forms whose Confirmation cannot be sent while Turnstile is missing (ADR 0011). */
     private function confirmation_notice(): void {
         $links = [];
-        foreach ( ( new Form_Repository() )->find_all() as $form ) {
+        foreach ( $this->repository->find_all() as $form ) {
             if ( ! empty( $form->attributes['confirmationEnabled'] ) ) {
                 $links[] = '<a href="' . esc_url( (string) get_edit_post_link( $form->id ) ) . '">' . esc_html( $form->title ) . '</a>';
             }
@@ -401,16 +425,14 @@ final class Settings_Page {
     }
 
     /** @return array<string,string> Option values and labels for settings with a fixed set of values; empty otherwise. */
-    private function choices( string $key ): array {
-        switch ( $key ) {
-            case 'smtp_encryption':
-                return [
-                    'starttls' => __( 'STARTTLS (port 587)', 'jp-form-builder' ),
-                    'smtps'    => __( 'SMTPS / implicit TLS (port 465)', 'jp-form-builder' ),
-                    'none'     => __( 'None', 'jp-form-builder' ),
-                ];
-            default:
-                return [];
+    private function choices( string $type ): array {
+        if ( 'encryption' === $type ) {
+            return [
+                'starttls' => __( 'STARTTLS (port 587)', 'jp-form-builder' ),
+                'smtps'    => __( 'SMTPS / implicit TLS (port 465)', 'jp-form-builder' ),
+                'none'     => __( 'None', 'jp-form-builder' ),
+            ];
         }
+        return [];
     }
 }

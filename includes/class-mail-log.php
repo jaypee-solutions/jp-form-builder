@@ -29,10 +29,15 @@ final class Mail_Log {
     public function record( \WP_Error $error ): void {
         $message = self::redact( $error->get_error_message() );
         error_log( 'jp-form-builder: ' . $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-        $entries   = get_option( self::OPTION, [] );
-        $entries   = is_array( $entries ) ? $entries : [];
+        $entries   = $this->entries();
         $entries[] = [ 'time' => gmdate( 'c' ), 'form_id' => $this->form_id, 'message' => $message ];
         update_option( self::OPTION, array_slice( $entries, -10 ), false );
+    }
+
+    /** @return array<int,array{time:string,form_id:int|null,message:string}> The recorded failures, oldest first. */
+    public function entries(): array {
+        $entries = get_option( self::OPTION, [] );
+        return is_array( $entries ) ? array_values( array_filter( $entries, 'is_array' ) ) : [];
     }
 
     public static function redact( string $message ): string {

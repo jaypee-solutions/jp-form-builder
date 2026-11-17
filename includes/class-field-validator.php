@@ -13,10 +13,13 @@ defined( 'ABSPATH' ) || exit;
 
 final class Field_Validator {
 
-    private const MAX_EMAIL_LENGTH  = 254;
-    private const MAX_NAME_LENGTH   = 100;
-    private const MAX_STREET_LENGTH = 200;
-    private const MAX_CITY_LENGTH   = 100;
+    public const MAX_EMAIL_LENGTH      = 254;
+    public const MAX_NAME_LENGTH       = 100;
+    public const MAX_STREET_LENGTH     = 200;
+    public const MAX_CITY_LENGTH       = 100;
+    public const MAX_POSTCODE_LENGTH   = 10;
+    public const DEFAULT_TEXT_LENGTH   = 200;
+    public const DEFAULT_TEXTAREA_LENGTH = 5000;
 
     private Phone_Normalizer $phone_normalizer;
 
@@ -92,12 +95,8 @@ final class Field_Validator {
                 return in_array( $value, $this->option_values( $field ), true )
                     ? $this->success( $value )
                     : $this->failure( '', __( 'Please choose one of the available options.', 'jp-form-builder' ) );
-            case 'textarea':
-                return $this->check_length( $value, $this->max_length( $field, 5000 ), $label );
-            case 'text':
-                return $this->check_length( $value, $this->max_length( $field, 200 ), $label );
             default:
-                return $this->check_length( $value, self::MAX_NAME_LENGTH, $label );
+                return $this->check_length( $value, self::max_length( $field ), $label );
         }
     }
 
@@ -155,8 +154,8 @@ final class Field_Validator {
             $field,
             $parts,
             $labels,
-            static fn( string $sub, string $value, string $label ): ?string => Text::length( $value ) > self::MAX_NAME_LENGTH
-                ? self::too_long_message( $label, self::MAX_NAME_LENGTH )
+            static fn( string $sub, string $value, string $label ): ?string => Text::length( $value ) > self::part_max_length( $sub )
+                ? self::too_long_message( $label, self::part_max_length( $sub ) )
                 : null
         );
     }
@@ -184,9 +183,8 @@ final class Field_Validator {
             static function ( string $sub, string $value, string $label ) use ( $parts ): ?string {
                 switch ( $sub ) {
                     case 'street':
-                        return Text::length( $value ) > self::MAX_STREET_LENGTH ? self::too_long_message( $label, self::MAX_STREET_LENGTH ) : null;
                     case 'city':
-                        return Text::length( $value ) > self::MAX_CITY_LENGTH ? self::too_long_message( $label, self::MAX_CITY_LENGTH ) : null;
+                        return Text::length( $value ) > self::part_max_length( $sub ) ? self::too_long_message( $label, self::part_max_length( $sub ) ) : null;
                     case 'country':
                         return isset( Countries::all()[ $value ] ) ? null : __( 'Please choose a valid country.', 'jp-form-builder' );
                     default:
@@ -253,9 +251,32 @@ final class Field_Validator {
         return ! empty( $field->attributes['required'] );
     }
 
-    private function max_length( Field_Definition $field, int $fallback ): int {
-        $max = (int) ( $field->attributes['maxLength'] ?? $fallback );
-        return $max > 0 ? $max : $fallback;
+    /** The most characters a single-control Field accepts; the Form Renderer sets the same `maxlength`. */
+    public static function max_length( Field_Definition $field ): int {
+        switch ( $field->type ) {
+            case 'name':
+                return self::MAX_NAME_LENGTH;
+            case 'email':
+                return self::MAX_EMAIL_LENGTH;
+            default:
+                $fallback = 'textarea' === $field->type ? self::DEFAULT_TEXTAREA_LENGTH : self::DEFAULT_TEXT_LENGTH;
+                $max      = (int) ( $field->attributes['maxLength'] ?? $fallback );
+                return $max > 0 ? $max : $fallback;
+        }
+    }
+
+    /** The most characters one part of a compound Field accepts. */
+    public static function part_max_length( string $sub ): int {
+        switch ( $sub ) {
+            case 'street':
+                return self::MAX_STREET_LENGTH;
+            case 'city':
+                return self::MAX_CITY_LENGTH;
+            case 'postcode':
+                return self::MAX_POSTCODE_LENGTH;
+            default:
+                return self::MAX_NAME_LENGTH;
+        }
     }
 
     /** @return string[] */

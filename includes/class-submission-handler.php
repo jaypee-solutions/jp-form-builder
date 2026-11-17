@@ -93,7 +93,7 @@ final class Submission_Handler {
             return $turnstile_error;
         }
 
-        $definition = $this->repository->find_fields( $form->id, $this->string_param( $payload, 'rev' ) );
+        $definition = $this->repository->find_by_rev( $form->id, $this->string_param( $payload, 'rev' ) );
         if ( null === $definition ) {
             return $this->error( 'jpfb_form_changed', __( 'This form was updated. Please reload the page.', 'jp-form-builder' ), 409 );
         }
@@ -236,15 +236,9 @@ final class Submission_Handler {
             (string) get_option( 'admin_email' ),
         ];
         foreach ( $lists as $list ) {
-            $valid = [];
-            foreach ( explode( ',', $list ) as $address ) {
-                $address = trim( $address );
-                if ( '' !== $address && false !== is_email( $address ) ) {
-                    $valid[] = $address;
-                }
-            }
+            $valid = Recipient_List::parse( $list );
             if ( [] !== $valid ) {
-                return array_values( array_unique( $valid ) );
+                return $valid;
             }
         }
         return [];

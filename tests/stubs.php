@@ -65,6 +65,10 @@ function wp_salt( string $scheme = 'auth' ): string {
     return 'unit-test-salt-' . $scheme;
 }
 
+function is_email( $email ) {
+    return false !== filter_var( $email, FILTER_VALIDATE_EMAIL ) ? $email : false;
+}
+
 function absint( $value ): int {
     return abs( (int) $value );
 }

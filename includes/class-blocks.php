@@ -13,9 +13,11 @@ defined( 'ABSPATH' ) || exit;
 
 final class Blocks {
 
+    private Settings $settings;
     private Form_Repository $repository;
 
-    public function __construct( ?Form_Repository $repository = null ) {
+    public function __construct( ?Settings $settings = null, ?Form_Repository $repository = null ) {
+        $this->settings   = $settings ?? new Settings();
         $this->repository = $repository ?? new Form_Repository();
     }
 
@@ -44,8 +46,8 @@ final class Blocks {
                         if ( ! $form ) {
                             return '';
                         }
-                        $settings = new Settings();
-                        return ( new Form_Renderer() )->render( $form, 0, $this->turnstile_site_key( $settings ), $settings->min_fill_seconds() );
+                        $markup = ( new Form_Renderer() )->render( $form, 0, $this->turnstile_site_key(), $this->settings->min_fill_seconds() );
+                        return sprintf( '<div %s>%s</div>', get_block_wrapper_attributes(), $markup );
                     },
                 ]
             );
@@ -68,7 +70,7 @@ final class Blocks {
         $data    = [
             'address' => [ 'countries' => Countries::all() ],
             'phone'   => [ 'regions' => $regions ],
-            'form'    => [ 'turnstileConfigured' => '' !== $this->turnstile_site_key( new Settings() ) ],
+            'form'    => [ 'turnstileConfigured' => '' !== $this->turnstile_site_key() ],
             'embed'   => [
                 'canEditForms' => current_user_can( Form_Post_Type::capability() ),
                 'editFormUrl'  => admin_url( 'post.php' ),
@@ -94,8 +96,8 @@ final class Blocks {
     }
 
     /** The Turnstile site key, or '' unless both Turnstile keys are set. */
-    private function turnstile_site_key( Settings $settings ): string {
-        return $settings->turnstile_configured() ? (string) $settings->get( 'turnstile_site_key' ) : '';
+    private function turnstile_site_key(): string {
+        return $this->settings->turnstile_configured() ? (string) $this->settings->get( 'turnstile_site_key' ) : '';
     }
 
     public function routes(): void {

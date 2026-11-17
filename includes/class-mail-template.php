@@ -46,14 +46,13 @@ final class Mail_Template {
 
     public function sanitize( string $template ): string {
         $template = preg_replace( '#<script\b[^>]*>.*?</script\s*>#is', '', $template );
-        $tags     = wp_kses_allowed_html( 'post' );
-        unset( $tags['img'], $tags['form'], $tags['script'], $tags['style'] );
+        $tags     = Mail_Remote_Assets::without_fetching_tags( wp_kses_allowed_html( 'post' ) );
+        unset( $tags['script'], $tags['style'] );
         foreach ( $tags as &$attributes ) {
             $attributes['style'] = true;
         }
         unset( $attributes );
-        $clean = wp_kses( $template, apply_filters( 'jp_form_builder_mail_allowed_html', $tags ) );
-        return (string) preg_replace( '#<img\b[^>]*>#i', '', $clean );
+        return Mail_Remote_Assets::strip( wp_kses( $template, apply_filters( 'jp_form_builder_mail_allowed_html', $tags ) ) );
     }
 
     /**
@@ -72,7 +71,7 @@ final class Mail_Template {
                     return 'html' === $mode ? $this->field_table( $fields ) : $this->field_lines( $fields );
                 }
                 if ( isset( $fields[ $key ] ) ) {
-                    $value = $this->value( $fields[ $key ] );
+                    $value = $fields[ $key ]->as_text();
                     return 'text' === $mode ? str_replace( "\n", "\n  ", $value ) : $this->escape( $value, $mode );
                 }
                 return isset( $context[ $key ] ) ? $this->escape( $context[ $key ], $mode ) : '';
@@ -81,13 +80,8 @@ final class Mail_Template {
         );
     }
 
-    private function value( Submitted_Field $field ): string {
-        $value = $field->value();
-        return is_array( $value ) ? implode( ' ', array_map( 'strval', $value ) ) : $value;
-    }
-
     private function non_empty( Submitted_Field $field ): bool {
-        return '' !== trim( $this->value( $field ) );
+        return '' !== trim( $field->as_text() );
     }
 
     private function escape( string $value, string $mode ): string {
@@ -98,7 +92,7 @@ final class Mail_Template {
     private function field_lines( array $fields ): string {
         $lines = [];
         foreach ( $fields as $field ) {
-            $lines[] = $field->label() . ': ' . str_replace( "\n", "\n  ", $this->value( $field ) );
+            $lines[] = $field->label() . ': ' . str_replace( "\n", "\n  ", $field->as_text() );
         }
         return implode( "\n", $lines );
     }
@@ -110,7 +104,7 @@ final class Mail_Template {
         }
         $rows = '';
         foreach ( $fields as $field ) {
-            $rows .= '<tr><th style="text-align:left;padding:4px">' . esc_html( $field->label() ) . '</th><td style="padding:4px">' . nl2br( esc_html( $this->value( $field ) ), false ) . '</td></tr>';
+            $rows .= '<tr><th style="text-align:left;padding:4px">' . esc_html( $field->label() ) . '</th><td style="padding:4px">' . nl2br( esc_html( $field->as_text() ), false ) . '</td></tr>';
         }
         return '<table style="font:inherit;color:inherit;border-collapse:collapse">' . $rows . '</table>';
     }

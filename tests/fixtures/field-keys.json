@@ -1,0 +1,16 @@
+[
+	[ "Your E-Mail!", "your_e_mail" ],
+	[ "Vorname", "vorname" ],
+	[ "Größe", "groesse" ],
+	[ "Straße", "strasse" ],
+	[ "ÄÖÜ äöü", "aeoeue_aeoeue" ],
+	[ "Café Crème", "cafe_creme" ],
+	[ "Señor Ñandú", "senor_nandu" ],
+	[ "Łódź", "odz" ],
+	[ "ǎb", "b" ],
+	[ "  __Name__  ", "name" ],
+	[ "a--b", "a__b" ],
+	[ "a1_B2", "a1_b2" ],
+	[ "日本語", "" ],
+	[ "", "" ]
+]

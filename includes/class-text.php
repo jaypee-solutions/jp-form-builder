@@ -39,6 +39,19 @@ final class Text {
         return mb_strlen( $value, 'UTF-8' );
     }
 
+    /** Lowercase; multibyte-aware when mbstring is available. */
+    public static function lowercase( string $value ): string {
+        return function_exists( 'mb_strtolower' ) ? mb_strtolower( $value, 'UTF-8' ) : strtolower( $value );
+    }
+
+    /** At most `$max` characters of a valid UTF-8 string, never cutting a character in half. */
+    public static function truncate( string $value, int $max ): string {
+        if ( function_exists( 'mb_substr' ) ) {
+            return mb_substr( $value, 0, $max, 'UTF-8' );
+        }
+        return 1 === preg_match( '/^.{0,' . max( 0, $max ) . '}/su', $value, $match ) ? $match[0] : '';
+    }
+
     private static function trim( string $value ): string {
         return (string) preg_replace( '/^[\s\p{Z}]+|[\s\p{Z}]+$/u', '', $value );
     }

@@ -24,7 +24,7 @@ final class Rest_Controller {
         $this->settings   = $settings ?? new Settings();
         $this->repository = $repository ?? new Form_Repository();
         $this->token      = $token ?? new Form_Token();
-        $this->client_ip  = $client_ip ?? new Client_Ip();
+        $this->client_ip  = $client_ip ?? Client_Ip::from_settings( $this->settings );
     }
 
     public function init(): void {
@@ -69,7 +69,7 @@ final class Rest_Controller {
             (int) $request['id'],
             is_array( $payload ) ? $payload : [],
             strlen( $request->get_body() ),
-            $this->client_ip->resolve( $_SERVER, $this->client_ip->parse_trusted( (string) $this->settings->tunable( 'trusted_proxies' ) ) )
+            $this->client_ip->resolve( $_SERVER )
         );
         return $this->respond( $result );
     }

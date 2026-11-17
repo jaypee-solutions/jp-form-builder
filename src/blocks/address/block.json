@@ -1,17 +1,17 @@
 {
-  "apiVersion": 3,
-  "name": "jp-form-builder/address",
-  "title": "Address",
-  "category": "widgets",
-  "textdomain": "jp-form-builder",
-  "editorScript": "file:./index.js",
-  "parent": ["jp-form-builder/form"],
-  "attributes": {
-    "label": { "type": "string", "default": "" },
-    "fieldName": { "type": "string", "default": "" },
-    "required": { "type": "boolean", "default": false },
-    "helpText": { "type": "string", "default": "" },
-    "defaultCountry": { "type": "string", "default": "DE" }
-  },
-  "supports": { "html": false }
+	"apiVersion": 3,
+	"name": "jp-form-builder/address",
+	"title": "Address",
+	"category": "widgets",
+	"textdomain": "jp-form-builder",
+	"editorScript": "file:./index.js",
+	"parent": ["jp-form-builder/form"],
+	"attributes": {
+		"label": { "type": "string", "default": "" },
+		"fieldName": { "type": "string", "default": "" },
+		"required": { "type": "boolean", "default": false },
+		"helpText": { "type": "string", "default": "" },
+		"defaultCountry": { "type": "string", "default": "DE" }
+	},
+	"supports": { "html": false }
 }

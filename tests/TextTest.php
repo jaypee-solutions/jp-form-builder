@@ -29,4 +29,14 @@ final class TextTest extends TestCase {
         $this->assertTrue( Text::is_valid_utf8( 'Zoë' ) );
         $this->assertFalse( Text::is_valid_utf8( "\xFF" ) );
     }
+
+    public function test_truncate_cuts_by_characters(): void {
+        $this->assertSame( 'äö', Text::truncate( 'äöü', 2 ) );
+        $this->assertSame( 'abc', Text::truncate( 'abc', 10 ) );
+        $this->assertSame( '', Text::truncate( 'abc', 0 ) );
+    }
+
+    public function test_lowercase_handles_multibyte_letters(): void {
+        $this->assertSame( 'äöü straße', Text::lowercase( 'ÄÖÜ Straße' ) );
+    }
 }

@@ -77,6 +77,79 @@ final class SettingsTest extends TestCase {
         $this->assertSame( 'secret', $settings->get( 'smtp_password' ) );
     }
 
+    public function test_default_recipient_keeps_every_valid_address_of_a_comma_list(): void {
+        $settings = new Settings();
+        $this->assertSame( [], $settings->save( [ 'default_recipient' => 'a@x.de, b@y.de ,nope, a@x.de' ] ) );
+        $this->assertSame( 'a@x.de, b@y.de', $settings->get( 'default_recipient' ) );
+        $settings->save( [ 'default_recipient' => 'single@x.de' ] );
+        $this->assertSame( 'single@x.de', $settings->get( 'default_recipient' ) );
+        $settings->save( [ 'default_recipient' => 'nobody' ] );
+        $this->assertSame( '', $settings->get( 'default_recipient' ) );
+    }
+
+    /** @return array<string,array{mixed,bool}> */
+    public function accepted_booleans(): array {
+        return [
+            'true'      => [ 'true', true ],
+            'TRUE'      => [ ' TRUE ', true ],
+            'one'       => [ '1', true ],
+            'yes'       => [ 'yes', true ],
+            'on'        => [ 'on', true ],
+            'false'     => [ 'false', false ],
+            'zero'      => [ '0', false ],
+            'no'        => [ 'No', false ],
+            'off'       => [ 'off', false ],
+            'bool true' => [ true, true ],
+            'bool false' => [ false, false ],
+            'int zero'  => [ 0, false ],
+        ];
+    }
+
+    /** @dataProvider accepted_booleans */
+    public function test_booleans_are_read_from_words_and_numbers( $input, bool $expected ): void {
+        $settings = new Settings();
+        $this->assertSame( [], $settings->save( [ 'smtp_auth' => $input ] ) );
+        $this->assertSame( $expected, $settings->get( 'smtp_auth' ) );
+    }
+
+    public function test_an_unreadable_boolean_is_rejected_and_keeps_the_saved_value(): void {
+        $settings = new Settings();
+        $settings->save( [ 'smtp_auth' => 'false', 'force_from' => 'yes' ] );
+        $rejected = $settings->save( [ 'smtp_auth' => 'maybe', 'force_from' => 'no', 'from_name' => 'Kept' ] );
+        $this->assertSame( [ 'smtp_auth' ], array_keys( $rejected ) );
+        $this->assertFalse( $settings->get( 'smtp_auth' ), 'the previous value stays' );
+        $this->assertFalse( $settings->get( 'force_from' ), 'valid values are saved alongside' );
+        $this->assertSame( 'Kept', $settings->get( 'from_name' ) );
+        $this->assertNotNull( $settings->rejection( 'smtp_auth', 'maybe' ) );
+        $this->assertNull( $settings->rejection( 'smtp_auth', 'off' ) );
+    }
+
+    public function test_an_invalid_layout_is_rejected_without_discarding_the_other_settings(): void {
+        $settings = new Settings();
+        $settings->save( [ 'mail_layout' => '<p>{content}</p>' ] );
+        $rejected = $settings->save( [ 'from_name' => 'Kept', 'mail_layout' => '<p>no placeholder</p>', 'smtp_host' => 'mail.test' ] );
+        $this->assertSame( [ 'mail_layout' ], array_keys( $rejected ) );
+        $this->assertSame( '<p>{content}</p>', $settings->get( 'mail_layout' ), 'only the old layout is kept' );
+        $this->assertSame( 'Kept', $settings->get( 'from_name' ) );
+        $this->assertSame( 'mail.test', $settings->get( 'smtp_host' ) );
+    }
+
+    public function test_types_name_the_kind_of_every_setting(): void {
+        $settings = new Settings();
+        $this->assertSame( 'bool', $settings->type( 'smtp_auth' ) );
+        $this->assertSame( 'port', $settings->type( 'smtp_port' ) );
+        $this->assertSame( 'secret', $settings->type( 'smtp_password' ) );
+        $this->assertSame( 'mail_layout', $settings->type( 'mail_layout' ) );
+        $this->assertSame( '', $settings->type( 'unknown' ) );
+    }
+
+    public function test_delete_removes_the_saved_value(): void {
+        $settings = new Settings();
+        $settings->save( [ 'from_name' => 'Gone' ] );
+        $settings->delete( 'from_name' );
+        $this->assertSame( 'default', $settings->source( 'from_name' ) );
+    }
+
     public function test_secret_box_round_trip_rejects_tampering_and_wrong_key(): void {
         $box = new Secret_Box( 'first-key' );
         $encrypted = $box->encrypt( 'confidential' );

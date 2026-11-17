@@ -71,7 +71,7 @@ final class Form_Renderer {
                 $sub_id = $id . '-' . $subkey;
                 $autocomplete = 'first' === $subkey ? 'given-name' : 'family-name';
                 $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( Field_Labels::for_part( $field, $subkey ) ) . '</label>';
-                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . esc_attr( $field->key . '[' . $subkey . ']' ) . '"' . $required_attribute . ' maxlength="100" autocomplete="' . esc_attr( $autocomplete ) . '" aria-describedby="' . esc_attr( $described ) . '">';
+                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . esc_attr( $field->key . '[' . $subkey . ']' ) . '"' . $required_attribute . ' maxlength="' . Field_Validator::part_max_length( $subkey ) . '" autocomplete="' . esc_attr( $autocomplete ) . '" aria-describedby="' . esc_attr( $described ) . '">';
             }
             $html .= '</fieldset>';
         } elseif ( 'address' === $field->type ) {
@@ -94,8 +94,7 @@ final class Form_Renderer {
                     $html .= '</select>';
                     continue;
                 }
-                $maxlength = 'street' === $subkey ? 200 : ( 'city' === $subkey ? 100 : 10 );
-                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required_attribute . ' maxlength="' . $maxlength . '" autocomplete="' . esc_attr( $autocomplete[ $subkey ] ) . '" aria-describedby="' . esc_attr( $described ) . '">';
+                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required_attribute . ' maxlength="' . Field_Validator::part_max_length( $subkey ) . '" autocomplete="' . esc_attr( $autocomplete[ $subkey ] ) . '" aria-describedby="' . esc_attr( $described ) . '">';
             }
             $html .= '</fieldset>';
         } elseif ( 'consent' === $field->type ) {
@@ -116,7 +115,7 @@ final class Form_Renderer {
         } elseif ( 'textarea' === $field->type ) {
             $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
             $html .= '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute;
-            $html .= ' rows="' . esc_attr( (string) ( $attributes['rows'] ?? 6 ) ) . '" maxlength="' . esc_attr( (string) ( $attributes['maxLength'] ?? 5000 ) ) . '"';
+            $html .= ' rows="' . esc_attr( (string) ( $attributes['rows'] ?? 6 ) ) . '" maxlength="' . Field_Validator::max_length( $field ) . '"';
             if ( ! empty( $attributes['placeholder'] ) ) {
                 $html .= ' placeholder="' . esc_attr( (string) $attributes['placeholder'] ) . '"';
             }
@@ -134,8 +133,7 @@ final class Form_Renderer {
             if ( '' !== $auto ) {
                 $html .= ' autocomplete="' . esc_attr( $auto ) . '"';
             }
-            $maxlength = 'name' === $field->type ? 100 : ( $attributes['maxLength'] ?? ( 'email' === $field->type ? 254 : 200 ) );
-            $html .= ' maxlength="' . esc_attr( (string) $maxlength ) . '"';
+            $html .= ' maxlength="' . Field_Validator::max_length( $field ) . '"';
             if ( ! empty( $attributes['placeholder'] ) ) {
                 $html .= ' placeholder="' . esc_attr( (string) $attributes['placeholder'] ) . '"';
             }

@@ -64,8 +64,11 @@ final class Cli_Command {
             if ( $this->settings->is_locked( $key ) ) {
                 WP_CLI::error( 'Setting is locked by a constant.' );
             }
-            $value = $args[2] ?? stream_get_contents( STDIN );
-            $this->settings->save( [ $key => trim( (string) $value ) ] );
+            $value    = $args[2] ?? stream_get_contents( STDIN );
+            $rejected = $this->settings->save( [ $key => trim( (string) $value ) ] );
+            if ( isset( $rejected[ $key ] ) ) {
+                WP_CLI::error( $rejected[ $key ] );
+            }
             WP_CLI::success( 'Setting saved.' );
             return;
         }
@@ -76,9 +79,7 @@ final class Cli_Command {
             if ( $this->settings->is_locked( $key ) ) {
                 WP_CLI::error( 'Setting is locked by a constant.' );
             }
-            $option = get_option( 'jp_form_builder_settings', [] );
-            unset( $option[ $key ] );
-            update_option( 'jp_form_builder_settings', $option, false );
+            $this->settings->delete( $key );
             WP_CLI::success( 'Setting deleted.' );
             return;
         }

@@ -1,16 +1,28 @@
-// Mirrors Form_Definition_Parser: lowercase a-z, 0-9 and underscores; anything else becomes `_`.
+// Mirrors Field_Key::normalize() in PHP, rule for rule (tests/fixtures/field-keys.json checks both):
+// lowercase; ä, ö, ü, ß become ae, oe, ue, ss; the accents of the Latin-1 Supplement and Latin
+// Extended-A letters are removed; every other character outside a-z, 0-9 and `_` becomes `_`;
+// leading and trailing underscores are trimmed.
 
 const TRANSLITERATIONS = { ä: 'ae', ö: 'oe', ü: 'ue', ß: 'ss' };
 
+// The letters PHP folds with its own table: U+00C0 to U+017F.
+const ACCENTED_LATIN = /[\u00c0-\u017f]/g;
+
 /**
- * Applies the parser's character rules while the user is still typing, so a
- * trailing underscore survives until the next character arrives.
+ * Applies every character rule except the trim, so a trailing underscore
+ * survives while the user is still typing and the next character arrives.
  *
  * @param {string} value Raw input.
  * @return {string} Lowercase text with every character outside a-z0-9_ replaced by `_`.
  */
 export function sanitizeFieldKeyInput( value ) {
-	return value.toLowerCase().replace( /[^a-z0-9_]/g, '_' );
+	return value
+		.toLowerCase()
+		.replace( /[äöüß]/g, ( char ) => TRANSLITERATIONS[ char ] )
+		.replace( ACCENTED_LATIN, ( char ) =>
+			char.normalize( 'NFD' ).replace( /[\u0300-\u036f]/g, '' )
+		)
+		.replace( /[^a-z0-9_]/g, '_' );
 }
 
 /**
@@ -18,12 +30,7 @@ export function sanitizeFieldKeyInput( value ) {
  * @return {string} The key the parser derives from it; empty when nothing usable is left.
  */
 export function normalizeFieldKey( value ) {
-	const transliterated = value
-		.toLowerCase()
-		.replace( /[äöüß]/g, ( char ) => TRANSLITERATIONS[ char ] )
-		.normalize( 'NFD' )
-		.replace( /[\u0300-\u036f]/g, '' );
-	return sanitizeFieldKeyInput( transliterated ).replace( /^_+|_+$/g, '' );
+	return sanitizeFieldKeyInput( value ).replace( /^_+|_+$/g, '' );
 }
 
 /**

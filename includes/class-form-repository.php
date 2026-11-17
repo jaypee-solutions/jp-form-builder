@@ -39,7 +39,8 @@ final class Form_Repository {
         return $forms;
     }
 
-    public function find_fields( int $id, string $rev ): ?Form_Definition {
+    /** The Form as it was when its content hashed to `$rev`: the current content or one of its last revisions; null when none matches. */
+    public function find_by_rev( int $id, string $rev ): ?Form_Definition {
         $form = $this->find( $id );
         if ( $form && hash_equals( $form->rev, $rev ) ) {
             return $form;
@@ -47,8 +48,7 @@ final class Form_Repository {
 
         $revisions = wp_get_post_revisions( $id, [ 'numberposts' => 10, 'orderby' => 'date', 'order' => 'DESC' ] );
         foreach ( $revisions as $revision ) {
-            $revision_rev = substr( hash( 'sha256', $revision->post_content ), 0, 16 );
-            if ( hash_equals( $revision_rev, $rev ) ) {
+            if ( hash_equals( Form_Definition::hash_content( $revision->post_content ), $rev ) ) {
                 return $this->parser->parse( parse_blocks( $revision->post_content ), $id, get_the_title( $id ), $revision->post_content );
             }
         }

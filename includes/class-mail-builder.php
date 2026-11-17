@@ -13,16 +13,19 @@ defined( 'ABSPATH' ) || exit;
 
 final class Mail_Builder {
 
+    private const MAX_SUBJECT_VALUE_LENGTH = 200;
+    private const MAX_SUBJECT_LENGTH       = 250;
+
     private Mail_Template $template;
     private Mail_Layout $layout;
     private Mail_Header_Guard $header_guard;
     private Settings $settings;
 
     public function __construct( ?Mail_Template $template = null, ?Mail_Layout $layout = null, ?Mail_Header_Guard $header_guard = null, ?Settings $settings = null ) {
-        $this->template     = $template ?? new Mail_Template();
-        $this->layout       = $layout ?? new Mail_Layout();
-        $this->header_guard = $header_guard ?? new Mail_Header_Guard();
         $this->settings     = $settings ?? new Settings();
+        $this->template     = $template ?? new Mail_Template();
+        $this->layout       = $layout ?? new Mail_Layout( $this->settings );
+        $this->header_guard = $header_guard ?? new Mail_Header_Guard();
     }
 
     /**
@@ -48,11 +51,11 @@ final class Mail_Builder {
                 $name = '';
                 foreach ( $fields as $candidate ) {
                     if ( $candidate instanceof Submitted_Field && 'name' === $candidate->type() ) {
-                        $name = $this->value( $candidate );
+                        $name = $candidate->as_text();
                         break;
                     }
                 }
-                $header = $this->header_guard->reply_to( $name, $this->value( $field ) );
+                $header = $this->header_guard->reply_to( $name, $field->as_text() );
                 if ( null !== $header ) {
                     $headers[] = $header;
                 }
@@ -106,22 +109,17 @@ final class Mail_Builder {
         $values = [];
         foreach ( $fields as $field ) {
             if ( $field instanceof Submitted_Field ) {
-                $values[ $field->key() ] = $this->value( $field );
+                $values[ $field->key() ] = $field->as_text();
             }
         }
         $values = array_merge( $context, $values );
         $subject = preg_replace_callback(
             '/\{([A-Za-z0-9_-]+)\}/',
             static function ( array $placeholder ) use ( $values ): string {
-                return isset( $values[ $placeholder[1] ] ) ? substr( trim( preg_replace( '/[\r\n\x00]+/', ' ', (string) $values[ $placeholder[1] ] ) ), 0, 200 ) : '';
+                return isset( $values[ $placeholder[1] ] ) ? Text::truncate( trim( (string) preg_replace( '/[\r\n\x00]+/', ' ', (string) $values[ $placeholder[1] ] ) ), self::MAX_SUBJECT_VALUE_LENGTH ) : '';
             },
             wp_strip_all_tags( $template )
         );
-        return substr( trim( (string) $subject ), 0, 250 );
-    }
-
-    private function value( Submitted_Field $field ): string {
-        $value = $field->value();
-        return is_array( $value ) ? implode( ' ', array_map( 'strval', $value ) ) : $value;
+        return Text::truncate( trim( (string) $subject ), self::MAX_SUBJECT_LENGTH );
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /** Tests parsed Form definitions. */
 use JayPee\FormBuilder\Block_Defaults;
+use JayPee\FormBuilder\Form_Definition;
 use JayPee\FormBuilder\Form_Definition_Parser;
 use PHPUnit\Framework\TestCase;
 final class FormModelTest extends TestCase {
@@ -25,7 +26,8 @@ final class FormModelTest extends TestCase {
         $content = 'definition';
         $form = $parser->parse( $blocks, 17, 'Contact', $content );
         self::assertNotNull( $form );
-        self::assertSame( substr( hash( 'sha256', $content ), 0, 16 ), $form->rev );
+        self::assertSame( Form_Definition::hash_content( $content ), $form->rev );
+        self::assertSame( 16, strlen( $form->rev ) );
         self::assertSame( '', $form->attributes['submitLabel'] );
         self::assertIsArray( $form->items[0] );
         self::assertSame( [ 'first', 'last' ], $form->items[1]->subkeys );
