@@ -4,7 +4,7 @@ Tags: forms, contact form, smtp, privacy, turnstile
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ Requires PHP 8.0 and WordPress 6.6. Single-site only. Microsoft 365 mailboxes ar
 4. Create a Form under Forms → Add Form and add the Form block to a page.
 
 == Changelog ==
+
+= 1.2.0 =
+* Added: Card and Liquid Glass styles. Changed: cleaner Standard look. Fixed: consistent Field shapes against theme/admin input rules; the submit button no longer looks disabled before interaction.
 
 = 1.1.0 =
 * Added: styling for the Form block: style variations (Standard, Soft, Underlined, Rounded), color, typography, spacing and border tools, Field colors and borders, Field widths; site-wide in Styles → Blocks → Form or theme.json.

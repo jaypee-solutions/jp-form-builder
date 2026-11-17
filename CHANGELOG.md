@@ -10,6 +10,18 @@ extracts it as the GitHub release notes and fails without it.
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-17
+
+### Added
+- Two more Form block styles: *Card* (a raised surface with layered shadows) and *Liquid Glass* (a frosted, translucent surface with blur).
+
+### Changed
+- A cleaner *Standard* look: bold labels, a red required marker, muted help text, taller Fields with a 6 px radius, and one drawn select caret in every browser.
+
+### Fixed
+- Theme or wp-admin input rules no longer make text inputs square while selects and textareas follow the chosen style; all Field controls now look alike in the editor and on the page.
+- The submit button no longer looks disabled before the visitor interacts with the Form; it dims only while a Submission is being sent.
+
 ## [1.1.0] - 2026-11-17
 
 ### Added
