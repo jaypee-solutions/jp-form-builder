@@ -150,4 +150,27 @@ final class Test_Form_Styling extends WP_UnitTestCase {
         $this->assertStringContainsString( '--jpfb-field-radius:6px', $rendered );
         $this->assertStringContainsString( '--jpfb-field-gap:1rem', $rendered );
     }
+
+    public function test_theme_json_custom_values_become_the_variables_the_stylesheet_reads(): void {
+        $filter = static fn( WP_Theme_JSON_Data $data ): WP_Theme_JSON_Data => $data->update_with(
+            [
+                'version'  => WP_Theme_JSON::LATEST_SCHEMA,
+                'settings' => [ 'custom' => [ 'jpfb' => [ 'fieldRadius' => '9px', 'focusColor' => '#123456' ] ] ],
+            ]
+        );
+        add_filter( 'wp_theme_json_data_theme', $filter );
+        wp_clean_theme_json_cache();
+        try {
+            $variables = wp_get_global_stylesheet( [ 'variables' ] );
+        } finally {
+            remove_filter( 'wp_theme_json_data_theme', $filter );
+            wp_clean_theme_json_cache();
+        }
+
+        $this->assertStringContainsString( '--wp--custom--jpfb--field-radius: 9px', $variables );
+        $this->assertStringContainsString( '--wp--custom--jpfb--focus-color: #123456', $variables );
+        $css = (string) file_get_contents( dirname( __DIR__, 2 ) . '/blocks/embed/style-index.css' );
+        $this->assertStringContainsString( 'var(--wp--custom--jpfb--field-radius', $css, 'the style reads the variable theme.json writes' );
+        $this->assertStringContainsString( 'var(--wp--custom--jpfb--focus-color', $css );
+    }
 }

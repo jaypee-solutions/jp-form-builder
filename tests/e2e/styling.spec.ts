@@ -138,7 +138,14 @@ test.describe( 'Form styling', () => {
 	test( 'the Form block is offered in Site Editor Styles under Blocks', async ( { page } ) => {
 		await login( page );
 		await page.goto( '/wp-admin/site-editor.php?p=%2Fstyles&section=%2Fblocks' );
-		await expect( page.getByRole( 'button', { name: 'Form', exact: true } ) ).toBeVisible();
+		const formBlock = page.getByRole( 'button', { name: 'Form', exact: true } );
+		await expect( formBlock ).toBeVisible();
+		await formBlock.click();
+		// The block's own Styles screen lists its variations and the design tools its supports declare.
+		await expect( page.getByRole( 'button', { name: 'Soft', exact: true } ) ).toBeVisible();
+		await expect( page.getByRole( 'button', { name: 'Underlined', exact: true } ) ).toBeVisible();
+		await expect( page.getByRole( 'button', { name: 'Rounded', exact: true } ) ).toBeVisible();
+		await expect( page.getByRole( 'heading', { name: 'Typography' } ) ).toBeVisible();
 	} );
 
 	for ( const variation of VARIATIONS ) {

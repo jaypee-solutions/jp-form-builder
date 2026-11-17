@@ -47,7 +47,13 @@
 			"radius": true,
 			"width": true,
 			"color": true,
-			"style": true
+			"style": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"radius": true,
+				"width": true,
+				"style": true
+			}
 		}
 	},
 	"example": {}
