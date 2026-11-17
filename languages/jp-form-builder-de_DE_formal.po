@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JayPee Solutions Form Builder 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jp-forms\n"
-"POT-Creation-Date: 2026-11-17T15:56:13+00:00\n"
+"POT-Creation-Date: 2026-11-17T17:34:37+00:00\n"
 "PO-Revision-Date: 2026-11-17 00:00+0000\n"
 "Last-Translator: JayPee Solutions <support@jaypee.solutions>\n"
 "Language-Team: German\n"
@@ -170,59 +170,62 @@ msgstr "Vereinigtes Königreich"
 #: includes/class-field-labels.php:24
 #: includes/class-mail-preview-controller.php:172 admin/build/settings.js:1
 #: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Name"
 msgstr "Name"
 
 #: includes/class-field-labels.php:25
 #: includes/class-mail-preview-controller.php:173 admin/build/settings.js:1
 #: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Email"
 msgstr "E-Mail"
 
 #: includes/class-field-labels.php:26 blocks/address/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/form/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
+#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Phone"
 msgstr "Telefon"
 
 #: includes/class-field-labels.php:27 blocks/address/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/form/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
+#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Address"
 msgstr "Adresse"
 
 #: includes/class-field-labels.php:28 blocks/address/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/form/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
+#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Text"
 msgstr "Text"
 
 #: includes/class-field-labels.php:29 blocks/address/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/form/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
+#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Select"
 msgstr "Auswahl"
 
 #: includes/class-field-labels.php:30
 #: includes/class-mail-preview-controller.php:174 admin/build/settings.js:1
 #: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Message"
 msgstr "Nachricht"
 
 #: includes/class-field-labels.php:31 blocks/address/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/form/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
+#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Consent"
 msgstr "Einwilligung"
 
@@ -532,23 +535,24 @@ msgid_plural "%s Forms restored from the Trash."
 msgstr[0] "%s Formular aus dem Papierkorb wiederhergestellt."
 msgstr[1] "%s Formulare aus dem Papierkorb wiederhergestellt."
 
-#: includes/class-form-renderer.php:45 blocks/form/index.js:1
+#: includes/class-form-renderer.php:47 blocks/embed/index.js:1
+#: blocks/form/index.js:1
 msgid "Submit"
 msgstr "Absenden"
 
-#: includes/class-form-renderer.php:46
+#: includes/class-form-renderer.php:48
 msgid "Leave this field empty"
 msgstr "Dieses Feld leer lassen"
 
-#: includes/class-form-renderer.php:50
+#: includes/class-form-renderer.php:52
 msgid "JavaScript is required to submit this form."
 msgstr "Zum Absenden dieses Formulars ist JavaScript erforderlich."
 
-#: includes/class-form-renderer.php:102 blocks/consent/index.js:1
+#: includes/class-form-renderer.php:109 blocks/consent/index.js:1
 msgid "privacy policy"
 msgstr "Datenschutzerklärung"
 
-#: includes/class-form-renderer.php:103 blocks/consent/index.js:1
+#: includes/class-form-renderer.php:110 blocks/consent/index.js:1
 msgid "I agree to the {privacy_policy}."
 msgstr "Ich stimme der {privacy_policy} zu."
 
@@ -1407,6 +1411,38 @@ msgstr "Platzhaltertext"
 #: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
 #: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Width"
+msgstr "Breite"
+
+#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Full width"
+msgstr "Volle Breite"
+
+#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Half width"
+msgstr "Halbe Breite"
+
+#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "One third"
+msgstr "Ein Drittel"
+
+#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Narrower Fields sit side by side and stack on narrow screens."
+msgstr ""
+"Schmalere Felder stehen nebeneinander und werden auf schmalen Bildschirmen "
+"untereinander angeordnet."
+
+#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Field options"
 msgstr "Feldoptionen"
 
@@ -1451,6 +1487,39 @@ msgstr "Als Antwortadresse (Reply-To) verwenden"
 #: blocks/email/index.js:1
 msgid "Replying to the Notification then answers the Submitter."
 msgstr "Eine Antwort auf die Benachrichtigung geht dann an den Einsender."
+
+#: blocks/embed/index.js:1
+msgid "Field background"
+msgstr "Feldhintergrund"
+
+#: blocks/embed/index.js:1
+msgid "Field border"
+msgstr "Feldrahmen"
+
+#: blocks/embed/index.js:1
+msgid "Focus and accent"
+msgstr "Fokus- und Akzentfarbe"
+
+#: blocks/embed/index.js:1
+msgid "Fields"
+msgstr "Felder"
+
+#: blocks/embed/index.js:1
+msgid "Field border radius"
+msgstr "Eckenradius der Felder"
+
+#: blocks/embed/index.js:1
+msgid "Field border width"
+msgstr "Rahmenstärke der Felder"
+
+#: blocks/embed/index.js:1
+msgid ""
+"Keep the focus color at least 3:1 against the background so keyboard users "
+"can see it."
+msgstr ""
+"Wählen Sie die Fokusfarbe so, dass sie zum Hintergrund mindestens ein "
+"Kontrastverhältnis von 3:1 hat, damit der Fokus bei Tastaturbedienung "
+"sichtbar bleibt."
 
 #: blocks/embed/index.js:1
 msgid "Choose a Form…"
@@ -1696,6 +1765,26 @@ msgstr "E-Mail"
 msgctxt "block title"
 msgid "Form"
 msgstr "Formular"
+
+#: blocks/embed/block.json
+msgctxt "block style label"
+msgid "Standard"
+msgstr "Standard"
+
+#: blocks/embed/block.json
+msgctxt "block style label"
+msgid "Soft"
+msgstr "Weich"
+
+#: blocks/embed/block.json
+msgctxt "block style label"
+msgid "Underlined"
+msgstr "Unterstrichen"
+
+#: blocks/embed/block.json
+msgctxt "block style label"
+msgid "Rounded"
+msgstr "Abgerundet"
 
 #: blocks/form/block.json
 msgctxt "block title"
