@@ -1,14 +1,100 @@
+/*
+ * Design tokens. The Form block wrapper sets them (the editor's Form block
+ * too, for its preview). Order of precedence: the block's own settings
+ * (inline custom properties), the theme.json value
+ * settings.custom.jpfb.<name> (WordPress writes --wp--custom--jpfb--<name>),
+ * the style variation, the built-in default. Fonts, colors and the button
+ * come from the theme.
+ *
+ * `currentcolor` inside a token resolves where it is used, so the defaults
+ * follow the text color.
+ */
+.wp-block-jp-form-builder-embed,
+.jp-form-builder__form {
+	--jpfb-text-color: var(--wp--custom--jpfb--text-color, currentcolor);
+	--jpfb-field-background: var(--wp--custom--jpfb--field-background, transparent);
+	--jpfb-field-border-color: var(--wp--custom--jpfb--field-border-color, color-mix(in srgb, currentcolor 60%, transparent));
+	--jpfb-field-border-width: var(--wp--custom--jpfb--field-border-width, 1px);
+	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 4px);
+	--jpfb-focus-color: var(--wp--custom--jpfb--focus-color, currentcolor);
+	--jpfb-field-gap: var(--wp--custom--jpfb--field-gap, 1.25em);
+	--jpfb-label-weight: var(--wp--custom--jpfb--label-weight, 600);
+	--jpfb-error-color: var(--wp--custom--jpfb--error-color, #b32d2e);
+}
+
 .wp-block-jp-form-builder-embed {
 	display: block;
 }
 
-/* Fonts and colours come from the theme; the error colour is overridable. */
-.jp-form-builder {
-	--jpfb-error-color: #b32d2e;
+/*
+ * The editor preview renders the Form inside the block's own wrapper, so
+ * a nested wrapper hands the tokens down and stays out of the box model.
+ */
+.wp-block-jp-form-builder-embed .wp-block-jp-form-builder-embed {
+	display: contents;
+	--jpfb-text-color: inherit;
+	--jpfb-field-background: inherit;
+	--jpfb-field-border-color: inherit;
+	--jpfb-field-border-width: inherit;
+	--jpfb-field-radius: inherit;
+	--jpfb-focus-color: inherit;
+	--jpfb-field-gap: inherit;
+	--jpfb-label-weight: inherit;
+	--jpfb-error-color: inherit;
+	--jpfb-button-radius: inherit;
 }
 
-.jp-form-builder__field {
-	margin-block-end: 1.25em;
+/*
+ * Style variations only change tokens, plus the few shapes a token cannot
+ * express.
+ */
+.wp-block-jp-form-builder-embed.is-style-soft {
+	--jpfb-field-background: var(--wp--custom--jpfb--field-background, color-mix(in srgb, currentcolor 8%, transparent));
+	--jpfb-field-border-color: var(--wp--custom--jpfb--field-border-color, transparent);
+}
+
+.wp-block-jp-form-builder-embed.is-style-underlined {
+	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 0);
+	--jpfb-field-border-width: var(--wp--custom--jpfb--field-border-width, 2px);
+}
+
+.wp-block-jp-form-builder-embed.is-style-rounded {
+	--jpfb-field-radius: var(--wp--custom--jpfb--field-radius, 1.25em);
+	--jpfb-button-radius: var(--wp--custom--jpfb--button-radius, 999px);
+}
+
+.jp-form-builder,
+.jp-form-builder__form {
+	container-type: inline-size;
+}
+
+.jp-form-builder__fields {
+	display: grid;
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+	gap: var(--jpfb-field-gap);
+	margin-block-end: var(--jpfb-field-gap);
+}
+
+.jp-form-builder__fields > * {
+	grid-column: 1 / -1;
+	margin: 0;
+}
+
+.jp-form-builder__fields > .jp-form-builder__field--width-50 {
+	grid-column: span 3;
+}
+
+.jp-form-builder__fields > .jp-form-builder__field--width-33 {
+	grid-column: span 2;
+}
+
+/* Narrow Forms (not narrow viewports) stack every Field. */
+@container (max-width: 480px) {
+
+	.jp-form-builder__fields > .jp-form-builder__field--width-50,
+	.jp-form-builder__fields > .jp-form-builder__field--width-33 {
+		grid-column: 1 / -1;
+	}
 }
 
 .jp-form-builder__field fieldset {
@@ -17,12 +103,25 @@
 	border: 0;
 }
 
+.jp-form-builder__field > label,
 .jp-form-builder__field legend {
-	padding: 0;
-	font-weight: 600;
+	font-weight: var(--jpfb-label-weight);
 }
 
-.jp-form-builder__field label {
+.jp-form-builder__field > label {
+	display: block;
+	margin-block-end: 0.25em;
+}
+
+.jp-form-builder__field--consent > label {
+	font-weight: inherit;
+}
+
+.jp-form-builder__field legend {
+	padding: 0;
+}
+
+.jp-form-builder__field fieldset label {
 	display: block;
 	margin-block-end: 0.25em;
 }
@@ -31,21 +130,42 @@
 	margin-block-start: 0.75em;
 }
 
-.jp-form-builder__field input:not([type="checkbox"]),
-.jp-form-builder__field select,
-.jp-form-builder__field textarea {
+/*
+ * Low specificity, so the states below and a theme's own rules win without
+ * a fight.
+ */
+.jp-form-builder__field :where(
+	input:not([type="checkbox"]),
+	select,
+	textarea
+) {
 	box-sizing: border-box;
 	width: 100%;
-	padding: 0.5em 0.75em;
-	border: 1px solid currentcolor;
-	border-radius: 2px;
-	background-color: transparent;
+	padding: 0.6em 0.8em;
+	border: var(--jpfb-field-border-width) solid var(--jpfb-field-border-color);
+	border-radius: var(--jpfb-field-radius);
+	background-color: var(--jpfb-field-background);
 	font: inherit;
-	color: inherit;
+	color: var(--jpfb-text-color);
+}
+
+.jp-form-builder__field :where(input, textarea)::placeholder {
+	color: color-mix(in srgb, currentcolor 70%, transparent);
+	opacity: 1;
+}
+
+.is-style-underlined .jp-form-builder__field :where(
+	input:not([type="checkbox"]),
+	select,
+	textarea
+) {
+	padding-inline: 0.1em;
+	border-width: 0 0 var(--jpfb-field-border-width);
 }
 
 .jp-form-builder__field input[type="checkbox"] {
 	margin-inline-end: 0.5em;
+	accent-color: var(--jpfb-focus-color);
 }
 
 .jp-form-builder__field p {
@@ -57,17 +177,38 @@
 	margin-inline-start: 0.125em;
 }
 
+/*
+ * The outline color is a longhand: an invalid custom color then falls back
+ * to currentcolor, never to no outline at all.
+ */
 .jp-form-builder__field :focus-visible,
 .jp-form-builder__error-summary:focus-visible,
 .jp-form-builder__status:focus-visible,
 .jp-form-builder button:focus-visible {
-	outline: 2px solid currentcolor;
+	outline: 2px solid;
+	outline-color: var(--jpfb-focus-color);
 	outline-offset: 2px;
 }
 
+.is-style-soft .jp-form-builder__field :where(
+	input,
+	select,
+	textarea
+):focus:not([aria-invalid="true"]) {
+	border-color: var(--jpfb-focus-color);
+}
+
+/*
+ * The error keeps its meaning in every style: a border in the error color
+ * plus the message below the Field.
+ */
 .jp-form-builder__field [aria-invalid="true"] {
 	border-color: var(--jpfb-error-color);
 	box-shadow: 0 0 0 1px var(--jpfb-error-color);
+}
+
+.is-style-underlined .jp-form-builder__field [aria-invalid="true"] {
+	box-shadow: 0 1px 0 0 var(--jpfb-error-color);
 }
 
 .jp-form-builder__error:empty {
@@ -85,10 +226,10 @@
 }
 
 .jp-form-builder__error-summary {
-	margin-block-end: 1.25em;
+	margin-block-end: var(--jpfb-field-gap);
 	padding: 1em;
 	border: 2px solid var(--jpfb-error-color);
-	border-radius: 2px;
+	border-radius: var(--jpfb-field-radius);
 }
 
 .jp-form-builder__error-summary h2 {
@@ -110,14 +251,18 @@
 }
 
 .jp-form-builder__status {
-	margin-block-end: 1.25em;
+	margin-block-end: var(--jpfb-field-gap);
 	padding: 1em;
 	border: 2px solid currentcolor;
-	border-radius: 2px;
+	border-radius: var(--jpfb-field-radius);
 }
 
 .jp-form-builder__turnstile {
-	margin-block-end: 1.25em;
+	margin-block-end: var(--jpfb-field-gap);
+}
+
+.is-style-rounded .jp-form-builder .wp-element-button {
+	border-radius: var(--jpfb-button-radius);
 }
 
 .jp-form-builder button[aria-disabled="true"] {

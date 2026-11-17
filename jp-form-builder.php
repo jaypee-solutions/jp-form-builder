@@ -66,6 +66,7 @@ require_once __DIR__ . '/includes/class-turnstile-verifier.php';
 require_once __DIR__ . '/includes/class-turnstile-result.php';
 require_once __DIR__ . '/includes/class-form-token.php';
 require_once __DIR__ . '/includes/class-field-labels.php';
+require_once __DIR__ . '/includes/class-form-style.php';
 require_once __DIR__ . '/includes/class-form-renderer.php';
 require_once __DIR__ . '/includes/class-submission-handler.php';
 require_once __DIR__ . '/includes/class-rest-controller.php';

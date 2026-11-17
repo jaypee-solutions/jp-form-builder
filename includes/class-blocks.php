@@ -47,7 +47,8 @@ final class Blocks {
                             return '';
                         }
                         $markup = ( new Form_Renderer() )->render( $form, 0, $this->turnstile_site_key(), $this->settings->min_fill_seconds() );
-                        return sprintf( '<div %s>%s</div>', get_block_wrapper_attributes(), $markup );
+                        $style  = Form_Style::declarations( $attributes );
+                        return sprintf( '<div %s>%s</div>', get_block_wrapper_attributes( '' !== $style ? [ 'style' => $style ] : [] ), $markup );
                     },
                 ]
             );

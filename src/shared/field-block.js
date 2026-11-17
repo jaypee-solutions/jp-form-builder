@@ -1,5 +1,6 @@
 import { useBlockProps } from '@wordpress/block-editor';
 import { FieldInspector } from './field-inspector';
+import { fieldWidthClassName } from './field-width';
 import { useFieldKey } from './use-field-key';
 
 /**
@@ -25,7 +26,14 @@ export function FieldBlock( {
 	children,
 } ) {
 	useFieldKey( { type, clientId, attributes, setAttributes } );
-	const blockProps = useBlockProps( { className: 'jp-form-builder__field' } );
+	const blockProps = useBlockProps( {
+		className: [
+			'jp-form-builder__field',
+			fieldWidthClassName( type, attributes.width ),
+		]
+			.filter( Boolean )
+			.join( ' ' ),
+	} );
 
 	return (
 		<>

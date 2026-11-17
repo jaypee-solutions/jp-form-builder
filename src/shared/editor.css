@@ -3,10 +3,6 @@
  * Form_Renderer with plain, theme-neutral styling.
  */
 
-.jp-form-builder__field {
-	margin-bottom: 1.25rem;
-}
-
 .jp-form-builder__field .jp-form-builder__label {
 	display: block;
 	margin-bottom: 0.35rem;
@@ -107,7 +103,6 @@
 }
 
 .jp-form-builder__submit {
-	margin-top: 1.25rem;
 	pointer-events: none;
 }
 

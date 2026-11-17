@@ -32,6 +32,7 @@ final class Form_Renderer {
         }
         $html .= ' novalidate><div class="jp-form-builder__error-summary" tabindex="-1"></div><div class="jp-form-builder__status" role="status"></div>';
 
+        $html .= '<div class="jp-form-builder__fields">';
         foreach ( $form->items as $item ) {
             if ( ! $item instanceof Field_Definition ) {
                 $html .= render_block( $item );
@@ -39,6 +40,7 @@ final class Form_Renderer {
             }
             $html .= $this->render_field( $form->id, $instance, $item );
         }
+        $html .= '</div>';
 
         $submit_label = '' !== (string) ( $attrs['submitLabel'] ?? '' )
             ? (string) $attrs['submitLabel']
@@ -63,7 +65,12 @@ final class Form_Renderer {
         $required_attribute = $required ? ' required' : '';
         $indicator  = $required ? ' <span class="jp-form-builder__required" aria-hidden="true">*</span>' : '';
         $label      = Field_Labels::for_field( $field );
-        $html = '<div class="jp-form-builder__field" data-field-key="' . esc_attr( $field->key ) . '">';
+        $classes    = 'jp-form-builder__field jp-form-builder__field--' . $field->type;
+        if ( 'consent' !== $field->type ) {
+            $width_class = Form_Style::width_class( $attributes['width'] ?? '' );
+            $classes    .= '' !== $width_class ? ' ' . $width_class : '';
+        }
+        $html = '<div class="' . esc_attr( $classes ) . '" data-field-key="' . esc_attr( $field->key ) . '">';
 
         if ( 'name' === $field->type && $field->subkeys ) {
             $html .= '<fieldset><legend>' . esc_html( $label ) . $indicator . '</legend>';

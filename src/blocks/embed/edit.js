@@ -1,4 +1,8 @@
-import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import {
+	InspectorControls,
+	store as blockEditorStore,
+	useBlockProps,
+} from '@wordpress/block-editor';
 import {
 	Disabled,
 	PanelBody,
@@ -7,17 +11,23 @@ import {
 	Spinner,
 } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
+import { useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import ServerSideRender from '@wordpress/server-side-render';
 import { addQueryArgs } from '@wordpress/url';
 import { getEditorData } from '../../shared';
+import DemoForm from './demo-form';
+import { FieldDesignControls } from './field-design';
 
 // null while loading, false when the request failed, else the published Forms.
-function useForms() {
+function useForms( enabled ) {
 	const [ forms, setForms ] = useState( null );
 
 	useEffect( () => {
+		if ( ! enabled ) {
+			return undefined;
+		}
 		let current = true;
 		apiFetch( { path: '/jp-form-builder/v1/forms' } )
 			.then( ( result ) => current && setForms( result ) )
@@ -25,14 +35,41 @@ function useForms() {
 		return () => {
 			current = false;
 		};
-	}, [] );
+	}, [ enabled ] );
 
 	return forms;
 }
 
+// The design settings that change the markup; the wrapper's own block supports are already on blockProps.
+const DESIGN_ATTRIBUTES = [
+	'fieldBackground',
+	'fieldBorderColor',
+	'focusColor',
+	'fieldRadius',
+	'fieldBorderWidth',
+];
+
+function previewAttributes( attributes ) {
+	const preview = { formId: attributes.formId };
+	DESIGN_ATTRIBUTES.forEach( ( name ) => {
+		if ( attributes[ name ] ) {
+			preview[ name ] = attributes[ name ];
+		}
+	} );
+	const blockGap = attributes.style?.spacing?.blockGap;
+	if ( blockGap ) {
+		preview.style = { spacing: { blockGap } };
+	}
+	return preview;
+}
+
 export default function Edit( { attributes, setAttributes } ) {
 	const { formId } = attributes;
-	const forms = useForms();
+	const isPreview = useSelect(
+		( select ) => select( blockEditorStore ).getSettings().isPreviewMode,
+		[]
+	);
+	const forms = useForms( ! isPreview );
 	const { canEditForms, editFormUrl } = getEditorData( 'embed' );
 	const blockProps = useBlockProps();
 
@@ -68,7 +105,9 @@ export default function Edit( { attributes, setAttributes } ) {
 		) : null;
 
 	let content;
-	if ( forms === null ) {
+	if ( isPreview ) {
+		content = <DemoForm />;
+	} else if ( forms === null ) {
 		content = (
 			<Placeholder label={ __( 'Form', 'jp-form-builder' ) }>
 				<Spinner />
@@ -121,7 +160,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				{ /* Only the Form: the block wrapper's alignment and margin are already on blockProps. */ }
 				<ServerSideRender
 					block="jp-form-builder/embed"
-					attributes={ { formId } }
+					attributes={ previewAttributes( attributes ) }
 				/>
 			</Disabled>
 		);
@@ -129,6 +168,12 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	return (
 		<>
+			<InspectorControls group="styles">
+				<FieldDesignControls
+					attributes={ attributes }
+					setAttributes={ setAttributes }
+				/>
+			</InspectorControls>
 			<InspectorControls>
 				<PanelBody title={ __( 'Form', 'jp-form-builder' ) }>
 					{ forms && forms.length > 0 && picker }
