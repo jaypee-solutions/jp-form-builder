@@ -4,7 +4,7 @@ Tags: forms, contact form, smtp, privacy, turnstile
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ JayPee Solutions Form Builder replaces WPForms Lite and WP Mail SMTP with one le
 
 **Features**
 
-* Forms as blocks: Name, Email, Phone, Address, Text, Select, Textarea and Consent fields, placed on pages with the Form block.
+* Forms as blocks: Name, Email, Phone, Address, Text, Select, Radio buttons, Checkboxes, Textarea and Consent fields, placed on pages with the Form block. Conditional groups show Fields only while an earlier answer calls for them.
 * Accessible markup: labels, fieldsets, error summary with focus, status message, keyboard operable; inherits your theme's fonts and colours.
 * SMTP settings on the settings page, as `JP_FORM_BUILDER_*` constants in `wp-config.php` or with WP-CLI. Constants lock the field; secrets are encrypted and never shown.
 * Notification mail with Reply-To set to the sender, optional Confirmation mail, HTML mail layout and Body templates with preview, test mail.
@@ -40,6 +40,9 @@ Requires PHP 8.0 and WordPress 6.6. Single-site only. Microsoft 365 mailboxes ar
 4. Create a Form under Forms → Add Form and add the Form block to a page.
 
 == Changelog ==
+
+= 1.3.0 =
+* Added: Conditional groups (Fields shown only while a Condition on an earlier Field holds; checked on the server) and the Radio buttons and Checkboxes Fields. Fixed: seamless select caret.
 
 = 1.2.0 =
 * Added: Card and Liquid Glass styles. Changed: cleaner Standard look. Fixed: consistent Field shapes against theme/admin input rules; the submit button no longer looks disabled before interaction.

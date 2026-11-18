@@ -15,6 +15,12 @@ final class Form_Renderer {
 
     private static int $instances = 0;
 
+    private Condition_Evaluator $evaluator;
+
+    public function __construct( ?Condition_Evaluator $evaluator = null ) {
+        $this->evaluator = $evaluator ?? new Condition_Evaluator();
+    }
+
     /**
      * @param int    $instance Instance number for DOM ids; 0 assigns the next free one.
      * @param string $site_key Turnstile site key; '' renders no Turnstile container.
@@ -32,15 +38,7 @@ final class Form_Renderer {
         }
         $html .= ' novalidate><div class="jp-form-builder__error-summary" tabindex="-1"></div><div class="jp-form-builder__status" role="status"></div>';
 
-        $html .= '<div class="jp-form-builder__fields">';
-        foreach ( $form->items as $item ) {
-            if ( ! $item instanceof Field_Definition ) {
-                $html .= render_block( $item );
-                continue;
-            }
-            $html .= $this->render_field( $form->id, $instance, $item );
-        }
-        $html .= '</div>';
+        $html .= '<div class="jp-form-builder__fields">' . $this->render_items( $form->id, $instance, $form->items ) . '</div>';
 
         $submit_label = '' !== (string) ( $attrs['submitLabel'] ?? '' )
             ? (string) $attrs['submitLabel']
@@ -53,6 +51,54 @@ final class Form_Renderer {
         $html .= '<button type="submit" class="wp-element-button" disabled>' . esc_html( $submit_label ) . '</button></form>';
 
         return $html;
+    }
+
+    /** @param array<int,Field_Definition|Conditional_Group|array<string,mixed>> $items */
+    private function render_items( int $form_id, int $instance, array $items ): string {
+        $html = '';
+        foreach ( $items as $item ) {
+            if ( $item instanceof Field_Definition ) {
+                $html .= $this->render_field( $form_id, $instance, $item );
+            } elseif ( $item instanceof Conditional_Group ) {
+                $html .= $this->render_group( $form_id, $instance, $item );
+            } else {
+                $html .= render_block( $item );
+            }
+        }
+        return $html;
+    }
+
+    /**
+     * A group carries its Condition as JSON for view.js. A group whose Condition fails for an empty Form is rendered
+     * `hidden`, so a cached page starts in the right state; an invalid Condition leaves it shown and unconditioned.
+     */
+    private function render_group( int $form_id, int $instance, Conditional_Group $group ): string {
+        $attributes = '';
+        if ( $group->condition->valid ) {
+            $attributes = ' data-condition="' . esc_attr( (string) wp_json_encode( $group->condition->to_array() ) ) . '"';
+            if ( ! $this->evaluator->is_met( $group->condition, [] ) ) {
+                $attributes .= ' hidden';
+            }
+        }
+        return '<div class="jp-form-builder__group"' . $attributes . '><div class="jp-form-builder__fields">' . $this->render_items( $form_id, $instance, $group->items ) . '</div></div>';
+    }
+
+    /** Radio buttons or Checkboxes: a fieldset with one labelled input per option. */
+    private function render_choices( Field_Definition $field, string $id, string $described, string $label, string $indicator, bool $required ): string {
+        $is_radio = 'radio' === $field->type;
+        $name     = $is_radio ? $field->key : $field->key . '[]';
+        // Checkboxes are required as a group (at least one), which no single `required` attribute can say.
+        $group_required = ! $is_radio && $required ? ' data-required="true"' : '';
+        $html           = '<fieldset aria-describedby="' . esc_attr( $described ) . '"' . $group_required . '><legend>' . esc_html( $label ) . $indicator . '</legend>';
+        $position       = 0;
+        foreach ( $field->attributes['options'] ?? [] as $option ) {
+            ++$position;
+            $value        = (string) ( $option['value'] ?? '' );
+            $option_label = '' !== trim( (string) ( $option['label'] ?? '' ) ) ? (string) $option['label'] : $value;
+            $option_id    = $id . '-' . $position;
+            $html        .= '<label for="' . esc_attr( $option_id ) . '"><input type="' . ( $is_radio ? 'radio' : 'checkbox' ) . '" id="' . esc_attr( $option_id ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '"' . ( $is_radio && $required ? ' required' : '' ) . '> ' . esc_html( $option_label ) . '</label>';
+        }
+        return $html . '</fieldset>';
     }
 
     private function render_field( int $form_id, int $instance, Field_Definition $field ): string {
@@ -119,6 +165,8 @@ final class Form_Renderer {
                 $html .= '<option value="' . esc_attr( (string) ( $option['value'] ?? '' ) ) . '">' . esc_html( (string) ( $option['label'] ?? '' ) ) . '</option>';
             }
             $html .= '</select>';
+        } elseif ( 'radio' === $field->type || 'checkbox' === $field->type ) {
+            $html .= $this->render_choices( $field, $id, $described, $label, $indicator, $required );
         } elseif ( 'textarea' === $field->type ) {
             $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
             $html .= '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute;

@@ -27,6 +27,8 @@ final class Field_Labels {
             'address'  => __( 'Address', 'jp-form-builder' ),
             'text'     => __( 'Text', 'jp-form-builder' ),
             'select'   => __( 'Select', 'jp-form-builder' ),
+            'radio'    => __( 'Radio buttons', 'jp-form-builder' ),
+            'checkbox' => __( 'Checkboxes', 'jp-form-builder' ),
             'textarea' => __( 'Message', 'jp-form-builder' ),
             'consent'  => __( 'Consent', 'jp-form-builder' ),
         ];

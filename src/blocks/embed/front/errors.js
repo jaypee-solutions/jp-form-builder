@@ -1,5 +1,6 @@
 import { __ } from '@wordpress/i18n';
-import { fieldControls, fieldWrappers, subKeyOf } from './dom';
+import { fieldControls, fieldWrappers, isInHiddenGroup } from './dom';
+import { choiceKind, subKeyOf } from './values';
 
 let summaryCount = 0;
 
@@ -7,6 +8,14 @@ const errorContainerOf = ( control ) =>
 	control
 		.closest( '[data-field-key]' )
 		.querySelector( '.jp-form-builder__error' );
+
+// Every option of a Radio buttons or Checkboxes Field is marked, the first one is the link target.
+function markedControls( control ) {
+	if ( ! choiceKind( [ control ] ) ) {
+		return [ control ];
+	}
+	return fieldControls( control.closest( '[data-field-key]' ) );
+}
 
 export function clearErrors( form ) {
 	form.querySelectorAll( '[aria-invalid]' ).forEach( ( control ) =>
@@ -17,6 +26,33 @@ export function clearErrors( form ) {
 	);
 	form.querySelector( '.jp-form-builder__error-summary' ).replaceChildren();
 	form.querySelector( '.jp-form-builder__status' ).textContent = '';
+}
+
+// Removes the errors of a group that has just been hidden: its messages, `aria-invalid` and its links in the summary.
+export function clearGroupErrors( form, group ) {
+	group
+		.querySelectorAll( '[aria-invalid]' )
+		.forEach( ( control ) => control.removeAttribute( 'aria-invalid' ) );
+	group
+		.querySelectorAll( '.jp-form-builder__error' )
+		.forEach( ( container ) => container.replaceChildren() );
+
+	const summary = form.querySelector( '.jp-form-builder__error-summary' );
+	const items = [ ...summary.querySelectorAll( 'li' ) ];
+	for ( const item of items ) {
+		const id = item
+			.querySelector( 'a' )
+			?.getAttribute( 'href' )
+			?.slice( 1 );
+		const target = id ? document.getElementById( id ) : null;
+		if ( target && group.contains( target ) ) {
+			item.remove();
+		}
+	}
+	if ( items.length > 0 && ! summary.querySelector( 'li' ) ) {
+		summary.replaceChildren();
+		summary.removeAttribute( 'aria-labelledby' );
+	}
 }
 
 function focusSummary( form ) {
@@ -41,7 +77,9 @@ export function showIssues( form, issues ) {
 	for ( const { control, message } of issues ) {
 		const item = document.createElement( 'li' );
 		if ( control ) {
-			control.setAttribute( 'aria-invalid', 'true' );
+			markedControls( control ).forEach( ( marked ) =>
+				marked.setAttribute( 'aria-invalid', 'true' )
+			);
 			const text = document.createElement( 'p' );
 			text.textContent = message;
 			errorContainerOf( control ).append( text );
@@ -76,7 +114,8 @@ export function showMessage( form, message ) {
 }
 
 // Maps the `data.errors` of a 422 answer (keyed `key` or `key.sub`) onto the
-// Form's controls, in document order; unknown keys come last without a control.
+// Form's controls, in document order; unknown keys and Fields of a hidden
+// group (the server never reports those) come last without a control.
 export function issuesFromServer( form, errors ) {
 	const found = new Map();
 	const unmatched = [];
@@ -85,7 +124,10 @@ export function issuesFromServer( form, errors ) {
 		const wrapper = fieldWrappers( form ).find(
 			( candidate ) => candidate.dataset.fieldKey === key
 		);
-		const controls = wrapper ? fieldControls( wrapper ) : [];
+		const controls =
+			wrapper && ! isInHiddenGroup( wrapper )
+				? fieldControls( wrapper )
+				: [];
 		const control = controls.find(
 			( candidate ) => subKeyOf( candidate, key ) === subKey
 		);

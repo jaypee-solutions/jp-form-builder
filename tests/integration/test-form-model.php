@@ -108,5 +108,8 @@ final class Test_Form_Model extends WP_UnitTestCase {
         $this->assertContains( 'jp-form-builder/form', $allowed );
         $this->assertContains( 'jp-form-builder/consent', $allowed );
         $this->assertContains( 'core/paragraph', $allowed );
+        $this->assertContains( 'jp-form-builder/radio', $allowed );
+        $this->assertContains( 'jp-form-builder/checkbox', $allowed );
+        $this->assertContains( 'jp-form-builder/conditional', $allowed );
     }
 }

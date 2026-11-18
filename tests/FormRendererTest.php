@@ -1,5 +1,7 @@
 <?php
 /** Tests accessible form rendering. */
+use JayPee\FormBuilder\Condition;
+use JayPee\FormBuilder\Conditional_Group;
 use JayPee\FormBuilder\Field_Definition;
 use JayPee\FormBuilder\Field_Validator;
 use JayPee\FormBuilder\Form_Definition;
@@ -90,5 +92,72 @@ final class FormRendererTest extends TestCase {
 
         $plain = ( new Form_Renderer() )->render( $form, 1 );
         self::assertStringNotContainsString( 'jp-form-builder__turnstile', $plain );
+    }
+
+    public function test_radio_and_checkboxes_render_as_a_fieldset_with_one_labelled_input_per_option(): void {
+        $options = [ [ 'label' => 'Red <b>', 'value' => 'red' ], [ 'label' => '', 'value' => 'green' ] ];
+        $form    = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'radio', 'colour', [ 'label' => 'Colour', 'required' => true, 'helpText' => 'Pick one', 'width' => '50', 'options' => $options ] ),
+            new Field_Definition( 'checkbox', 'extras', [ 'label' => 'Extras', 'required' => true, 'options' => $options ] ),
+            new Field_Definition( 'checkbox', 'optional', [ 'label' => 'Optional', 'options' => $options ] ),
+        ] );
+
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( 'class="jp-form-builder__field jp-form-builder__field--radio jp-form-builder__field--width-50" data-field-key="colour"', $markup );
+        self::assertStringContainsString( '<fieldset aria-describedby="jpfb-12-1-colour-help jpfb-12-1-colour-error"><legend>Colour <span class="jp-form-builder__required"', $markup );
+        self::assertStringContainsString( '<label for="jpfb-12-1-colour-1"><input type="radio" id="jpfb-12-1-colour-1" name="colour" value="red" required> Red &lt;b&gt;</label>', $markup );
+        self::assertStringContainsString( '<label for="jpfb-12-1-colour-2"><input type="radio" id="jpfb-12-1-colour-2" name="colour" value="green" required> green</label>', $markup );
+        self::assertStringContainsString( '<p id="jpfb-12-1-colour-help">Pick one</p>', $markup );
+        self::assertStringContainsString( '<div id="jpfb-12-1-colour-error" class="jp-form-builder__error"></div>', $markup );
+
+        self::assertStringContainsString( '<fieldset aria-describedby="jpfb-12-1-extras-error" data-required="true"><legend>Extras', $markup );
+        self::assertStringContainsString( '<label for="jpfb-12-1-extras-1"><input type="checkbox" id="jpfb-12-1-extras-1" name="extras[]" value="red"> Red &lt;b&gt;</label>', $markup );
+        self::assertStringContainsString( '<input type="checkbox" id="jpfb-12-1-extras-2" name="extras[]" value="green"> green</label>', $markup );
+        self::assertStringContainsString( '<fieldset aria-describedby="jpfb-12-1-optional-error"><legend>Optional</legend>', $markup );
+    }
+
+    public function test_a_group_wraps_its_own_grid_and_carries_its_condition(): void {
+        $condition = new Condition( 'topic', 'is_one_of', [ 'a"b', 'c' ] );
+        $form      = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'select', 'topic', [ 'label' => 'Topic', 'options' => [] ] ),
+            new Conditional_Group( $condition, [
+                [ 'blockName' => 'core/paragraph', 'attrs' => [], 'innerHTML' => '<p>More details</p>' ],
+                new Field_Definition( 'text', 'budget', [ 'label' => 'Budget', 'width' => '50' ] ),
+            ] ),
+        ] );
+
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( '<div class="jp-form-builder__group" data-condition="{&quot;sourceField&quot;:&quot;topic&quot;,&quot;operator&quot;:&quot;is_one_of&quot;,&quot;values&quot;:[&quot;a\&quot;b&quot;,&quot;c&quot;]}" hidden><div class="jp-form-builder__fields"><p>More details</p><div class="jp-form-builder__field jp-form-builder__field--text jp-form-builder__field--width-50" data-field-key="budget">', $markup );
+        self::assertSame( 2, substr_count( $markup, 'class="jp-form-builder__fields"' ), 'The Form and the group each have a grid.' );
+    }
+
+    public function test_a_group_is_visible_for_an_empty_form_when_its_condition_holds_then(): void {
+        $field = new Field_Definition( 'text', 'budget', [ 'label' => 'Budget' ] );
+        $form  = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Conditional_Group( new Condition( 'topic', 'is_empty', [] ), [ $field ] ),
+            new Conditional_Group( new Condition( 'topic', 'is_not', [ 'a' ] ), [ $field ] ),
+            new Conditional_Group( new Condition( 'topic', 'is_not_checked', [] ), [ $field ] ),
+            new Conditional_Group( new Condition( 'topic', 'is_filled', [] ), [ $field ] ),
+        ] );
+
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        preg_match_all( '/<div class="jp-form-builder__group"[^>]*>/', $markup, $tags );
+        self::assertCount( 4, $tags[0] );
+        self::assertSame( [ false, false, false, true ], array_map( static fn( string $tag ): bool => str_ends_with( $tag, ' hidden>' ), $tags[0] ) );
+    }
+
+    public function test_a_group_with_an_invalid_condition_is_plain_and_visible(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Conditional_Group( new Condition( 'nope', 'is', [ 'a' ], false ), [ new Field_Definition( 'text', 'budget', [ 'label' => 'Budget' ] ) ] ),
+        ] );
+
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( '<div class="jp-form-builder__group"><div class="jp-form-builder__fields">', $markup );
+        self::assertStringNotContainsString( 'data-condition', $markup );
+        self::assertStringNotContainsString( ' hidden', $markup );
     }
 }

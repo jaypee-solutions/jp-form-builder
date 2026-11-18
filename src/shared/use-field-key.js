@@ -2,10 +2,17 @@ import { store as blockEditorStore } from '@wordpress/block-editor';
 import { useRegistry, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { newFieldKey, normalizeFieldKey } from './field-key';
+import { flattenFieldBlocks } from './form-fields';
 
+// Field keys are unique across the whole Form, so Fields inside Conditional groups count too.
 function siblingFieldKeys( select, clientId ) {
-	const { getBlockRootClientId, getBlocks } = select( blockEditorStore );
-	return getBlocks( getBlockRootClientId( clientId ) )
+	const { getBlockParentsByBlockName, getBlocks } =
+		select( blockEditorStore );
+	const [ formClientId ] = getBlockParentsByBlockName(
+		clientId,
+		'jp-form-builder/form'
+	);
+	return flattenFieldBlocks( getBlocks( formClientId ) )
 		.filter( ( block ) => block.name.startsWith( 'jp-form-builder/' ) )
 		.map( ( block ) => ( {
 			clientId: block.clientId,

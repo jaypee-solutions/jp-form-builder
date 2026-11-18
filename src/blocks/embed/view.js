@@ -6,6 +6,7 @@ import {
 	showIssues,
 	showMessage,
 } from './front/errors';
+import { initGroups } from './front/groups';
 import { createTurnstileWidget } from './front/turnstile';
 import { validateForm } from './front/validation';
 
@@ -208,6 +209,7 @@ function initForm( form ) {
 		}
 		activate();
 		clearErrors( form );
+		groups.refresh();
 
 		const issues = validateForm( form );
 		if ( issues.length > 0 ) {
@@ -241,6 +243,7 @@ function initForm( form ) {
 	}
 
 	submitButton.setAttribute( 'aria-disabled', 'true' );
+	const groups = initGroups( form );
 	form.addEventListener( 'focusin', activate, { once: true } );
 	form.addEventListener( 'submit', submit );
 }

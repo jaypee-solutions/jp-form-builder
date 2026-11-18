@@ -102,4 +102,23 @@ jpfb_seed_post(
     '<!-- wp:jp-form-builder/embed {"formId":' . $jpfb_phone_form_id . '} /-->'
 );
 
+$jpfb_choices_form_id = jpfb_seed_post(
+    'jp_form',
+    'e2e-choices',
+    'E2E choices',
+    '<!-- wp:jp-form-builder/form {"recipients":"owner@example.test"} -->'
+    . '<!-- wp:jp-form-builder/radio {"fieldName":"plan","label":"Plan","required":true,"options":[{"label":"Silber","value":"plan-s"},{"label":"Gold","value":"plan-g"}]} /-->'
+    . '<!-- wp:jp-form-builder/checkbox {"fieldName":"extras","label":"Extras","required":true,"options":[{"label":"Versand","value":"extra-ship"},{"label":"Montage","value":"extra-install"}]} /-->'
+    . '<!-- wp:jp-form-builder/conditional {"sourceField":"extras","operator":"includes","values":["extra-install"]} -->'
+    . '<!-- wp:jp-form-builder/text {"fieldName":"floor","label":"Etage"} /-->'
+    . '<!-- /wp:jp-form-builder/conditional -->'
+    . '<!-- /wp:jp-form-builder/form -->'
+);
+jpfb_seed_post(
+    'page',
+    'e2e-choices-page',
+    'E2E choices page',
+    '<!-- wp:jp-form-builder/embed {"formId":' . $jpfb_choices_form_id . '} /-->'
+);
+
 WP_CLI::success( 'Seed complete.' );

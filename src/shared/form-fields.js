@@ -3,6 +3,10 @@ import { normalizeFieldKey, uniqueFieldKey } from './field-key';
 
 const BLOCK_NAMESPACE = 'jp-form-builder/';
 
+export const CONDITIONAL_BLOCK = 'jp-form-builder/conditional';
+
+const CHOICE_TYPES = [ 'select', 'radio', 'checkbox' ];
+
 export const FIELD_TYPES = [
 	'name',
 	'email',
@@ -10,23 +14,37 @@ export const FIELD_TYPES = [
 	'address',
 	'text',
 	'select',
+	'radio',
+	'checkbox',
 	'textarea',
 	'consent',
 ];
 
 /**
- * Lists a Form's Fields the way Form_Definition_Parser keys them: an empty key
- * becomes `<type>_<n>` (n counts per type) and a duplicate gets `_2`, `_3`, …
+ * The blocks of a Form in document order with Conditional groups replaced by their children.
  *
  * @param {Object[]} blocks The Form block's inner blocks.
- * @return {{key: string, label: string, type: string, split: boolean}[]} The Fields in document order.
+ * @return {Object[]} Field and pass-through blocks; groups are flattened.
  */
-export function collectFormFields( blocks ) {
+export function flattenFieldBlocks( blocks ) {
+	return blocks.flatMap( ( block ) =>
+		block.name === CONDITIONAL_BLOCK
+			? flattenFieldBlocks( block.innerBlocks )
+			: [ block ]
+	);
+}
+
+// Every Field block in document order, keyed like Form_Definition_Parser does. A Conditional group's own
+// Fields follow the group; `stopAt` ends the walk at that group, leaving the Fields before it.
+function keyedFieldBlocks( blocks, stopAt = '' ) {
 	const countsByType = {};
 	const takenKeys = [];
-	const fields = [];
+	const keyed = [];
 
-	for ( const block of blocks ) {
+	for ( const block of walkBlocks( blocks ) ) {
+		if ( block.clientId === stopAt && block.name === CONDITIONAL_BLOCK ) {
+			break;
+		}
 		const type = block.name.startsWith( BLOCK_NAMESPACE )
 			? block.name.slice( BLOCK_NAMESPACE.length )
 			: '';
@@ -40,13 +58,64 @@ export function collectFormFields( blocks ) {
 			takenKeys
 		);
 		takenKeys.push( key );
-		fields.push( {
+		keyed.push( {
+			block,
+			type,
 			key,
 			label:
 				( block.attributes.label ?? '' ).trim() || defaultLabel( type ),
-			type,
-			split: type === 'name' && !! block.attributes.split,
 		} );
 	}
-	return fields;
+	return keyed;
+}
+
+// Blocks in document order; a Conditional group comes before its children.
+function* walkBlocks( blocks ) {
+	for ( const block of blocks ) {
+		yield block;
+		if ( block.name === CONDITIONAL_BLOCK ) {
+			yield* walkBlocks( block.innerBlocks );
+		}
+	}
+}
+
+/**
+ * Lists a Form's Fields the way Form_Definition_Parser keys them: an empty key
+ * becomes `<type>_<n>` (n counts per type) and a duplicate gets `_2`, `_3`, …
+ *
+ * @param {Object[]} blocks The Form block's inner blocks.
+ * @return {{key: string, label: string, type: string, split: boolean}[]} The Fields in document order.
+ */
+export function collectFormFields( blocks ) {
+	return keyedFieldBlocks( blocks ).map(
+		( { block, type, key, label } ) => ( {
+			key,
+			label,
+			type,
+			split: type === 'name' && !! block.attributes.split,
+		} )
+	);
+}
+
+/**
+ * The Fields a Conditional group's Condition may look at: those before the
+ * group in the Form, including the ones inside earlier groups.
+ *
+ * @param {Object[]} blocks  The Form block's inner blocks.
+ * @param {string}   groupId Client id of the Conditional group.
+ * @return {{key: string, label: string, type: string, options: {label: string, value: string}[]}[]} The Fields in document order; `options` is empty for Fields without choices.
+ */
+export function collectConditionSources( blocks, groupId ) {
+	return keyedFieldBlocks( blocks, groupId ).map(
+		( { block, type, key, label } ) => ( {
+			key,
+			label,
+			type,
+			options: CHOICE_TYPES.includes( type )
+				? ( block.attributes.options ?? [] ).filter(
+						( option ) => ( option.value ?? '' ) !== ''
+					)
+				: [],
+		} )
+	);
 }

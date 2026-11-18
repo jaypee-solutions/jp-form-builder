@@ -108,13 +108,34 @@ final class Form_Backup {
             return __( 'The content must be exactly one Form block.', 'jp-form-builder' );
         }
         foreach ( $top_level[0]['innerBlocks'] ?? [] as $child ) {
-            $name = (string) ( $child['blockName'] ?? '' );
-            if ( ! in_array( $name, Form_Blocks::allowed_children(), true ) ) {
-                /* translators: %s: block name. */
-                return sprintf( __( 'The block "%s" is not allowed in a Form.', 'jp-form-builder' ), '' === $name ? 'freeform' : $name );
+            $error = $this->child_error( $child, Form_Blocks::allowed_children() );
+            if ( null !== $error ) {
+                return $error;
             }
-            if ( ! empty( $child['innerBlocks'] ) ) {
-                return __( 'Nested blocks are not allowed in a Form.', 'jp-form-builder' );
+        }
+        return null;
+    }
+
+    /**
+     * Why a child of the Form or of a Conditional group cannot be restored. Only a group may hold blocks, and only
+     * Fields and pass-through blocks without blocks of their own, so groups never nest.
+     *
+     * @param array<string,mixed> $block   The child block.
+     * @param string[]            $allowed Block names allowed at this level.
+     */
+    private function child_error( array $block, array $allowed ): ?string {
+        $name = (string) ( $block['blockName'] ?? '' );
+        if ( ! in_array( $name, $allowed, true ) ) {
+            /* translators: %s: block name. */
+            return sprintf( __( 'The block "%s" is not allowed in a Form.', 'jp-form-builder' ), '' === $name ? 'freeform' : $name );
+        }
+        if ( Form_Blocks::CONDITIONAL !== $name ) {
+            return empty( $block['innerBlocks'] ) ? null : __( 'Nested blocks are not allowed in a Form.', 'jp-form-builder' );
+        }
+        foreach ( $block['innerBlocks'] ?? [] as $child ) {
+            $error = $this->child_error( $child, Form_Blocks::group_children() );
+            if ( null !== $error ) {
+                return $error;
             }
         }
         return null;

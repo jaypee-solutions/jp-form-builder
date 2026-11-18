@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { choiceKind, cleanFieldValue } from './values';
 
 export const HONEYPOT_NAME = '_jpfb_field_914';
 
@@ -10,19 +11,14 @@ export function fieldControls( wrapper ) {
 	return [ ...wrapper.querySelectorAll( 'input, select, textarea' ) ];
 }
 
-// The sub-key of a compound Field's control (`key[sub]`), or '' for a single control.
-export function subKeyOf( control, fieldKey ) {
-	const prefix = fieldKey + '[';
-	return control.name.startsWith( prefix ) && control.name.endsWith( ']' )
-		? control.name.slice( prefix.length, -1 )
-		: '';
-}
-
 // The visible label of a control without its required marker.
 export function labelOf( form, control ) {
-	const label = form.querySelector(
-		`label[for="${ window.CSS.escape( control.id ) }"]`
-	);
+	// An option of Radio buttons or Checkboxes is labelled by its own text; the error is about the group.
+	const label = choiceKind( [ control ] )
+		? control.closest( 'fieldset' ).querySelector( 'legend' )
+		: form.querySelector(
+				`label[for="${ window.CSS.escape( control.id ) }"]`
+			);
 	if ( ! label ) {
 		return __( 'This field', 'jp-form-builder' );
 	}
@@ -33,26 +29,32 @@ export function labelOf( form, control ) {
 	return clone.textContent.trim();
 }
 
-export function controlValue( control ) {
-	if ( control.type === 'checkbox' ) {
-		return control.checked ? '1' : '';
-	}
-	return control.value;
+// Fields inside a Conditional group that is currently hidden take no part in validation or the payload.
+export function isInHiddenGroup( wrapper ) {
+	return wrapper.closest( '.jp-form-builder__group[hidden]' ) !== null;
 }
 
-// The Fields as the submissions route expects them: key to string, or to a sub-key map.
+// The cleaned value of every Field, hidden groups included; Conditions are evaluated on these.
+export function readValues( form ) {
+	const values = {};
+	for ( const wrapper of fieldWrappers( form ) ) {
+		values[ wrapper.dataset.fieldKey ] = cleanFieldValue(
+			wrapper.dataset.fieldKey,
+			fieldControls( wrapper )
+		);
+	}
+	return values;
+}
+
+// The Fields as the submissions route expects them: key to string, list or sub-key map, without hidden groups.
 export function readFields( form ) {
 	const fields = {};
 	for ( const wrapper of fieldWrappers( form ) ) {
-		const key = wrapper.dataset.fieldKey;
-		for ( const control of fieldControls( wrapper ) ) {
-			const subKey = subKeyOf( control, key );
-			if ( subKey ) {
-				fields[ key ] = fields[ key ] ?? {};
-				fields[ key ][ subKey ] = controlValue( control );
-			} else {
-				fields[ key ] = controlValue( control );
-			}
+		if ( ! isInHiddenGroup( wrapper ) ) {
+			fields[ wrapper.dataset.fieldKey ] = cleanFieldValue(
+				wrapper.dataset.fieldKey,
+				fieldControls( wrapper )
+			);
 		}
 	}
 	return fields;

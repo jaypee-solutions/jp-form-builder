@@ -1,6 +1,7 @@
 import { __, sprintf } from '@wordpress/i18n';
-import { controlValue, fieldControls, fieldWrappers, labelOf } from './dom';
+import { fieldControls, fieldWrappers, isInHiddenGroup, labelOf } from './dom';
 import { isPlausiblePhoneNumber } from './phone';
+import { choiceKind, controlValue } from './values';
 
 const codePoints = ( text ) => [ ...text ].length;
 
@@ -67,7 +68,7 @@ function emptyMessage( form, control ) {
 }
 
 function validateSingle( form, control ) {
-	const value = controlValue( control ).trim();
+	const value = controlValue( control );
 	if ( value === '' ) {
 		return control.required
 			? [ { control, message: emptyMessage( form, control ) } ]
@@ -75,6 +76,22 @@ function validateSingle( form, control ) {
 	}
 	const message = invalidValueMessage( form, control, value, null );
 	return message ? [ { control, message } ] : [];
+}
+
+// Radio buttons are required with one checked option, Checkboxes with `data-required` on the group. The issue is
+// attached to the first option, which the error summary links to.
+function validateChoices( form, controls, kind ) {
+	const [ first ] = controls;
+	const required =
+		kind === 'radio'
+			? controls.some( ( control ) => control.required )
+			: first.closest( 'fieldset' ).dataset.required === 'true';
+	if ( ! required || controls.some( ( control ) => control.checked ) ) {
+		return [];
+	}
+	return [
+		{ control: first, message: requiredMessage( labelOf( form, first ) ) },
+	];
 }
 
 // A compound Field is empty only when every part is; the country select is
@@ -106,17 +123,23 @@ function validateCompound( form, fieldset, controls ) {
 }
 
 // Checks the Form with the rules its markup carries: one issue per invalid
-// control, in document order.
+// control, in document order. Fields of a hidden Conditional group are skipped.
 export function validateForm( form ) {
 	const issues = [];
 	for ( const wrapper of fieldWrappers( form ) ) {
+		if ( isInHiddenGroup( wrapper ) ) {
+			continue;
+		}
 		const controls = fieldControls( wrapper );
 		const fieldset = wrapper.querySelector( 'fieldset' );
-		issues.push(
-			...( fieldset
-				? validateCompound( form, fieldset, controls )
-				: validateSingle( form, controls[ 0 ] ) )
-		);
+		const kind = choiceKind( controls );
+		if ( kind ) {
+			issues.push( ...validateChoices( form, controls, kind ) );
+		} else if ( fieldset ) {
+			issues.push( ...validateCompound( form, fieldset, controls ) );
+		} else {
+			issues.push( ...validateSingle( form, controls[ 0 ] ) );
+		}
 	}
 	return issues;
 }

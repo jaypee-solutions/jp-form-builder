@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JayPee Solutions Form Builder 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jp-forms\n"
-"POT-Creation-Date: 2026-11-17T18:37:01+00:00\n"
+"POT-Creation-Date: 2026-11-17T20:14:39+00:00\n"
 "PO-Revision-Date: 2026-11-17 00:00+0000\n"
 "Last-Translator: JayPee Solutions <support@jaypee.solutions>\n"
 "Language-Team: German\n"
@@ -168,132 +168,168 @@ msgid "United Kingdom"
 msgstr "Vereinigtes Königreich"
 
 #: includes/class-field-labels.php:24
-#: includes/class-mail-preview-controller.php:172 admin/build/settings.js:1
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: includes/class-mail-preview-controller.php:175 admin/build/settings.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Name"
 msgstr "Name"
 
 #: includes/class-field-labels.php:25
-#: includes/class-mail-preview-controller.php:173 admin/build/settings.js:1
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: includes/class-mail-preview-controller.php:176 admin/build/settings.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Email"
 msgstr "E-Mail"
 
 #: includes/class-field-labels.php:26 blocks/address/index.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Phone"
 msgstr "Telefon"
 
 #: includes/class-field-labels.php:27 blocks/address/index.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Address"
 msgstr "Adresse"
 
 #: includes/class-field-labels.php:28 blocks/address/index.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Text"
 msgstr "Text"
 
 #: includes/class-field-labels.php:29 blocks/address/index.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Select"
 msgstr "Auswahl"
 
-#: includes/class-field-labels.php:30
-#: includes/class-mail-preview-controller.php:174 admin/build/settings.js:1
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: includes/class-field-labels.php:30 blocks/address/index.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
+#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
 #: blocks/textarea/index.js:1
+msgid "Radio buttons"
+msgstr "Optionsfelder"
+
+#: includes/class-field-labels.php:31 blocks/address/index.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
+#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Checkboxes"
+msgstr "Kontrollkästchen"
+
+#: includes/class-field-labels.php:32
+#: includes/class-mail-preview-controller.php:177 admin/build/settings.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Message"
 msgstr "Nachricht"
 
-#: includes/class-field-labels.php:31 blocks/address/index.js:1
+#: includes/class-field-labels.php:33 blocks/address/index.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Consent"
 msgstr "Einwilligung"
 
-#: includes/class-field-labels.php:40 blocks/name/index.js:1
+#: includes/class-field-labels.php:42 blocks/name/index.js:1
 msgid "First name"
 msgstr "Vorname"
 
-#: includes/class-field-labels.php:42 blocks/name/index.js:1
+#: includes/class-field-labels.php:44 blocks/name/index.js:1
 msgid "Last name"
 msgstr "Nachname"
 
-#: includes/class-field-labels.php:44 blocks/address/index.js:1
+#: includes/class-field-labels.php:46 blocks/address/index.js:1
 msgid "Street and number"
 msgstr "Straße und Hausnummer"
 
-#: includes/class-field-labels.php:46 blocks/address/index.js:1
+#: includes/class-field-labels.php:48 blocks/address/index.js:1
 msgid "Postcode"
 msgstr "Postleitzahl"
 
-#: includes/class-field-labels.php:48 blocks/address/index.js:1
+#: includes/class-field-labels.php:50 blocks/address/index.js:1
 msgid "City"
 msgstr "Ort"
 
-#: includes/class-field-labels.php:50 blocks/address/index.js:1
+#: includes/class-field-labels.php:52 blocks/address/index.js:1
 msgid "Country"
 msgstr "Land"
 
-#: includes/class-field-validator.php:92 blocks/embed/view.js:2
+#: includes/class-field-validator.php:118
+#: includes/class-field-validator.php:128
+msgid "Please choose only from the available options."
+msgstr "Bitte wählen Sie nur aus den angebotenen Optionen."
+
+#: includes/class-field-validator.php:166 blocks/embed/view.js:4
 msgid "Please enter a valid phone number."
 msgstr "Bitte geben Sie eine gültige Telefonnummer ein."
 
-#: includes/class-field-validator.php:97 blocks/embed/view.js:2
+#: includes/class-field-validator.php:172 blocks/embed/view.js:4
 msgid "Please choose one of the available options."
 msgstr "Bitte wählen Sie eine der verfügbaren Optionen."
 
-#: includes/class-field-validator.php:111 blocks/embed/view.js:2
+#: includes/class-field-validator.php:186 blocks/embed/view.js:4
 msgid "Please accept to continue."
 msgstr "Bitte stimmen Sie zu, um fortzufahren."
 
-#: includes/class-field-validator.php:116 blocks/embed/view.js:1
+#: includes/class-field-validator.php:191 blocks/embed/view.js:3
 msgid "Please enter a valid email address."
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
-#: includes/class-field-validator.php:189
+#: includes/class-field-validator.php:264
 msgid "Please choose a valid country."
 msgstr "Bitte wählen Sie ein gültiges Land."
 
-#: includes/class-field-validator.php:197 blocks/embed/view.js:2
+#: includes/class-field-validator.php:272 blocks/embed/view.js:4
 msgid "Please enter a valid postcode."
 msgstr "Bitte geben Sie eine gültige Postleitzahl ein."
 
-#: includes/class-field-validator.php:296 blocks/embed/view.js:1
+#: includes/class-field-validator.php:371 blocks/embed/view.js:1
 msgid "This field"
 msgstr "Dieses Feld"
 
 #. translators: %s: field label.
-#: includes/class-field-validator.php:301 blocks/embed/view.js:2
+#: includes/class-field-validator.php:376 blocks/embed/view.js:3
 #, php-format
 msgid "%s is required."
 msgstr "%s ist erforderlich."
 
 #. translators: 1: field label, 2: maximum number of characters.
-#: includes/class-field-validator.php:306 blocks/embed/view.js:2
+#: includes/class-field-validator.php:381 blocks/embed/view.js:4
 #, php-format
 msgid "%1$s must not be longer than %2$d characters."
 msgstr "%1$s darf nicht länger als %2$d Zeichen sein."
 
-#: includes/class-form-backup.php:78 includes/class-form-backup.php:133
+#: includes/class-form-backup.php:78 includes/class-form-backup.php:154
 #: includes/class-settings-page.php:68
 msgid "The Backup file is too large."
 msgstr "Die Sicherungsdatei ist zu groß."
@@ -315,37 +351,37 @@ msgid "The content must be exactly one Form block."
 msgstr "Der Inhalt muss genau ein Formularblock sein."
 
 #. translators: %s: block name.
-#: includes/class-form-backup.php:114
+#: includes/class-form-backup.php:130
 #, php-format
 msgid "The block \"%s\" is not allowed in a Form."
 msgstr "Der Block „%s“ ist in einem Formular nicht erlaubt."
 
-#: includes/class-form-backup.php:117
+#: includes/class-form-backup.php:133
 msgid "Nested blocks are not allowed in a Form."
 msgstr "Verschachtelte Blöcke sind in einem Formular nicht erlaubt."
 
-#: includes/class-form-backup.php:130
+#: includes/class-form-backup.php:151
 msgid "The Backup file cannot be read."
 msgstr "Die Sicherungsdatei kann nicht gelesen werden."
 
-#: includes/class-form-backup.php:190
+#: includes/class-form-backup.php:211
 msgid "Dry run: nothing was written."
 msgstr "Testlauf: Es wurde nichts geschrieben."
 
 #. translators: 1: Form title, 2: Form ID.
-#: includes/class-form-backup.php:194
+#: includes/class-form-backup.php:215
 #, php-format
 msgid "Overwritten: \"%1$s\" (ID %2$d)."
 msgstr "Überschrieben: „%1$s“ (ID %2$d)."
 
 #. translators: 1: Form title, 2: Form ID.
-#: includes/class-form-backup.php:194
+#: includes/class-form-backup.php:215
 #, php-format
 msgid "Restored: \"%1$s\" (ID %2$d)."
 msgstr "Wiederhergestellt: „%1$s“ (ID %2$d)."
 
 #. translators: 1: Form title, 2: old Form ID.
-#: includes/class-form-backup.php:202
+#: includes/class-form-backup.php:223
 #, php-format
 msgid ""
 "Mapped: \"%1$s\" would get a new ID because ID %2$d is taken by another "
@@ -355,62 +391,62 @@ msgstr ""
 "Beitrag verwendet wird. Einbettungen werden nicht angepasst."
 
 #. translators: 1: Form title, 2: old Form ID, 3: new Form ID.
-#: includes/class-form-backup.php:204
+#: includes/class-form-backup.php:225
 #, php-format
 msgid "Mapped: \"%1$s\" ID %2$d → %3$d. Embeds are not rewritten."
 msgstr ""
 "Zugeordnet: „%1$s“ ID %2$d → %3$d. Einbettungen werden nicht angepasst."
 
 #. translators: 1: Form title, 2: Form ID, 3: reason.
-#: includes/class-form-backup.php:208
+#: includes/class-form-backup.php:229
 #, php-format
 msgid "Skipped: \"%1$s\" (ID %2$d): %3$s"
 msgstr "Übersprungen: „%1$s“ (ID %2$d): %3$s"
 
 #. translators: 1: Form title, 2: Form ID, 3: reason.
-#: includes/class-form-backup.php:212
+#: includes/class-form-backup.php:233
 #, php-format
 msgid "Rejected: \"%1$s\" (ID %2$d): %3$s"
 msgstr "Abgelehnt: „%1$s“ (ID %2$d): %3$s"
 
 #. translators: %s: comma-separated setting keys.
-#: includes/class-form-backup.php:216
+#: includes/class-form-backup.php:237
 #, php-format
 msgid "Settings restored: %s"
 msgstr "Einstellungen wiederhergestellt: %s"
 
 #. translators: 1: setting key, 2: reason.
-#: includes/class-form-backup.php:220
+#: includes/class-form-backup.php:241
 #, php-format
 msgid "Setting skipped: %1$s: %2$s"
 msgstr "Einstellung übersprungen: %1$s: %2$s"
 
-#: includes/class-form-backup.php:235
+#: includes/class-form-backup.php:256
 msgid "A Form in the Backup is missing its ID or content."
 msgstr "Einem Formular in der Sicherung fehlen ID oder Inhalt."
 
-#: includes/class-form-backup.php:257
+#: includes/class-form-backup.php:278
 msgid "A Form with this ID exists. Overwrite is off."
 msgstr ""
 "Ein Formular mit dieser ID existiert bereits. Überschreiben ist deaktiviert."
 
-#: includes/class-form-backup.php:271
+#: includes/class-form-backup.php:292
 msgid "WordPress could not save the Form."
 msgstr "WordPress konnte das Formular nicht speichern."
 
-#: includes/class-form-backup.php:290
+#: includes/class-form-backup.php:311
 msgid "Unknown setting."
 msgstr "Unbekannte Einstellung."
 
-#: includes/class-form-backup.php:292
+#: includes/class-form-backup.php:313
 msgid "Secrets are never restored."
 msgstr "Geheime Werte werden nie wiederhergestellt."
 
-#: includes/class-form-backup.php:294
+#: includes/class-form-backup.php:315
 msgid "Locked by a constant."
 msgstr "Durch eine Konstante gesperrt."
 
-#: includes/class-form-backup.php:296
+#: includes/class-form-backup.php:317
 msgid "Invalid value."
 msgstr "Ungültiger Wert."
 
@@ -535,24 +571,24 @@ msgid_plural "%s Forms restored from the Trash."
 msgstr[0] "%s Formular aus dem Papierkorb wiederhergestellt."
 msgstr[1] "%s Formulare aus dem Papierkorb wiederhergestellt."
 
-#: includes/class-form-renderer.php:47 blocks/embed/index.js:1
+#: includes/class-form-renderer.php:45 blocks/embed/index.js:1
 #: blocks/form/index.js:1
 msgid "Submit"
 msgstr "Absenden"
 
-#: includes/class-form-renderer.php:48
+#: includes/class-form-renderer.php:46
 msgid "Leave this field empty"
 msgstr "Dieses Feld leer lassen"
 
-#: includes/class-form-renderer.php:52
+#: includes/class-form-renderer.php:50
 msgid "JavaScript is required to submit this form."
 msgstr "Zum Absenden dieses Formulars ist JavaScript erforderlich."
 
-#: includes/class-form-renderer.php:109 blocks/consent/index.js:1
+#: includes/class-form-renderer.php:155 blocks/consent/index.js:1
 msgid "privacy policy"
 msgstr "Datenschutzerklärung"
 
-#: includes/class-form-renderer.php:110 blocks/consent/index.js:1
+#: includes/class-form-renderer.php:156 blocks/consent/index.js:1
 msgid "I agree to the {privacy_policy}."
 msgstr "Ich stimme der {privacy_policy} zu."
 
@@ -590,18 +626,23 @@ msgstr "Musterstraße 1"
 msgid "Sampletown"
 msgstr "Musterstadt"
 
-#: includes/class-mail-preview-controller.php:158
+#: includes/class-mail-preview-controller.php:159
+#: includes/class-mail-preview-controller.php:161
 msgid "Sample option"
 msgstr "Beispieloption"
 
+#: includes/class-mail-preview-controller.php:161
+msgid "Another option"
+msgstr "Weitere Option"
+
 #. translators: %s: UTC timestamp of the Submission.
-#: includes/class-mail-preview-controller.php:163
-#: includes/class-submission-handler.php:219
+#: includes/class-mail-preview-controller.php:166
+#: includes/class-submission-handler.php:222
 #, php-format
 msgid "Yes (%s)"
 msgstr "Ja (%s)"
 
-#: includes/class-mail-preview-controller.php:165
+#: includes/class-mail-preview-controller.php:168
 msgid "Sample text"
 msgstr "Beispieltext"
 
@@ -1097,7 +1138,7 @@ msgid "The spam protection check failed. Please try again."
 msgstr ""
 "Die Spam-Schutz-Prüfung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
 
-#: includes/class-submission-handler.php:249
+#: includes/class-submission-handler.php:255
 msgid "Thank you! Your message has been sent."
 msgstr "Vielen Dank! Ihre Nachricht wurde gesendet."
 
@@ -1266,14 +1307,16 @@ msgstr "Platzhalter einfügen"
 msgid "General"
 msgstr "Allgemein"
 
-#: admin/build/settings.js:1 blocks/form/index.js:1
+#: admin/build/settings.js:1 blocks/conditional/index.js:10
+#: blocks/form/index.js:1
 msgid "Value"
 msgstr "Wert"
 
 #: admin/build/settings.js:1 blocks/address/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/form/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
+#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Label"
 msgstr "Beschriftung"
 
@@ -1354,28 +1397,32 @@ msgstr ""
 "eigenen Betreff noch eine eigene Textvorlage haben. Lassen Sie das Feld "
 "leer, um den eingebauten Text zu verwenden."
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Field"
 msgstr "Feld"
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Field key"
 msgstr "Feldschlüssel"
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Another Field in this Form already uses this key. Choose a unique one."
 msgstr ""
 "Ein anderes Feld in diesem Formular verwendet diesen Schlüssel bereits. "
 "Wählen Sie einen eindeutigen."
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid ""
 "Used in mail placeholders. Lowercase letters, numbers and underscores; "
@@ -1384,64 +1431,74 @@ msgstr ""
 "Wird in Mail-Platzhaltern verwendet. Kleinbuchstaben, Ziffern und "
 "Unterstriche; eindeutig innerhalb dieses Formulars."
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Required"
 msgstr "Pflichtfeld"
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "A consent checkbox is always required."
 msgstr "Ein Einwilligungs-Kontrollkästchen ist immer ein Pflichtfeld."
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Help text"
 msgstr "Hilfetext"
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Placeholder"
 msgstr "Platzhaltertext"
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Width"
 msgstr "Breite"
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Full width"
 msgstr "Volle Breite"
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Half width"
 msgstr "Halbe Breite"
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "One third"
 msgstr "Ein Drittel"
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Narrower Fields sit side by side and stack on narrow screens."
 msgstr ""
 "Schmalere Felder stehen nebeneinander und werden auf schmalen Bildschirmen "
 "untereinander angeordnet."
 
-#: blocks/address/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/select/index.js:1
+#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Field options"
 msgstr "Feldoptionen"
@@ -1449,6 +1506,180 @@ msgstr "Feldoptionen"
 #: blocks/address/index.js:1
 msgid "Default country"
 msgstr "Standardland"
+
+#: blocks/checkbox/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
+msgid "Options"
+msgstr "Optionen"
+
+#. translators: %d: position of the option in the list.
+#: blocks/checkbox/index.js:2 blocks/radio/index.js:2 blocks/select/index.js:2
+msgid "Option %d label"
+msgstr "Beschriftung der Option %d"
+
+#. translators: %d: position of the option in the list.
+#: blocks/checkbox/index.js:3 blocks/radio/index.js:3 blocks/select/index.js:3
+msgid "Option %d value"
+msgstr "Wert der Option %d"
+
+#. translators: %s: option label.
+#: blocks/checkbox/index.js:4 blocks/radio/index.js:4 blocks/select/index.js:4
+msgid "Move up: %s"
+msgstr "Nach oben: %s"
+
+#: blocks/checkbox/index.js:4 blocks/radio/index.js:4 blocks/select/index.js:4
+msgid "Move up"
+msgstr "Nach oben"
+
+#. translators: %s: option label.
+#: blocks/checkbox/index.js:5 blocks/radio/index.js:5 blocks/select/index.js:5
+msgid "Move down: %s"
+msgstr "Nach unten: %s"
+
+#: blocks/checkbox/index.js:5 blocks/radio/index.js:5 blocks/select/index.js:5
+msgid "Move down"
+msgstr "Nach unten"
+
+#. translators: %s: option label.
+#: blocks/checkbox/index.js:6 blocks/radio/index.js:6 blocks/select/index.js:6
+msgid "Remove: %s"
+msgstr "Entfernen: %s"
+
+#: blocks/checkbox/index.js:6 blocks/radio/index.js:6 blocks/select/index.js:6
+msgid "Remove"
+msgstr "Entfernen"
+
+#: blocks/checkbox/index.js:6 blocks/radio/index.js:6 blocks/select/index.js:6
+msgid "Add option"
+msgstr "Option hinzufügen"
+
+#: blocks/conditional/index.js:1
+msgctxt "Condition operator"
+msgid "is"
+msgstr "ist"
+
+#: blocks/conditional/index.js:1
+msgctxt "Condition operator"
+msgid "is not"
+msgstr "ist nicht"
+
+#: blocks/conditional/index.js:1
+msgctxt "Condition operator"
+msgid "is one of"
+msgstr "ist eine von"
+
+#: blocks/conditional/index.js:1
+msgctxt "Condition operator"
+msgid "includes"
+msgstr "enthält"
+
+#: blocks/conditional/index.js:1
+msgctxt "Condition operator"
+msgid "is ticked"
+msgstr "ist angehakt"
+
+#: blocks/conditional/index.js:1
+msgctxt "Condition operator"
+msgid "is not ticked"
+msgstr "ist nicht angehakt"
+
+#: blocks/conditional/index.js:1
+msgctxt "Condition operator"
+msgid "is filled"
+msgstr "ist ausgefüllt"
+
+#: blocks/conditional/index.js:1
+msgctxt "Condition operator"
+msgid "is empty"
+msgstr "ist leer"
+
+#. translators: 1: Field label, 2: option label.
+#: blocks/conditional/index.js:2
+msgid "Shown when %1$s is %2$s"
+msgstr "Angezeigt, wenn %1$s %2$s ist"
+
+#. translators: 1: Field label, 2: option label.
+#: blocks/conditional/index.js:3
+msgid "Shown when %1$s is not %2$s"
+msgstr "Angezeigt, wenn %1$s nicht %2$s ist"
+
+#. translators: 1: Field label, 2: comma-separated option labels.
+#: blocks/conditional/index.js:4
+msgid "Shown when %1$s is one of %2$s"
+msgstr "Angezeigt, wenn %1$s eine dieser Optionen ist: %2$s"
+
+#. translators: 1: Field label, 2: comma-separated option labels.
+#: blocks/conditional/index.js:5
+msgid "Shown when %1$s includes %2$s"
+msgstr "Angezeigt, wenn %1$s mindestens eine dieser Optionen enthält: %2$s"
+
+#. translators: %s: Field label.
+#: blocks/conditional/index.js:6
+msgid "Shown when %s is ticked"
+msgstr "Angezeigt, wenn %s angehakt ist"
+
+#. translators: %s: Field label.
+#: blocks/conditional/index.js:7
+msgid "Shown when %s is not ticked"
+msgstr "Angezeigt, wenn %s nicht angehakt ist"
+
+#. translators: %s: Field label.
+#: blocks/conditional/index.js:8
+msgid "Shown when %s is filled"
+msgstr "Angezeigt, wenn %s ausgefüllt ist"
+
+#. translators: %s: Field label.
+#: blocks/conditional/index.js:9
+msgid "Shown when %s is empty"
+msgstr "Angezeigt, wenn %s leer ist"
+
+#. translators: %s: Field key.
+#: blocks/conditional/index.js:10
+msgid "%s (not available)"
+msgstr "%s (nicht verfügbar)"
+
+#: blocks/conditional/index.js:10
+msgid "Choose a Field"
+msgstr "Feld wählen"
+
+#: blocks/conditional/index.js:10
+msgid "Choose an option"
+msgstr "Option wählen"
+
+#: blocks/conditional/index.js:10
+msgid "Values"
+msgstr "Werte"
+
+#: blocks/conditional/index.js:10
+msgid "Condition"
+msgstr "Bedingung"
+
+#: blocks/conditional/index.js:10
+msgid "Add Fields before this group to use one of them in a Condition."
+msgstr "Fügen Sie vor dieser Gruppe Felder hinzu, um eines davon in einer Bedingung zu verwenden."
+
+#: blocks/conditional/index.js:10
+msgid "Source Field"
+msgstr "Quellfeld"
+
+#: blocks/conditional/index.js:10
+msgid "This Field was removed or comes after this group. Choose another one."
+msgstr "Dieses Feld wurde entfernt oder steht hinter dieser Gruppe. Wählen Sie ein anderes."
+
+#: blocks/conditional/index.js:10
+msgid "Only Fields before this group can be used."
+msgstr "Es können nur Felder vor dieser Gruppe verwendet werden."
+
+#: blocks/conditional/index.js:10
+msgid "Operator"
+msgstr "Operator"
+
+#: blocks/conditional/index.js:10
+msgid "Condition incomplete"
+msgstr "Bedingung unvollständig"
+
+#: blocks/conditional/index.js:10
+msgid "Add Fields here. They are shown only while the Condition holds."
+msgstr "Fügen Sie hier Felder hinzu. Sie werden nur angezeigt, solange die Bedingung erfüllt ist."
 
 #: blocks/consent/index.js:1
 msgid "Consent text"
@@ -1556,11 +1787,11 @@ msgstr ""
 "Das gewählte Formular existiert nicht mehr oder ist nicht veröffentlicht. "
 "Wählen Sie ein anderes oder entfernen Sie diesen Block."
 
-#: blocks/embed/view.js:2
+#: blocks/embed/view.js:4
 msgid "Please wait…"
 msgstr "Bitte warten …"
 
-#: blocks/embed/view.js:2
+#: blocks/embed/view.js:4
 msgid ""
 "The spam protection check could not be loaded. Please reload the page and "
 "try again."
@@ -1568,14 +1799,14 @@ msgstr ""
 "Die Spam-Schutz-Prüfung konnte nicht geladen werden. Bitte laden Sie die "
 "Seite neu und versuchen Sie es erneut."
 
-#: blocks/embed/view.js:2
+#: blocks/embed/view.js:4
 msgid ""
 "Your message could not be sent. Please check your connection and try again."
 msgstr ""
 "Ihre Nachricht konnte nicht gesendet werden. Bitte prüfen Sie Ihre "
 "Verbindung und versuchen Sie es erneut."
 
-#: blocks/embed/view.js:2
+#: blocks/embed/view.js:4
 msgid "Your session could not be verified. Please submit the form again."
 msgstr ""
 "Ihre Sitzung konnte nicht überprüft werden. Bitte senden Sie das Formular "
@@ -1693,51 +1924,6 @@ msgstr "Standardregion"
 msgid "Numbers without a country code are read as belonging to this country."
 msgstr "Nummern ohne Ländervorwahl werden diesem Land zugeordnet."
 
-#: blocks/select/index.js:1
-msgid "Options"
-msgstr "Optionen"
-
-#. translators: %d: position of the option in the list.
-#: blocks/select/index.js:2
-msgid "Option %d label"
-msgstr "Beschriftung der Option %d"
-
-#. translators: %d: position of the option in the list.
-#: blocks/select/index.js:3
-msgid "Option %d value"
-msgstr "Wert der Option %d"
-
-#. translators: %s: option label.
-#: blocks/select/index.js:4
-msgid "Move up: %s"
-msgstr "Nach oben: %s"
-
-#: blocks/select/index.js:4
-msgid "Move up"
-msgstr "Nach oben"
-
-#. translators: %s: option label.
-#: blocks/select/index.js:5
-msgid "Move down: %s"
-msgstr "Nach unten: %s"
-
-#: blocks/select/index.js:5
-msgid "Move down"
-msgstr "Nach unten"
-
-#. translators: %s: option label.
-#: blocks/select/index.js:6
-msgid "Remove: %s"
-msgstr "Entfernen: %s"
-
-#: blocks/select/index.js:6
-msgid "Remove"
-msgstr "Entfernen"
-
-#: blocks/select/index.js:6
-msgid "Add option"
-msgstr "Option hinzufügen"
-
 #: blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Maximum length"
 msgstr "Maximale Länge"
@@ -1750,6 +1936,23 @@ msgstr "Zeilen"
 msgctxt "block title"
 msgid "Address"
 msgstr "Adresse"
+
+#: blocks/checkbox/block.json
+msgctxt "block title"
+msgid "Checkboxes"
+msgstr "Kontrollkästchen"
+
+#: blocks/conditional/block.json
+msgctxt "block title"
+msgid "Conditional group"
+msgstr "Bedingte Gruppe"
+
+#: blocks/conditional/block.json
+msgctxt "block description"
+msgid ""
+"Shows the Fields inside it only while a Condition on an earlier Field holds, "
+"for example while the Select \"Package\" is \"Gold\"."
+msgstr "Zeigt die darin enthaltenen Felder nur an, solange eine Bedingung für ein früheres Feld erfüllt ist, zum Beispiel solange die Auswahl „Paket“ „Gold“ ist."
 
 #: blocks/consent/block.json
 msgctxt "block title"
@@ -1810,6 +2013,11 @@ msgstr "Name"
 msgctxt "block title"
 msgid "Phone"
 msgstr "Telefon"
+
+#: blocks/radio/block.json
+msgctxt "block title"
+msgid "Radio buttons"
+msgstr "Optionsfelder"
 
 #: blocks/select/block.json
 msgctxt "block title"

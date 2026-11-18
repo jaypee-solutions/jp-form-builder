@@ -1,0 +1,21 @@
+{
+	"apiVersion": 3,
+	"name": "jp-form-builder/conditional",
+	"title": "Conditional group",
+	"description": "Shows the Fields inside it only while a Condition on an earlier Field holds, for example while the Select \"Package\" is \"Gold\".",
+	"icon": "visibility",
+	"category": "widgets",
+	"textdomain": "jp-form-builder",
+	"editorScript": "file:./index.js",
+	"parent": ["jp-form-builder/form"],
+	"attributes": {
+		"sourceField": { "type": "string", "default": "" },
+		"operator": {
+			"type": "string",
+			"enum": ["is", "is_not", "is_one_of", "includes", "is_checked", "is_not_checked", "is_filled", "is_empty"],
+			"default": "is"
+		},
+		"values": { "type": "array", "items": { "type": "string" }, "default": [] }
+	},
+	"supports": { "html": false }
+}

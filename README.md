@@ -4,7 +4,7 @@ A privacy-first WordPress plugin for contact-style forms, built as a lean replac
 
 ## What it does
 
-- **Forms as blocks.** Forms are edited in the block editor under **Forms** and placed on pages with the **Form** block. Fields: Name (single or first/last), Email, Phone (normalised to E.164), Address (German order, 32 countries), Text, Select, Textarea and Consent with a privacy-policy link. Every Field has a label, required flag, help text and, where it fits, a placeholder.
+- **Forms as blocks.** Forms are edited in the block editor under **Forms** and placed on pages with the **Form** block. Fields: Name (single or first/last), Email, Phone (normalised to E.164), Address (German order, 32 countries), Text, Select, Radio buttons, Checkboxes, Textarea and Consent with a privacy-policy link. A [Conditional group](#conditional-groups) shows Fields only while an earlier answer calls for them. Every Field has a label, required flag, help text and, where it fits, a placeholder.
 - **Accessible and theme-friendly.** Labels, fieldsets, `aria-describedby`/`aria-invalid`, a focused error summary with links, a `role="status"` success message, full keyboard use. The CSS inherits fonts and colours; the button uses `wp-element-button`. Four styles, the core design tools and Field widths let you adapt the look (see [Styling](#styling)).
 - **Mail by SMTP.** Notification to the Recipients with Reply-To set to the Submitter, an optional Confirmation to the Submitter, HTML mail with a plain-text alternative, editable Mail layout and Body templates, test mail, redacted failure log.
 - **Spam protection that works behind full-page caches.** Cloudflare Turnstile, honeypot, signed minimum fill time, per-IP rate limit, payload limit, header-injection guard. Submissions use a public REST route without a nonce.
@@ -131,6 +131,29 @@ The variables are set on the block wrapper `.wp-block-jp-form-builder-embed`, so
 ```
 
 Keep the design accessible: the focus color needs at least 3:1 contrast against the Form's background, Field borders should reach 3:1 as well, and every style keeps the error border and the message under the Field, the required marker and the visible label.
+
+## Conditional groups
+
+A **Conditional group** holds Fields (and paragraphs or headings) that a visitor sees only while a **Condition** on an earlier Field holds, for example a "Which package?" Select that reveals a "Discount code" Field for *Gold*.
+
+**Build one** in the Form editor:
+
+1. Add the Field the answer comes from (Select, Radio buttons, Checkboxes, Consent or any other Field) and give it a label.
+2. Add a **Conditional group** after it and put the dependent Fields inside it. Groups do not nest.
+3. With the group selected, open the **Condition** panel in the sidebar and choose the **Source Field**, the **Operator** and, where the operator needs them, the **Value**. The group's label on the canvas states the rule in words, such as "Shown when Package is Gold". "Condition incomplete" means the group has no usable rule yet: no source, a source that is missing or sits after the group, or an operator without values. Such a group is always shown on the page.
+
+The Source Field lists only Fields that come **before** the group in the Form, including Fields inside earlier groups. Changing the source resets the operator and values.
+
+| Source Field | Operators | Value |
+| --- | --- | --- |
+| Select, Radio buttons | *is*, *is not*, *is one of* | one option for *is*/*is not*, several for *is one of* |
+| Checkboxes | *includes*, *is filled*, *is empty* | one or more options for *includes* (any of them) |
+| Consent | *is ticked*, *is not ticked* | none |
+| Every other Field (Name, Email, Phone, Address, Text, Textarea) | *is filled*, *is empty* | none |
+
+**In the browser** the group appears right after the Field that triggers it, without moving the keyboard focus or announcing anything, and disappears again when the answer changes. A hidden group is removed from the tab order and the accessibility tree (`hidden`), so a screen-reader or keyboard user never meets it. When a group hides, its error messages go with it.
+
+**On the server** the browser is never trusted: every Condition is evaluated against the submitted values, in document order. Fields of a hidden group are **not validated** (a required Field inside a hidden group never blocks the Submission) and **not mailed**, even if a client sends values for them. A Field inside a hidden group counts as empty for the Conditions of later groups. Pages and Forms that are cached start with the groups that fail for an empty Form already hidden.
 
 ## WP-CLI
 
