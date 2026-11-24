@@ -12,7 +12,7 @@ import { collectConditionSources } from '../../shared/form-fields';
 import { ConditionPanel } from './condition-panel';
 import { describeCondition } from './condition-text';
 
-// A group holds Fields and pass-through blocks, never another group.
+// A group holds Fields, layout blocks and pass-through blocks, never another group.
 const ALLOWED_BLOCKS = [
 	'jp-form-builder/name',
 	'jp-form-builder/email',
@@ -26,6 +26,8 @@ const ALLOWED_BLOCKS = [
 	'jp-form-builder/consent',
 	'core/paragraph',
 	'core/heading',
+	'core/columns',
+	'core/group',
 ];
 
 export default function Edit( { clientId, attributes, setAttributes } ) {

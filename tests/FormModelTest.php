@@ -6,6 +6,7 @@ use JayPee\FormBuilder\Conditional_Group;
 use JayPee\FormBuilder\Field_Definition;
 use JayPee\FormBuilder\Form_Definition;
 use JayPee\FormBuilder\Form_Definition_Parser;
+use JayPee\FormBuilder\Layout_Block;
 use PHPUnit\Framework\TestCase;
 final class FormModelTest extends TestCase {
     public function test_defaults_and_field_keys_are_merged_in_document_order(): void {
@@ -172,5 +173,69 @@ final class FormModelTest extends TestCase {
         self::assertCount( 1, $form->groups() );
         self::assertCount( 1, $form->groups()[0]->items );
         self::assertSame( [ 'topic', 'outer' ], array_map( static fn( Field_Definition $field ): string => $field->key, $form->fields() ) );
+    }
+
+    /**
+     * @param array<int,array<string,mixed>> $children
+     * @return array<string,mixed> A core layout block with the innerContent core would parse.
+     */
+    private function layout( string $name, array $children, array $attrs = [] ): array {
+        $css = 'core/columns' === $name ? 'wp-block-columns' : ( 'core/column' === $name ? 'wp-block-column' : 'wp-block-group' );
+        return [
+            'blockName'    => $name,
+            'attrs'        => $attrs,
+            'innerBlocks'  => $children,
+            'innerHTML'    => '<div class="' . $css . '"></div>',
+            'innerContent' => array_merge( [ '<div class="' . $css . '">' ], array_fill( 0, count( $children ), null ), [ '</div>' ] ),
+        ];
+    }
+
+    /** @return string[] */
+    private function keys( Form_Definition $form ): array {
+        return array_map( static fn( Field_Definition $field ): string => $field->key, $form->fields() );
+    }
+
+    public function test_layout_blocks_hold_fields_at_any_depth_in_document_order(): void {
+        $html = [ 'blockName' => 'core/html', 'attrs' => [], 'innerBlocks' => [], 'innerHTML' => '', 'innerContent' => [] ];
+        $form = $this->parse(
+            [
+                $this->field_block( 'text', 'topic' ),
+                $this->layout(
+                    'core/columns',
+                    [
+                        $this->layout( 'core/column', [ $this->field_block( 'email', 'mail' ), $html ] ),
+                        $this->layout( 'core/column', [ $this->field_block( 'text', 'topic' ) ] ),
+                    ]
+                ),
+                $this->group(
+                    [ 'sourceField' => 'topic', 'operator' => 'is_filled' ],
+                    [ $this->layout( 'core/group', [ $this->field_block( 'text', 'extra' ) ], [ 'layout' => [ 'type' => 'flex' ] ] ) ]
+                ),
+            ]
+        );
+
+        self::assertSame( [ 'topic', 'mail', 'topic_2', 'extra' ], $this->keys( $form ) );
+        $columns = $form->items[1];
+        self::assertInstanceOf( Layout_Block::class, $columns );
+        $first = $columns->items[0];
+        self::assertInstanceOf( Layout_Block::class, $first );
+        self::assertCount( 1, $first->items, 'The foreign block is dropped.' );
+        self::assertCount( 1, array_filter( $first->block['innerContent'], 'is_null' ), 'Its placeholder goes with it.' );
+        self::assertSame( [], $first->block['innerBlocks'] );
+        self::assertSame( [ 'extra' ], array_map( static fn( Field_Definition $field ): string => $field->key, $form->groups()[0]->fields() ) );
+    }
+
+    public function test_a_conditional_group_inside_a_layout_block_is_dropped_with_its_fields(): void {
+        $form = $this->parse(
+            [
+                $this->layout(
+                    'core/columns',
+                    [ $this->layout( 'core/column', [ $this->field_block( 'text', 'kept' ), $this->group( [], [ $this->field_block( 'text', 'lost' ) ] ) ] ) ]
+                ),
+            ]
+        );
+
+        self::assertSame( [], $form->groups() );
+        self::assertSame( [ 'kept' ], $this->keys( $form ) );
     }
 }

@@ -362,6 +362,27 @@ final class FieldValidatorTest extends TestCase {
         $this->assertSame( [ 'topic' => 'help' ], $dropped['values'], 'A value posted for a hidden Field is dropped.' );
     }
 
+    public function test_a_field_inside_a_layout_block_of_a_hidden_group_is_neither_required_nor_kept(): void {
+        $layout = new Layout_Block(
+            [ 'blockName' => 'core/columns', 'attrs' => [], 'innerBlocks' => [], 'innerContent' => [ '<div>', null, '</div>' ] ],
+            [ $this->field( 'text', 'code', [ 'required' => true ] ) ]
+        );
+        $form   = $this->form(
+            [
+                $this->field( 'radio', 'topic', [ 'options' => [ [ 'label' => 'Sales', 'value' => 'sales' ], [ 'label' => 'Help', 'value' => 'help' ] ] ] ),
+                new Conditional_Group( new Condition( 'topic', 'is', [ 'sales' ] ), [ $layout ] ),
+            ]
+        );
+
+        $hidden = $this->validator->validate_form( $form, [ 'topic' => 'help', 'code' => 'X1' ] );
+        $this->assertSame( [], $hidden['errors'] );
+        $this->assertSame( [ 'topic' => 'help' ], $hidden['values'] );
+
+        $shown = $this->validator->validate_form( $form, [ 'topic' => 'sales', 'code' => '' ] );
+        $this->assertArrayHasKey( 'code', $shown['errors'], 'Shown, the Field in the layout is required.' );
+        $this->assertSame( [ 'code' ], ( new Condition_Evaluator() )->resolve( [ $form->groups()[0] ], [ 'topic' => 'help' ] )['hidden'] );
+    }
+
     public function test_a_shown_group_is_validated_like_the_rest_of_the_form(): void {
         $form = $this->form(
             [

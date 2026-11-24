@@ -26,6 +26,9 @@ final class Form_Blocks {
     /** Core blocks that may sit between Fields and are rendered as they are. */
     public const PASS_THROUGH = [ 'core/paragraph', 'core/heading' ];
 
+    /** Core layout blocks that may hold Fields and pass-through blocks; they never hold a Conditional group. */
+    public const LAYOUT = [ 'core/columns', 'core/column', 'core/group' ];
+
     /** @return string The Field type of a block name, or '' when the block is not a Field block. */
     public static function field_type( string $block_name ): string {
         if ( ! str_starts_with( $block_name, self::NAMESPACE_PREFIX ) ) {
@@ -35,10 +38,10 @@ final class Form_Blocks {
         return in_array( $type, self::FIELD_TYPES, true ) ? $type : '';
     }
 
-    /** @return string[] Blocks allowed inside a Conditional group: Field blocks and pass-through blocks. */
+    /** @return string[] Blocks allowed inside a Conditional group or a layout block: Field blocks, pass-through blocks and layout blocks. */
     public static function group_children(): array {
         $fields = array_map( static fn( string $type ): string => self::NAMESPACE_PREFIX . $type, self::FIELD_TYPES );
-        return array_merge( $fields, self::PASS_THROUGH );
+        return array_merge( $fields, self::PASS_THROUGH, self::LAYOUT );
     }
 
     /** @return string[] Blocks allowed inside the Form block: Field blocks, pass-through blocks and Conditional groups. */

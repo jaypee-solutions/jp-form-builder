@@ -20,17 +20,23 @@ export const FIELD_TYPES = [
 	'consent',
 ];
 
+// The Field type of a block name, or '' when the block is not a Field block.
+function fieldTypeOf( name ) {
+	const type = name.startsWith( BLOCK_NAMESPACE )
+		? name.slice( BLOCK_NAMESPACE.length )
+		: '';
+	return FIELD_TYPES.includes( type ) ? type : '';
+}
+
 /**
- * The blocks of a Form in document order with Conditional groups replaced by their children.
+ * Every Field block of a Form in document order, at any depth.
  *
  * @param {Object[]} blocks The Form block's inner blocks.
- * @return {Object[]} Field and pass-through blocks; groups are flattened.
+ * @return {Object[]} The Field blocks, including those inside Conditional groups and layout blocks.
  */
-export function flattenFieldBlocks( blocks ) {
-	return blocks.flatMap( ( block ) =>
-		block.name === CONDITIONAL_BLOCK
-			? flattenFieldBlocks( block.innerBlocks )
-			: [ block ]
+export function fieldBlocks( blocks ) {
+	return [ ...walkBlocks( blocks ) ].filter( ( block ) =>
+		fieldTypeOf( block.name )
 	);
 }
 
@@ -45,10 +51,8 @@ function keyedFieldBlocks( blocks, stopAt = '' ) {
 		if ( block.clientId === stopAt && block.name === CONDITIONAL_BLOCK ) {
 			break;
 		}
-		const type = block.name.startsWith( BLOCK_NAMESPACE )
-			? block.name.slice( BLOCK_NAMESPACE.length )
-			: '';
-		if ( ! FIELD_TYPES.includes( type ) ) {
+		const type = fieldTypeOf( block.name );
+		if ( ! type ) {
 			continue;
 		}
 		countsByType[ type ] = ( countsByType[ type ] ?? 0 ) + 1;
@@ -69,13 +73,11 @@ function keyedFieldBlocks( blocks, stopAt = '' ) {
 	return keyed;
 }
 
-// Blocks in document order; a Conditional group comes before its children.
+// Blocks in document order; a container comes before its children.
 function* walkBlocks( blocks ) {
 	for ( const block of blocks ) {
 		yield block;
-		if ( block.name === CONDITIONAL_BLOCK ) {
-			yield* walkBlocks( block.innerBlocks );
-		}
+		yield* walkBlocks( block.innerBlocks ?? [] );
 	}
 }
 

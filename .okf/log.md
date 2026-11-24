@@ -22,3 +22,4 @@
 * **Styling decision**: after v1.0.1 feedback, ADR 0015: styling on the Form block (style variations, design controls, Field widths), site-wide via Global Styles.
 * **Releases 1.0.1–1.2.0**: Form labels instead of Post labels (1.0.1, core fact 9); styling per ADR 0015 (1.1.0); cleaner Standard, Card and Liquid Glass styles, class-qualified Field selectors (1.2.0).
 * **Conditional groups decision**: ADR 0016: one Condition per group on an earlier Field, no nesting, server-side evaluation; Radio buttons and Checkboxes Fields; glossary terms Conditional group and Condition.
+* **Layout blocks decision**: ADR 0017: core Columns/Group (Row, Stack, Grid) allowed in Forms and Conditional groups, Conditional groups stay top-level; rendered by core with `pre_render_block` slots; glossary term Layout block.
