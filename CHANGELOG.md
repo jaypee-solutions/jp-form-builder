@@ -10,6 +10,11 @@ extracts it as the GitHub release notes and fails without it.
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-24
+
+### Added
+- Layout blocks in Forms: the core Columns and Group blocks (including Row, Stack and Grid) can hold Fields and paragraphs or headings in a Form and in a Conditional group, nested in each other. The front end is rendered by WordPress core, so layout, gap, colours and spacing are kept; Fields keep their 50 % and 33 % widths inside Columns and Groups. Validation, Conditions, mails and Field keys treat Fields at any depth in document order. Conditional groups stay directly in the Form and cannot be placed inside a layout block.
+
 ## [1.3.0] - 2026-11-17
 
 ### Added
