@@ -20,6 +20,7 @@ okf_version: "0.1"
 * [Stale cached forms validate against their revision](decisions/0014-stale-markup-revision-validation.md) - Cached markup carries a content hash; server validates against the matching revision.
 * [Form styling with block design tools](decisions/0015-form-styling-with-block-design-tools.md) - Style variations, block supports, Field colours and widths on the Form block.
 * [Conditional groups](decisions/0016-conditional-groups.md) - Group block shown only while a Condition on an earlier Field holds; evaluated on the server.
+* [Layout blocks in Forms](decisions/0017-layout-blocks-in-forms.md) - Core Columns and Group blocks hold Fields; rendered by core with Fields slotted in.
 * [Domain language](references/domain-language.md) - Canonical terms; see GLOSSARY.md.
 * [Template facts](references/template-facts.md) - wp-plugin-template v1.4.0 conventions.
 * [Phone library evaluation](references/phone-library-evaluation.md) - Measured libphonenumber facts.

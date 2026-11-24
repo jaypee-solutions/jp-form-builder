@@ -260,6 +260,13 @@ function add_filter( string $hook, $callback, int $priority = 10, int $accepted_
 /**
  * @param mixed $callback
  */
+function remove_filter( string $hook, $callback, int $priority = 10 ): bool {
+    return true;
+}
+
+/**
+ * @param mixed $callback
+ */
 function add_action( string $hook, $callback, int $priority = 10, int $accepted_args = 1 ): bool {
     return true;
 }

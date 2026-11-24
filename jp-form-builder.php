@@ -54,6 +54,7 @@ require_once __DIR__ . '/includes/class-field-key.php';
 require_once __DIR__ . '/includes/class-field-definition.php';
 require_once __DIR__ . '/includes/class-condition.php';
 require_once __DIR__ . '/includes/class-conditional-group.php';
+require_once __DIR__ . '/includes/class-layout-block.php';
 require_once __DIR__ . '/includes/class-condition-evaluator.php';
 require_once __DIR__ . '/includes/class-form-definition.php';
 require_once __DIR__ . '/includes/class-block-defaults.php';

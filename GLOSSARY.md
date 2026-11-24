@@ -30,6 +30,10 @@ _Avoid_: section, step, page, conditional field
 A rule on one earlier Field that decides whether a Conditional group is shown (DE: Bedingung).
 _Avoid_: logic, rule set, trigger
 
+**Layout block**:
+A core Columns, Column or Group block (including Row, Stack and Grid) that arranges Fields inside a Form (DE: Layout-Block).
+_Avoid_: section, container, row field
+
 ### Sending
 
 **Submission**:

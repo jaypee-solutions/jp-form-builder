@@ -13,6 +13,8 @@ defined( 'ABSPATH' ) || exit;
 
 final class Form_Renderer {
 
+    private const SLOT_BLOCK = 'jp-form-builder/slot';
+
     private static int $instances = 0;
 
     private Condition_Evaluator $evaluator;
@@ -53,7 +55,7 @@ final class Form_Renderer {
         return $html;
     }
 
-    /** @param array<int,Field_Definition|Conditional_Group|array<string,mixed>> $items */
+    /** @param array<int,Field_Definition|Conditional_Group|Layout_Block|array<string,mixed>> $items */
     private function render_items( int $form_id, int $instance, array $items ): string {
         $html = '';
         foreach ( $items as $item ) {
@@ -61,11 +63,55 @@ final class Form_Renderer {
                 $html .= $this->render_field( $form_id, $instance, $item );
             } elseif ( $item instanceof Conditional_Group ) {
                 $html .= $this->render_group( $form_id, $instance, $item );
+            } elseif ( $item instanceof Layout_Block ) {
+                $html .= $this->render_layout( $form_id, $instance, $item );
             } else {
                 $html .= render_block( $item );
             }
         }
         return $html;
+    }
+
+    /**
+     * Core renders the layout block so its layout classes and generated styles stay; WP_Block::render() applies
+     * pre_render_block to every inner block, which fills each slot with the plugin's markup.
+     */
+    private function render_layout( int $form_id, int $instance, Layout_Block $layout ): string {
+        $slots = [];
+        $block = $this->slotted( $form_id, $instance, $layout, $slots );
+        $fill  = static fn( $pre, array $parsed ) => self::SLOT_BLOCK === ( $parsed['blockName'] ?? '' )
+            ? ( $slots[ $parsed['attrs']['slot'] ] ?? '' )
+            : $pre;
+
+        add_filter( 'pre_render_block', $fill, 10, 2 );
+        try {
+            return render_block( $block );
+        } finally {
+            remove_filter( 'pre_render_block', $fill, 10 );
+        }
+    }
+
+    /**
+     * @param string[] $slots Rendered markup per slot placeholder; appended to.
+     * @return array<string,mixed> The layout block with a slot placeholder block per item, nested layouts included.
+     */
+    private function slotted( int $form_id, int $instance, Layout_Block $layout, array &$slots ): array {
+        $inner = [];
+        foreach ( $layout->items as $item ) {
+            if ( $item instanceof Layout_Block ) {
+                $inner[] = $this->slotted( $form_id, $instance, $item, $slots );
+                continue;
+            }
+            $slots[] = $this->render_items( $form_id, $instance, [ $item ] );
+            $inner[] = [
+                'blockName'    => self::SLOT_BLOCK,
+                'attrs'        => [ 'slot' => count( $slots ) - 1 ],
+                'innerBlocks'  => [],
+                'innerHTML'    => '',
+                'innerContent' => [],
+            ];
+        }
+        return array_merge( $layout->block, [ 'innerBlocks' => $inner ] );
     }
 
     /**

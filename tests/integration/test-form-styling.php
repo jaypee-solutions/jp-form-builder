@@ -127,6 +127,22 @@ final class Test_Form_Styling extends WP_UnitTestCase {
         $this->assertStringContainsString( 'jp-form-builder__field--consent" data-field-key="privacy"', $markup, 'consent is always full width' );
     }
 
+    public function test_layout_blocks_render_through_core_with_fields_slotted_in(): void {
+        $id     = $this->create_form(
+            '<!-- wp:columns --><div class="wp-block-columns"><!-- wp:column --><div class="wp-block-column"><!-- wp:jp-form-builder/email {"fieldName":"email","width":"50"} /--></div><!-- /wp:column -->'
+            . '<!-- wp:column --><div class="wp-block-column"><!-- wp:paragraph --><p>Hi</p><!-- /wp:paragraph --></div><!-- /wp:column --></div><!-- /wp:columns -->'
+            . '<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap"}} --><div class="wp-block-group"><!-- wp:jp-form-builder/text {"fieldName":"city"} /--></div><!-- /wp:group -->'
+        );
+        $markup = $this->render_embed( $id );
+
+        $this->assertMatchesRegularExpression( '/wp-block-columns[^"]*is-layout-flex/', $markup );
+        $this->assertMatchesRegularExpression( '/wp-block-column.*data-field-key="email"/s', $markup );
+        $this->assertMatchesRegularExpression( '/<p[^>]*>Hi<\/p>/', $markup );
+        $this->assertMatchesRegularExpression( '/class="wp-block-group[^"]*is-layout-flex[^"]*"/', $markup );
+        $this->assertMatchesRegularExpression( '/class="wp-block-group[^"]*is-nowrap[^"]*"[^>]*><div[^>]*data-field-key="city"/', $markup );
+        $this->assertStringNotContainsString( 'jp-form-builder/slot', $markup );
+    }
+
     public function test_editor_preview_request_renders_the_same_properties(): void {
         $id = $this->create_form();
         wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );

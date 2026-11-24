@@ -39,6 +39,7 @@ require dirname( __DIR__ ) . '/includes/class-field-key.php';
 require dirname( __DIR__ ) . '/includes/class-field-definition.php';
 require dirname( __DIR__ ) . '/includes/class-condition.php';
 require dirname( __DIR__ ) . '/includes/class-conditional-group.php';
+require dirname( __DIR__ ) . '/includes/class-layout-block.php';
 require dirname( __DIR__ ) . '/includes/class-condition-evaluator.php';
 require dirname( __DIR__ ) . '/includes/class-form-definition.php';
 require dirname( __DIR__ ) . '/includes/class-block-defaults.php';

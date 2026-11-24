@@ -39,9 +39,7 @@ final class Form_Definition_Parser {
         $items      = [];
 
         foreach ( $root['innerBlocks'] ?? [] as $block ) {
-            $item = Form_Blocks::CONDITIONAL === ( $block['blockName'] ?? '' )
-                ? $this->parse_group( $block, $counts, $keys )
-                : $this->parse_item( $block, $counts, $keys );
+            $item = $this->parse_child( $block, true, $counts, $keys );
             if ( null !== $item ) {
                 $items[] = $item;
             }
@@ -51,7 +49,7 @@ final class Form_Definition_Parser {
     }
 
     /**
-     * A Conditional group keeps its Fields and pass-through blocks; a nested group is dropped like any foreign block.
+     * A Conditional group keeps its Fields, layout blocks and pass-through blocks; a nested group is dropped like any foreign block.
      * Its Condition is valid only when the source is a Field before the group, so a source that is missing, later or
      * inside the group itself leaves the group always shown.
      *
@@ -69,12 +67,58 @@ final class Form_Definition_Parser {
 
         $items = [];
         foreach ( $block['innerBlocks'] ?? [] as $child ) {
-            $item = $this->parse_item( $child, $counts, $keys );
+            $item = $this->parse_child( $child, false, $counts, $keys );
             if ( null !== $item ) {
                 $items[] = $item;
             }
         }
         return new Conditional_Group( new Condition( $source, $operator, $values, $valid ), $items );
+    }
+
+    /**
+     * @param array<string,mixed> $block        Any child of the Form, of a group or of a layout block.
+     * @param bool                $allow_groups Whether a Conditional group may sit here; only the Form itself allows it.
+     * @param array<string,int>   $counts       Fields seen per type; updated.
+     * @param array<string,true>  $keys         Field keys taken so far; updated.
+     * @return Field_Definition|Conditional_Group|Layout_Block|array<string,mixed>|null
+     */
+    private function parse_child( array $block, bool $allow_groups, array &$counts, array &$keys ) {
+        $name = (string) ( $block['blockName'] ?? '' );
+        if ( Form_Blocks::CONDITIONAL === $name ) {
+            return $allow_groups ? $this->parse_group( $block, $counts, $keys ) : null;
+        }
+        if ( in_array( $name, Form_Blocks::LAYOUT, true ) ) {
+            return $this->parse_layout( $block, $counts, $keys );
+        }
+        return $this->parse_item( $block, $counts, $keys );
+    }
+
+    /**
+     * A layout block keeps its own markup; children that are not allowed are dropped together with their placeholder
+     * in innerContent. Walking innerContent assigns Field keys in document order and keeps placeholders aligned with items.
+     *
+     * @param array<string,mixed> $block  The layout block.
+     * @param array<string,int>   $counts Fields seen per type; updated.
+     * @param array<string,true>  $keys   Field keys taken so far; updated.
+     */
+    private function parse_layout( array $block, array &$counts, array &$keys ): Layout_Block {
+        $children = $block['innerBlocks'] ?? [];
+        $content  = [];
+        $items    = [];
+        $next     = 0;
+        foreach ( $block['innerContent'] ?? [] as $chunk ) {
+            if ( null !== $chunk ) {
+                $content[] = $chunk;
+                continue;
+            }
+            $item = isset( $children[ $next ] ) ? $this->parse_child( $children[ $next ], false, $counts, $keys ) : null;
+            ++$next;
+            if ( null !== $item ) {
+                $items[]   = $item;
+                $content[] = null;
+            }
+        }
+        return new Layout_Block( array_merge( $block, [ 'innerBlocks' => [], 'innerContent' => $content ] ), $items );
     }
 
     /**

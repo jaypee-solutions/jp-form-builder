@@ -21,6 +21,8 @@ const ALLOWED_BLOCKS = [
 	'jp-form-builder/consent',
 	'core/paragraph',
 	'core/heading',
+	'core/columns',
+	'core/group',
 ];
 
 const TEMPLATE = [

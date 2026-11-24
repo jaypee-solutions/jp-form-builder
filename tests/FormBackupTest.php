@@ -69,7 +69,8 @@ final class FormBackupTest extends TestCase {
                 $this->block( 'jp-form-builder/select' ),
                 $this->block( 'jp-form-builder/radio' ),
                 $this->block( 'jp-form-builder/checkbox' ),
-                $this->block( 'jp-form-builder/conditional', [ $this->block( 'core/heading' ), $this->block( 'jp-form-builder/radio' ), $this->block( 'core/paragraph' ) ] ),
+                $this->block( 'jp-form-builder/conditional', [ $this->block( 'core/heading' ), $this->block( 'jp-form-builder/radio' ), $this->block( 'core/paragraph' ), $this->block( 'core/group', [ $this->block( 'jp-form-builder/text' ) ] ) ] ),
+                $this->block( 'core/columns', [ $this->block( 'core/column', [ $this->block( 'jp-form-builder/email' ), $this->block( 'core/paragraph' ) ] ) ] ),
                 $this->block( 'jp-form-builder/textarea' ),
                 $this->block( 'jp-form-builder/consent' ),
                 $this->block( 'core/paragraph' ),
@@ -93,6 +94,8 @@ final class FormBackupTest extends TestCase {
             'Form block in a group'     => [ $this->block( 'jp-form-builder/conditional', [ $this->block( 'jp-form-builder/form' ) ] ) ],
             'embed in a group'          => [ $this->block( 'jp-form-builder/conditional', [ $this->block( 'jp-form-builder/embed' ) ] ) ],
             'foreign block in a group'  => [ $this->block( 'jp-form-builder/conditional', [ $this->block( 'core/html' ) ] ) ],
+            'group in a layout'         => [ $this->block( 'core/group', [ $this->block( 'jp-form-builder/conditional', [ $this->block( 'jp-form-builder/text' ) ] ) ] ) ],
+            'foreign block in a layout' => [ $this->block( 'core/columns', [ $this->block( 'core/column', [ $this->block( 'core/html' ) ] ) ] ) ],
             'inner blocks of a Field'   => [ $this->block( 'jp-form-builder/conditional', [ $this->block( 'jp-form-builder/text', [ $this->block( 'core/paragraph' ) ] ) ] ) ],
         ];
     }

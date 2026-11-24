@@ -22,12 +22,12 @@ final class Form_Definition {
     /** @var array<string,mixed> */
     public array $attributes;
 
-    /** @var array<int,Field_Definition|Conditional_Group|array<string,mixed>> */
+    /** @var array<int,Field_Definition|Conditional_Group|Layout_Block|array<string,mixed>> */
     public array $items;
 
     /**
-     * @param array<string,mixed>                                                $attributes Form attributes.
-     * @param array<int,Field_Definition|Conditional_Group|array<string,mixed>> $items      Ordered Form contents.
+     * @param array<string,mixed>                                                            $attributes Form attributes.
+     * @param array<int,Field_Definition|Conditional_Group|Layout_Block|array<string,mixed>> $items      Ordered Form contents.
      */
     public function __construct( int $id, string $title, string $rev, array $attributes, array $items ) {
         $this->id         = $id;
@@ -42,14 +42,22 @@ final class Form_Definition {
         return substr( hash( 'sha256', $content ), 0, 16 );
     }
 
-    /** @return Field_Definition[] Every Field in document order, including those inside Conditional groups. */
+    /** @return Field_Definition[] Every Field in document order, at any depth. */
     public function fields(): array {
+        return self::fields_in( $this->items );
+    }
+
+    /**
+     * @param array<int,Field_Definition|Conditional_Group|Layout_Block|array<string,mixed>> $items
+     * @return Field_Definition[] Every Field in document order, at any depth.
+     */
+    public static function fields_in( array $items ): array {
         $fields = [];
-        foreach ( $this->items as $item ) {
+        foreach ( $items as $item ) {
             if ( $item instanceof Field_Definition ) {
                 $fields[] = $item;
-            } elseif ( $item instanceof Conditional_Group ) {
-                array_push( $fields, ...$item->fields() );
+            } elseif ( $item instanceof Conditional_Group || $item instanceof Layout_Block ) {
+                array_push( $fields, ...self::fields_in( $item->items ) );
             }
         }
         return $fields;

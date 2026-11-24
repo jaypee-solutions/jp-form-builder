@@ -1,135 +1,16 @@
-import { login } from './support/auth';
+import {
+	CANVAS,
+	capturedMail,
+	clearCapturedMail,
+	embedPage,
+	openNewForm,
+	publish,
+	selectBlockNamed,
+	setFormBlocks,
+	sourceFieldOptions,
+} from './support/form-editor';
 import { test, expect, type Page } from './support/fixtures';
 import { wpCli } from './support/wp-cli';
-
-type CapturedMail = { message: string };
-
-const CANVAS = 'iframe[name="editor-canvas"]';
-
-function clearCapturedMail(): void {
-	wpCli( 'eval', "delete_option( 'jp_form_builder_e2e_last_mail' );" );
-}
-
-function capturedMail(): CapturedMail {
-	return JSON.parse(
-		wpCli(
-			'option',
-			'get',
-			'jp_form_builder_e2e_last_mail',
-			'--format=json'
-		)
-	);
-}
-
-async function openNewForm( page: Page ): Promise< void > {
-	await login( page );
-	await page.goto( '/wp-admin/post-new.php?post_type=jp_form' );
-	await page.waitForFunction( () =>
-		// @ts-ignore wp is provided by the block editor page.
-		window.wp?.data
-			?.select( 'core/block-editor' )
-			?.getBlocks()
-			.some(
-				( block: { name: string; innerBlocks: unknown[] } ) =>
-					block.name === 'jp-form-builder/form' &&
-					block.innerBlocks.length > 0
-			)
-	);
-}
-
-type BlockSpec = {
-	name: string;
-	attributes?: Record< string, unknown >;
-	inner?: BlockSpec[];
-};
-
-// Replaces the Form's blocks, so a test starts from a known tree instead of clicking every Field into place.
-async function setFormBlocks(
-	page: Page,
-	blocks: BlockSpec[]
-): Promise< void > {
-	await page.evaluate( ( specs ) => {
-		// @ts-ignore wp is provided by the block editor page.
-		const { data, blocks: wpBlocks } = window.wp;
-		const build = ( spec: any ): unknown =>
-			wpBlocks.createBlock(
-				spec.name,
-				spec.attributes ?? {},
-				( spec.inner ?? [] ).map( build )
-			);
-		const form = data
-			.select( 'core/block-editor' )
-			.getBlocks()
-			.find(
-				( block: { name: string } ) =>
-					block.name === 'jp-form-builder/form'
-			);
-		data.dispatch( 'core/block-editor' ).replaceInnerBlocks(
-			form.clientId,
-			specs.map( build )
-		);
-	}, blocks );
-}
-
-async function selectBlockNamed(
-	page: Page,
-	name: string,
-	index = 0
-): Promise< void > {
-	await page.evaluate(
-		( { blockName, position } ) => {
-			// @ts-ignore wp is provided by the block editor page.
-			const { data } = window.wp;
-			const flatten = ( blocks: any[] ): any[] =>
-				blocks.flatMap( ( block ) => [
-					block,
-					...flatten( block.innerBlocks ),
-				] );
-			const found = flatten(
-				data.select( 'core/block-editor' ).getBlocks()
-			).filter( ( block ) => block.name === blockName );
-			data.dispatch( 'core/block-editor' ).selectBlock(
-				found[ position ].clientId
-			);
-		},
-		{ blockName: name, position: index }
-	);
-}
-
-async function publish( page: Page ): Promise< number > {
-	await page.getByRole( 'button', { name: 'Publish', exact: true } ).click();
-	await page
-		.getByRole( 'region', { name: 'Editor publish' } )
-		.getByRole( 'button', { name: 'Publish', exact: true } )
-		.click();
-	await expect(
-		page.getByText( /is now live|published/i ).first()
-	).toBeVisible();
-	return page.evaluate(
-		// @ts-ignore wp is provided by the block editor page.
-		() =>
-			window.wp.data.select( 'core/editor' ).getCurrentPostId() as number
-	);
-}
-
-function embedPage( formId: number, title: string ): string {
-	return wpCli(
-		'post',
-		'create',
-		'--post_type=page',
-		'--post_status=publish',
-		`--post_title=${ title }`,
-		`--post_content=<!-- wp:jp-form-builder/embed {"formId":${ formId }} /-->`,
-		'--porcelain'
-	);
-}
-
-async function sourceFieldOptions( page: Page ): Promise< string[] > {
-	return page
-		.getByLabel( 'Source Field' )
-		.locator( 'option' )
-		.allTextContents();
-}
 
 test.describe( 'Conditional group in the editor', () => {
 	test( 'is built with the inserter, states its Condition on the canvas and works on the front end', async ( {

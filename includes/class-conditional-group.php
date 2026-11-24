@@ -15,10 +15,10 @@ final class Conditional_Group {
 
     public Condition $condition;
 
-    /** @var array<int,Field_Definition|array<string,mixed>> Fields and pass-through blocks; groups never nest. */
+    /** @var array<int,Field_Definition|Layout_Block|array<string,mixed>> Fields, layout blocks and pass-through blocks; groups never nest. */
     public array $items;
 
-    /** @param array<int,Field_Definition|array<string,mixed>> $items */
+    /** @param array<int,Field_Definition|Layout_Block|array<string,mixed>> $items */
     public function __construct( Condition $condition, array $items ) {
         $this->condition = $condition;
         $this->items     = $items;
@@ -26,6 +26,6 @@ final class Conditional_Group {
 
     /** @return Field_Definition[] */
     public function fields(): array {
-        return array_values( array_filter( $this->items, static fn( $item ) => $item instanceof Field_Definition ) );
+        return Form_Definition::fields_in( $this->items );
     }
 }

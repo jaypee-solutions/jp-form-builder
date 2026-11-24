@@ -117,8 +117,9 @@ final class Form_Backup {
     }
 
     /**
-     * Why a child of the Form or of a Conditional group cannot be restored. Only a group may hold blocks, and only
-     * Fields and pass-through blocks without blocks of their own, so groups never nest.
+     * Why a child of the Form, of a Conditional group or of a layout block cannot be restored. Only Conditional groups
+     * and layout blocks may hold blocks: Fields, pass-through blocks and layout blocks, so Conditional groups never
+     * nest and stay at the top level.
      *
      * @param array<string,mixed> $block   The child block.
      * @param string[]            $allowed Block names allowed at this level.
@@ -129,7 +130,8 @@ final class Form_Backup {
             /* translators: %s: block name. */
             return sprintf( __( 'The block "%s" is not allowed in a Form.', 'jp-form-builder' ), '' === $name ? 'freeform' : $name );
         }
-        if ( Form_Blocks::CONDITIONAL !== $name ) {
+        $is_container = Form_Blocks::CONDITIONAL === $name || in_array( $name, Form_Blocks::LAYOUT, true );
+        if ( ! $is_container ) {
             return empty( $block['innerBlocks'] ) ? null : __( 'Nested blocks are not allowed in a Form.', 'jp-form-builder' );
         }
         foreach ( $block['innerBlocks'] ?? [] as $child ) {
