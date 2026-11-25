@@ -130,6 +130,14 @@ final class FormModelTest extends TestCase {
         ];
     }
 
+    public function test_a_date_field_is_not_a_condition_source(): void {
+        $date = [ 'blockName' => 'jp-form-builder/date', 'attrs' => [ 'fieldName' => 'day' ], 'innerBlocks' => [] ];
+        $form = $this->parse( [ $date, $this->group( [ 'sourceField' => 'day', 'operator' => 'is_filled', 'values' => [] ], [ $date ] ) ] );
+
+        self::assertFalse( $form->groups()[0]->condition->valid );
+        self::assertSame( 'date', $form->fields()[0]->type );
+    }
+
     public function test_a_source_inside_an_earlier_group_is_valid_and_the_source_key_is_normalised(): void {
         $form = $this->parse(
             [

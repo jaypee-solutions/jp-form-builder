@@ -147,13 +147,12 @@ final class Mail_Preview_Controller {
                 return 'jane@example.test';
             case 'phone':
                 return '+49821123456';
-            case 'address':
-                return [
-                    'street'   => __( 'Example Street 1', 'jp-form-builder' ),
-                    'postcode' => '86150',
-                    'city'     => __( 'Sampletown', 'jp-form-builder' ),
-                    'country'  => Countries::all()['DE'] ?? 'DE',
-                ];
+            case 'postcode':
+                return '86150';
+            case 'country':
+                return Countries::all()['DE'] ?? 'DE';
+            case 'date':
+                return Date_Format::for_locale( determine_locale() )->format( '2026-03-14' );
             case 'select':
             case 'radio':
                 return __( 'Sample option', 'jp-form-builder' );

@@ -1,3 +1,4 @@
+export { countryOptions } from './countries';
 export { getEditorData } from './editor-data';
 export { FieldBlock } from './field-block';
 export { FormSettings } from './form-settings';
@@ -11,7 +12,6 @@ export {
 } from './field-preview';
 export { OptionsEditor } from './options-editor';
 export {
-	addressPartLabels,
 	defaultConsentLinkText,
 	defaultConsentText,
 	defaultFirstNameLabel,

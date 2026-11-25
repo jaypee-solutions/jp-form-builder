@@ -1,9 +1,8 @@
 // Mirrors Condition_Evaluator in PHP, rule for rule (tests/fixtures/conditions.json checks both).
 //
 // A value is a string, a list of strings (Checkboxes) or an object of strings
-// (compound Fields). A Field without a value counts as empty. Values are the
-// ones the server cleans: trimmed, and an optional address with only its
-// preselected country is empty.
+// (a split Name). A Field without a value counts as empty. Values are the
+// ones the server cleans: trimmed.
 
 export const OPERATORS = [
 	'is',

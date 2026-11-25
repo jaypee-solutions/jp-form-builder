@@ -21,6 +21,9 @@ okf_version: "0.1"
 * [Form styling with block design tools](decisions/0015-form-styling-with-block-design-tools.md) - Style variations, block supports, Field colours and widths on the Form block.
 * [Conditional groups](decisions/0016-conditional-groups.md) - Group block shown only while a Condition on an earlier Field holds; evaluated on the server.
 * [Layout blocks in Forms](decisions/0017-layout-blocks-in-forms.md) - Core Columns and Group blocks hold Fields; rendered by core with Fields slotted in.
+* [Date field](decisions/0018-date-field.md) - Typed input plus native picker; Date offsets resolved on the server in the site timezone.
+* [Postcode follows the nearest Country field](decisions/0019-postcode-follows-nearest-country-field.md) - Postcode validates per the nearest Country Field in document order, else Germany (5 digits).
+* [Drop the Address Field](decisions/0020-drop-address-field.md) - Composite Address removed in 2.0.0; separate Street, Postcode, City and Country Fields.
 * [Domain language](references/domain-language.md) - Canonical terms; see GLOSSARY.md.
 * [Template facts](references/template-facts.md) - wp-plugin-template v1.4.0 conventions.
 * [Phone library evaluation](references/phone-library-evaluation.md) - Measured libphonenumber facts.

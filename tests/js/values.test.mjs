@@ -44,6 +44,9 @@ function controlsHolding( key, value ) {
 			control( 'radio', key, 'other' ),
 		];
 	}
+	if ( key === 'country' ) {
+		return [ control( 'select', key, value ) ];
+	}
 	if ( key === 'consent' ) {
 		return [ control( 'checkbox', key, '1', { checked: value === '1' } ) ];
 	}
@@ -123,39 +126,50 @@ describe( 'cleanFieldValue', () => {
 		} );
 	} );
 
-	describe( 'an address', () => {
-		const address = ( { street = '', city = '', required = false } ) => [
-			control( 'text', 'home[street]', street, { required } ),
-			control( 'text', 'home[postcode]', '', { required } ),
-			control( 'text', 'home[city]', city, { required } ),
-			control( 'select', 'home[country]', 'DE', { required } ),
-		];
-
-		it( 'with only its preselected country is empty when optional', () => {
-			assert.deepEqual( cleanFieldValue( 'home', address( {} ) ), {
-				street: '',
-				postcode: '',
-				city: '',
-				country: '',
+	describe( 'a date Field', () => {
+		const dateControl = ( value, format ) =>
+			control( 'text', 'when', value, {
+				dataset: { dateFormat: format },
 			} );
-		} );
 
-		it( 'keeps its country once another part is filled', () => {
-			assert.deepEqual(
-				cleanFieldValue( 'home', address( { city: ' Augsburg ' } ) ),
-				{ street: '', postcode: '', city: 'Augsburg', country: 'DE' }
+		it( 'is sent as ISO from the German display format', () => {
+			assert.equal(
+				cleanFieldValue( 'when', [
+					dateControl( ' 5.3.2026 ', 'dmy' ),
+				] ),
+				'2026-03-05'
 			);
 		} );
 
-		it( 'keeps its country when required', () => {
+		it( 'is sent unchanged from the ISO display format', () => {
 			assert.equal(
-				cleanFieldValue( 'home', address( { required: true } ) )
-					.country,
-				'DE'
+				cleanFieldValue( 'when', [
+					dateControl( '2026-03-05', 'iso' ),
+				] ),
+				'2026-03-05'
+			);
+		} );
+
+		it( 'sends unparseable text as typed, so the server reports it', () => {
+			assert.equal(
+				cleanFieldValue( 'when', [
+					dateControl( '31.02.2026', 'dmy' ),
+				] ),
+				'31.02.2026'
+			);
+			assert.equal(
+				cleanFieldValue( 'when', [ dateControl( 'soon', 'iso' ) ] ),
+				'soon'
+			);
+		} );
+
+		it( 'stays empty when empty', () => {
+			assert.equal(
+				cleanFieldValue( 'when', [ dateControl( '  ', 'dmy' ) ] ),
+				''
 			);
 		} );
 	} );
-
 	it( 'reads a Field without controls as empty', () => {
 		assert.equal( cleanFieldValue( 'ghost', [] ), '' );
 	} );

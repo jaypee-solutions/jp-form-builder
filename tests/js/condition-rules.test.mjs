@@ -24,6 +24,10 @@ describe( 'operatorsForType', () => {
 			operatorsForType( 'radio' ),
 			operatorsForType( 'select' )
 		);
+		assert.deepEqual(
+			operatorsForType( 'country' ),
+			operatorsForType( 'select' )
+		);
 		assert.deepEqual( operatorsForType( 'checkbox' ), [
 			'includes',
 			'is_filled',
@@ -37,7 +41,7 @@ describe( 'operatorsForType', () => {
 			'name',
 			'email',
 			'phone',
-			'address',
+			'postcode',
 			'text',
 			'textarea',
 		] ) {
@@ -48,8 +52,18 @@ describe( 'operatorsForType', () => {
 		}
 	} );
 
+	it( 'offers no operators for a date Field', () => {
+		assert.deepEqual( operatorsForType( 'date' ), [] );
+	} );
+
 	it( 'only offers operators the evaluator knows', () => {
-		for ( const type of [ 'select', 'checkbox', 'consent', 'text' ] ) {
+		for ( const type of [
+			'select',
+			'country',
+			'checkbox',
+			'consent',
+			'text',
+		] ) {
 			for ( const operator of operatorsForType( type ) ) {
 				assert.ok( OPERATORS.includes( operator ) );
 			}

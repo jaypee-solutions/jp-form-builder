@@ -43,6 +43,11 @@ $GLOBALS['jp_form_builder_test_http_requests'] = [];
 $GLOBALS['jp_form_builder_test_transients'] = [];
 
 /**
+ * @var string Locale the determine_locale() stub reports; unset means en_US.
+ */
+$GLOBALS['jp_form_builder_test_locale'] = 'en_US';
+
+/**
  * @var array<string,callable> Callback per hook name for the apply_filters() stub.
  */
 $GLOBALS['jp_form_builder_test_filters'] = [];
@@ -190,7 +195,15 @@ function esc_attr( string $text ): string {
 }
 
 function determine_locale(): string {
-    return 'en_US';
+    return $GLOBALS['jp_form_builder_test_locale'] ?? 'en_US';
+}
+
+function wp_timezone(): \DateTimeZone {
+    return new \DateTimeZone( 'UTC' );
+}
+
+function esc_attr__( string $text, string $domain = 'default' ): string { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore
+    return esc_attr( $text );
 }
 
 function get_privacy_policy_url(): string {

@@ -1,6 +1,14 @@
 import { __, sprintf } from '@wordpress/i18n';
-import { fieldControls, fieldWrappers, isInHiddenGroup, labelOf } from './dom';
+import { dateIssueMessage } from './date';
+import {
+	countryValueOf,
+	fieldControls,
+	fieldWrappers,
+	isInHiddenGroup,
+	labelOf,
+} from './dom';
 import { isPlausiblePhoneNumber } from './phone';
+import { isValidPostcode } from './postcode';
 import { choiceKind, controlValue } from './values';
 
 const codePoints = ( text ) => [ ...text ].length;
@@ -24,7 +32,7 @@ function tooLongMessage( label, max ) {
 
 // The message for one control's value, or '' when it is acceptable. Empty
 // values are the caller's business.
-function invalidValueMessage( form, control, value, postcodePatterns ) {
+function invalidValueMessage( form, control, value ) {
 	if ( control.type === 'email' && control.validity.typeMismatch ) {
 		return __( 'Please enter a valid email address.', 'jp-form-builder' );
 	}
@@ -37,6 +45,16 @@ function invalidValueMessage( form, control, value, postcodePatterns ) {
 	) {
 		return __( 'Please enter a valid phone number.', 'jp-form-builder' );
 	}
+	if (
+		! isValidPostcode( control, value, ( key ) =>
+			countryValueOf( form, key )
+		)
+	) {
+		return __( 'Please enter a valid postcode.', 'jp-form-builder' );
+	}
+	if ( control.dataset.dateFormat ) {
+		return dateIssueMessage( control );
+	}
 	if ( control.tagName === 'SELECT' ) {
 		const isOption = [ ...control.options ].some(
 			( option ) => option.value === control.value
@@ -47,15 +65,6 @@ function invalidValueMessage( form, control, value, postcodePatterns ) {
 					'Please choose one of the available options.',
 					'jp-form-builder'
 				);
-	}
-	if ( postcodePatterns && control.name.endsWith( '[postcode]' ) ) {
-		const country = control
-			.closest( 'fieldset' )
-			.querySelector( 'select' )?.value;
-		const pattern = postcodePatterns[ country ];
-		if ( pattern && ! new RegExp( pattern ).test( value ) ) {
-			return __( 'Please enter a valid postcode.', 'jp-form-builder' );
-		}
 	}
 	return '';
 }
@@ -94,15 +103,10 @@ function validateChoices( form, controls, kind ) {
 	];
 }
 
-// A compound Field is empty only when every part is; the country select is
-// preselected, so it never makes an address "filled" (mirrors Field_Validator).
-function validateCompound( form, fieldset, controls ) {
-	const postcodePatterns = fieldset.dataset.postcodePatterns
-		? JSON.parse( fieldset.dataset.postcodePatterns )
-		: null;
+// A split Name is empty only when both parts are; otherwise each empty part is missing (mirrors Field_Validator).
+function validateCompound( form, controls ) {
 	const isEmpty = controls.every(
-		( control ) =>
-			control.tagName === 'SELECT' || control.value.trim() === ''
+		( control ) => control.value.trim() === ''
 	);
 	if ( isEmpty && ! controls.some( ( control ) => control.required ) ) {
 		return [];
@@ -114,7 +118,7 @@ function validateCompound( form, fieldset, controls ) {
 		const message =
 			value === ''
 				? emptyMessage( form, control )
-				: invalidValueMessage( form, control, value, postcodePatterns );
+				: invalidValueMessage( form, control, value );
 		if ( message ) {
 			issues.push( { control, message } );
 		}
@@ -136,7 +140,7 @@ export function validateForm( form ) {
 		if ( kind ) {
 			issues.push( ...validateChoices( form, controls, kind ) );
 		} else if ( fieldset ) {
-			issues.push( ...validateCompound( form, fieldset, controls ) );
+			issues.push( ...validateCompound( form, controls ) );
 		} else {
 			issues.push( ...validateSingle( form, controls[ 0 ] ) );
 		}

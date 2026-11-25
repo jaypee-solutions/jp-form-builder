@@ -4,7 +4,7 @@ Tags: forms, contact form, smtp, privacy, turnstile
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.4.0
+Stable tag: 2.0.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ JayPee Solutions Form Builder replaces WPForms Lite and WP Mail SMTP with one le
 
 **Features**
 
-* Forms as blocks: Name, Email, Phone, Address, Text, Select, Radio buttons, Checkboxes, Textarea and Consent fields, placed on pages with the Form block. Conditional groups show Fields only while an earlier answer calls for them.
+* Forms as blocks: Name, Email, Phone, Postcode, Country, Text, Select, Radio buttons, Checkboxes, Date, Textarea and Consent fields, placed on pages with the Form block. Conditional groups show Fields only while an earlier answer calls for them.
 * Accessible markup: labels, fieldsets, error summary with focus, status message, keyboard operable; inherits your theme's fonts and colours.
 * SMTP settings on the settings page, as `JP_FORM_BUILDER_*` constants in `wp-config.php` or with WP-CLI. Constants lock the field; secrets are encrypted and never shown.
 * Notification mail with Reply-To set to the sender, optional Confirmation mail, HTML mail layout and Body templates with preview, test mail.
@@ -40,6 +40,9 @@ Requires PHP 8.0 and WordPress 6.6. Single-site only. Microsoft 365 mailboxes ar
 4. Create a Form under Forms → Add Form and add the Form block to a page.
 
 == Changelog ==
+
+= 2.0.0 =
+* Added: Postcode and Country fields (the Postcode follows its nearest Country; five digits like in Germany without one) and Country conditions; a Date field (typed or picked, with an optional window of earliest and latest date, fixed or relative to today). Removed: the Address field; arrange Text, Postcode and Country fields with Columns or Group blocks instead. Saved forms lose their address block.
 
 = 1.4.0 =
 * Added: Columns and Group layout blocks (Row, Stack, Grid) hold Fields in a Form and in a Conditional group; Conditional groups stay at the top level.

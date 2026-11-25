@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: JayPee Solutions Form Builder 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jp-forms\n"
-"POT-Creation-Date: 2026-11-17T20:14:39+00:00\n"
+"POT-Creation-Date: 2026-11-25T13:04:25+00:00\n"
 "PO-Revision-Date: 2026-11-17 00:00+0000\n"
 "Last-Translator: JayPee Solutions <support@jaypee.solutions>\n"
 "Language-Team: German\n"
@@ -168,168 +168,193 @@ msgid "United Kingdom"
 msgstr "Vereinigtes Königreich"
 
 #: includes/class-field-labels.php:24
-#: includes/class-mail-preview-controller.php:175 admin/build/settings.js:1
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: includes/class-mail-preview-controller.php:174 admin/build/settings.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
+#: blocks/consent/index.js:1 blocks/country/index.js:1 blocks/date/index.js:1
 #: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/radio/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Name"
 msgstr "Name"
 
 #: includes/class-field-labels.php:25
-#: includes/class-mail-preview-controller.php:176 admin/build/settings.js:1
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: includes/class-mail-preview-controller.php:175 admin/build/settings.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
+#: blocks/consent/index.js:1 blocks/country/index.js:1 blocks/date/index.js:1
 #: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/radio/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Email"
 msgstr "E-Mail"
 
-#: includes/class-field-labels.php:26 blocks/address/index.js:1
-#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: includes/class-field-labels.php:26 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Phone"
 msgstr "Telefon"
 
-#: includes/class-field-labels.php:27 blocks/address/index.js:1
-#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
-msgid "Address"
-msgstr "Adresse"
-
-#: includes/class-field-labels.php:28 blocks/address/index.js:1
-#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
-msgid "Text"
-msgstr "Text"
-
-#: includes/class-field-labels.php:29 blocks/address/index.js:1
-#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
-msgid "Select"
-msgstr "Auswahl"
-
-#: includes/class-field-labels.php:30 blocks/address/index.js:1
-#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
-msgid "Radio buttons"
-msgstr "Optionsfelder"
-
-#: includes/class-field-labels.php:31 blocks/address/index.js:1
-#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
-msgid "Checkboxes"
-msgstr "Kontrollkästchen"
-
-#: includes/class-field-labels.php:32
-#: includes/class-mail-preview-controller.php:177 admin/build/settings.js:1
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
+#: includes/class-field-labels.php:27 blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1 blocks/consent/index.js:1
-#: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
-#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/radio/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
 #: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
-msgid "Message"
-msgstr "Nachricht"
-
-#: includes/class-field-labels.php:33 blocks/address/index.js:1
-#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
-msgid "Consent"
-msgstr "Einwilligung"
-
-#: includes/class-field-labels.php:42 blocks/name/index.js:1
-msgid "First name"
-msgstr "Vorname"
-
-#: includes/class-field-labels.php:44 blocks/name/index.js:1
-msgid "Last name"
-msgstr "Nachname"
-
-#: includes/class-field-labels.php:46 blocks/address/index.js:1
-msgid "Street and number"
-msgstr "Straße und Hausnummer"
-
-#: includes/class-field-labels.php:48 blocks/address/index.js:1
 msgid "Postcode"
 msgstr "Postleitzahl"
 
-#: includes/class-field-labels.php:50 blocks/address/index.js:1
-msgid "City"
-msgstr "Ort"
-
-#: includes/class-field-labels.php:52 blocks/address/index.js:1
+#: includes/class-field-labels.php:28 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Country"
 msgstr "Land"
 
-#: includes/class-field-validator.php:118
-#: includes/class-field-validator.php:128
-msgid "Please choose only from the available options."
-msgstr "Bitte wählen Sie nur aus den angebotenen Optionen."
+#: includes/class-field-labels.php:29 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Date"
+msgstr "Datum"
 
-#: includes/class-field-validator.php:166 blocks/embed/view.js:4
-msgid "Please enter a valid phone number."
-msgstr "Bitte geben Sie eine gültige Telefonnummer ein."
+#: includes/class-field-labels.php:30 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Text"
+msgstr "Text"
 
-#: includes/class-field-validator.php:172 blocks/embed/view.js:4
-msgid "Please choose one of the available options."
-msgstr "Bitte wählen Sie eine der verfügbaren Optionen."
+#: includes/class-field-labels.php:31 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Select"
+msgstr "Auswahl"
 
-#: includes/class-field-validator.php:186 blocks/embed/view.js:4
-msgid "Please accept to continue."
-msgstr "Bitte stimmen Sie zu, um fortzufahren."
+#: includes/class-field-labels.php:32 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Radio buttons"
+msgstr "Optionsfelder"
 
-#: includes/class-field-validator.php:191 blocks/embed/view.js:3
-msgid "Please enter a valid email address."
-msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+#: includes/class-field-labels.php:33 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Checkboxes"
+msgstr "Kontrollkästchen"
 
-#: includes/class-field-validator.php:264
-msgid "Please choose a valid country."
-msgstr "Bitte wählen Sie ein gültiges Land."
+#: includes/class-field-labels.php:34
+#: includes/class-mail-preview-controller.php:176 admin/build/settings.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
+#: blocks/consent/index.js:1 blocks/country/index.js:1 blocks/date/index.js:1
+#: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Message"
+msgstr "Nachricht"
 
-#: includes/class-field-validator.php:272 blocks/embed/view.js:4
+#: includes/class-field-labels.php:35 blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Consent"
+msgstr "Einwilligung"
+
+#: includes/class-field-labels.php:44 blocks/name/index.js:1
+msgid "First name"
+msgstr "Vorname"
+
+#: includes/class-field-labels.php:46 blocks/name/index.js:1
+msgid "Last name"
+msgstr "Nachname"
+
+#: includes/class-field-validator.php:191 blocks/embed/view.js:7
 msgid "Please enter a valid postcode."
 msgstr "Bitte geben Sie eine gültige Postleitzahl ein."
 
-#: includes/class-field-validator.php:371 blocks/embed/view.js:1
+#: includes/class-field-validator.php:205
+#: includes/class-field-validator.php:215
+msgid "Please choose only from the available options."
+msgstr "Bitte wählen Sie nur aus den angebotenen Optionen."
+
+#: includes/class-field-validator.php:253 blocks/embed/view.js:7
+msgid "Please enter a valid phone number."
+msgstr "Bitte geben Sie eine gültige Telefonnummer ein."
+
+#: includes/class-field-validator.php:258
+msgid "Please choose a valid country."
+msgstr "Bitte wählen Sie ein gültiges Land."
+
+#: includes/class-field-validator.php:265 blocks/embed/view.js:7
+msgid "Please choose one of the available options."
+msgstr "Bitte wählen Sie eine der verfügbaren Optionen."
+
+#. translators: %s: expected date format, for example YYYY-MM-DD.
+#: includes/class-field-validator.php:281 blocks/embed/view.js:2
+#, php-format
+msgid "Please enter a valid date (%s)."
+msgstr "Bitte geben Sie ein gültiges Datum ein (%s)."
+
+#. translators: %s: earliest allowed date.
+#. translators: %s: the earliest allowed date.
+#: includes/class-field-validator.php:289 blocks/embed/view.js:3
+#, php-format
+msgid "Date must not be before %s."
+msgstr "Das Datum darf nicht vor dem %s liegen."
+
+#. translators: %s: latest allowed date.
+#. translators: %s: the latest allowed date.
+#: includes/class-field-validator.php:293 blocks/embed/view.js:4
+#, php-format
+msgid "Date must not be after %s."
+msgstr "Das Datum darf nicht nach dem %s liegen."
+
+#: includes/class-field-validator.php:306 blocks/embed/view.js:7
+msgid "Please accept to continue."
+msgstr "Bitte stimmen Sie zu, um fortzufahren."
+
+#: includes/class-field-validator.php:311 blocks/embed/view.js:6
+msgid "Please enter a valid email address."
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+
+#: includes/class-field-validator.php:437 blocks/embed/view.js:1
 msgid "This field"
 msgstr "Dieses Feld"
 
 #. translators: %s: field label.
-#: includes/class-field-validator.php:376 blocks/embed/view.js:3
+#: includes/class-field-validator.php:442 blocks/embed/view.js:6
 #, php-format
 msgid "%s is required."
 msgstr "%s ist erforderlich."
 
 #. translators: 1: field label, 2: maximum number of characters.
-#: includes/class-field-validator.php:381 blocks/embed/view.js:4
+#: includes/class-field-validator.php:447 blocks/embed/view.js:7
 #, php-format
 msgid "%1$s must not be longer than %2$d characters."
 msgstr "%1$s darf nicht länger als %2$d Zeichen sein."
 
-#: includes/class-form-backup.php:78 includes/class-form-backup.php:154
+#: includes/class-form-backup.php:78 includes/class-form-backup.php:156
 #: includes/class-settings-page.php:68
 msgid "The Backup file is too large."
 msgstr "Die Sicherungsdatei ist zu groß."
@@ -351,37 +376,37 @@ msgid "The content must be exactly one Form block."
 msgstr "Der Inhalt muss genau ein Formularblock sein."
 
 #. translators: %s: block name.
-#: includes/class-form-backup.php:130
+#: includes/class-form-backup.php:131
 #, php-format
 msgid "The block \"%s\" is not allowed in a Form."
 msgstr "Der Block „%s“ ist in einem Formular nicht erlaubt."
 
-#: includes/class-form-backup.php:133
+#: includes/class-form-backup.php:135
 msgid "Nested blocks are not allowed in a Form."
 msgstr "Verschachtelte Blöcke sind in einem Formular nicht erlaubt."
 
-#: includes/class-form-backup.php:151
+#: includes/class-form-backup.php:153
 msgid "The Backup file cannot be read."
 msgstr "Die Sicherungsdatei kann nicht gelesen werden."
 
-#: includes/class-form-backup.php:211
+#: includes/class-form-backup.php:213
 msgid "Dry run: nothing was written."
 msgstr "Testlauf: Es wurde nichts geschrieben."
 
 #. translators: 1: Form title, 2: Form ID.
-#: includes/class-form-backup.php:215
+#: includes/class-form-backup.php:217
 #, php-format
 msgid "Overwritten: \"%1$s\" (ID %2$d)."
 msgstr "Überschrieben: „%1$s“ (ID %2$d)."
 
 #. translators: 1: Form title, 2: Form ID.
-#: includes/class-form-backup.php:215
+#: includes/class-form-backup.php:217
 #, php-format
 msgid "Restored: \"%1$s\" (ID %2$d)."
 msgstr "Wiederhergestellt: „%1$s“ (ID %2$d)."
 
 #. translators: 1: Form title, 2: old Form ID.
-#: includes/class-form-backup.php:223
+#: includes/class-form-backup.php:225
 #, php-format
 msgid ""
 "Mapped: \"%1$s\" would get a new ID because ID %2$d is taken by another "
@@ -391,62 +416,62 @@ msgstr ""
 "Beitrag verwendet wird. Einbettungen werden nicht angepasst."
 
 #. translators: 1: Form title, 2: old Form ID, 3: new Form ID.
-#: includes/class-form-backup.php:225
+#: includes/class-form-backup.php:227
 #, php-format
 msgid "Mapped: \"%1$s\" ID %2$d → %3$d. Embeds are not rewritten."
 msgstr ""
 "Zugeordnet: „%1$s“ ID %2$d → %3$d. Einbettungen werden nicht angepasst."
 
 #. translators: 1: Form title, 2: Form ID, 3: reason.
-#: includes/class-form-backup.php:229
+#: includes/class-form-backup.php:231
 #, php-format
 msgid "Skipped: \"%1$s\" (ID %2$d): %3$s"
 msgstr "Übersprungen: „%1$s“ (ID %2$d): %3$s"
 
 #. translators: 1: Form title, 2: Form ID, 3: reason.
-#: includes/class-form-backup.php:233
+#: includes/class-form-backup.php:235
 #, php-format
 msgid "Rejected: \"%1$s\" (ID %2$d): %3$s"
 msgstr "Abgelehnt: „%1$s“ (ID %2$d): %3$s"
 
 #. translators: %s: comma-separated setting keys.
-#: includes/class-form-backup.php:237
+#: includes/class-form-backup.php:239
 #, php-format
 msgid "Settings restored: %s"
 msgstr "Einstellungen wiederhergestellt: %s"
 
 #. translators: 1: setting key, 2: reason.
-#: includes/class-form-backup.php:241
+#: includes/class-form-backup.php:243
 #, php-format
 msgid "Setting skipped: %1$s: %2$s"
 msgstr "Einstellung übersprungen: %1$s: %2$s"
 
-#: includes/class-form-backup.php:256
+#: includes/class-form-backup.php:258
 msgid "A Form in the Backup is missing its ID or content."
 msgstr "Einem Formular in der Sicherung fehlen ID oder Inhalt."
 
-#: includes/class-form-backup.php:278
+#: includes/class-form-backup.php:280
 msgid "A Form with this ID exists. Overwrite is off."
 msgstr ""
 "Ein Formular mit dieser ID existiert bereits. Überschreiben ist deaktiviert."
 
-#: includes/class-form-backup.php:292
+#: includes/class-form-backup.php:294
 msgid "WordPress could not save the Form."
 msgstr "WordPress konnte das Formular nicht speichern."
 
-#: includes/class-form-backup.php:311
+#: includes/class-form-backup.php:313
 msgid "Unknown setting."
 msgstr "Unbekannte Einstellung."
 
-#: includes/class-form-backup.php:313
+#: includes/class-form-backup.php:315
 msgid "Secrets are never restored."
 msgstr "Geheime Werte werden nie wiederhergestellt."
 
-#: includes/class-form-backup.php:315
+#: includes/class-form-backup.php:317
 msgid "Locked by a constant."
 msgstr "Durch eine Konstante gesperrt."
 
-#: includes/class-form-backup.php:317
+#: includes/class-form-backup.php:319
 msgid "Invalid value."
 msgstr "Ungültiger Wert."
 
@@ -571,26 +596,34 @@ msgid_plural "%s Forms restored from the Trash."
 msgstr[0] "%s Formular aus dem Papierkorb wiederhergestellt."
 msgstr[1] "%s Formulare aus dem Papierkorb wiederhergestellt."
 
-#: includes/class-form-renderer.php:45 blocks/embed/index.js:1
+#: includes/class-form-renderer.php:52 blocks/embed/index.js:1
 #: blocks/form/index.js:1
 msgid "Submit"
 msgstr "Absenden"
 
-#: includes/class-form-renderer.php:46
+#: includes/class-form-renderer.php:53
 msgid "Leave this field empty"
 msgstr "Dieses Feld leer lassen"
 
-#: includes/class-form-renderer.php:50
+#: includes/class-form-renderer.php:57
 msgid "JavaScript is required to submit this form."
 msgstr "Zum Absenden dieses Formulars ist JavaScript erforderlich."
 
-#: includes/class-form-renderer.php:155 blocks/consent/index.js:1
+#: includes/class-form-renderer.php:182
+msgid "Choose date from calendar"
+msgstr "Datum im Kalender auswählen"
+
+#: includes/class-form-renderer.php:214 blocks/consent/index.js:1
 msgid "privacy policy"
 msgstr "Datenschutzerklärung"
 
-#: includes/class-form-renderer.php:156 blocks/consent/index.js:1
+#: includes/class-form-renderer.php:215 blocks/consent/index.js:1
 msgid "I agree to the {privacy_policy}."
 msgstr "Ich stimme der {privacy_policy} zu."
+
+#: includes/class-form-renderer.php:244 blocks/country/index.js:1
+msgid "Please choose…"
+msgstr "Bitte wählen …"
 
 #: includes/class-mail-builder.php:38
 msgid "New message via {form_title}"
@@ -618,31 +651,23 @@ msgstr "Das Mail-Layout muss {content} enthalten."
 msgid "Sample form"
 msgstr "Beispielformular"
 
-#: includes/class-mail-preview-controller.php:152
-msgid "Example Street 1"
-msgstr "Musterstraße 1"
-
-#: includes/class-mail-preview-controller.php:154
-msgid "Sampletown"
-msgstr "Musterstadt"
-
-#: includes/class-mail-preview-controller.php:159
-#: includes/class-mail-preview-controller.php:161
+#: includes/class-mail-preview-controller.php:158
+#: includes/class-mail-preview-controller.php:160
 msgid "Sample option"
 msgstr "Beispieloption"
 
-#: includes/class-mail-preview-controller.php:161
+#: includes/class-mail-preview-controller.php:160
 msgid "Another option"
 msgstr "Weitere Option"
 
 #. translators: %s: UTC timestamp of the Submission.
-#: includes/class-mail-preview-controller.php:166
-#: includes/class-submission-handler.php:222
+#: includes/class-mail-preview-controller.php:165
+#: includes/class-submission-handler.php:215
 #, php-format
 msgid "Yes (%s)"
 msgstr "Ja (%s)"
 
-#: includes/class-mail-preview-controller.php:168
+#: includes/class-mail-preview-controller.php:167
 msgid "Sample text"
 msgstr "Beispieltext"
 
@@ -1138,7 +1163,7 @@ msgid "The spam protection check failed. Please try again."
 msgstr ""
 "Die Spam-Schutz-Prüfung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
 
-#: includes/class-submission-handler.php:255
+#: includes/class-submission-handler.php:254
 msgid "Thank you! Your message has been sent."
 msgstr "Vielen Dank! Ihre Nachricht wurde gesendet."
 
@@ -1312,11 +1337,11 @@ msgstr "Allgemein"
 msgid "Value"
 msgstr "Wert"
 
-#: admin/build/settings.js:1 blocks/address/index.js:1
-#: blocks/checkbox/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: admin/build/settings.js:1 blocks/checkbox/index.js:1
+#: blocks/consent/index.js:1 blocks/country/index.js:1 blocks/date/index.js:1
+#: blocks/email/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/postcode/index.js:1 blocks/radio/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
 msgid "Label"
 msgstr "Beschriftung"
 
@@ -1397,33 +1422,37 @@ msgstr ""
 "eigenen Betreff noch eine eigene Textvorlage haben. Lassen Sie das Feld "
 "leer, um den eingebauten Text zu verwenden."
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Field"
 msgstr "Feld"
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Field key"
 msgstr "Feldschlüssel"
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Another Field in this Form already uses this key. Choose a unique one."
 msgstr ""
 "Ein anderes Feld in diesem Formular verwendet diesen Schlüssel bereits. "
 "Wählen Sie einen eindeutigen."
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid ""
 "Used in mail placeholders. Lowercase letters, numbers and underscores; "
 "unique within this Form."
@@ -1431,81 +1460,87 @@ msgstr ""
 "Wird in Mail-Platzhaltern verwendet. Kleinbuchstaben, Ziffern und "
 "Unterstriche; eindeutig innerhalb dieses Formulars."
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Required"
 msgstr "Pflichtfeld"
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "A consent checkbox is always required."
 msgstr "Ein Einwilligungs-Kontrollkästchen ist immer ein Pflichtfeld."
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Help text"
 msgstr "Hilfetext"
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Placeholder"
 msgstr "Platzhaltertext"
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Width"
 msgstr "Breite"
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Full width"
 msgstr "Volle Breite"
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Half width"
 msgstr "Halbe Breite"
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "One third"
 msgstr "Ein Drittel"
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Narrower Fields sit side by side and stack on narrow screens."
 msgstr ""
 "Schmalere Felder stehen nebeneinander und werden auf schmalen Bildschirmen "
 "untereinander angeordnet."
 
-#: blocks/address/index.js:1 blocks/checkbox/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
-#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/checkbox/index.js:1 blocks/consent/index.js:1
+#: blocks/country/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/postcode/index.js:1
+#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
+#: blocks/textarea/index.js:1
 msgid "Field options"
 msgstr "Feldoptionen"
-
-#: blocks/address/index.js:1
-msgid "Default country"
-msgstr "Standardland"
 
 #: blocks/checkbox/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 msgid "Options"
@@ -1655,7 +1690,9 @@ msgstr "Bedingung"
 
 #: blocks/conditional/index.js:10
 msgid "Add Fields before this group to use one of them in a Condition."
-msgstr "Fügen Sie vor dieser Gruppe Felder hinzu, um eines davon in einer Bedingung zu verwenden."
+msgstr ""
+"Fügen Sie vor dieser Gruppe Felder hinzu, um eines davon in einer Bedingung "
+"zu verwenden."
 
 #: blocks/conditional/index.js:10
 msgid "Source Field"
@@ -1663,7 +1700,9 @@ msgstr "Quellfeld"
 
 #: blocks/conditional/index.js:10
 msgid "This Field was removed or comes after this group. Choose another one."
-msgstr "Dieses Feld wurde entfernt oder steht hinter dieser Gruppe. Wählen Sie ein anderes."
+msgstr ""
+"Dieses Feld wurde entfernt oder steht hinter dieser Gruppe. Wählen Sie ein "
+"anderes."
 
 #: blocks/conditional/index.js:10
 msgid "Only Fields before this group can be used."
@@ -1679,7 +1718,9 @@ msgstr "Bedingung unvollständig"
 
 #: blocks/conditional/index.js:10
 msgid "Add Fields here. They are shown only while the Condition holds."
-msgstr "Fügen Sie hier Felder hinzu. Sie werden nur angezeigt, solange die Bedingung erfüllt ist."
+msgstr ""
+"Fügen Sie hier Felder hinzu. Sie werden nur angezeigt, solange die Bedingung "
+"erfüllt ist."
 
 #: blocks/consent/index.js:1
 msgid "Consent text"
@@ -1710,6 +1751,76 @@ msgstr "URL der Datenschutzerklärung"
 #: blocks/consent/index.js:1
 msgid "Leave empty to link to the site’s privacy policy page."
 msgstr "Leer lassen, um auf die Datenschutzseite der Website zu verlinken."
+
+#: blocks/country/index.js:1
+msgid "Default country"
+msgstr "Standardland"
+
+#: blocks/country/index.js:1
+msgid "Choose “Please choose…” to make visitors pick a country themselves."
+msgstr ""
+"Wählen Sie „Bitte wählen …“, damit Besucher das Land selbst auswählen müssen."
+
+#: blocks/date/index.js:1
+msgid ""
+"Invalid date or offset. Use YYYY-MM-DD or an offset such as now, -1y, +30d, "
+"+2w, 6m."
+msgstr ""
+"Ungültiges Datum oder ungültiger Datumsversatz. Verwenden Sie JJJJ-MM-TT "
+"oder einen Datumsversatz wie now, -1y, +30d, +2w, 6m."
+
+#. translators: %s: a date in the display format
+#: blocks/date/index.js:2
+msgid "Resolves to %s today."
+msgstr "Entspricht heute dem %s."
+
+#: blocks/date/index.js:2
+msgid "Empty: no limit."
+msgstr "Leer: keine Begrenzung."
+
+#: blocks/date/index.js:2
+msgid ""
+"Each date is a fixed date (YYYY-MM-DD) or an offset from today: now, -1y, "
+"+30d, +2w, 6m (d days, w weeks, m months, y years)."
+msgstr ""
+"Jedes Datum ist ein festes Datum (JJJJ-MM-TT) oder ein Datumsversatz ab "
+"heute: now, -1y, +30d, +2w, 6m (d Tage, w Wochen, m Monate, y Jahre)."
+
+#: blocks/date/index.js:2
+msgid "Earliest selectable date"
+msgstr "Frühestes wählbares Datum"
+
+#: blocks/date/index.js:2
+msgid "Latest selectable date"
+msgstr "Spätestes wählbares Datum"
+
+#: blocks/date/index.js:2
+msgid ""
+"The earliest date is later than the latest date: no date can be selected."
+msgstr ""
+"Das früheste Datum liegt nach dem spätesten Datum: Es kann kein Datum "
+"ausgewählt werden."
+
+#: blocks/date/index.js:2
+msgid "Opening date"
+msgstr "Startdatum"
+
+#. translators: 1: earliest date, 2: latest date
+#: blocks/date/index.js:3
+msgid "%1$s to %2$s"
+msgstr "%1$s bis %2$s"
+
+#: blocks/date/index.js:3
+msgid "From %s"
+msgstr "Ab %s"
+
+#: blocks/date/index.js:3
+msgid "Until %s"
+msgstr "Bis %s"
+
+#: blocks/date/index.js:3
+msgid "No date can be selected."
+msgstr "Es kann kein Datum ausgewählt werden."
 
 #: blocks/email/index.js:1
 msgid "Use as Reply-To address"
@@ -1787,11 +1898,11 @@ msgstr ""
 "Das gewählte Formular existiert nicht mehr oder ist nicht veröffentlicht. "
 "Wählen Sie ein anderes oder entfernen Sie diesen Block."
 
-#: blocks/embed/view.js:4
+#: blocks/embed/view.js:7
 msgid "Please wait…"
 msgstr "Bitte warten …"
 
-#: blocks/embed/view.js:4
+#: blocks/embed/view.js:7
 msgid ""
 "The spam protection check could not be loaded. Please reload the page and "
 "try again."
@@ -1799,14 +1910,14 @@ msgstr ""
 "Die Spam-Schutz-Prüfung konnte nicht geladen werden. Bitte laden Sie die "
 "Seite neu und versuchen Sie es erneut."
 
-#: blocks/embed/view.js:4
+#: blocks/embed/view.js:7
 msgid ""
 "Your message could not be sent. Please check your connection and try again."
 msgstr ""
 "Ihre Nachricht konnte nicht gesendet werden. Bitte prüfen Sie Ihre "
 "Verbindung und versuchen Sie es erneut."
 
-#: blocks/embed/view.js:4
+#: blocks/embed/view.js:7
 msgid "Your session could not be verified. Please submit the form again."
 msgstr ""
 "Ihre Sitzung konnte nicht überprüft werden. Bitte senden Sie das Formular "
@@ -1932,11 +2043,6 @@ msgstr "Maximale Länge"
 msgid "Rows"
 msgstr "Zeilen"
 
-#: blocks/address/block.json
-msgctxt "block title"
-msgid "Address"
-msgstr "Adresse"
-
 #: blocks/checkbox/block.json
 msgctxt "block title"
 msgid "Checkboxes"
@@ -1952,12 +2058,25 @@ msgctxt "block description"
 msgid ""
 "Shows the Fields inside it only while a Condition on an earlier Field holds, "
 "for example while the Select \"Package\" is \"Gold\"."
-msgstr "Zeigt die darin enthaltenen Felder nur an, solange eine Bedingung für ein früheres Feld erfüllt ist, zum Beispiel solange die Auswahl „Paket“ „Gold“ ist."
+msgstr ""
+"Zeigt die darin enthaltenen Felder nur an, solange eine Bedingung für ein "
+"früheres Feld erfüllt ist, zum Beispiel solange die Auswahl „Paket“ „Gold“ "
+"ist."
 
 #: blocks/consent/block.json
 msgctxt "block title"
 msgid "Consent"
 msgstr "Einwilligung"
+
+#: blocks/country/block.json
+msgctxt "block title"
+msgid "Country"
+msgstr "Land"
+
+#: blocks/date/block.json
+msgctxt "block title"
+msgid "Date"
+msgstr "Datum"
 
 #: blocks/email/block.json
 msgctxt "block title"
@@ -2013,6 +2132,11 @@ msgstr "Name"
 msgctxt "block title"
 msgid "Phone"
 msgstr "Telefon"
+
+#: blocks/postcode/block.json
+msgctxt "block title"
+msgid "Postcode"
+msgstr "Postleitzahl"
 
 #: blocks/radio/block.json
 msgctxt "block title"

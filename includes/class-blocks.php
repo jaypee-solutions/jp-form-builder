@@ -83,7 +83,7 @@ final class Blocks {
     public function enqueue_editor_data(): void {
         $regions = array_intersect_key( Countries::all(), array_flip( [ 'DE', 'AT', 'CH' ] ) );
         $data    = [
-            'address' => [ 'countries' => Countries::all() ],
+            'country' => [ 'countries' => Countries::all() ],
             'phone'   => [ 'regions' => $regions ],
             'form'    => [ 'turnstileConfigured' => '' !== $this->turnstile_site_key() ],
             'embed'   => [

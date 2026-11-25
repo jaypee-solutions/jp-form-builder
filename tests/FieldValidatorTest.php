@@ -26,10 +26,6 @@ final class FieldValidatorTest extends TestCase {
         return new Field_Definition( $type, $key, $attributes + [ 'label' => ucfirst( $key ) ], $subkeys );
     }
 
-    private function address( bool $required = true ): Field_Definition {
-        return $this->field( 'address', 'address', [ 'required' => $required ], [ 'street', 'postcode', 'city', 'country' ] );
-    }
-
     /**
      * @param array<string,mixed> $submitted Submitted values.
      * @return array{values: array<string,mixed>, errors: array<string,string>}
@@ -117,7 +113,8 @@ final class FieldValidatorTest extends TestCase {
             $this->field( 'textarea', 'message' ),
             $this->field( 'text', 'subject' ),
             $this->field( 'consent', 'consent', [ 'required' => false ] ),
-            $this->address( false ),
+            $this->field( 'postcode', 'zip' ),
+            $this->field( 'country', 'land', [ 'defaultCountry' => '' ] ),
         ];
 
         $result = $this->validator->validate( $fields, [] );
@@ -125,7 +122,8 @@ final class FieldValidatorTest extends TestCase {
         $this->assertSame( [], $result['errors'] );
         $this->assertSame( '', $result['values']['email'] );
         $this->assertSame( '', $result['values']['phone'] );
-        $this->assertSame( [ 'street' => '', 'postcode' => '', 'city' => '', 'country' => '' ], $result['values']['address'] );
+        $this->assertSame( '', $result['values']['zip'] );
+        $this->assertSame( '', $result['values']['land'] );
     }
 
     public function test_phone_uses_the_default_region(): void {
@@ -136,60 +134,157 @@ final class FieldValidatorTest extends TestCase {
         $this->assertSame( [ 'phone' => 'Phone is required.' ], $this->validate_one( $field, [ 'phone' => '' ] )['errors'] );
     }
 
-    public function test_address(): void {
-        $field = $this->address();
-        $valid = [ 'street' => 'Hauptstr. 1', 'postcode' => '86150', 'city' => 'Augsburg', 'country' => 'DE' ];
+    public function test_country_accepts_a_known_code_only(): void {
+        $field = $this->field( 'country', 'land', [ 'required' => true ] );
 
-        $this->assertSame( [ 'address' => $valid ], $this->validate_one( $field, [ 'address' => $valid ] )['values'] );
-
-        $this->assertSame(
-            [ 'address.postcode' => 'Please enter a valid postcode.' ],
-            $this->validate_one( $field, [ 'address' => [ 'postcode' => '8615' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [],
-            $this->validate_one( $field, [ 'address' => [ 'postcode' => '8001', 'country' => 'CH' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [ 'address.postcode' => 'Please enter a valid postcode.' ],
-            $this->validate_one( $field, [ 'address' => [ 'postcode' => '86150', 'country' => 'AT' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [],
-            $this->validate_one( $field, [ 'address' => [ 'postcode' => 'SW1A 1AA', 'country' => 'GB' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [ 'address.country' => 'Please choose a valid country.' ],
-            $this->validate_one( $field, [ 'address' => [ 'country' => 'US' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [
-                'address.street' => 'Street and number must not be longer than 200 characters.',
-                'address.city'   => 'City must not be longer than 100 characters.',
-            ],
-            $this->validate_one( $field, [ 'address' => [ 'street' => str_repeat( 's', 201 ), 'city' => str_repeat( 'c', 101 ) ] + $valid ] )['errors']
-        );
+        $this->assertSame( [ 'land' => 'AT' ], $this->validate_one( $field, [ 'land' => ' AT ' ] )['values'] );
+        $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $this->validate_one( $field, [ 'land' => 'US' ] )['errors'] );
+        $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $this->validate_one( $field, [ 'land' => 'at' ] )['errors'] );
+        $this->assertSame( [ 'land' => 'Land is required.' ], $this->validate_one( $field, [ 'land' => '' ] )['errors'] );
+        $this->assertSame( [ 'land' => 'Land is required.' ], $this->validate_one( $field, [] )['errors'] );
     }
 
-    public function test_partial_address_reports_the_missing_parts(): void {
-        foreach ( [ true, false ] as $required ) {
-            $this->assertSame(
-                [
-                    'address.postcode' => 'Postcode is required.',
-                    'address.city'     => 'City is required.',
-                    'address.country'  => 'Country is required.',
-                ],
-                $this->validate_one( $this->address( $required ), [ 'address' => [ 'street' => 'Hauptstr. 1' ] ] )['errors']
-            );
+    public function test_optional_country_may_stay_empty(): void {
+        $field = $this->field( 'country', 'land', [ 'required' => false ] );
+
+        $this->assertSame( [ 'land' => '' ], $this->validate_one( $field, [ 'land' => '' ] )['values'] );
+        $this->assertSame( [], $this->validate_one( $field, [] )['errors'] );
+        $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $this->validate_one( $field, [ 'land' => 'XX' ] )['errors'] );
+    }
+
+    /** @return array<string,array{string,string,bool}> The cases of tests/fixtures/postcodes.json, which tests/js/postcode.test.mjs also uses. */
+    public function postcode_cases(): array {
+        $cases = [];
+        foreach ( (array) json_decode( (string) file_get_contents( __DIR__ . '/fixtures/postcodes.json' ), true )['cases'] as $case ) {
+            $cases[ $case[0] . ' ' . $case[1] ] = $case;
         }
-        $this->assertCount( 4, $this->validate_one( $this->address(), [] )['errors'] );
+        return $cases;
     }
 
-    public function test_optional_address_with_only_the_default_country_is_empty(): void {
-        $result = $this->validate_one( $this->address( false ), [ 'address' => [ 'country' => 'DE' ] ] );
+    public function test_the_postcode_fixture_lists_the_pattern_of_every_country(): void {
+        $patterns = (array) json_decode( (string) file_get_contents( __DIR__ . '/fixtures/postcodes.json' ), true )['patterns'];
+
+        $this->assertSame( array_keys( Countries::all() ), array_keys( $patterns ) );
+        foreach ( $patterns as $code => $pattern ) {
+            $this->assertSame( Countries::postcode_pattern( $code ), $pattern, $code );
+        }
+    }
+
+    /** @dataProvider postcode_cases */
+    public function test_postcode_follows_the_pattern_of_its_country( string $country, string $postcode, bool $valid ): void {
+        $form   = $this->form(
+            [
+                $this->field( 'postcode', 'plz' ),
+                $this->field( 'country', 'land', [ 'required' => false ] ),
+            ]
+        );
+        $result = $this->validator->validate_form( $form, [ 'plz' => $postcode, 'land' => $country ] );
+
+        if ( ! isset( Countries::all()[ $country ] ) && '' !== $country ) {
+            $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $result['errors'], 'An invalid Country skips the Postcode pattern.' );
+            return;
+        }
+        $this->assertSame( $valid ? [] : [ 'plz' => 'Please enter a valid postcode.' ], $result['errors'] );
+    }
+
+    public function test_postcode_without_a_country_field_uses_the_german_rule(): void {
+        $field = $this->field( 'postcode', 'plz', [ 'required' => true ] );
+
+        $this->assertSame( [ 'plz' => '86150' ], $this->validate_one( $field, [ 'plz' => ' 86150 ' ] )['values'] );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->validate_one( $field, [ 'plz' => '8615' ] )['errors'] );
+        $this->assertSame( [ 'plz' => 'Plz is required.' ], $this->validate_one( $field, [ 'plz' => '' ] )['errors'] );
+        $this->assertSame( [], $this->validator->validate_form( $this->form( [ $field ] ), [ 'plz' => '86150' ] )['errors'] );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->validator->validate_form( $this->form( [ $field ] ), [ 'plz' => 'AB1 2CD' ] )['errors'] );
+    }
+
+    public function test_optional_empty_postcode_is_accepted(): void {
+        $result = $this->validate_one( $this->field( 'postcode', 'plz' ), [] );
 
         $this->assertSame( [], $result['errors'] );
-        $this->assertSame( '', $result['values']['address']['country'] );
+        $this->assertSame( [ 'plz' => '' ], $result['values'] );
+    }
+
+    /**
+     * @param array<int,Field_Definition|Conditional_Group> $items
+     * @param array<string,mixed>                           $submitted
+     * @return string[] Errors of the Form keyed by Field key.
+     */
+    private function postcode_errors( array $items, array $submitted ): array {
+        return $this->validator->validate_form( $this->form( $items ), $submitted )['errors'];
+    }
+
+    public function test_postcode_follows_a_preceding_country(): void {
+        $items = [ $this->field( 'country', 'land' ), $this->field( 'postcode', 'plz' ) ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'land' => 'AT', 'plz' => '1010' ] ) );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->postcode_errors( $items, [ 'land' => 'AT', 'plz' => '86150' ] ) );
+    }
+
+    public function test_postcode_follows_a_following_country(): void {
+        $items = [ $this->field( 'postcode', 'plz' ), $this->field( 'text', 'city' ), $this->field( 'country', 'land' ) ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'land' => 'CH', 'plz' => '8001' ] ) );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->postcode_errors( $items, [ 'land' => 'CH', 'plz' => '86150' ] ) );
+    }
+
+    public function test_postcode_follows_the_nearest_of_two_countries(): void {
+        $items = [
+            $this->field( 'country', 'bill_land' ),
+            $this->field( 'postcode', 'bill_plz' ),
+            $this->field( 'country', 'ship_land' ),
+            $this->field( 'postcode', 'ship_plz' ),
+        ];
+        $submitted = [ 'bill_land' => 'DE', 'bill_plz' => '86150', 'ship_land' => 'AT', 'ship_plz' => '1010' ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, $submitted ) );
+        $this->assertSame(
+            [ 'bill_plz' => 'Please enter a valid postcode.', 'ship_plz' => 'Please enter a valid postcode.' ],
+            $this->postcode_errors( $items, [ 'bill_plz' => '1010', 'ship_plz' => '86150' ] + $submitted )
+        );
+    }
+
+    public function test_a_hidden_country_counts_as_absent(): void {
+        $items = [
+            $this->field( 'radio', 'topic', [ 'options' => [ [ 'label' => 'Abroad', 'value' => 'abroad' ], [ 'label' => 'Home', 'value' => 'home' ] ] ] ),
+            $this->field( 'postcode', 'plz' ),
+            $this->trigger_group( 'abroad', $this->field( 'country', 'land' ) ),
+        ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'topic' => 'abroad', 'land' => 'AT', 'plz' => '1010' ] ), 'A shown Country applies.' );
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'topic' => 'home', 'land' => 'AT', 'plz' => '86150' ] ), 'A hidden Country falls back to Germany.' );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->postcode_errors( $items, [ 'topic' => 'home', 'land' => 'AT', 'plz' => '1010' ] ) );
+    }
+
+    public function test_an_invalid_country_skips_the_pattern_and_reports_its_own_error(): void {
+        $items = [ $this->field( 'postcode', 'plz' ), $this->field( 'country', 'land' ) ];
+
+        $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $this->postcode_errors( $items, [ 'land' => 'US', 'plz' => '12345-6789' ] ) );
+        $this->assertSame(
+            [ 'land' => 'Please choose a valid country.', 'plz' => 'Plz must not be longer than 10 characters.' ],
+            $this->postcode_errors( $items, [ 'land' => 'US', 'plz' => '12345678901' ] )
+        );
+    }
+
+    public function test_an_empty_country_counts_as_absent(): void {
+        $items = [ $this->field( 'postcode', 'plz' ), $this->field( 'country', 'land' ) ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'land' => '', 'plz' => '86150' ] ) );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->postcode_errors( $items, [ 'land' => '', 'plz' => '1010' ] ) );
+
+        $second = [ $this->field( 'postcode', 'plz' ), $this->field( 'country', 'empty_land' ), $this->field( 'country', 'land' ) ];
+        $this->assertSame( [], $this->postcode_errors( $second, [ 'empty_land' => '', 'land' => 'AT', 'plz' => '1010' ] ), 'The next Country takes over.' );
+    }
+
+    public function test_a_postcode_in_a_hidden_group_is_not_checked_and_a_condition_sees_a_valid_one(): void {
+        $items = [
+            $this->field( 'country', 'land' ),
+            $this->field( 'postcode', 'plz' ),
+            new Conditional_Group( new Condition( 'plz', 'is_filled', [] ), [ $this->field( 'text', 'note', [ 'required' => true ] ) ] ),
+        ];
+
+        $filled = $this->validator->validate_form( $this->form( $items ), [ 'land' => 'AT', 'plz' => '1010' ] );
+        $this->assertSame( [ 'note' => 'Note is required.' ], $filled['errors'] );
+        $this->assertSame( '1010', $filled['values']['plz'] );
     }
 
     public function test_select_accepts_only_defined_option_values(): void {
@@ -427,5 +522,60 @@ final class FieldValidatorTest extends TestCase {
         );
 
         $this->assertSame( [ 'budget' => 'Budget is required.' ], $this->validator->validate_form( $form, [] )['errors'] );
+    }
+
+    /** @param array<string,mixed> $attributes Date field attributes. */
+    private function validate_date( array $attributes, string $value, string $today = '2026-11-25', string $locale = 'en_US' ): array {
+        $GLOBALS['jp_form_builder_test_locale'] = $locale;
+        try {
+            $validator = new Field_Validator( null, null, null, new \DateTimeImmutable( $today ) );
+            return $validator->validate( [ $this->field( 'date', 'when', $attributes ) ], [ 'when' => $value ] );
+        } finally {
+            $GLOBALS['jp_form_builder_test_locale'] = 'en_US';
+        }
+    }
+
+    public function test_date_accepts_only_real_iso_dates_and_keeps_the_iso_value(): void {
+        $this->assertSame( [ 'when' => '2024-02-29' ], $this->validate_date( [], ' 2024-02-29 ' )['values'] );
+        $this->assertSame( [ 'when' => '' ], $this->validate_date( [], '' )['values'] );
+
+        foreach ( [ '29.02.2024', '2024-2-29', '2023-02-29', '1899-12-31', '2101-01-01', 'tomorrow' ] as $bad ) {
+            $this->assertSame( [ 'when' => 'Please enter a valid date (YYYY-MM-DD).' ], $this->validate_date( [], $bad )['errors'], $bad );
+        }
+        $this->assertSame( [ 'when' => 'Please enter a valid date (TT.MM.JJJJ).' ], $this->validate_date( [], '2024-02-30', '2026-11-25', 'de_DE' )['errors'] );
+    }
+
+    public function test_date_required_uses_the_required_message(): void {
+        $this->assertSame( [ 'when' => 'When is required.' ], $this->validate_date( [ 'required' => true ], '' )['errors'] );
+        $this->assertSame( [], $this->validate_date( [ 'required' => false ], '' )['errors'] );
+    }
+
+    public function test_date_window_resolves_offsets_against_today_and_includes_both_bounds(): void {
+        $window = [ 'earliest' => '-1y', 'latest' => '+1m' ];
+
+        $this->assertSame( [], $this->validate_date( $window, '2025-11-25' )['errors'] );
+        $this->assertSame( [], $this->validate_date( $window, '2026-12-25' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be before 2025-11-25.' ], $this->validate_date( $window, '2025-11-24' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be after 2026-12-25.' ], $this->validate_date( $window, '2026-12-26' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be after 25.12.2026.' ], $this->validate_date( $window, '2026-12-26', '2026-11-25', 'de_DE' )['errors'] );
+    }
+
+    public function test_a_window_bound_is_clamped_to_the_supported_years(): void {
+        $this->assertSame( [], $this->validate_date( [ 'earliest' => '+999y' ], '2100-12-31' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be before 2100-12-31.' ], $this->validate_date( [ 'earliest' => '+999y' ], '2100-12-30' )['errors'] );
+        $this->assertSame( [], $this->validate_date( [ 'latest' => '+999y' ], '2100-12-31' )['errors'] );
+        $this->assertSame( [], $this->validate_date( [ 'earliest' => '-999y' ], '1900-01-01' )['errors'] );
+    }
+
+    public function test_an_invalid_bound_expression_is_ignored(): void {
+        $this->assertSame( [], $this->validate_date( [ 'earliest' => 'soon', 'latest' => '2026-02-30' ], '2026-11-25' )['errors'] );
+    }
+
+    public function test_an_inverted_window_rejects_every_date(): void {
+        $inverted = [ 'earliest' => '2026-12-01', 'latest' => '2026-01-01' ];
+
+        $this->assertSame( [ 'when' => 'Date must not be before 2026-12-01.' ], $this->validate_date( $inverted, '2026-06-15' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be before 2026-12-01.' ], $this->validate_date( $inverted, '2026-01-01' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be after 2026-01-01.' ], $this->validate_date( $inverted, '2027-01-01' )['errors'] );
     }
 }

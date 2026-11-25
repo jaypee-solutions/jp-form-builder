@@ -12,11 +12,14 @@ export function operatorsForType( type ) {
 	switch ( type ) {
 		case 'select':
 		case 'radio':
+		case 'country':
 			return [ 'is', 'is_not', 'is_one_of' ];
 		case 'checkbox':
 			return [ 'includes', 'is_filled', 'is_empty' ];
 		case 'consent':
 			return [ 'is_checked', 'is_not_checked' ];
+		case 'date':
+			return [];
 		default:
 			return [ 'is_filled', 'is_empty' ];
 	}

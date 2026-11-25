@@ -15,7 +15,8 @@ final class FormRendererTest extends TestCase {
             new Field_Definition( 'name', 'single', [ 'label' => 'Name', 'required' => true ] ),
             new Field_Definition( 'email', 'email', [ 'label' => 'Email', 'required' => true ] ),
             new Field_Definition( 'phone', 'phone', [ 'label' => 'Phone', 'required' => false ] ),
-            new Field_Definition( 'address', 'home', [ 'label' => 'Address', 'required' => true ], [ 'street', 'postcode', 'city', 'country' ] ),
+            new Field_Definition( 'postcode', 'zip', [ 'label' => 'Postcode', 'required' => true ] ),
+            new Field_Definition( 'country', 'land', [ 'label' => 'Country', 'required' => true ] ),
             new Field_Definition( 'consent', 'privacy', [ 'required' => false ] ),
             new Field_Definition( 'textarea', 'message', [ 'label' => 'Message', 'helpText' => 'How can we help?' ] ),
         ] );
@@ -36,9 +37,7 @@ final class FormRendererTest extends TestCase {
         self::assertStringContainsString( 'autocomplete="name" maxlength="100"', $markup );
         self::assertStringContainsString( 'autocomplete="email"', $markup );
         self::assertStringContainsString( 'autocomplete="tel"', $markup );
-        self::assertStringContainsString( 'autocomplete="street-address"', $markup );
         self::assertStringContainsString( 'autocomplete="postal-code"', $markup );
-        self::assertStringContainsString( 'autocomplete="address-level2"', $markup );
         self::assertStringContainsString( 'autocomplete="country"', $markup );
         self::assertStringContainsString( 'data-postcode-patterns=', $markup );
         self::assertStringNotContainsString( 'pattern="^\\d{5}$"', $markup );
@@ -60,7 +59,6 @@ final class FormRendererTest extends TestCase {
             new Field_Definition( 'phone', 'phone', [ 'label' => 'Phone' ] ),
             new Field_Definition( 'text', 'company', [ 'label' => 'Company' ] ),
             new Field_Definition( 'textarea', 'message', [ 'label' => 'Message' ] ),
-            new Field_Definition( 'address', 'home', [ 'label' => 'Address' ], [ 'street', 'postcode', 'city', 'country' ] ),
         ] );
         $markup = ( new Form_Renderer() )->render( $form );
         foreach ( [ 'first', 'last' ] as $part ) {
@@ -69,9 +67,98 @@ final class FormRendererTest extends TestCase {
         self::assertStringContainsString( 'name="email" maxlength="' . Field_Validator::MAX_EMAIL_LENGTH . '"', str_replace( ' autocomplete="email"', '', $markup ) );
         self::assertStringContainsString( 'name="company" maxlength="' . Field_Validator::DEFAULT_TEXT_LENGTH . '"', $markup );
         self::assertStringContainsString( 'maxlength="' . Field_Validator::DEFAULT_TEXTAREA_LENGTH . '"', $markup );
-        foreach ( [ 'street' => Field_Validator::MAX_STREET_LENGTH, 'postcode' => Field_Validator::MAX_POSTCODE_LENGTH, 'city' => Field_Validator::MAX_CITY_LENGTH ] as $part => $limit ) {
-            self::assertStringContainsString( 'name="home[' . $part . ']" maxlength="' . $limit . '"', str_replace( ' required', '', $markup ) );
+    }
+
+    public function test_country_renders_a_select_of_countries_with_the_default_selected(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'country', 'land', [ 'label' => 'Land', 'required' => true, 'defaultCountry' => 'AT', 'helpText' => 'Where you live' ] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( 'class="jp-form-builder__field jp-form-builder__field--country', $markup );
+        self::assertStringContainsString( '<label for="jpfb-12-1-land">Land <span class="jp-form-builder__required"', $markup );
+        self::assertStringContainsString( '<select id="jpfb-12-1-land" name="land" required autocomplete="country" aria-describedby="jpfb-12-1-land-help jpfb-12-1-land-error">', $markup );
+        self::assertSame( 32, substr_count( $markup, '<option value="' ) );
+        self::assertMatchesRegularExpression( '~<option value="AT" selected=.selected.>Austria</option>~', $markup );
+        self::assertStringNotContainsString( '<option value="">', $markup );
+    }
+
+    public function test_country_without_a_default_offers_a_placeholder_option(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'country', 'land', [ 'label' => 'Land', 'defaultCountry' => '' ] ),
+            new Field_Definition( 'country', 'other', [ 'label' => 'Other' ] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertSame( 1, substr_count( $markup, '<option value="">Please choose…</option>' ) );
+        self::assertSame( 1, preg_match_all( '~<option value="DE" selected=.selected.>~', $markup ) );
+    }
+
+    public function test_postcode_names_its_nearest_country_field_and_carries_every_pattern(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'postcode', 'plz', [ 'label' => 'PLZ', 'required' => true, 'placeholder' => '86150' ] ),
+            new Field_Definition( 'country', 'land', [ 'label' => 'Land' ] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( '<label for="jpfb-12-1-plz">PLZ <span class="jp-form-builder__required"', $markup );
+        self::assertStringContainsString( '<input type="text" id="jpfb-12-1-plz" name="plz" required autocomplete="postal-code" data-country-source="land" data-postcode-patterns="', $markup );
+        self::assertStringContainsString( '&quot;AT&quot;:&quot;^\\\\d{4}$&quot;', $markup );
+        self::assertSame( 32, substr_count( $markup, '&quot;:&quot;^' ) );
+        self::assertStringContainsString( 'maxlength="' . Field_Validator::MAX_POSTCODE_LENGTH . '" placeholder="86150" aria-describedby="jpfb-12-1-plz-error">', $markup );
+        self::assertStringNotContainsString( 'inputmode', $markup );
+        self::assertStringNotContainsString( ' pattern=', $markup );
+    }
+
+    public function test_postcode_binds_to_the_nearest_country_of_each_block(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'country', 'bill_land', [] ),
+            new Field_Definition( 'postcode', 'bill_plz', [] ),
+            new Field_Definition( 'country', 'ship_land', [] ),
+            new Field_Definition( 'postcode', 'ship_plz', [] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertMatchesRegularExpression( '~name="bill_plz"[^>]*data-country-source="bill_land"~', $markup );
+        self::assertMatchesRegularExpression( '~name="ship_plz"[^>]*data-country-source="ship_land"~', $markup );
+    }
+
+    public function test_postcode_without_a_country_field_carries_the_german_rule(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'postcode', 'plz', [ 'label' => 'PLZ' ] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( 'autocomplete="postal-code" pattern="^\\d{5}$" maxlength="5" inputmode="numeric"', $markup );
+        self::assertStringNotContainsString( 'data-country-source', $markup );
+        self::assertStringNotContainsString( 'data-postcode-patterns', $markup );
+    }
+
+    public function test_date_field_renders_the_typed_input_with_the_raw_window_and_a_hidden_calendar_button(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'date', 'birthday', [ 'label' => 'Birthday', 'required' => true, 'helpText' => 'Optional?', 'earliest' => '-120y', 'latest' => 'Today', 'openingDate' => '' ] ),
+            new Field_Definition( 'date', 'visit', [ 'label' => '' ] ),
+        ] );
+
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( '<label for="jpfb-12-1-birthday">Birthday <span class="jp-form-builder__required" aria-hidden="true">*</span></label><div class="jp-form-builder__date"><input type="text" id="jpfb-12-1-birthday" name="birthday" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="YYYY-MM-DD" data-date-format="iso" data-earliest="-120y" data-latest="Today" required aria-describedby="jpfb-12-1-birthday-help jpfb-12-1-birthday-error"><button type="button" class="jp-form-builder__date-picker" hidden aria-label="Choose date from calendar"><svg aria-hidden="true"', $markup );
+        self::assertStringNotContainsString( 'data-opening-date', $markup );
+        self::assertStringContainsString( '<label for="jpfb-12-1-visit">Date</label>', $markup );
+        self::assertStringContainsString( 'id="jpfb-12-1-visit" name="visit" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="YYYY-MM-DD" data-date-format="iso" aria-describedby="jpfb-12-1-visit-error">', $markup );
+    }
+
+    public function test_date_field_follows_the_form_locale(): void {
+        $GLOBALS['jp_form_builder_test_locale'] = 'de_DE';
+        try {
+            $markup = ( new Form_Renderer() )->render( new Form_Definition( 12, 'Kontakt', '1234567890abcdef', [], [
+                new Field_Definition( 'date', 'day', [ 'openingDate' => '+1m' ] ),
+            ] ), 1 );
+        } finally {
+            $GLOBALS['jp_form_builder_test_locale'] = 'en_US';
         }
+
+        self::assertStringContainsString( 'placeholder="TT.MM.JJJJ" data-date-format="dmy" data-opening-date="+1m"', $markup );
     }
 
     public function test_empty_label_uses_a_translated_default(): void {
