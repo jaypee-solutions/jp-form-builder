@@ -15,8 +15,16 @@ The placement of one Form on a page (DE: Einbettung).
 _Avoid_: form block, shortcode, form instance
 
 **Field**:
-One input of a Form, such as name, email, phone, address, text, select, radio buttons, checkboxes, date, message or consent (DE: Feld).
+One input of a Form, such as name, email, phone, postcode, country, text, select, radio buttons, checkboxes, date, message or consent (DE: Feld).
 _Avoid_: input, control, element
+
+**Postcode**:
+A Field for a postal code; it is checked against the rules of the nearest Country Field, or Germany without one (DE: Postleitzahl, PLZ).
+_Avoid_: postal code, zip, zip code
+
+**Country**:
+A Field for choosing a country; its choice sets the rules for the nearest Postcode (DE: Land).
+_Avoid_: nation, country code
 
 **Date offset**:
 A date given relative to today, such as now, -1y or +2w, instead of a fixed date; it bounds or opens a date Field (DE: Datumsversatz).

@@ -15,7 +15,10 @@ final class Test_Submissions extends WP_UnitTestCase {
         . '<!-- wp:jp-form-builder/name {"fieldName":"name","required":true} /-->'
         . '<!-- wp:jp-form-builder/email {"fieldName":"email","required":true} /-->'
         . '<!-- wp:jp-form-builder/select {"fieldName":"topic","options":[{"label":"Sales team","value":"sales"}]} /-->'
-        . '<!-- wp:jp-form-builder/address {"fieldName":"address"} /-->'
+        . '<!-- wp:jp-form-builder/text {"fieldName":"street"} /-->'
+        . '<!-- wp:jp-form-builder/postcode {"fieldName":"postcode","required":true} /-->'
+        . '<!-- wp:jp-form-builder/text {"fieldName":"city","required":true} /-->'
+        . '<!-- wp:jp-form-builder/country {"fieldName":"country"} /-->'
         . '<!-- wp:jp-form-builder/textarea {"fieldName":"message","required":true} /-->'
         . '<!-- wp:jp-form-builder/consent {"fieldName":"privacy"} /-->'
         . '<!-- /wp:jp-form-builder/form -->';
@@ -114,17 +117,15 @@ final class Test_Submissions extends WP_UnitTestCase {
     /** @return array<string,mixed> */
     private function valid_fields(): array {
         return [
-            'name'    => 'Jane Example',
-            'email'   => 'jane@example.test',
-            'topic'   => 'sales',
-            'address' => [
-                'street'   => 'Hauptstrasse 1',
-                'postcode' => '86150',
-                'city'     => 'Augsburg',
-                'country'  => 'DE',
-            ],
-            'message' => "Hello,\nplease call me.",
-            'privacy' => '1',
+            'name'     => 'Jane Example',
+            'email'    => 'jane@example.test',
+            'topic'    => 'sales',
+            'street'   => 'Hauptstrasse 1',
+            'postcode' => '86150',
+            'city'     => 'Augsburg',
+            'country'  => 'DE',
+            'message'  => "Hello,\nplease call me.",
+            'privacy'  => '1',
         ];
     }
 
@@ -190,7 +191,7 @@ final class Test_Submissions extends WP_UnitTestCase {
         $this->assertSame( 'team@example.test', tests_retrieve_phpmailer_instance()->get_recipient( 'to' )->address );
         $this->assertSame( 'New message via Contact', $mails[0]['subject'] );
         $this->assertStringContainsString( 'Reply-To: Jane Example <jane@example.test>', $mails[0]['header'] );
-        foreach ( [ 'Jane Example', 'jane@example.test', 'Sales team', 'Hauptstrasse 1', '86150 Augsburg', 'Germany', 'please call me.', 'Yes (', home_url( '/contact/' ) ] as $expected ) {
+        foreach ( [ 'Jane Example', 'jane@example.test', 'Sales team', 'Hauptstrasse 1', '86150', 'Augsburg', 'Germany', 'please call me.', 'Yes (', home_url( '/contact/' ) ] as $expected ) {
             $this->assertStringContainsString( $expected, $mails[0]['body'] );
         }
     }
@@ -283,16 +284,17 @@ final class Test_Submissions extends WP_UnitTestCase {
 
     public function test_invalid_fields_return_422_with_keyed_errors(): void {
         $fields = $this->valid_fields();
-        $fields['email']   = 'not-an-email';
-        $fields['name']    = '';
-        $fields['address'] = [ 'street' => 'Hauptstrasse 1', 'postcode' => '', 'city' => '', 'country' => 'DE' ];
-        $fields['privacy'] = '';
+        $fields['email']    = 'not-an-email';
+        $fields['name']     = '';
+        $fields['postcode'] = '';
+        $fields['city']     = '';
+        $fields['privacy']  = '';
 
         $response = $this->submit( $this->payload( [ 'fields' => $fields ] ) );
         $this->assert_error( $response, 422, 'jpfb_invalid_fields' );
         $this->assertSame( 'Please correct the marked fields.', $response->get_data()['message'] );
         $errors = $response->get_data()['data']['errors'];
-        $this->assertSame( [ 'address.city', 'address.postcode', 'email', 'name', 'privacy' ], $this->sorted_keys( $errors ) );
+        $this->assertSame( [ 'city', 'email', 'name', 'postcode', 'privacy' ], $this->sorted_keys( $errors ) );
         $this->assertSame( 'Please enter a valid email address.', $errors['email'] );
         $this->assertCount( 0, $this->mails() );
     }
@@ -548,6 +550,52 @@ final class Test_Submissions extends WP_UnitTestCase {
         $not_a_list = $this->submit_group_form( $form_id, [ 'topic' => 'support', 'extras' => [ [ 'brochure' ] ] ] );
         $this->assertSame( [ 'extras' ], array_keys( $not_a_list->get_data()['data']['errors'] ) );
         $this->assertCount( 0, $this->mails() );
+    }
+
+    public function test_a_country_is_validated_and_mailed_by_its_name(): void {
+        $form_id = $this->create_form(
+            '<!-- wp:jp-form-builder/form {"recipients":"team@example.test"} -->'
+            . '<!-- wp:jp-form-builder/country {"fieldName":"land","label":"Residence","required":true,"defaultCountry":""} /-->'
+            . '<!-- /wp:jp-form-builder/form -->'
+        );
+
+        $invalid = $this->submit_group_form( $form_id, [ 'land' => 'US' ] );
+        $this->assertSame( 'Please choose a valid country.', $invalid->get_data()['data']['errors']['land'] );
+        $missing = $this->submit_group_form( $form_id, [ 'land' => '' ] );
+        $this->assertSame( 'Residence is required.', $missing->get_data()['data']['errors']['land'] );
+        $this->assertCount( 0, $this->mails() );
+
+        $ok = $this->submit_group_form( $form_id, [ 'land' => 'AT' ] );
+        $this->assertSame( 200, $ok->get_status() );
+        $body = $this->mails()[0]['body'];
+        $this->assertStringContainsString( 'Residence', $body );
+        $this->assertStringContainsString( 'Austria', $body );
+        $this->assertStringNotContainsString( '>AT<', $body );
+    }
+
+    public function test_a_postcode_is_checked_against_the_country_of_the_form(): void {
+        $form_id = $this->create_form(
+            '<!-- wp:jp-form-builder/form {"recipients":"team@example.test"} -->'
+            . '<!-- wp:jp-form-builder/postcode {"fieldName":"plz","label":"Postcode","required":true} /-->'
+            . '<!-- wp:jp-form-builder/text {"fieldName":"city"} /-->'
+            . '<!-- wp:jp-form-builder/country {"fieldName":"land","defaultCountry":""} /-->'
+            . '<!-- /wp:jp-form-builder/form -->'
+        );
+
+        $markup = do_blocks( '<!-- wp:jp-form-builder/embed {"formId":' . $form_id . '} /-->' );
+        $this->assertStringContainsString( 'name="plz" required autocomplete="postal-code" data-country-source="land"', $markup );
+
+        $wrong = $this->submit_group_form( $form_id, [ 'plz' => '86150', 'city' => 'Wien', 'land' => 'AT' ] );
+        $this->assertSame( 422, $wrong->get_status() );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $wrong->get_data()['data']['errors'] );
+        $this->assertCount( 0, $this->mails() );
+
+        $austrian = $this->submit_group_form( $form_id, [ 'plz' => '1010', 'city' => 'Wien', 'land' => 'AT' ] );
+        $this->assertSame( 200, $austrian->get_status() );
+        $this->assertStringContainsString( '1010', $this->mails()[0]['body'] );
+
+        $german_fallback = $this->submit_group_form( $form_id, [ 'plz' => '86150', 'city' => 'Augsburg', 'land' => '' ] );
+        $this->assertSame( 200, $german_fallback->get_status(), 'An empty Country counts as absent, so the German rule applies.' );
     }
 
     public function test_the_mail_shows_the_option_labels_not_the_values(): void {

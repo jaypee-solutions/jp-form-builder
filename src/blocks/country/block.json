@@ -1,7 +1,7 @@
 {
 	"apiVersion": 3,
-	"name": "jp-form-builder/address",
-	"title": "Address",
+	"name": "jp-form-builder/country",
+	"title": "Country",
 	"category": "widgets",
 	"textdomain": "jp-form-builder",
 	"editorScript": "file:./index.js",

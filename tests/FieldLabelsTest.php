@@ -20,12 +20,15 @@ final class FieldLabelsTest extends TestCase {
         $this->assertSame( 'Consent', Field_Labels::for_field( new Field_Definition( 'consent', 'consent_1', [] ) ) );
     }
 
-    public function test_part_labels_use_overrides_for_names_and_fixed_text_for_addresses(): void {
+    public function test_country_field_label_defaults_to_country(): void {
+        $this->assertSame( 'Country', Field_Labels::for_field( new Field_Definition( 'country', 'country_1', [] ) ) );
+        $this->assertSame( 'Land', Field_Labels::for_field( new Field_Definition( 'country', 'country_1', [ 'label' => 'Land' ] ) ) );
+    }
+
+    public function test_part_labels_use_overrides_for_split_names(): void {
         $name = new Field_Definition( 'name', 'name_1', [ 'firstLabel' => 'Given name' ], [ 'first', 'last' ] );
         $this->assertSame( 'Given name', Field_Labels::for_part( $name, 'first' ) );
         $this->assertSame( 'Last name', Field_Labels::for_part( $name, 'last' ) );
-        $address = new Field_Definition( 'address', 'address_1', [], [ 'street', 'postcode', 'city', 'country' ] );
-        $this->assertSame( 'Street and number', Field_Labels::for_part( $address, 'street' ) );
-        $this->assertSame( 'Country', Field_Labels::for_part( $address, 'country' ) );
+        $this->assertSame( '', Field_Labels::for_part( $name, 'street' ) );
     }
 }

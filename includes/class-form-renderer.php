@@ -19,6 +19,9 @@ final class Form_Renderer {
 
     private Condition_Evaluator $evaluator;
 
+    /** @var array<string,string> Country Field key by Postcode Field key for the Form being rendered (ADR 0019). */
+    private array $country_sources = [];
+
     public function __construct( ?Condition_Evaluator $evaluator = null ) {
         $this->evaluator = $evaluator ?? new Condition_Evaluator();
     }
@@ -32,6 +35,8 @@ final class Form_Renderer {
         if ( $instance < 1 ) {
             $instance = ++self::$instances;
         }
+
+        $this->country_sources = Postcode_Country::sources( $form->fields() );
 
         $attrs = $form->attributes;
         $html  = '<form method="post" class="jp-form-builder" data-form-id="' . esc_attr( (string) $form->id ) . '" data-rev="' . esc_attr( $form->rev ) . '" data-locale="' . esc_attr( determine_locale() ) . '" data-rest-root="' . esc_url( rest_url( 'jp-form-builder/v1/' ) ) . '" data-min-fill="' . esc_attr( (string) $min_fill ) . '"';
@@ -147,6 +152,22 @@ final class Form_Renderer {
         return $html . '</fieldset>';
     }
 
+    /**
+     * The attributes that carry a Postcode's rule: the key of its Country Field and every Country's pattern for view.js
+     * to pick from, or the German rule when the Form has no Country Field.
+     */
+    private function postcode_rule_attributes( Field_Definition $field ): string {
+        $source = $this->country_sources[ $field->key ] ?? '';
+        if ( '' === $source ) {
+            return ' pattern="' . esc_attr( Countries::postcode_pattern( 'DE' ) ) . '" maxlength="' . Field_Validator::GERMAN_POSTCODE_LENGTH . '" inputmode="numeric"';
+        }
+        $patterns = [];
+        foreach ( array_keys( Countries::all() ) as $code ) {
+            $patterns[ $code ] = Countries::postcode_pattern( $code );
+        }
+        return ' data-country-source="' . esc_attr( $source ) . '" data-postcode-patterns="' . esc_attr( (string) wp_json_encode( $patterns ) ) . '" maxlength="' . Field_Validator::MAX_POSTCODE_LENGTH . '"';
+    }
+
     /** The typed input and the calendar button of a Date field; view.js reveals the button and manages the native picker. */
     private function render_date_input( Field_Definition $field, string $id, string $required_attribute, string $described ): string {
         $format = Date_Format::for_locale( determine_locale() );
@@ -185,30 +206,7 @@ final class Form_Renderer {
                 $sub_id = $id . '-' . $subkey;
                 $autocomplete = 'first' === $subkey ? 'given-name' : 'family-name';
                 $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( Field_Labels::for_part( $field, $subkey ) ) . '</label>';
-                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . esc_attr( $field->key . '[' . $subkey . ']' ) . '"' . $required_attribute . ' maxlength="' . Field_Validator::part_max_length( $subkey ) . '" autocomplete="' . esc_attr( $autocomplete ) . '" aria-describedby="' . esc_attr( $described ) . '">';
-            }
-            $html .= '</fieldset>';
-        } elseif ( 'address' === $field->type ) {
-            $patterns = [];
-            foreach ( Countries::all() as $code => $country_name ) {
-                $patterns[ $code ] = Countries::postcode_pattern( $code );
-            }
-            $html .= '<fieldset data-postcode-patterns="' . esc_attr( (string) wp_json_encode( $patterns ) ) . '"><legend>' . esc_html( $label ) . $indicator . '</legend>';
-            $autocomplete = [ 'street' => 'street-address', 'postcode' => 'postal-code', 'city' => 'address-level2', 'country' => 'country' ];
-            foreach ( $field->subkeys as $subkey ) {
-                $sub_id = $id . '-' . $subkey;
-                $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( Field_Labels::for_part( $field, $subkey ) ) . ( $required ? $indicator : '' ) . '</label>';
-                $name = esc_attr( $field->key . '[' . $subkey . ']' );
-                if ( 'country' === $subkey ) {
-                    $selected = (string) ( $attributes['defaultCountry'] ?? 'DE' );
-                    $html .= '<select id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required_attribute . ' autocomplete="country" aria-describedby="' . esc_attr( $described ) . '">';
-                    foreach ( Countries::all() as $code => $country_name ) {
-                        $html .= '<option value="' . esc_attr( $code ) . '"' . selected( $selected, $code, false ) . '>' . esc_html( $country_name ) . '</option>';
-                    }
-                    $html .= '</select>';
-                    continue;
-                }
-                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required_attribute . ' maxlength="' . Field_Validator::part_max_length( $subkey ) . '" autocomplete="' . esc_attr( $autocomplete[ $subkey ] ) . '" aria-describedby="' . esc_attr( $described ) . '">';
+                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . esc_attr( $field->key . '[' . $subkey . ']' ) . '"' . $required_attribute . ' maxlength="' . Field_Validator::MAX_NAME_LENGTH . '" autocomplete="' . esc_attr( $autocomplete ) . '" aria-describedby="' . esc_attr( $described ) . '">';
             }
             $html .= '</fieldset>';
         } elseif ( 'consent' === $field->type ) {
@@ -227,6 +225,26 @@ final class Form_Renderer {
             $html .= '<option value="">' . esc_html( (string) ( $attributes['placeholder'] ?? '' ) ) . '</option>';
             foreach ( $attributes['options'] ?? [] as $option ) {
                 $html .= '<option value="' . esc_attr( (string) ( $option['value'] ?? '' ) ) . '">' . esc_html( (string) ( $option['label'] ?? '' ) ) . '</option>';
+            }
+            $html .= '</select>';
+        } elseif ( 'postcode' === $field->type ) {
+            $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
+            $html .= '<input type="text" id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute . ' autocomplete="postal-code"';
+            $html .= $this->postcode_rule_attributes( $field );
+            if ( ! empty( $attributes['placeholder'] ) ) {
+                $html .= ' placeholder="' . esc_attr( (string) $attributes['placeholder'] ) . '"';
+            }
+            $html .= ' aria-describedby="' . esc_attr( $described ) . '">';
+        } elseif ( 'country' === $field->type ) {
+            // An empty default country offers a placeholder; a Field that is not required may then stay empty.
+            $selected = (string) ( $attributes['defaultCountry'] ?? 'DE' );
+            $html    .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
+            $html    .= '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute . ' autocomplete="country" aria-describedby="' . esc_attr( $described ) . '">';
+            if ( '' === $selected ) {
+                $html .= '<option value="">' . esc_html__( 'Please choose…', 'jp-form-builder' ) . '</option>';
+            }
+            foreach ( Countries::all() as $code => $country_name ) {
+                $html .= '<option value="' . esc_attr( $code ) . '"' . selected( $selected, $code, false ) . '>' . esc_html( $country_name ) . '</option>';
             }
             $html .= '</select>';
         } elseif ( 'radio' === $field->type || 'checkbox' === $field->type ) {

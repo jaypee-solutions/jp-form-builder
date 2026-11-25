@@ -34,6 +34,17 @@ export function isInHiddenGroup( wrapper ) {
 	return wrapper.closest( '.jp-form-builder__group[hidden]' ) !== null;
 }
 
+// The code a Country Field holds, for a Postcode to pick its rule; '' when the Field is missing, hidden or empty.
+export function countryValueOf( form, fieldKey ) {
+	const wrapper = form.querySelector(
+		`[data-field-key="${ window.CSS.escape( fieldKey ) }"]`
+	);
+	if ( ! wrapper || isInHiddenGroup( wrapper ) ) {
+		return '';
+	}
+	return wrapper.querySelector( 'select' )?.value ?? '';
+}
+
 // The cleaned value of every Field, hidden groups included; Conditions are evaluated on these.
 export function readValues( form ) {
 	const values = {};

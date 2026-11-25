@@ -121,6 +121,37 @@ jpfb_seed_post(
     '<!-- wp:jp-form-builder/embed {"formId":' . $jpfb_choices_form_id . '} /-->'
 );
 
+$jpfb_postcode_form_id = jpfb_seed_post(
+    'jp_form',
+    'e2e-postcode',
+    'E2E postcode',
+    '<!-- wp:jp-form-builder/form {"recipients":"owner@example.test"} -->'
+    . '<!-- wp:jp-form-builder/postcode {"fieldName":"postcode","required":true} /-->'
+    . '<!-- wp:jp-form-builder/country {"fieldName":"country","required":true} /-->'
+    . '<!-- /wp:jp-form-builder/form -->'
+);
+jpfb_seed_post(
+    'page',
+    'e2e-postcode-page',
+    'E2E postcode page',
+    '<!-- wp:jp-form-builder/embed {"formId":' . $jpfb_postcode_form_id . '} /-->'
+);
+
+$jpfb_postcode_alone_form_id = jpfb_seed_post(
+    'jp_form',
+    'e2e-postcode-alone',
+    'E2E postcode alone',
+    '<!-- wp:jp-form-builder/form {"recipients":"owner@example.test"} -->'
+    . '<!-- wp:jp-form-builder/postcode {"fieldName":"postcode","required":true} /-->'
+    . '<!-- /wp:jp-form-builder/form -->'
+);
+jpfb_seed_post(
+    'page',
+    'e2e-postcode-alone-page',
+    'E2E postcode alone page',
+    '<!-- wp:jp-form-builder/embed {"formId":' . $jpfb_postcode_alone_form_id . '} /-->'
+);
+
 $jpfb_date_form_id = jpfb_seed_post(
     'jp_form',
     'e2e-date',

@@ -64,12 +64,6 @@
 	font-weight: 400;
 }
 
-.jp-form-builder__parts-row {
-	display: grid;
-	grid-template-columns: 1fr 2fr;
-	gap: 0.75rem;
-}
-
 .jp-form-builder__help {
 	margin: 0.35rem 0 0;
 	font-size: 0.875em;

@@ -4,7 +4,8 @@ A privacy-first WordPress plugin for contact-style forms, built as a lean replac
 
 ## What it does
 
-- **Forms as blocks.** Forms are edited in the block editor under **Forms** and placed on pages with the **Form** block. Fields: Name (single or first/last), Email, Phone (normalised to E.164), Address (German order, 32 countries), Text, Select, Radio buttons, Checkboxes, Date, Textarea and Consent with a privacy-policy link. A [Conditional group](#conditional-groups) shows Fields only while an earlier answer calls for them. Every Field has a label, required flag, help text and, where it fits, a placeholder.
+- **Forms as blocks.** Forms are edited in the block editor under **Forms** and placed on pages with the **Form** block. Fields: Name (single or first/last), Email, Phone (normalised to E.164), Postcode (checked against the nearest Country), Country (32 countries), Text, Select, Radio buttons, Checkboxes, Date, Textarea and Consent with a privacy-policy link. The core Columns and Group blocks lay Fields out. A [Conditional group](#conditional-groups) shows Fields only while an earlier answer calls for them. Every Field has a label, required flag, help text and, where it fits, a placeholder.
+- **Postcode and Country.** A Postcode Field is checked against the rule of the Country Field nearest to it: the closest one before it in the Form, else the closest one after it (so a Country that comes last in an [address in German order](#address-in-german-order) still counts). A Country that is hidden by a Conditional group or left empty does not count; without a usable Country the Postcode must be five digits, the German rule. The Country Field is a select of 32 countries with a default country (or a "Please choose…" entry) and drives Conditions like a Select.
 - **Accessible and theme-friendly.** Labels, fieldsets, `aria-describedby`/`aria-invalid`, a focused error summary with links, a `role="status"` success message, full keyboard use. The CSS inherits fonts and colours; the button uses `wp-element-button`. Four styles, the core design tools and Field widths let you adapt the look (see [Styling](#styling)).
 - **Mail by SMTP.** Notification to the Recipients with Reply-To set to the Submitter, an optional Confirmation to the Submitter, HTML mail with a plain-text alternative, editable Mail layout and Body templates, test mail, redacted failure log.
 - **Spam protection that works behind full-page caches.** Cloudflare Turnstile, honeypot, signed minimum fill time, per-IP rate limit, payload limit, header-injection guard. Submissions use a public REST route without a nonce.
@@ -132,6 +133,16 @@ The variables are set on the block wrapper `.wp-block-jp-form-builder-embed`, so
 
 Keep the design accessible: the focus color needs at least 3:1 contrast against the Form's background, Field borders should reach 3:1 as well, and every style keeps the error border and the message under the Field, the required marker and the visible label.
 
+## Address in German order
+
+There is no Address Field: with the core **Columns** and **Group** layout blocks you arrange single Fields yourself, and a Postcode is checked against the Country Field next to it. For a German address add these Fields in this order inside the Form (or in a Group):
+
+1. **Text** labelled *Street and number* (key `street`).
+2. A **Columns** block with a narrow column holding **Postcode** and a wide column holding **Text** labelled *City* (key `city`), or leave them as two Fields at 33 % and 50 % width.
+3. **Country**, with *Default country* Germany.
+
+Because the Country comes after the Postcode, the Postcode follows it; put a Country before the Postcode instead for another order. A Condition can look at any of these Fields.
+
 ## Date field
 
 The **Date** Field takes a typed date, checked while typing, or a date picked from the browser's calendar behind the icon. The expected format is the placeholder: `TT.MM.JJJJ` when the Form's language is German, `YYYY-MM-DD` otherwise. The Submission carries the ISO date; mails show it in the format of the Form's language. Years run from 1900 to 2100. Without browser support for the calendar (`showPicker`), the icon is hidden and typing still works.
@@ -160,10 +171,10 @@ The Source Field lists only Fields that come **before** the group in the Form, i
 
 | Source Field | Operators | Value |
 | --- | --- | --- |
-| Select, Radio buttons | *is*, *is not*, *is one of* | one option for *is*/*is not*, several for *is one of* |
+| Select, Radio buttons, Country | *is*, *is not*, *is one of* | one option (a country for Country) for *is*/*is not*, several for *is one of* |
 | Checkboxes | *includes*, *is filled*, *is empty* | one or more options for *includes* (any of them) |
 | Consent | *is ticked*, *is not ticked* | none |
-| Every other Field (Name, Email, Phone, Address, Text, Textarea) | *is filled*, *is empty* | none |
+| Every other Field (Name, Email, Phone, Postcode, Text, Textarea) | *is filled*, *is empty* | none |
 
 **In the browser** the group appears right after the Field that triggers it, without moving the keyboard focus or announcing anything, and disappears again when the answer changes. A hidden group is removed from the tab order and the accessibility tree (`hidden`), so a screen-reader or keyboard user never meets it. When a group hides, its error messages go with it.
 

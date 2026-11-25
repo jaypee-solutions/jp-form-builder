@@ -3,7 +3,7 @@
  * Plugin Name:       JayPee Solutions Form Builder
  * Plugin URI:        https://github.com/jaypee-solutions/jp-form-builder
  * Description:       JayPee Solutions Form Builder is a WordPress plugin to create basic forms like a contact form.
- * Version:           1.4.0
+ * Version:           2.0.0
  * Author:            Jan-Peter Alten
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -21,7 +21,7 @@ namespace JayPee\FormBuilder;
 
 defined( 'ABSPATH' ) || exit;
 
-const VERSION     = '1.4.0';
+const VERSION     = '2.0.0';
 const PLUGIN_FILE = __FILE__;
 const GITHUB_REPO = 'jaypee-solutions/jp-form-builder';
 const UPDATE_URL  = 'https://github.com/jaypee-solutions/jp-form-builder/';
@@ -61,6 +61,7 @@ require_once __DIR__ . '/includes/class-block-defaults.php';
 require_once __DIR__ . '/includes/class-form-definition-parser.php';
 require_once __DIR__ . '/includes/class-form-repository.php';
 require_once __DIR__ . '/includes/class-countries.php';
+require_once __DIR__ . '/includes/class-postcode-country.php';
 require_once __DIR__ . '/includes/class-text.php';
 require_once __DIR__ . '/includes/class-phone-normalizer.php';
 require_once __DIR__ . '/includes/class-date-offset.php';

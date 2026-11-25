@@ -1,8 +1,7 @@
 import { parseDate } from '../../../shared/date-format.js';
 // Reads Field values from controls the way the server cleans them (Field_Validator): trimmed, a Radio buttons
-// Field as its checked value, Checkboxes as the list of checked values, and an optional address with only its
-// preselected country as empty. The functions use `type`, `name`, `value`, `checked` and `required` only, so
-// tests can pass plain objects instead of DOM controls.
+// Field as its checked value and Checkboxes as the list of checked values. The functions use `type`, `name`,
+// `value`, `checked` and `required` only, so tests can pass plain objects instead of DOM controls.
 
 // The sub-key of a compound Field's control (`key[sub]`), or '' for a single control.
 export function subKeyOf( control, fieldKey ) {
@@ -70,15 +69,5 @@ export function cleanFieldValue( fieldKey, controls ) {
 		return controls.length > 0 ? controlValue( controls[ 0 ] ) : '';
 	}
 
-	const unfilledAddress =
-		'country' in parts &&
-		! controls.some( ( control ) => control.required ) &&
-		Object.entries( parts ).every(
-			( [ subKey, value ] ) => subKey === 'country' || value === ''
-		);
-	return unfilledAddress
-		? Object.fromEntries(
-				Object.keys( parts ).map( ( key ) => [ key, '' ] )
-			)
-		: parts;
+	return parts;
 }

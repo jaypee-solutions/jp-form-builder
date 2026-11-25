@@ -205,14 +205,7 @@ final class Submission_Handler {
             return implode( ', ', array_map( fn( string $chosen ): string => $this->option_label( $field, $chosen ), $value ) );
         }
         if ( is_array( $value ) ) {
-            if ( 'address' !== $field->type ) {
-                return trim( implode( ' ', $value ) );
-            }
-            if ( '' === implode( '', array_diff_key( $value, [ 'country' => true ] ) ) ) {
-                return '';
-            }
-            $countries = Countries::all();
-            return $value['street'] . "\n" . $value['postcode'] . ' ' . $value['city'] . "\n" . ( $countries[ $value['country'] ] ?? $value['country'] );
+            return trim( implode( ' ', $value ) );
         }
         if ( '' === $value ) {
             return '';
@@ -220,6 +213,9 @@ final class Submission_Handler {
         if ( 'consent' === $field->type ) {
             /* translators: %s: UTC timestamp of the Submission. */
             return sprintf( __( 'Yes (%s)', 'jp-form-builder' ), $submitted_at );
+        }
+        if ( 'country' === $field->type ) {
+            return Countries::all()[ $value ] ?? $value;
         }
         if ( 'date' === $field->type ) {
             return Date_Format::for_locale( determine_locale() )->format( $value );

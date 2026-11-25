@@ -153,9 +153,7 @@ final class Form_Definition_Parser {
         if ( 'consent' === $type ) {
             $attrs['required'] = true;
         }
-        $subkeys = 'name' === $type && ! empty( $attrs['split'] )
-            ? [ 'first', 'last' ]
-            : ( 'address' === $type ? [ 'street', 'postcode', 'city', 'country' ] : [] );
+        $subkeys = 'name' === $type && ! empty( $attrs['split'] ) ? [ 'first', 'last' ] : [];
         return new Field_Definition( $type, $key, $attrs, $subkeys );
     }
 }
