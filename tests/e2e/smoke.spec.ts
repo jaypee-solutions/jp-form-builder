@@ -1,5 +1,5 @@
-import { login } from './support/auth';
 import { test, expect } from './support/fixtures';
+import { login } from './support/auth';
 
 test.describe( 'JayPee Solutions Form Builder — smoke', () => {
 	test( 'the plugin is active and its Updates page loads', async ( { page } ) => {

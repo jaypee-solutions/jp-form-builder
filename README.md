@@ -345,7 +345,7 @@ Requirements: Composer, Node 22.22+ (wp-env 12), and Docker or Podman (for `wp-e
 composer install
 npm install
 
-composer lint          # PHPCS (WordPress Coding Standards)
+composer lint          # PHPCS (WordPress Coding Standards) + repository checks
 composer lint:fix      # PHPCBF
 composer test          # PHPUnit
 
@@ -354,14 +354,15 @@ npm run test:js        # Node test runner: Field keys and the phone check, again
 npm run lint:js
 npm run lint:css
 
-npm run env:start      # main checkout uses 8888; linked worktrees use isolated ports
+npm run env:start      # ports derive from the plugin slug; linked worktrees use isolated ports
 npm run test:integration
 npm run test:e2e:run   # seed + Playwright
 npm run env:stop
 ```
 
-Linked git worktrees get their own deterministic wp-env ports (8900–8999); the main
-checkout keeps 8888/8889. `WP_ENV_PORT`, `WP_ENV_TESTS_PORT`, `WP_ENV_URL`,
+wp-env ports are deterministic: the main checkout derives an even pair from the plugin
+slug (8800–8899, never 8888/8889), linked git worktrees hash their path into 8900–8999.
+`WP_ENV_PORT`, `WP_ENV_TESTS_PORT`, `WP_ENV_URL`,
 `WP_ENV_TESTS_URL` and `WP_ENV_HOME` override them. wp-env, integration and E2E commands
 queue per plugin (`E2E_LOCK_DIR` moves the queue, `E2E_LOCK_DISABLE=1` turns it off);
 `npm run test:e2e:ui` leaves the queue once the site is ready. If a site that does not
@@ -378,6 +379,20 @@ defines `JP_FORM_BUILDER_SMTP_PORT` so the E2E suite can assert a constant-locke
 `jp_form_builder_`, or matches a pattern in `scripts/hook-allowlist.txt`, where
 third-party hooks go. The hook check reads the source from the wp-env cache and skips
 until `npm run env:start` has downloaded it; CI fetches it.
+
+`composer lint` also runs `scripts/check-test-seams.sh` (integration tests reach the plugin
+through WordPress: no static calls, no `new` on plugin classes; a trailing
+`// test-seam: <reason>` opts a line out), `scripts/check-ignored-sources.sh` (git must not
+ignore files in `includes/`, `src/`, `templates/` or `tests/`) and
+`scripts/check-code-rules.sh` (mechanical rules from `CODING_STANDARDS.md`). The reviewer's
+judgement calls live in `CODING_STANDARDS.md`; add plugin-specific ones under its
+"Project rules" heading. `docs/agents/` holds the testing notes, the brief for delegated
+implementation work and the WordPress facts agents should read first.
+
+`npm run test:integration` and `npm run test:e2e:run` compile `languages/*.po` to the
+gitignored `.mo` first (they need `msgfmt`), and the wp-env scripts install the core
+language packs listed in `scripts/test-locales.txt` (copier question `test_locales`,
+default `de_DE`), so translation tests see real core strings.
 
 `npm install` runs Husky, which points Git at `.husky/`; `composer hooks:check` verifies
 that. `.husky/pre-commit` runs `composer lint`; `.husky/pre-push` runs `composer test`.
@@ -396,11 +411,18 @@ Design records are in [`docs/`](docs): the [PRD](docs/prd.md), the [implementati
    git tag vX.Y.Z && git push --tags
    ```
 
-`.github/workflows/release.yml` lints, tests, builds `build/jp-form-builder-vX.Y.Z.zip`
-and publishes it as a GitHub release asset. `scripts/build-release.sh` installs
+`.github/workflows/release.yml` lints, tests, builds `build/jp-form-builder-vX.Y.Z.zip`,
+checks it with `scripts/verify-release-zip.sh` and publishes it as a GitHub release asset. `scripts/build-release.sh` installs
 the runtime dependencies with `--no-dev` and prefixes them with `php-scoper`, so
 this plugin cannot collide with another JayPee plugin bundling a different
 version of the same library on the same WordPress install.
+
+What ships is listed in `scripts/release-paths.txt`; what is tracked but does not ship in
+`scripts/release-dev-only.txt`. Add a new runtime directory or file (for example `public`) to
+the first list and a new development file to the second. `verify-release-zip.sh` fails on any
+top-level path in neither list, on a listed path missing from the ZIP, on a `.po` without
+`.mo`, on a block source without its built `block.json`, and on a header version that differs
+from the checkout; CI runs it on every build.
 
 ## Updates
 

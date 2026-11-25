@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: v1.5.0
+_commit: v1.5.0-12-gabac073
 _src_path: gh:jaypee-solutions/wp-plugin-template
 email: support@jaypee.solutions
 full_name: Jan-Peter Alten
@@ -11,6 +11,7 @@ plugin_description: JayPee Solutions Form Builder is a WordPress plugin to creat
 plugin_name: JayPee Solutions Form Builder
 plugin_slug: jp-form-builder
 puc_update_url: https://github.com/jaypee-solutions/jp-form-builder/
+test_locales: de_DE
 text_domain: jp-form-builder
 uses_blocks: true
 wc_dependent: false

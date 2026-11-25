@@ -146,6 +146,23 @@ activate_required_plugins() {
 	activate_plugin "$environment" "$PLUGIN_DIR_NAME"
 }
 
+# Core language packs for the locales in scripts/test-locales.txt, in both
+# environments, so translation tests see real core strings. Idempotent.
+install_test_locales() {
+	local locales_file="$ROOT_DIR/scripts/test-locales.txt" locale environment
+
+	[[ -f "$locales_file" ]] || return 0
+
+	# wp_cli runs `docker exec`, which would read the rest of the locale list from stdin.
+	while read -r locale; do
+		for environment in cli tests-cli; do
+			if ! wp_cli "$environment" language core is-installed "$locale" </dev/null >/dev/null 2>&1; then
+				wp_cli "$environment" language core install "$locale" </dev/null
+			fi
+		done
+	done < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^$/d' "$locales_file")
+}
+
 # A fresh wp-env install ships no .htaccess, so Apache 404s every pretty
 # permalink (pages and CPT archives alike). A hard flush writes the file.
 ensure_permalinks() {
@@ -347,10 +364,13 @@ start() {
 	if ! wait_for_dbs || ! ensure_sites || ! wait_for_http_sites; then
 		destroy_and_restart
 	fi
+
+	install_test_locales
 }
 
 seed() {
 	ensure_sites || destroy_and_restart
+	install_test_locales
 
 	if [[ ! -f "$ROOT_DIR/tests/seed.php" ]]; then
 		echo "wp-env: no tests/seed.php — nothing to seed."
