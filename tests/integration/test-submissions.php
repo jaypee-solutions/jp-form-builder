@@ -550,6 +550,27 @@ final class Test_Submissions extends WP_UnitTestCase {
         $this->assertCount( 0, $this->mails() );
     }
 
+    public function test_a_country_is_validated_and_mailed_by_its_name(): void {
+        $form_id = $this->create_form(
+            '<!-- wp:jp-form-builder/form {"recipients":"team@example.test"} -->'
+            . '<!-- wp:jp-form-builder/country {"fieldName":"land","label":"Residence","required":true,"defaultCountry":""} /-->'
+            . '<!-- /wp:jp-form-builder/form -->'
+        );
+
+        $invalid = $this->submit_group_form( $form_id, [ 'land' => 'US' ] );
+        $this->assertSame( 'Please choose a valid country.', $invalid->get_data()['data']['errors']['land'] );
+        $missing = $this->submit_group_form( $form_id, [ 'land' => '' ] );
+        $this->assertSame( 'Residence is required.', $missing->get_data()['data']['errors']['land'] );
+        $this->assertCount( 0, $this->mails() );
+
+        $ok = $this->submit_group_form( $form_id, [ 'land' => 'AT' ] );
+        $this->assertSame( 200, $ok->get_status() );
+        $body = $this->mails()[0]['body'];
+        $this->assertStringContainsString( 'Residence', $body );
+        $this->assertStringContainsString( 'Austria', $body );
+        $this->assertStringNotContainsString( '>AT<', $body );
+    }
+
     public function test_the_mail_shows_the_option_labels_not_the_values(): void {
         $form_id = $this->create_form( self::GROUP_CONTENT );
 

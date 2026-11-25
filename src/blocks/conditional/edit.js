@@ -18,6 +18,7 @@ const ALLOWED_BLOCKS = [
 	'jp-form-builder/email',
 	'jp-form-builder/phone',
 	'jp-form-builder/address',
+	'jp-form-builder/country',
 	'jp-form-builder/text',
 	'jp-form-builder/select',
 	'jp-form-builder/radio',

@@ -44,6 +44,9 @@ function controlsHolding( key, value ) {
 			control( 'radio', key, 'other' ),
 		];
 	}
+	if ( key === 'country' ) {
+		return [ control( 'select', key, value ) ];
+	}
 	if ( key === 'consent' ) {
 		return [ control( 'checkbox', key, '1', { checked: value === '1' } ) ];
 	}

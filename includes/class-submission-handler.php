@@ -221,6 +221,9 @@ final class Submission_Handler {
             /* translators: %s: UTC timestamp of the Submission. */
             return sprintf( __( 'Yes (%s)', 'jp-form-builder' ), $submitted_at );
         }
+        if ( 'country' === $field->type ) {
+            return Countries::all()[ $value ] ?? $value;
+        }
         return in_array( $field->type, [ 'select', 'radio' ], true ) ? $this->option_label( $field, $value ) : $value;
     }
 

@@ -1,3 +1,4 @@
+import { editorCountryOptions } from './countries';
 import { defaultLabel } from './labels';
 import { normalizeFieldKey, uniqueFieldKey } from './field-key';
 
@@ -12,6 +13,7 @@ export const FIELD_TYPES = [
 	'email',
 	'phone',
 	'address',
+	'country',
 	'text',
 	'select',
 	'radio',
@@ -113,11 +115,19 @@ export function collectConditionSources( blocks, groupId ) {
 			key,
 			label,
 			type,
-			options: CHOICE_TYPES.includes( type )
-				? ( block.attributes.options ?? [] ).filter(
-						( option ) => ( option.value ?? '' ) !== ''
-					)
-				: [],
+			options: sourceOptions( block, type ),
 		} )
 	);
+}
+
+// The choices a Condition may compare a source Field with; empty for Fields without choices.
+function sourceOptions( block, type ) {
+	if ( type === 'country' ) {
+		return editorCountryOptions();
+	}
+	return CHOICE_TYPES.includes( type )
+		? ( block.attributes.options ?? [] ).filter(
+				( option ) => ( option.value ?? '' ) !== ''
+			)
+		: [];
 }

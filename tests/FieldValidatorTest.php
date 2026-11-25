@@ -136,6 +136,24 @@ final class FieldValidatorTest extends TestCase {
         $this->assertSame( [ 'phone' => 'Phone is required.' ], $this->validate_one( $field, [ 'phone' => '' ] )['errors'] );
     }
 
+    public function test_country_accepts_a_known_code_only(): void {
+        $field = $this->field( 'country', 'land', [ 'required' => true ] );
+
+        $this->assertSame( [ 'land' => 'AT' ], $this->validate_one( $field, [ 'land' => ' AT ' ] )['values'] );
+        $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $this->validate_one( $field, [ 'land' => 'US' ] )['errors'] );
+        $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $this->validate_one( $field, [ 'land' => 'at' ] )['errors'] );
+        $this->assertSame( [ 'land' => 'Land is required.' ], $this->validate_one( $field, [ 'land' => '' ] )['errors'] );
+        $this->assertSame( [ 'land' => 'Land is required.' ], $this->validate_one( $field, [] )['errors'] );
+    }
+
+    public function test_optional_country_may_stay_empty(): void {
+        $field = $this->field( 'country', 'land', [ 'required' => false ] );
+
+        $this->assertSame( [ 'land' => '' ], $this->validate_one( $field, [ 'land' => '' ] )['values'] );
+        $this->assertSame( [], $this->validate_one( $field, [] )['errors'] );
+        $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $this->validate_one( $field, [ 'land' => 'XX' ] )['errors'] );
+    }
+
     public function test_address(): void {
         $field = $this->address();
         $valid = [ 'street' => 'Hauptstr. 1', 'postcode' => '86150', 'city' => 'Augsburg', 'country' => 'DE' ];

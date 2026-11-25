@@ -12,6 +12,8 @@ export function defaultLabel( type ) {
 			return __( 'Phone', 'jp-form-builder' );
 		case 'address':
 			return __( 'Address', 'jp-form-builder' );
+		case 'country':
+			return __( 'Country', 'jp-form-builder' );
 		case 'text':
 			return __( 'Text', 'jp-form-builder' );
 		case 'select':

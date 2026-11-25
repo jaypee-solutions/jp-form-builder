@@ -1,0 +1,18 @@
+{
+	"apiVersion": 3,
+	"name": "jp-form-builder/country",
+	"title": "Country",
+	"category": "widgets",
+	"textdomain": "jp-form-builder",
+	"editorScript": "file:./index.js",
+	"ancestor": ["jp-form-builder/form"],
+	"attributes": {
+		"label": { "type": "string", "default": "" },
+		"fieldName": { "type": "string", "default": "" },
+		"required": { "type": "boolean", "default": false },
+		"helpText": { "type": "string", "default": "" },
+		"width": { "type": "string", "enum": ["100", "50", "33"], "default": "100" },
+		"defaultCountry": { "type": "string", "default": "DE" }
+	},
+	"supports": { "html": false }
+}

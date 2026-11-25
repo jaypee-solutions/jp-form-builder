@@ -39,6 +39,15 @@ final class Test_Editor_Data extends WP_UnitTestCase {
         $this->assertSame( 'United Kingdom', $countries['GB'] );
     }
 
+    public function test_country_block_receives_the_translated_country_list(): void {
+        $this->open_form_editor();
+
+        $countries = $this->editor_data( 'country' )['countries'];
+
+        $this->assertCount( 32, $countries );
+        $this->assertSame( 'Austria', $countries['AT'] );
+    }
+
     public function test_phone_block_receives_only_the_supported_regions(): void {
         $this->open_form_editor();
 

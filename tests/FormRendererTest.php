@@ -74,6 +74,31 @@ final class FormRendererTest extends TestCase {
         }
     }
 
+    public function test_country_renders_a_select_of_countries_with_the_default_selected(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'country', 'land', [ 'label' => 'Land', 'required' => true, 'defaultCountry' => 'AT', 'helpText' => 'Where you live' ] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( 'class="jp-form-builder__field jp-form-builder__field--country', $markup );
+        self::assertStringContainsString( '<label for="jpfb-12-1-land">Land <span class="jp-form-builder__required"', $markup );
+        self::assertStringContainsString( '<select id="jpfb-12-1-land" name="land" required autocomplete="country" aria-describedby="jpfb-12-1-land-help jpfb-12-1-land-error">', $markup );
+        self::assertSame( 32, substr_count( $markup, '<option value="' ) );
+        self::assertMatchesRegularExpression( '~<option value="AT" selected=.selected.>Austria</option>~', $markup );
+        self::assertStringNotContainsString( '<option value="">', $markup );
+    }
+
+    public function test_country_without_a_default_offers_a_placeholder_option(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'country', 'land', [ 'label' => 'Land', 'defaultCountry' => '' ] ),
+            new Field_Definition( 'country', 'other', [ 'label' => 'Other' ] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertSame( 1, substr_count( $markup, '<option value="">Please choose…</option>' ) );
+        self::assertSame( 1, preg_match_all( '~<option value="DE" selected=.selected.>~', $markup ) );
+    }
+
     public function test_empty_label_uses_a_translated_default(): void {
         $form = new Form_Definition( 12, 'Kontakt', '1234567890abcdef', [], [
             new Field_Definition( 'email', 'email_1', [ 'label' => '' ] ),

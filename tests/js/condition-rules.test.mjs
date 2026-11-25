@@ -24,6 +24,10 @@ describe( 'operatorsForType', () => {
 			operatorsForType( 'radio' ),
 			operatorsForType( 'select' )
 		);
+		assert.deepEqual(
+			operatorsForType( 'country' ),
+			operatorsForType( 'select' )
+		);
 		assert.deepEqual( operatorsForType( 'checkbox' ), [
 			'includes',
 			'is_filled',
@@ -49,7 +53,13 @@ describe( 'operatorsForType', () => {
 	} );
 
 	it( 'only offers operators the evaluator knows', () => {
-		for ( const type of [ 'select', 'checkbox', 'consent', 'text' ] ) {
+		for ( const type of [
+			'select',
+			'country',
+			'checkbox',
+			'consent',
+			'text',
+		] ) {
 			for ( const operator of operatorsForType( type ) ) {
 				assert.ok( OPERATORS.includes( operator ) );
 			}

@@ -154,6 +154,8 @@ final class Mail_Preview_Controller {
                     'city'     => __( 'Sampletown', 'jp-form-builder' ),
                     'country'  => Countries::all()['DE'] ?? 'DE',
                 ];
+            case 'country':
+                return Countries::all()['DE'] ?? 'DE';
             case 'select':
             case 'radio':
                 return __( 'Sample option', 'jp-form-builder' );

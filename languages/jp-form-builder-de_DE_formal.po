@@ -309,6 +309,10 @@ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 msgid "Please choose a valid country."
 msgstr "Bitte wählen Sie ein gültiges Land."
 
+#: includes/class-form-renderer.php blocks/country/index.js:1
+msgid "Please choose…"
+msgstr "Bitte wählen …"
+
 #: includes/class-field-validator.php:272 blocks/embed/view.js:4
 msgid "Please enter a valid postcode."
 msgstr "Bitte geben Sie eine gültige Postleitzahl ein."
@@ -1503,9 +1507,13 @@ msgstr ""
 msgid "Field options"
 msgstr "Feldoptionen"
 
-#: blocks/address/index.js:1
+#: blocks/address/index.js:1 blocks/country/index.js:1
 msgid "Default country"
 msgstr "Standardland"
+
+#: blocks/country/index.js:1
+msgid "Choose “Please choose…” to make visitors pick a country themselves."
+msgstr "Wählen Sie „Bitte wählen …“, damit Besucher das Land selbst auswählen müssen."
 
 #: blocks/checkbox/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
 msgid "Options"

@@ -4,7 +4,7 @@ A privacy-first WordPress plugin for contact-style forms, built as a lean replac
 
 ## What it does
 
-- **Forms as blocks.** Forms are edited in the block editor under **Forms** and placed on pages with the **Form** block. Fields: Name (single or first/last), Email, Phone (normalised to E.164), Address (German order, 32 countries), Text, Select, Radio buttons, Checkboxes, Textarea and Consent with a privacy-policy link. A [Conditional group](#conditional-groups) shows Fields only while an earlier answer calls for them. Every Field has a label, required flag, help text and, where it fits, a placeholder.
+- **Forms as blocks.** Forms are edited in the block editor under **Forms** and placed on pages with the **Form** block. Fields: Name (single or first/last), Email, Phone (normalised to E.164), Address (German order, 32 countries), Country (32 countries), Text, Select, Radio buttons, Checkboxes, Textarea and Consent with a privacy-policy link. A [Conditional group](#conditional-groups) shows Fields only while an earlier answer calls for them. Every Field has a label, required flag, help text and, where it fits, a placeholder.
 - **Accessible and theme-friendly.** Labels, fieldsets, `aria-describedby`/`aria-invalid`, a focused error summary with links, a `role="status"` success message, full keyboard use. The CSS inherits fonts and colours; the button uses `wp-element-button`. Four styles, the core design tools and Field widths let you adapt the look (see [Styling](#styling)).
 - **Mail by SMTP.** Notification to the Recipients with Reply-To set to the Submitter, an optional Confirmation to the Submitter, HTML mail with a plain-text alternative, editable Mail layout and Body templates, test mail, redacted failure log.
 - **Spam protection that works behind full-page caches.** Cloudflare Turnstile, honeypot, signed minimum fill time, per-IP rate limit, payload limit, header-injection guard. Submissions use a public REST route without a nonce.
@@ -146,7 +146,7 @@ The Source Field lists only Fields that come **before** the group in the Form, i
 
 | Source Field | Operators | Value |
 | --- | --- | --- |
-| Select, Radio buttons | *is*, *is not*, *is one of* | one option for *is*/*is not*, several for *is one of* |
+| Select, Radio buttons, Country | *is*, *is not*, *is one of* | one option (a country for Country) for *is*/*is not*, several for *is one of* |
 | Checkboxes | *includes*, *is filled*, *is empty* | one or more options for *includes* (any of them) |
 | Consent | *is ticked*, *is not ticked* | none |
 | Every other Field (Name, Email, Phone, Address, Text, Textarea) | *is filled*, *is empty* | none |

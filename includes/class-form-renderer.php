@@ -211,6 +211,18 @@ final class Form_Renderer {
                 $html .= '<option value="' . esc_attr( (string) ( $option['value'] ?? '' ) ) . '">' . esc_html( (string) ( $option['label'] ?? '' ) ) . '</option>';
             }
             $html .= '</select>';
+        } elseif ( 'country' === $field->type ) {
+            // An empty default country offers a placeholder; a Field that is not required may then stay empty.
+            $selected = (string) ( $attributes['defaultCountry'] ?? 'DE' );
+            $html    .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
+            $html    .= '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute . ' autocomplete="country" aria-describedby="' . esc_attr( $described ) . '">';
+            if ( '' === $selected ) {
+                $html .= '<option value="">' . esc_html__( 'Please choose…', 'jp-form-builder' ) . '</option>';
+            }
+            foreach ( Countries::all() as $code => $country_name ) {
+                $html .= '<option value="' . esc_attr( $code ) . '"' . selected( $selected, $code, false ) . '>' . esc_html( $country_name ) . '</option>';
+            }
+            $html .= '</select>';
         } elseif ( 'radio' === $field->type || 'checkbox' === $field->type ) {
             $html .= $this->render_choices( $field, $id, $described, $label, $indicator, $required );
         } elseif ( 'textarea' === $field->type ) {

@@ -21,7 +21,7 @@ final class Form_Blocks {
     public const CONDITIONAL = 'jp-form-builder/conditional';
 
     /** Field types; each has the block `jp-form-builder/<type>`. */
-    public const FIELD_TYPES = [ 'name', 'email', 'phone', 'address', 'text', 'select', 'radio', 'checkbox', 'textarea', 'consent' ];
+    public const FIELD_TYPES = [ 'name', 'email', 'phone', 'address', 'country', 'text', 'select', 'radio', 'checkbox', 'textarea', 'consent' ];
 
     /** Core blocks that may sit between Fields and are rendered as they are. */
     public const PASS_THROUGH = [ 'core/paragraph', 'core/heading' ];

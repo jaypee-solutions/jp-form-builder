@@ -165,6 +165,10 @@ final class Field_Validator {
                 return null === $phone
                     ? $this->failure( '', __( 'Please enter a valid phone number.', 'jp-form-builder' ) )
                     : $this->success( $phone );
+            case 'country':
+                return isset( Countries::all()[ $value ] )
+                    ? $this->success( $value )
+                    : $this->failure( '', __( 'Please choose a valid country.', 'jp-form-builder' ) );
             case 'select':
             case 'radio':
                 return in_array( $value, $this->option_values( $field ), true )

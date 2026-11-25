@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: JayPee Solutions Form Builder 1.2.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jp-forms\n"
+"Project-Id-Version: JayPee Solutions Form Builder 1.4.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/postal-code\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-17T20:14:39+00:00\n"
+"POT-Creation-Date: 2026-11-25T11:10:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: jp-form-builder\n"
@@ -164,12 +164,13 @@ msgid "United Kingdom"
 msgstr ""
 
 #: includes/class-field-labels.php:24
-#: includes/class-mail-preview-controller.php:175
+#: includes/class-mail-preview-controller.php:177
 #: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -183,12 +184,13 @@ msgid "Name"
 msgstr ""
 
 #: includes/class-field-labels.php:25
-#: includes/class-mail-preview-controller.php:176
+#: includes/class-mail-preview-controller.php:178
 #: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -206,6 +208,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -223,6 +226,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -236,10 +240,30 @@ msgid "Address"
 msgstr ""
 
 #: includes/class-field-labels.php:28
+#: includes/class-field-labels.php:53
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
+#: blocks/email/index.js:1
+#: blocks/embed/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/radio/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Country"
+msgstr ""
+
+#: includes/class-field-labels.php:29
+#: blocks/address/index.js:1
+#: blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -252,11 +276,12 @@ msgstr ""
 msgid "Text"
 msgstr ""
 
-#: includes/class-field-labels.php:29
+#: includes/class-field-labels.php:30
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -269,11 +294,12 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: includes/class-field-labels.php:30
+#: includes/class-field-labels.php:31
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -286,11 +312,12 @@ msgstr ""
 msgid "Radio buttons"
 msgstr ""
 
-#: includes/class-field-labels.php:31
+#: includes/class-field-labels.php:32
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -303,13 +330,14 @@ msgstr ""
 msgid "Checkboxes"
 msgstr ""
 
-#: includes/class-field-labels.php:32
-#: includes/class-mail-preview-controller.php:177
+#: includes/class-field-labels.php:33
+#: includes/class-mail-preview-controller.php:179
 #: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -322,11 +350,12 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: includes/class-field-labels.php:33
+#: includes/class-field-labels.php:34
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -339,34 +368,29 @@ msgstr ""
 msgid "Consent"
 msgstr ""
 
-#: includes/class-field-labels.php:42
+#: includes/class-field-labels.php:43
 #: blocks/name/index.js:1
 msgid "First name"
 msgstr ""
 
-#: includes/class-field-labels.php:44
+#: includes/class-field-labels.php:45
 #: blocks/name/index.js:1
 msgid "Last name"
 msgstr ""
 
-#: includes/class-field-labels.php:46
+#: includes/class-field-labels.php:47
 #: blocks/address/index.js:1
 msgid "Street and number"
 msgstr ""
 
-#: includes/class-field-labels.php:48
+#: includes/class-field-labels.php:49
 #: blocks/address/index.js:1
 msgid "Postcode"
 msgstr ""
 
-#: includes/class-field-labels.php:50
+#: includes/class-field-labels.php:51
 #: blocks/address/index.js:1
 msgid "City"
-msgstr ""
-
-#: includes/class-field-labels.php:52
-#: blocks/address/index.js:1
-msgid "Country"
 msgstr ""
 
 #: includes/class-field-validator.php:118
@@ -379,51 +403,52 @@ msgstr ""
 msgid "Please enter a valid phone number."
 msgstr ""
 
-#: includes/class-field-validator.php:172
+#: includes/class-field-validator.php:171
+#: includes/class-field-validator.php:268
+msgid "Please choose a valid country."
+msgstr ""
+
+#: includes/class-field-validator.php:176
 #: blocks/embed/view.js:4
 msgid "Please choose one of the available options."
 msgstr ""
 
-#: includes/class-field-validator.php:186
+#: includes/class-field-validator.php:190
 #: blocks/embed/view.js:4
 msgid "Please accept to continue."
 msgstr ""
 
-#: includes/class-field-validator.php:191
+#: includes/class-field-validator.php:195
 #: blocks/embed/view.js:3
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: includes/class-field-validator.php:264
-msgid "Please choose a valid country."
-msgstr ""
-
-#: includes/class-field-validator.php:272
+#: includes/class-field-validator.php:276
 #: blocks/embed/view.js:4
 msgid "Please enter a valid postcode."
 msgstr ""
 
-#: includes/class-field-validator.php:371
+#: includes/class-field-validator.php:375
 #: blocks/embed/view.js:1
 msgid "This field"
 msgstr ""
 
 #. translators: %s: field label.
-#: includes/class-field-validator.php:376
+#: includes/class-field-validator.php:380
 #: blocks/embed/view.js:3
 #, php-format,js-format
 msgid "%s is required."
 msgstr ""
 
 #. translators: 1: field label, 2: maximum number of characters.
-#: includes/class-field-validator.php:381
+#: includes/class-field-validator.php:385
 #: blocks/embed/view.js:4
 #, php-format,js-format
 msgid "%1$s must not be longer than %2$d characters."
 msgstr ""
 
 #: includes/class-form-backup.php:78
-#: includes/class-form-backup.php:154
+#: includes/class-form-backup.php:156
 #: includes/class-settings-page.php:68
 msgid "The Backup file is too large."
 msgstr ""
@@ -445,96 +470,96 @@ msgid "The content must be exactly one Form block."
 msgstr ""
 
 #. translators: %s: block name.
-#: includes/class-form-backup.php:130
+#: includes/class-form-backup.php:131
 #, php-format
 msgid "The block \"%s\" is not allowed in a Form."
 msgstr ""
 
-#: includes/class-form-backup.php:133
+#: includes/class-form-backup.php:135
 msgid "Nested blocks are not allowed in a Form."
 msgstr ""
 
-#: includes/class-form-backup.php:151
+#: includes/class-form-backup.php:153
 msgid "The Backup file cannot be read."
 msgstr ""
 
-#: includes/class-form-backup.php:211
+#: includes/class-form-backup.php:213
 msgid "Dry run: nothing was written."
 msgstr ""
 
 #. translators: 1: Form title, 2: Form ID.
-#: includes/class-form-backup.php:215
+#: includes/class-form-backup.php:217
 #, php-format
 msgid "Overwritten: \"%1$s\" (ID %2$d)."
 msgstr ""
 
 #. translators: 1: Form title, 2: Form ID.
-#: includes/class-form-backup.php:215
+#: includes/class-form-backup.php:217
 #, php-format
 msgid "Restored: \"%1$s\" (ID %2$d)."
 msgstr ""
 
 #. translators: 1: Form title, 2: old Form ID.
-#: includes/class-form-backup.php:223
+#: includes/class-form-backup.php:225
 #, php-format
 msgid "Mapped: \"%1$s\" would get a new ID because ID %2$d is taken by another post. Embeds are not rewritten."
 msgstr ""
 
 #. translators: 1: Form title, 2: old Form ID, 3: new Form ID.
-#: includes/class-form-backup.php:225
+#: includes/class-form-backup.php:227
 #, php-format
 msgid "Mapped: \"%1$s\" ID %2$d → %3$d. Embeds are not rewritten."
 msgstr ""
 
 #. translators: 1: Form title, 2: Form ID, 3: reason.
-#: includes/class-form-backup.php:229
+#: includes/class-form-backup.php:231
 #, php-format
 msgid "Skipped: \"%1$s\" (ID %2$d): %3$s"
 msgstr ""
 
 #. translators: 1: Form title, 2: Form ID, 3: reason.
-#: includes/class-form-backup.php:233
+#: includes/class-form-backup.php:235
 #, php-format
 msgid "Rejected: \"%1$s\" (ID %2$d): %3$s"
 msgstr ""
 
 #. translators: %s: comma-separated setting keys.
-#: includes/class-form-backup.php:237
+#: includes/class-form-backup.php:239
 #, php-format
 msgid "Settings restored: %s"
 msgstr ""
 
 #. translators: 1: setting key, 2: reason.
-#: includes/class-form-backup.php:241
+#: includes/class-form-backup.php:243
 #, php-format
 msgid "Setting skipped: %1$s: %2$s"
 msgstr ""
 
-#: includes/class-form-backup.php:256
+#: includes/class-form-backup.php:258
 msgid "A Form in the Backup is missing its ID or content."
 msgstr ""
 
-#: includes/class-form-backup.php:278
+#: includes/class-form-backup.php:280
 msgid "A Form with this ID exists. Overwrite is off."
 msgstr ""
 
-#: includes/class-form-backup.php:292
+#: includes/class-form-backup.php:294
 msgid "WordPress could not save the Form."
 msgstr ""
 
-#: includes/class-form-backup.php:311
+#: includes/class-form-backup.php:313
 msgid "Unknown setting."
 msgstr ""
 
-#: includes/class-form-backup.php:313
+#: includes/class-form-backup.php:315
 msgid "Secrets are never restored."
 msgstr ""
 
-#: includes/class-form-backup.php:315
+#: includes/class-form-backup.php:317
 msgid "Locked by a constant."
 msgstr ""
 
-#: includes/class-form-backup.php:317
+#: includes/class-form-backup.php:319
 msgid "Invalid value."
 msgstr ""
 
@@ -663,28 +688,33 @@ msgid_plural "%s Forms restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-form-renderer.php:45
+#: includes/class-form-renderer.php:47
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
 msgid "Submit"
 msgstr ""
 
-#: includes/class-form-renderer.php:46
+#: includes/class-form-renderer.php:48
 msgid "Leave this field empty"
 msgstr ""
 
-#: includes/class-form-renderer.php:50
+#: includes/class-form-renderer.php:52
 msgid "JavaScript is required to submit this form."
 msgstr ""
 
-#: includes/class-form-renderer.php:155
+#: includes/class-form-renderer.php:201
 #: blocks/consent/index.js:1
 msgid "privacy policy"
 msgstr ""
 
-#: includes/class-form-renderer.php:156
+#: includes/class-form-renderer.php:202
 #: blocks/consent/index.js:1
 msgid "I agree to the {privacy_policy}."
+msgstr ""
+
+#: includes/class-form-renderer.php:220
+#: blocks/country/index.js:1
+msgid "Please choose…"
 msgstr ""
 
 #: includes/class-mail-builder.php:38
@@ -721,23 +751,23 @@ msgstr ""
 msgid "Sampletown"
 msgstr ""
 
-#: includes/class-mail-preview-controller.php:159
 #: includes/class-mail-preview-controller.php:161
+#: includes/class-mail-preview-controller.php:163
 msgid "Sample option"
 msgstr ""
 
-#: includes/class-mail-preview-controller.php:161
+#: includes/class-mail-preview-controller.php:163
 msgid "Another option"
 msgstr ""
 
 #. translators: %s: UTC timestamp of the Submission.
-#: includes/class-mail-preview-controller.php:166
+#: includes/class-mail-preview-controller.php:168
 #: includes/class-submission-handler.php:222
 #, php-format
 msgid "Yes (%s)"
 msgstr ""
 
-#: includes/class-mail-preview-controller.php:168
+#: includes/class-mail-preview-controller.php:170
 msgid "Sample text"
 msgstr ""
 
@@ -1111,7 +1141,7 @@ msgstr ""
 msgid "The spam protection check failed. Please try again."
 msgstr ""
 
-#: includes/class-submission-handler.php:255
+#: includes/class-submission-handler.php:258
 msgid "Thank you! Your message has been sent."
 msgstr ""
 
@@ -1258,6 +1288,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
@@ -1337,6 +1368,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1350,6 +1382,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1363,6 +1396,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1376,6 +1410,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1389,6 +1424,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1402,6 +1438,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1415,6 +1452,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1428,6 +1466,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1441,6 +1480,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1454,6 +1494,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1467,6 +1508,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1480,6 +1522,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1493,6 +1536,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1506,6 +1550,7 @@ msgstr ""
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
+#: blocks/country/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1517,6 +1562,7 @@ msgid "Field options"
 msgstr ""
 
 #: blocks/address/index.js:1
+#: blocks/country/index.js:1
 msgid "Default country"
 msgstr ""
 
@@ -1752,6 +1798,10 @@ msgstr ""
 msgid "Leave empty to link to the site’s privacy policy page."
 msgstr ""
 
+#: blocks/country/index.js:1
+msgid "Choose “Please choose…” to make visitors pick a country themselves."
+msgstr ""
+
 #: blocks/email/index.js:1
 msgid "Use as Reply-To address"
 msgstr ""
@@ -1958,6 +2008,11 @@ msgstr ""
 #: blocks/consent/block.json
 msgctxt "block title"
 msgid "Consent"
+msgstr ""
+
+#: blocks/country/block.json
+msgctxt "block title"
+msgid "Country"
 msgstr ""
 
 #: blocks/email/block.json

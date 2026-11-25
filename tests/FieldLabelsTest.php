@@ -20,6 +20,11 @@ final class FieldLabelsTest extends TestCase {
         $this->assertSame( 'Consent', Field_Labels::for_field( new Field_Definition( 'consent', 'consent_1', [] ) ) );
     }
 
+    public function test_country_field_label_defaults_to_country(): void {
+        $this->assertSame( 'Country', Field_Labels::for_field( new Field_Definition( 'country', 'country_1', [] ) ) );
+        $this->assertSame( 'Land', Field_Labels::for_field( new Field_Definition( 'country', 'country_1', [ 'label' => 'Land' ] ) ) );
+    }
+
     public function test_part_labels_use_overrides_for_names_and_fixed_text_for_addresses(): void {
         $name = new Field_Definition( 'name', 'name_1', [ 'firstLabel' => 'Given name' ], [ 'first', 'last' ] );
         $this->assertSame( 'Given name', Field_Labels::for_part( $name, 'first' ) );
