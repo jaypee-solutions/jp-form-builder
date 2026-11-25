@@ -201,6 +201,45 @@ test.describe( 'Form submission', () => {
 		expect( capturedMail().message ).toContain( '+49821123456' );
 	} );
 
+	test( 'a Postcode follows its Country in the browser, and without a Country it must be five digits', async ( { page } ) => {
+		clearCapturedMail();
+		const submissions = requestsTo( page, SUBMISSIONS_ROUTE );
+		await page.goto( '/e2e-postcode-page/' );
+		const form = page.locator( 'form[data-form-id]' );
+		const postcode = form.getByRole( 'textbox', { name: 'Postcode', exact: true } );
+		const country = form.getByRole( 'combobox', { name: 'Country', exact: true } );
+		const summary = form.locator( '.jp-form-builder__error-summary' );
+		const submit = form.getByRole( 'button', { name: 'Submit' } );
+
+		await country.selectOption( 'AT' );
+		await postcode.fill( '86150' );
+		await submit.click( { force: true } );
+		await expect( summary.getByRole( 'link' ) ).toHaveText( [ 'Please enter a valid postcode.' ] );
+		await expect( postcode ).toHaveAttribute( 'aria-invalid', 'true' );
+		expect( submissions ).toEqual( [] );
+
+		await postcode.fill( '1010' );
+		await expect( submit ).not.toHaveAttribute( 'aria-disabled', 'true' );
+		await submit.click();
+		await expect( form.locator( '[role="status"]' ) ).toHaveText( 'Thank you! Your message has been sent.' );
+		expect( submissions ).toHaveLength( 1 );
+		expect( capturedMail().message ).toContain( '1010' );
+		expect( capturedMail().message ).toContain( 'Austria' );
+
+		// A Form without a Country field falls back to the German rule: five digits.
+		await page.goto( '/e2e-postcode-alone-page/' );
+		const alone = page.locator( 'form[data-form-id]' );
+		const lonePostcode = alone.getByRole( 'textbox', { name: 'Postcode', exact: true } );
+		await lonePostcode.fill( '1010' );
+		await alone.getByRole( 'button', { name: 'Submit' } ).click( { force: true } );
+		await expect( alone.locator( '.jp-form-builder__error-summary' ).getByRole( 'link' ) ).toHaveText( [ 'Please enter a valid postcode.' ] );
+		await lonePostcode.fill( '86150' );
+		await alone.getByRole( 'button', { name: 'Submit' } ).click();
+		await expect( alone.locator( '[role="status"]' ) ).toHaveText( 'Thank you! Your message has been sent.' );
+		expect( submissions ).toHaveLength( 2 );
+		expect( capturedMail().message ).toContain( '86150' );
+	} );
+
 	test( 'with Turnstile configured, the widget loads on first interaction and renews after a failed attempt', async ( { page } ) => {
 		const original = wpCli(
 			'eval',
