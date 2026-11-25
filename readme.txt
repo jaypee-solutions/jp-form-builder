@@ -64,3 +64,8 @@ Requires PHP 8.0 and WordPress 6.6. Single-site only. Microsoft 365 mailboxes ar
 
 = 0.1.0 =
 * Initial scaffolding.
+
+== Upgrade Notice ==
+
+= 2.0.0 =
+Breaking: the Address field is removed and saved Forms lose their address block, with no migration. Rebuild addresses from Text, Postcode and Country fields; the README section Address in German order shows how.
