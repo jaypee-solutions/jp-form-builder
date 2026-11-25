@@ -147,13 +147,6 @@ final class Mail_Preview_Controller {
                 return 'jane@example.test';
             case 'phone':
                 return '+49821123456';
-            case 'address':
-                return [
-                    'street'   => __( 'Example Street 1', 'jp-form-builder' ),
-                    'postcode' => '86150',
-                    'city'     => __( 'Sampletown', 'jp-form-builder' ),
-                    'country'  => Countries::all()['DE'] ?? 'DE',
-                ];
             case 'postcode':
                 return '86150';
             case 'country':

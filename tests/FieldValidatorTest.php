@@ -26,10 +26,6 @@ final class FieldValidatorTest extends TestCase {
         return new Field_Definition( $type, $key, $attributes + [ 'label' => ucfirst( $key ) ], $subkeys );
     }
 
-    private function address( bool $required = true ): Field_Definition {
-        return $this->field( 'address', 'address', [ 'required' => $required ], [ 'street', 'postcode', 'city', 'country' ] );
-    }
-
     /**
      * @param array<string,mixed> $submitted Submitted values.
      * @return array{values: array<string,mixed>, errors: array<string,string>}
@@ -117,7 +113,8 @@ final class FieldValidatorTest extends TestCase {
             $this->field( 'textarea', 'message' ),
             $this->field( 'text', 'subject' ),
             $this->field( 'consent', 'consent', [ 'required' => false ] ),
-            $this->address( false ),
+            $this->field( 'postcode', 'zip' ),
+            $this->field( 'country', 'land', [ 'defaultCountry' => '' ] ),
         ];
 
         $result = $this->validator->validate( $fields, [] );
@@ -125,7 +122,8 @@ final class FieldValidatorTest extends TestCase {
         $this->assertSame( [], $result['errors'] );
         $this->assertSame( '', $result['values']['email'] );
         $this->assertSame( '', $result['values']['phone'] );
-        $this->assertSame( [ 'street' => '', 'postcode' => '', 'city' => '', 'country' => '' ], $result['values']['address'] );
+        $this->assertSame( '', $result['values']['zip'] );
+        $this->assertSame( '', $result['values']['land'] );
     }
 
     public function test_phone_uses_the_default_region(): void {
@@ -287,62 +285,6 @@ final class FieldValidatorTest extends TestCase {
         $filled = $this->validator->validate_form( $this->form( $items ), [ 'land' => 'AT', 'plz' => '1010' ] );
         $this->assertSame( [ 'note' => 'Note is required.' ], $filled['errors'] );
         $this->assertSame( '1010', $filled['values']['plz'] );
-    }
-
-    public function test_address(): void {
-        $field = $this->address();
-        $valid = [ 'street' => 'Hauptstr. 1', 'postcode' => '86150', 'city' => 'Augsburg', 'country' => 'DE' ];
-
-        $this->assertSame( [ 'address' => $valid ], $this->validate_one( $field, [ 'address' => $valid ] )['values'] );
-
-        $this->assertSame(
-            [ 'address.postcode' => 'Please enter a valid postcode.' ],
-            $this->validate_one( $field, [ 'address' => [ 'postcode' => '8615' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [],
-            $this->validate_one( $field, [ 'address' => [ 'postcode' => '8001', 'country' => 'CH' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [ 'address.postcode' => 'Please enter a valid postcode.' ],
-            $this->validate_one( $field, [ 'address' => [ 'postcode' => '86150', 'country' => 'AT' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [],
-            $this->validate_one( $field, [ 'address' => [ 'postcode' => 'SW1A 1AA', 'country' => 'GB' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [ 'address.country' => 'Please choose a valid country.' ],
-            $this->validate_one( $field, [ 'address' => [ 'country' => 'US' ] + $valid ] )['errors']
-        );
-        $this->assertSame(
-            [
-                'address.street' => 'Street and number must not be longer than 200 characters.',
-                'address.city'   => 'City must not be longer than 100 characters.',
-            ],
-            $this->validate_one( $field, [ 'address' => [ 'street' => str_repeat( 's', 201 ), 'city' => str_repeat( 'c', 101 ) ] + $valid ] )['errors']
-        );
-    }
-
-    public function test_partial_address_reports_the_missing_parts(): void {
-        foreach ( [ true, false ] as $required ) {
-            $this->assertSame(
-                [
-                    'address.postcode' => 'Postcode is required.',
-                    'address.city'     => 'City is required.',
-                    'address.country'  => 'Country is required.',
-                ],
-                $this->validate_one( $this->address( $required ), [ 'address' => [ 'street' => 'Hauptstr. 1' ] ] )['errors']
-            );
-        }
-        $this->assertCount( 4, $this->validate_one( $this->address(), [] )['errors'] );
-    }
-
-    public function test_optional_address_with_only_the_default_country_is_empty(): void {
-        $result = $this->validate_one( $this->address( false ), [ 'address' => [ 'country' => 'DE' ] ] );
-
-        $this->assertSame( [], $result['errors'] );
-        $this->assertSame( '', $result['values']['address']['country'] );
     }
 
     public function test_select_accepts_only_defined_option_values(): void {

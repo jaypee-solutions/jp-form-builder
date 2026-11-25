@@ -196,15 +196,6 @@ msgstr "E-Mail"
 msgid "Phone"
 msgstr "Telefon"
 
-#: includes/class-field-labels.php:27 blocks/address/index.js:1
-#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
-#: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
-#: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
-#: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
-msgid "Address"
-msgstr "Adresse"
-
 #: includes/class-field-labels.php:28 blocks/address/index.js:1
 #: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
@@ -268,17 +259,9 @@ msgstr "Vorname"
 msgid "Last name"
 msgstr "Nachname"
 
-#: includes/class-field-labels.php:46 blocks/address/index.js:1
-msgid "Street and number"
-msgstr "Straße und Hausnummer"
-
 #: includes/class-field-labels.php:48 blocks/address/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Postcode"
 msgstr "Postleitzahl"
-
-#: includes/class-field-labels.php:50 blocks/address/index.js:1
-msgid "City"
-msgstr "Ort"
 
 #: includes/class-field-labels.php:52 blocks/address/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Country"
@@ -621,14 +604,6 @@ msgstr "Das Mail-Layout muss {content} enthalten."
 #: includes/class-mail-preview-controller.php:72
 msgid "Sample form"
 msgstr "Beispielformular"
-
-#: includes/class-mail-preview-controller.php:152
-msgid "Example Street 1"
-msgstr "Musterstraße 1"
-
-#: includes/class-mail-preview-controller.php:154
-msgid "Sampletown"
-msgstr "Musterstadt"
 
 #: includes/class-mail-preview-controller.php:159
 #: includes/class-mail-preview-controller.php:161
@@ -1939,11 +1914,6 @@ msgstr "Maximale Länge"
 #: blocks/textarea/index.js:1
 msgid "Rows"
 msgstr "Zeilen"
-
-#: blocks/address/block.json
-msgctxt "block title"
-msgid "Address"
-msgstr "Adresse"
 
 #: blocks/checkbox/block.json
 msgctxt "block title"

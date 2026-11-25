@@ -66,7 +66,6 @@ final class Test_Mail_Preview extends WP_UnitTestCase {
                     [ 'key' => 'Company Contact', 'label' => 'Your <b>name</b>', 'type' => 'name', 'split' => true ],
                     [ 'key' => 'work_email', 'label' => 'Work email', 'type' => 'email' ],
                     [ 'key' => 'phone_number', 'label' => 'Call me on', 'type' => 'phone' ],
-                    [ 'key' => 'where', 'label' => 'Where', 'type' => 'address' ],
                     [ 'key' => 'zip', 'label' => 'Zip area', 'type' => 'postcode' ],
                     [ 'key' => 'land', 'label' => 'Residence', 'type' => 'country' ],
                     [ 'key' => 'agree', 'label' => 'Agree', 'type' => 'consent' ],
@@ -77,7 +76,7 @@ final class Test_Mail_Preview extends WP_UnitTestCase {
         $this->assertSame( 200, $response->get_status() );
         $data = $response->get_data();
         $this->assertSame( 'Request from Jane Example', $data['subject'] );
-        foreach ( [ 'Your name', 'Work email', 'jane@example.test', 'Call me on', '+49821123456', 'Where', 'Example Street 1 86150 Sampletown Germany', 'Zip area', 'Residence', 'Yes (' ] as $expected ) {
+        foreach ( [ 'Your name', 'Work email', 'jane@example.test', 'Call me on', '+49821123456', 'Zip area', '86150', 'Residence', 'Germany', 'Yes (' ] as $expected ) {
             $this->assertStringContainsString( $expected, $data['html'] );
         }
         $this->assertStringNotContainsString( '<b>', $data['html'] );

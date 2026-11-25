@@ -29,16 +29,6 @@ final class Test_Editor_Data extends WP_UnitTestCase {
         do_action( 'enqueue_block_editor_assets' );
     }
 
-    public function test_address_block_receives_the_translated_country_list(): void {
-        $this->open_form_editor();
-
-        $countries = $this->editor_data( 'address' )['countries'];
-
-        $this->assertCount( 32, $countries );
-        $this->assertSame( 'Germany', $countries['DE'] );
-        $this->assertSame( 'United Kingdom', $countries['GB'] );
-    }
-
     public function test_country_block_receives_the_translated_country_list(): void {
         $this->open_form_editor();
 

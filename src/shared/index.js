@@ -12,7 +12,6 @@ export {
 } from './field-preview';
 export { OptionsEditor } from './options-editor';
 export {
-	addressPartLabels,
 	defaultConsentLinkText,
 	defaultConsentText,
 	defaultFirstNameLabel,

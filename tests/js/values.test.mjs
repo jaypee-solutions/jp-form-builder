@@ -126,39 +126,6 @@ describe( 'cleanFieldValue', () => {
 		} );
 	} );
 
-	describe( 'an address', () => {
-		const address = ( { street = '', city = '', required = false } ) => [
-			control( 'text', 'home[street]', street, { required } ),
-			control( 'text', 'home[postcode]', '', { required } ),
-			control( 'text', 'home[city]', city, { required } ),
-			control( 'select', 'home[country]', 'DE', { required } ),
-		];
-
-		it( 'with only its preselected country is empty when optional', () => {
-			assert.deepEqual( cleanFieldValue( 'home', address( {} ) ), {
-				street: '',
-				postcode: '',
-				city: '',
-				country: '',
-			} );
-		} );
-
-		it( 'keeps its country once another part is filled', () => {
-			assert.deepEqual(
-				cleanFieldValue( 'home', address( { city: ' Augsburg ' } ) ),
-				{ street: '', postcode: '', city: 'Augsburg', country: 'DE' }
-			);
-		} );
-
-		it( 'keeps its country when required', () => {
-			assert.equal(
-				cleanFieldValue( 'home', address( { required: true } ) )
-					.country,
-				'DE'
-			);
-		} );
-	} );
-
 	it( 'reads a Field without controls as empty', () => {
 		assert.equal( cleanFieldValue( 'ghost', [] ), '' );
 	} );

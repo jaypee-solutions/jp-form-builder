@@ -191,30 +191,7 @@ final class Form_Renderer {
                 $sub_id = $id . '-' . $subkey;
                 $autocomplete = 'first' === $subkey ? 'given-name' : 'family-name';
                 $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( Field_Labels::for_part( $field, $subkey ) ) . '</label>';
-                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . esc_attr( $field->key . '[' . $subkey . ']' ) . '"' . $required_attribute . ' maxlength="' . Field_Validator::part_max_length( $subkey ) . '" autocomplete="' . esc_attr( $autocomplete ) . '" aria-describedby="' . esc_attr( $described ) . '">';
-            }
-            $html .= '</fieldset>';
-        } elseif ( 'address' === $field->type ) {
-            $patterns = [];
-            foreach ( Countries::all() as $code => $country_name ) {
-                $patterns[ $code ] = Countries::postcode_pattern( $code );
-            }
-            $html .= '<fieldset data-postcode-patterns="' . esc_attr( (string) wp_json_encode( $patterns ) ) . '"><legend>' . esc_html( $label ) . $indicator . '</legend>';
-            $autocomplete = [ 'street' => 'street-address', 'postcode' => 'postal-code', 'city' => 'address-level2', 'country' => 'country' ];
-            foreach ( $field->subkeys as $subkey ) {
-                $sub_id = $id . '-' . $subkey;
-                $html .= '<label for="' . esc_attr( $sub_id ) . '">' . esc_html( Field_Labels::for_part( $field, $subkey ) ) . ( $required ? $indicator : '' ) . '</label>';
-                $name = esc_attr( $field->key . '[' . $subkey . ']' );
-                if ( 'country' === $subkey ) {
-                    $selected = (string) ( $attributes['defaultCountry'] ?? 'DE' );
-                    $html .= '<select id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required_attribute . ' autocomplete="country" aria-describedby="' . esc_attr( $described ) . '">';
-                    foreach ( Countries::all() as $code => $country_name ) {
-                        $html .= '<option value="' . esc_attr( $code ) . '"' . selected( $selected, $code, false ) . '>' . esc_html( $country_name ) . '</option>';
-                    }
-                    $html .= '</select>';
-                    continue;
-                }
-                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . $name . '"' . $required_attribute . ' maxlength="' . Field_Validator::part_max_length( $subkey ) . '" autocomplete="' . esc_attr( $autocomplete[ $subkey ] ) . '" aria-describedby="' . esc_attr( $described ) . '">';
+                $html .= '<input type="text" id="' . esc_attr( $sub_id ) . '" name="' . esc_attr( $field->key . '[' . $subkey . ']' ) . '"' . $required_attribute . ' maxlength="' . Field_Validator::MAX_NAME_LENGTH . '" autocomplete="' . esc_attr( $autocomplete ) . '" aria-describedby="' . esc_attr( $described ) . '">';
             }
             $html .= '</fieldset>';
         } elseif ( 'consent' === $field->type ) {

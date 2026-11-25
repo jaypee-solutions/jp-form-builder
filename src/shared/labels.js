@@ -10,8 +10,6 @@ export function defaultLabel( type ) {
 			return __( 'Email', 'jp-form-builder' );
 		case 'phone':
 			return __( 'Phone', 'jp-form-builder' );
-		case 'address':
-			return __( 'Address', 'jp-form-builder' );
 		case 'postcode':
 			return __( 'Postcode', 'jp-form-builder' );
 		case 'country':
@@ -39,15 +37,6 @@ export function defaultFirstNameLabel() {
 
 export function defaultLastNameLabel() {
 	return __( 'Last name', 'jp-form-builder' );
-}
-
-export function addressPartLabels() {
-	return {
-		street: __( 'Street and number', 'jp-form-builder' ),
-		postcode: __( 'Postcode', 'jp-form-builder' ),
-		city: __( 'City', 'jp-form-builder' ),
-		country: __( 'Country', 'jp-form-builder' ),
-	};
 }
 
 export function defaultConsentText() {

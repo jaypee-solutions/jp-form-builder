@@ -10,6 +10,16 @@ extracts it as the GitHub release notes and fails without it.
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-11-25
+
+### Added
+- Postcode Field: one text input, checked on the server and in the browser against the postcode rule of the Country Field nearest to it (the closest one before it, else the closest one after it). A Country that is hidden by a Conditional group or left empty does not count; without a usable Country the German five-digit rule applies.
+- Country Field: a select of the 32 supported countries with a default country (or a "Please choose…" entry); the mail shows the country name.
+- Country Conditions: a Conditional group can test a Country Field with *is*, *is not* and *is one of*.
+
+### Removed
+- **Breaking:** the Address Field. Build an address from Text, Postcode and Country Fields, arranged with the Columns and Group layout blocks (see the "Address in German order" recipe in the README). Saved Forms lose their address block; there is no migration.
+
 ## [1.4.0] - 2026-11-24
 
 ### Added

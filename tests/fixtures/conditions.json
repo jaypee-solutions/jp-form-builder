@@ -62,9 +62,8 @@
 		{ "name": "country is_not: nothing chosen", "source": "country", "operator": "is_not", "values": ["AT"], "value": "", "expected": true },
 		{ "name": "country is_one_of: listed", "source": "country", "operator": "is_one_of", "values": ["DE", "AT", "CH"], "value": "CH", "expected": true },
 		{ "name": "country is_one_of: not listed", "source": "country", "operator": "is_one_of", "values": ["DE", "AT", "CH"], "value": "FR", "expected": false },
-		{ "name": "address is_filled: city only", "source": "address", "operator": "is_filled", "values": [], "value": { "street": "", "postcode": "", "city": "Augsburg", "country": "" }, "expected": true },
-		{ "name": "address is_filled: all parts empty", "source": "address", "operator": "is_filled", "values": [], "value": { "street": "", "postcode": "", "city": "", "country": "" }, "expected": false },
-		{ "name": "address is_empty: all parts empty", "source": "address", "operator": "is_empty", "values": [], "value": { "street": "", "postcode": "", "city": "", "country": "" }, "expected": true }
+		{ "name": "postcode is_filled: a code", "source": "postcode", "operator": "is_filled", "values": [], "value": "86150", "expected": true },
+		{ "name": "postcode is_empty: nothing entered", "source": "postcode", "operator": "is_empty", "values": [], "value": "", "expected": true }
 	],
 	"groups": [
 		{

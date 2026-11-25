@@ -12,7 +12,6 @@ export const FIELD_TYPES = [
 	'name',
 	'email',
 	'phone',
-	'address',
 	'postcode',
 	'country',
 	'text',

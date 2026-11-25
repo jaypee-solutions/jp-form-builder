@@ -15,8 +15,6 @@ final class Field_Validator {
 
     public const MAX_EMAIL_LENGTH      = 254;
     public const MAX_NAME_LENGTH       = 100;
-    public const MAX_STREET_LENGTH     = 200;
-    public const MAX_CITY_LENGTH       = 100;
     public const MAX_POSTCODE_LENGTH   = 10;
     public const GERMAN_POSTCODE_LENGTH = 5;
     public const DEFAULT_TEXT_LENGTH   = 200;
@@ -37,8 +35,8 @@ final class Field_Validator {
     /**
      * Validates submitted values against the Fields; keys not defined by a Field are ignored.
      *
-     * Values hold only valid Fields: a string, a list of strings for Checkboxes, or a sub-key map for compound
-     * Fields. Errors are keyed "key" or "key.sub".
+     * Values hold only valid Fields: a string, a list of strings for Checkboxes, or a sub-key map for a split Name.
+     * Errors are keyed "key" or "key.sub".
      *
      * @param Field_Definition[]  $fields    Fields of the Form.
      * @param array<string,mixed> $submitted Submitted `fields` map.
@@ -162,9 +160,6 @@ final class Field_Validator {
         }
         if ( [] === $field->subkeys ) {
             return $this->validate_scalar( $field, is_string( $raw ) ? $raw : '' );
-        }
-        if ( 'address' === $field->type ) {
-            return $this->validate_address( $field, is_array( $raw ) ? $raw : [] );
         }
         return $this->validate_split_name( $field, is_array( $raw ) ? $raw : [] );
     }
@@ -321,49 +316,9 @@ final class Field_Validator {
             $field,
             $parts,
             $labels,
-            static fn( string $sub, string $value, string $label ): ?string => Text::length( $value ) > self::part_max_length( $sub )
-                ? self::too_long_message( $label, self::part_max_length( $sub ) )
+            static fn( string $sub, string $value, string $label ): ?string => Text::length( $value ) > self::MAX_NAME_LENGTH
+                ? self::too_long_message( $label, self::MAX_NAME_LENGTH )
                 : null
-        );
-    }
-
-    /**
-     * @param array<mixed> $raw Submitted sub-key map.
-     * @return array{value: array<string,string>, errors: array<string,string>}
-     */
-    private function validate_address( Field_Definition $field, array $raw ): array {
-        $labels  = [];
-        foreach ( $field->subkeys as $sub ) {
-            $labels[ $sub ] = Field_Labels::for_part( $field, $sub );
-        }
-        $parts   = $this->parts( $field, $raw );
-
-        // A country alone is the preselected default, so it does not make an optional address "filled".
-        if ( ! $this->is_required( $field ) && '' === $parts['street'] . $parts['postcode'] . $parts['city'] ) {
-            return $this->success( array_fill_keys( $field->subkeys, '' ) );
-        }
-
-        return $this->validate_parts(
-            $field,
-            $parts,
-            $labels,
-            static function ( string $sub, string $value, string $label ) use ( $parts ): ?string {
-                switch ( $sub ) {
-                    case 'street':
-                    case 'city':
-                        return Text::length( $value ) > self::part_max_length( $sub ) ? self::too_long_message( $label, self::part_max_length( $sub ) ) : null;
-                    case 'country':
-                        return isset( Countries::all()[ $value ] ) ? null : __( 'Please choose a valid country.', 'jp-form-builder' );
-                    default:
-                        // Postcode: only checkable against a valid country.
-                        if ( ! isset( Countries::all()[ $parts['country'] ] ) ) {
-                            return null;
-                        }
-                        return 1 === preg_match( '~' . Countries::postcode_pattern( $parts['country'] ) . '~D', $value )
-                            ? null
-                            : __( 'Please enter a valid postcode.', 'jp-form-builder' );
-                }
-            }
         );
     }
 
@@ -429,20 +384,6 @@ final class Field_Validator {
                 $fallback = 'textarea' === $field->type ? self::DEFAULT_TEXTAREA_LENGTH : self::DEFAULT_TEXT_LENGTH;
                 $max      = (int) ( $field->attributes['maxLength'] ?? $fallback );
                 return $max > 0 ? $max : $fallback;
-        }
-    }
-
-    /** The most characters one part of a compound Field accepts. */
-    public static function part_max_length( string $sub ): int {
-        switch ( $sub ) {
-            case 'street':
-                return self::MAX_STREET_LENGTH;
-            case 'city':
-                return self::MAX_CITY_LENGTH;
-            case 'postcode':
-                return self::MAX_POSTCODE_LENGTH;
-            default:
-                return self::MAX_NAME_LENGTH;
         }
     }
 

@@ -41,7 +41,7 @@ describe( 'operatorsForType', () => {
 			'name',
 			'email',
 			'phone',
-			'address',
+			'postcode',
 			'text',
 			'textarea',
 		] ) {

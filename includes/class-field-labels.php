@@ -24,7 +24,6 @@ final class Field_Labels {
             'name'     => __( 'Name', 'jp-form-builder' ),
             'email'    => __( 'Email', 'jp-form-builder' ),
             'phone'    => __( 'Phone', 'jp-form-builder' ),
-            'address'  => __( 'Address', 'jp-form-builder' ),
             'postcode' => __( 'Postcode', 'jp-form-builder' ),
             'country'  => __( 'Country', 'jp-form-builder' ),
             'text'     => __( 'Text', 'jp-form-builder' ),
@@ -37,21 +36,13 @@ final class Field_Labels {
         return $defaults[ $field->type ] ?? '';
     }
 
-    /** Label of one part of a compound Field (name `first`/`last`; address `street`/`postcode`/`city`/`country`). */
+    /** Label of one part of a split Name (`first`/`last`). */
     public static function for_part( Field_Definition $field, string $sub ): string {
         switch ( $sub ) {
             case 'first':
                 return self::attribute_or( $field, 'firstLabel', __( 'First name', 'jp-form-builder' ) );
             case 'last':
                 return self::attribute_or( $field, 'lastLabel', __( 'Last name', 'jp-form-builder' ) );
-            case 'street':
-                return __( 'Street and number', 'jp-form-builder' );
-            case 'postcode':
-                return __( 'Postcode', 'jp-form-builder' );
-            case 'city':
-                return __( 'City', 'jp-form-builder' );
-            case 'country':
-                return __( 'Country', 'jp-form-builder' );
             default:
                 return '';
         }

@@ -15,7 +15,8 @@ final class FormRendererTest extends TestCase {
             new Field_Definition( 'name', 'single', [ 'label' => 'Name', 'required' => true ] ),
             new Field_Definition( 'email', 'email', [ 'label' => 'Email', 'required' => true ] ),
             new Field_Definition( 'phone', 'phone', [ 'label' => 'Phone', 'required' => false ] ),
-            new Field_Definition( 'address', 'home', [ 'label' => 'Address', 'required' => true ], [ 'street', 'postcode', 'city', 'country' ] ),
+            new Field_Definition( 'postcode', 'zip', [ 'label' => 'Postcode', 'required' => true ] ),
+            new Field_Definition( 'country', 'land', [ 'label' => 'Country', 'required' => true ] ),
             new Field_Definition( 'consent', 'privacy', [ 'required' => false ] ),
             new Field_Definition( 'textarea', 'message', [ 'label' => 'Message', 'helpText' => 'How can we help?' ] ),
         ] );
@@ -36,9 +37,7 @@ final class FormRendererTest extends TestCase {
         self::assertStringContainsString( 'autocomplete="name" maxlength="100"', $markup );
         self::assertStringContainsString( 'autocomplete="email"', $markup );
         self::assertStringContainsString( 'autocomplete="tel"', $markup );
-        self::assertStringContainsString( 'autocomplete="street-address"', $markup );
         self::assertStringContainsString( 'autocomplete="postal-code"', $markup );
-        self::assertStringContainsString( 'autocomplete="address-level2"', $markup );
         self::assertStringContainsString( 'autocomplete="country"', $markup );
         self::assertStringContainsString( 'data-postcode-patterns=', $markup );
         self::assertStringNotContainsString( 'pattern="^\\d{5}$"', $markup );
@@ -60,7 +59,6 @@ final class FormRendererTest extends TestCase {
             new Field_Definition( 'phone', 'phone', [ 'label' => 'Phone' ] ),
             new Field_Definition( 'text', 'company', [ 'label' => 'Company' ] ),
             new Field_Definition( 'textarea', 'message', [ 'label' => 'Message' ] ),
-            new Field_Definition( 'address', 'home', [ 'label' => 'Address' ], [ 'street', 'postcode', 'city', 'country' ] ),
         ] );
         $markup = ( new Form_Renderer() )->render( $form );
         foreach ( [ 'first', 'last' ] as $part ) {
@@ -69,9 +67,6 @@ final class FormRendererTest extends TestCase {
         self::assertStringContainsString( 'name="email" maxlength="' . Field_Validator::MAX_EMAIL_LENGTH . '"', str_replace( ' autocomplete="email"', '', $markup ) );
         self::assertStringContainsString( 'name="company" maxlength="' . Field_Validator::DEFAULT_TEXT_LENGTH . '"', $markup );
         self::assertStringContainsString( 'maxlength="' . Field_Validator::DEFAULT_TEXTAREA_LENGTH . '"', $markup );
-        foreach ( [ 'street' => Field_Validator::MAX_STREET_LENGTH, 'postcode' => Field_Validator::MAX_POSTCODE_LENGTH, 'city' => Field_Validator::MAX_CITY_LENGTH ] as $part => $limit ) {
-            self::assertStringContainsString( 'name="home[' . $part . ']" maxlength="' . $limit . '"', str_replace( ' required', '', $markup ) );
-        }
     }
 
     public function test_country_renders_a_select_of_countries_with_the_default_selected(): void {
