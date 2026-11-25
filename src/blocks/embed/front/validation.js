@@ -1,4 +1,5 @@
 import { __, sprintf } from '@wordpress/i18n';
+import { dateIssueMessage } from './date';
 import { fieldControls, fieldWrappers, isInHiddenGroup, labelOf } from './dom';
 import { isPlausiblePhoneNumber } from './phone';
 import { choiceKind, controlValue } from './values';
@@ -36,6 +37,9 @@ function invalidValueMessage( form, control, value, postcodePatterns ) {
 		! isPlausiblePhoneNumber( value, control.dataset.defaultRegion || 'DE' )
 	) {
 		return __( 'Please enter a valid phone number.', 'jp-form-builder' );
+	}
+	if ( control.dataset.dateFormat ) {
+		return dateIssueMessage( control );
 	}
 	if ( control.tagName === 'SELECT' ) {
 		const isOption = [ ...control.options ].some(

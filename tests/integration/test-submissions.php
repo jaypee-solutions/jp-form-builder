@@ -167,7 +167,7 @@ final class Test_Submissions extends WP_UnitTestCase {
     public function test_token_route_is_public_uncached_and_only_for_published_forms(): void {
         $response = rest_get_server()->dispatch( new WP_REST_Request( 'GET', '/jp-form-builder/v1/forms/' . $this->form_id . '/token' ) );
         $this->assertSame( 200, $response->get_status() );
-        $this->assertSame( [ 'token' ], array_keys( $response->get_data() ) );
+        $this->assertSame( [ 'token', 'today' ], array_keys( $response->get_data() ) );
         $this->assertMatchesRegularExpression( '/^\d+\.[0-9a-f]{64}$/', $response->get_data()['token'] );
         $this->assertSame( 'no-store', $response->get_headers()['Cache-Control'] );
 
@@ -561,5 +561,63 @@ final class Test_Submissions extends WP_UnitTestCase {
         $this->assertStringContainsString( 'Brochure, Call back', $body );
         $this->assertStringNotContainsString( 'callback', $body );
         $this->assertStringNotContainsString( '>support<', $body );
+    }
+
+    public function test_token_route_reports_today_in_the_site_timezone(): void {
+        // Kiritimati (UTC+14) and Pago Pago (UTC-11) are never on the same calendar day.
+        foreach ( [ 'Pacific/Kiritimati', 'Pacific/Pago_Pago' ] as $timezone ) {
+            update_option( 'timezone_string', $timezone );
+            $zone   = new DateTimeZone( $timezone );
+            $before = ( new DateTimeImmutable( 'now', $zone ) )->format( 'Y-m-d' );
+            $today  = rest_get_server()->dispatch( new WP_REST_Request( 'GET', '/jp-form-builder/v1/forms/' . $this->form_id . '/token' ) )->get_data()['today'];
+            $after  = ( new DateTimeImmutable( 'now', $zone ) )->format( 'Y-m-d' );
+
+            $this->assertContains( $today, [ $before, $after ], $timezone );
+        }
+    }
+
+    private function date_form( string $attributes ): int {
+        return $this->create_form(
+            '<!-- wp:jp-form-builder/form {"recipients":"team@example.test","notificationBody":"\\u003cp\\u003e{arrival:label}: {arrival}\\u003c/p\\u003e"} -->'
+            . '<!-- wp:jp-form-builder/date {"fieldName":"arrival","label":"Arrival"' . $attributes . '} /-->'
+            . '<!-- /wp:jp-form-builder/form -->'
+        );
+    }
+
+    public function test_a_date_in_the_window_is_accepted_and_mailed_in_the_display_format(): void {
+        $form_id = $this->date_form( ',"required":true,"earliest":"2026-01-01","latest":"2026-12-31"' );
+
+        $this->assertSame( 200, $this->submit( $this->payload( [ 'fields' => [ 'arrival' => '2026-03-05' ] ], $form_id ), $form_id )->get_status() );
+        $this->assertStringContainsString( 'Arrival: 2026-03-05', $this->mails()[0]['body'] );
+
+        reset_phpmailer_instance();
+        add_filter( 'locale', static fn(): string => 'de_DE' );
+        $this->assertSame( 200, $this->submit( $this->payload( [ 'fields' => [ 'arrival' => '2026-03-05' ] ], $form_id ), $form_id )->get_status() );
+        $this->assertStringContainsString( 'Arrival: 05.03.2026', $this->mails()[0]['body'] );
+        $this->assertStringNotContainsString( '2026-03-05', $this->mails()[0]['body'] );
+    }
+
+    public function test_a_date_outside_the_window_or_malformed_returns_422_and_sends_nothing(): void {
+        $form_id = $this->date_form( ',"earliest":"2026-01-01","latest":"today"' );
+
+        $early = $this->submit( $this->payload( [ 'fields' => [ 'arrival' => '2025-12-31' ] ], $form_id ), $form_id );
+        $this->assert_error( $early, 422, 'jpfb_invalid_fields' );
+        $this->assertSame( [ 'arrival' => 'Date must not be before 2026-01-01.' ], $early->get_data()['data']['errors'] );
+
+        $late = $this->submit( $this->payload( [ 'fields' => [ 'arrival' => '2100-12-31' ] ], $form_id ), $form_id );
+        $this->assertStringStartsWith( 'Date must not be after ', $late->get_data()['data']['errors']['arrival'] );
+
+        foreach ( [ '05.03.2026', '2026-02-30', 'soon' ] as $malformed ) {
+            $response = $this->submit( $this->payload( [ 'fields' => [ 'arrival' => $malformed ] ], $form_id ), $form_id );
+            $this->assertSame( [ 'arrival' => 'Please enter a valid date (YYYY-MM-DD).' ], $response->get_data()['data']['errors'], $malformed );
+        }
+        $this->assertCount( 0, $this->mails() );
+    }
+
+    public function test_an_empty_optional_date_is_not_mailed(): void {
+        $form_id = $this->date_form( '' );
+
+        $this->assertSame( 200, $this->submit( $this->payload( [ 'fields' => [ 'arrival' => '' ] ], $form_id ), $form_id )->get_status() );
+        $this->assertStringNotContainsString( 'Arrival', $this->mails()[0]['body'] );
     }
 }

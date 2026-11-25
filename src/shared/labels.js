@@ -10,6 +10,8 @@ export function defaultLabel( type ) {
 			return __( 'Email', 'jp-form-builder' );
 		case 'phone':
 			return __( 'Phone', 'jp-form-builder' );
+		case 'date':
+			return __( 'Date', 'jp-form-builder' );
 		case 'address':
 			return __( 'Address', 'jp-form-builder' );
 		case 'text':

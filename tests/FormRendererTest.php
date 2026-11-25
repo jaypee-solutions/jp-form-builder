@@ -74,6 +74,33 @@ final class FormRendererTest extends TestCase {
         }
     }
 
+    public function test_date_field_renders_the_typed_input_with_the_raw_window_and_a_hidden_calendar_button(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'date', 'birthday', [ 'label' => 'Birthday', 'required' => true, 'helpText' => 'Optional?', 'earliest' => '-120y', 'latest' => 'Today', 'openingDate' => '' ] ),
+            new Field_Definition( 'date', 'visit', [ 'label' => '' ] ),
+        ] );
+
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( '<label for="jpfb-12-1-birthday">Birthday <span class="jp-form-builder__required" aria-hidden="true">*</span></label><div class="jp-form-builder__date"><input type="text" id="jpfb-12-1-birthday" name="birthday" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="YYYY-MM-DD" data-date-format="iso" data-earliest="-120y" data-latest="Today" required aria-describedby="jpfb-12-1-birthday-help jpfb-12-1-birthday-error"><button type="button" class="jp-form-builder__date-picker" hidden aria-label="Choose date from calendar"><svg aria-hidden="true"', $markup );
+        self::assertStringNotContainsString( 'data-opening-date', $markup );
+        self::assertStringContainsString( '<label for="jpfb-12-1-visit">Date</label>', $markup );
+        self::assertStringContainsString( 'id="jpfb-12-1-visit" name="visit" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="YYYY-MM-DD" data-date-format="iso" aria-describedby="jpfb-12-1-visit-error">', $markup );
+    }
+
+    public function test_date_field_follows_the_form_locale(): void {
+        $GLOBALS['jp_form_builder_test_locale'] = 'de_DE';
+        try {
+            $markup = ( new Form_Renderer() )->render( new Form_Definition( 12, 'Kontakt', '1234567890abcdef', [], [
+                new Field_Definition( 'date', 'day', [ 'openingDate' => '+1m' ] ),
+            ] ), 1 );
+        } finally {
+            $GLOBALS['jp_form_builder_test_locale'] = 'en_US';
+        }
+
+        self::assertStringContainsString( 'placeholder="TT.MM.JJJJ" data-date-format="dmy" data-opening-date="+1m"', $markup );
+    }
+
     public function test_empty_label_uses_a_translated_default(): void {
         $form = new Form_Definition( 12, 'Kontakt', '1234567890abcdef', [], [
             new Field_Definition( 'email', 'email_1', [ 'label' => '' ] ),

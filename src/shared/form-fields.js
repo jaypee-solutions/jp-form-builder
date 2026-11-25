@@ -1,3 +1,4 @@
+import { operatorsForType } from './condition-rules';
 import { defaultLabel } from './labels';
 import { normalizeFieldKey, uniqueFieldKey } from './field-key';
 
@@ -11,6 +12,7 @@ export const FIELD_TYPES = [
 	'name',
 	'email',
 	'phone',
+	'date',
 	'address',
 	'text',
 	'select',
@@ -108,8 +110,9 @@ export function collectFormFields( blocks ) {
  * @return {{key: string, label: string, type: string, options: {label: string, value: string}[]}[]} The Fields in document order; `options` is empty for Fields without choices.
  */
 export function collectConditionSources( blocks, groupId ) {
-	return keyedFieldBlocks( blocks, groupId ).map(
-		( { block, type, key, label } ) => ( {
+	return keyedFieldBlocks( blocks, groupId )
+		.filter( ( { type } ) => operatorsForType( type ).length > 0 )
+		.map( ( { block, type, key, label } ) => ( {
 			key,
 			label,
 			type,
@@ -118,6 +121,5 @@ export function collectConditionSources( blocks, groupId ) {
 						( option ) => ( option.value ?? '' ) !== ''
 					)
 				: [],
-		} )
-	);
+		} ) );
 }

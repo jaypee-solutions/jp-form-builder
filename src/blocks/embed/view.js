@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { initDates, setToday } from './front/date';
 import { HONEYPOT_NAME, readFields } from './front/dom';
 import {
 	clearErrors,
@@ -68,6 +69,7 @@ function initForm( form ) {
 						value: body.token,
 						readyAt: Date.now() + minFillMilliseconds,
 					};
+					setToday( form, body.today ?? null );
 					setTimeout( refreshSubmitButton, minFillMilliseconds );
 					refreshSubmitButton();
 					return token;
@@ -244,6 +246,11 @@ function initForm( form ) {
 
 	submitButton.setAttribute( 'aria-disabled', 'true' );
 	const groups = initGroups( form );
+	// Opening the picker counts as interaction: it starts the token request and waits for the site date.
+	initDates( form, () => {
+		activate();
+		return loadToken().catch( noop );
+	} );
 	form.addEventListener( 'focusin', activate, { once: true } );
 	form.addEventListener( 'submit', submit );
 }

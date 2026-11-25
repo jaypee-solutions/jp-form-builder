@@ -1,3 +1,4 @@
+import { parseDate } from '../../../shared/date-format.js';
 // Reads Field values from controls the way the server cleans them (Field_Validator): trimmed, a Radio buttons
 // Field as its checked value, Checkboxes as the list of checked values, and an optional address with only its
 // preselected country as empty. The functions use `type`, `name`, `value`, `checked` and `required` only, so
@@ -23,6 +24,12 @@ export function choiceKind( controls ) {
 	return first?.type === 'checkbox' && first.name.endsWith( '[]' )
 		? 'checkbox'
 		: '';
+}
+
+// A date Field is sent as ISO; text that is not a date goes as typed so the server reports it.
+function dateValue( control ) {
+	const text = control.value.trim();
+	return parseDate( text, control.dataset.dateFormat ) ?? text;
 }
 
 // The value of a single control; a lone checkbox (consent) is '1' when ticked.
@@ -57,6 +64,9 @@ export function cleanFieldValue( fieldKey, controls ) {
 		}
 	}
 	if ( Object.keys( parts ).length === 0 ) {
+		if ( controls[ 0 ]?.dataset?.dateFormat ) {
+			return dateValue( controls[ 0 ] );
+		}
 		return controls.length > 0 ? controlValue( controls[ 0 ] ) : '';
 	}
 

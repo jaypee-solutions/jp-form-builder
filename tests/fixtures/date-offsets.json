@@ -1,0 +1,367 @@
+[
+  {
+    "today": "2026-11-25",
+    "expression": "now",
+    "resolved": "2026-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "today",
+    "resolved": "2026-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "NOW",
+    "resolved": "2026-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "Today",
+    "resolved": "2026-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "  today  ",
+    "resolved": "2026-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "-1y",
+    "resolved": "2025-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+30d",
+    "resolved": "2026-12-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+2w",
+    "resolved": "2026-12-09"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "6m",
+    "resolved": "2027-05-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+0d",
+    "resolved": "2026-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "-0m",
+    "resolved": "2026-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": " -1Y ",
+    "resolved": "2025-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+1M",
+    "resolved": "2026-12-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "-3W",
+    "resolved": "2026-11-04"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "999d",
+    "resolved": "2029-08-20"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "-999y",
+    "resolved": "1900-01-01"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+999y",
+    "resolved": "2100-12-31"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "-18y",
+    "resolved": "2008-11-25"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "-1d",
+    "resolved": "2026-11-24"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+1d",
+    "resolved": "2026-11-26"
+  },
+  {
+    "today": "2026-01-31",
+    "expression": "+1m",
+    "resolved": "2026-02-28"
+  },
+  {
+    "today": "2026-03-31",
+    "expression": "-1m",
+    "resolved": "2026-02-28"
+  },
+  {
+    "today": "2026-12-31",
+    "expression": "+2m",
+    "resolved": "2027-02-28"
+  },
+  {
+    "today": "2024-01-31",
+    "expression": "+1m",
+    "resolved": "2024-02-29"
+  },
+  {
+    "today": "2025-01-31",
+    "expression": "+1m",
+    "resolved": "2025-02-28"
+  },
+  {
+    "today": "2026-08-31",
+    "expression": "+6m",
+    "resolved": "2027-02-28"
+  },
+  {
+    "today": "2026-05-31",
+    "expression": "-3m",
+    "resolved": "2026-02-28"
+  },
+  {
+    "today": "2024-02-29",
+    "expression": "+1y",
+    "resolved": "2025-02-28"
+  },
+  {
+    "today": "2024-02-29",
+    "expression": "-1y",
+    "resolved": "2023-02-28"
+  },
+  {
+    "today": "2024-02-29",
+    "expression": "+4y",
+    "resolved": "2028-02-29"
+  },
+  {
+    "today": "2024-02-29",
+    "expression": "+1d",
+    "resolved": "2024-03-01"
+  },
+  {
+    "today": "2024-02-28",
+    "expression": "+1d",
+    "resolved": "2024-02-29"
+  },
+  {
+    "today": "2024-12-31",
+    "expression": "+1d",
+    "resolved": "2025-01-01"
+  },
+  {
+    "today": "2026-01-01",
+    "expression": "-1d",
+    "resolved": "2025-12-31"
+  },
+  {
+    "today": "2100-12-31",
+    "expression": "+1d",
+    "resolved": "2100-12-31"
+  },
+  {
+    "today": "2100-06-15",
+    "expression": "+1y",
+    "resolved": "2100-12-31"
+  },
+  {
+    "today": "2099-12-31",
+    "expression": "+1y",
+    "resolved": "2100-12-31"
+  },
+  {
+    "today": "1900-01-01",
+    "expression": "-1d",
+    "resolved": "1900-01-01"
+  },
+  {
+    "today": "1900-03-01",
+    "expression": "-1y",
+    "resolved": "1900-01-01"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "   ",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "tomorrow",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+1",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "1d2d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+1d+1d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "1 d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+ 1d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "++1d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "1.5d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "1000d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "+1x",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "-",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "nowish",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "1e2d",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2026-02-14",
+    "resolved": "2026-02-14"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2000-02-29",
+    "resolved": "2000-02-29"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "1900-01-01",
+    "resolved": "1900-01-01"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2100-12-31",
+    "resolved": "2100-12-31"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": " 2026-02-14 ",
+    "resolved": "2026-02-14"
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2026-02-30",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2025-02-29",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2026-13-01",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2026-00-10",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2026-04-31",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2026-2-3",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "26-02-14",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "14.02.2026",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "1899-12-31",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2101-01-01",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "0000-01-01",
+    "resolved": null
+  },
+  {
+    "today": "2026-11-25",
+    "expression": "2026-02-14T10:00",
+    "resolved": null
+  }
+]

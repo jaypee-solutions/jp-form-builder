@@ -154,6 +154,8 @@ final class Mail_Preview_Controller {
                     'city'     => __( 'Sampletown', 'jp-form-builder' ),
                     'country'  => Countries::all()['DE'] ?? 'DE',
                 ];
+            case 'date':
+                return Date_Format::for_locale( determine_locale() )->format( '2026-03-14' );
             case 'select':
             case 'radio':
                 return __( 'Sample option', 'jp-form-builder' );

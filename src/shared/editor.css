@@ -217,3 +217,22 @@
 	margin: 0 0 0.5rem;
 	color: #757575;
 }
+
+.jp-form-builder__date-preview {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.jp-form-builder__date-icon {
+	color: #1e1e1e;
+}
+
+.jp-form-builder__date-hint {
+	color: #757575;
+	font-size: 12px;
+}
+
+.jp-form-builder__date-error {
+	color: #cc1818;
+}
