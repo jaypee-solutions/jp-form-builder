@@ -15,8 +15,16 @@ The placement of one Form on a page (DE: Einbettung).
 _Avoid_: form block, shortcode, form instance
 
 **Field**:
-One input of a Form, such as name, email, phone, address, text, select, radio buttons, checkboxes, message or consent (DE: Feld).
+One input of a Form, such as name, email, phone, postcode, country, text, select, radio buttons, checkboxes, message or consent (DE: Feld).
 _Avoid_: input, control, element
+
+**Postcode**:
+A Field for a postal code; it is checked against the rules of the nearest Country Field, or Germany without one (DE: Postleitzahl, PLZ).
+_Avoid_: postal code, zip, zip code
+
+**Country**:
+A Field for choosing a country; its choice sets the rules for the nearest Postcode (DE: Land).
+_Avoid_: nation, country code
 
 **Field key**:
 The stable identifier of a Field inside its Form, used in mail placeholders (DE: Feldschlüssel).
