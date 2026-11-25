@@ -147,6 +147,21 @@ final class Form_Renderer {
         return $html . '</fieldset>';
     }
 
+    /** The typed input and the calendar button of a Date field; view.js reveals the button and manages the native picker. */
+    private function render_date_input( Field_Definition $field, string $id, string $required_attribute, string $described ): string {
+        $format = Date_Format::for_locale( determine_locale() );
+        $html   = '<div class="jp-form-builder__date"><input type="text" id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="' . esc_attr( $format->placeholder() ) . '" data-date-format="' . esc_attr( $format->name() ) . '"';
+        foreach ( [ 'earliest' => 'data-earliest', 'latest' => 'data-latest', 'openingDate' => 'data-opening-date' ] as $attribute => $data_attribute ) {
+            $raw = trim( (string) ( $field->attributes[ $attribute ] ?? '' ) );
+            if ( '' !== $raw ) {
+                $html .= ' ' . $data_attribute . '="' . esc_attr( $raw ) . '"';
+            }
+        }
+        $html .= $required_attribute . ' aria-describedby="' . esc_attr( $described ) . '">';
+        $html .= '<button type="button" class="jp-form-builder__date-picker" hidden aria-label="' . esc_attr__( 'Choose date from calendar', 'jp-form-builder' ) . '"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button></div>';
+        return $html;
+    }
+
     private function render_field( int $form_id, int $instance, Field_Definition $field ): string {
         $attributes = $field->attributes;
         $id         = 'jpfb-' . $form_id . '-' . $instance . '-' . $field->key;
@@ -203,6 +218,9 @@ final class Form_Renderer {
             $link = '<a href="' . esc_url( $url ) . '">' . esc_html( (string) $link_text ) . '</a>';
             $text = str_replace( '{privacy_policy}', $link, esc_html( (string) $text ) );
             $html .= '<label for="' . esc_attr( $id ) . '"><input type="checkbox" id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '" value="1" required aria-describedby="' . esc_attr( $described ) . '"> ' . $text . $indicator . '</label>';
+        } elseif ( 'date' === $field->type ) {
+            $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
+            $html .= $this->render_date_input( $field, $id, $required_attribute, $described );
         } elseif ( 'select' === $field->type ) {
             $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
             $html .= '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute . ' aria-describedby="' . esc_attr( $described ) . '">';

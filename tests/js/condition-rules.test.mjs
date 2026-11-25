@@ -48,6 +48,10 @@ describe( 'operatorsForType', () => {
 		}
 	} );
 
+	it( 'offers no operators for a date Field', () => {
+		assert.deepEqual( operatorsForType( 'date' ), [] );
+	} );
+
 	it( 'only offers operators the evaluator knows', () => {
 		for ( const type of [ 'select', 'checkbox', 'consent', 'text' ] ) {
 			for ( const operator of operatorsForType( type ) ) {

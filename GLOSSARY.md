@@ -15,8 +15,20 @@ The placement of one Form on a page (DE: Einbettung).
 _Avoid_: form block, shortcode, form instance
 
 **Field**:
-One input of a Form, such as name, email, phone, address, text, select, radio buttons, checkboxes, message or consent (DE: Feld).
+One input of a Form, such as name, email, phone, address, text, select, radio buttons, checkboxes, date, message or consent (DE: Feld).
 _Avoid_: input, control, element
+
+**Date offset**:
+A date given relative to today, such as now, -1y or +2w, instead of a fixed date; it bounds or opens a date Field (DE: Datumsversatz).
+_Avoid_: relative date, dynamic date, date expression
+
+**Date window**:
+The span of dates a date Field accepts, set by an earliest and a latest selectable date, each fixed or a Date offset (DE: Datumsfenster).
+_Avoid_: date range, date limits
+
+**Opening date**:
+The date a date Field's calendar shows first while the Field is empty; it never fills the Field (DE: Startdatum).
+_Avoid_: default date, default value, preset
 
 **Field key**:
 The stable identifier of a Field inside its Form, used in mail placeholders (DE: Feldschlüssel).

@@ -121,4 +121,19 @@ jpfb_seed_post(
     '<!-- wp:jp-form-builder/embed {"formId":' . $jpfb_choices_form_id . '} /-->'
 );
 
+$jpfb_date_form_id = jpfb_seed_post(
+    'jp_form',
+    'e2e-date',
+    'E2E date',
+    '<!-- wp:jp-form-builder/form {"recipients":"owner@example.test"} -->'
+    . '<!-- wp:jp-form-builder/date {"fieldName":"termin","label":"Termin","required":true,"earliest":"-1y","latest":"+30d"} /-->'
+    . '<!-- /wp:jp-form-builder/form -->'
+);
+jpfb_seed_post(
+    'page',
+    'e2e-date-page',
+    'E2E date page',
+    '<!-- wp:jp-form-builder/embed {"formId":' . $jpfb_date_form_id . '} /-->'
+);
+
 WP_CLI::success( 'Seed complete.' );

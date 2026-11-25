@@ -27,7 +27,11 @@ final class Field_Validator {
 
     private Condition_Evaluator $evaluator;
 
-    public function __construct( ?Phone_Normalizer $phone_normalizer = null, ?Mail_Header_Guard $header_guard = null, ?Condition_Evaluator $evaluator = null ) {
+    /** Today for Date windows; null means the current date in the site timezone at validation time. */
+    private ?\DateTimeImmutable $today;
+
+    public function __construct( ?Phone_Normalizer $phone_normalizer = null, ?Mail_Header_Guard $header_guard = null, ?Condition_Evaluator $evaluator = null, ?\DateTimeImmutable $today = null ) {
+        $this->today            = $today;
         $this->phone_normalizer = $phone_normalizer ?? new Phone_Normalizer();
         $this->header_guard     = $header_guard ?? new Mail_Header_Guard();
         $this->evaluator        = $evaluator ?? new Condition_Evaluator();
@@ -165,6 +169,8 @@ final class Field_Validator {
                 return null === $phone
                     ? $this->failure( '', __( 'Please enter a valid phone number.', 'jp-form-builder' ) )
                     : $this->success( $phone );
+            case 'date':
+                return $this->validate_date( $field, $value );
             case 'select':
             case 'radio':
                 return in_array( $value, $this->option_values( $field ), true )
@@ -173,6 +179,33 @@ final class Field_Validator {
             default:
                 return $this->check_length( $value, self::max_length( $field ), $label );
         }
+    }
+
+    /**
+     * A Date is an ISO date inside its Date window. An inverted window leaves no valid date: every value then
+     * violates one of the bounds. An invalid bound expression counts as no bound.
+     *
+     * @return array{value: string, errors: array<string,string>}
+     */
+    private function validate_date( Field_Definition $field, string $value ): array {
+        $format = Date_Format::for_locale( determine_locale() );
+        if ( ! Date_Offset::is_valid_iso( $value ) ) {
+            /* translators: %s: expected date format, for example YYYY-MM-DD. */
+            return $this->failure( '', sprintf( __( 'Please enter a valid date (%s).', 'jp-form-builder' ), $format->placeholder() ) );
+        }
+
+        $today    = $this->today ?? Date_Offset::today();
+        $earliest = Date_Offset::resolve( (string) ( $field->attributes['earliest'] ?? '' ), $today );
+        $latest   = Date_Offset::resolve( (string) ( $field->attributes['latest'] ?? '' ), $today );
+        if ( null !== $earliest && $value < $earliest ) {
+            /* translators: %s: earliest allowed date. */
+            return $this->failure( '', sprintf( __( 'Date must not be before %s.', 'jp-form-builder' ), $format->format( $earliest ) ) );
+        }
+        if ( null !== $latest && $value > $latest ) {
+            /* translators: %s: latest allowed date. */
+            return $this->failure( '', sprintf( __( 'Date must not be after %s.', 'jp-form-builder' ), $format->format( $latest ) ) );
+        }
+        return $this->success( $value );
     }
 
     /** @return array{value: string, errors: array<string,string>} */

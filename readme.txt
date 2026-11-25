@@ -16,7 +16,7 @@ JayPee Solutions Form Builder replaces WPForms Lite and WP Mail SMTP with one le
 
 **Features**
 
-* Forms as blocks: Name, Email, Phone, Address, Text, Select, Radio buttons, Checkboxes, Textarea and Consent fields, placed on pages with the Form block. Conditional groups show Fields only while an earlier answer calls for them.
+* Forms as blocks: Name, Email, Phone, Address, Text, Select, Radio buttons, Checkboxes, Date, Textarea and Consent fields, placed on pages with the Form block. Conditional groups show Fields only while an earlier answer calls for them.
 * Accessible markup: labels, fieldsets, error summary with focus, status message, keyboard operable; inherits your theme's fonts and colours.
 * SMTP settings on the settings page, as `JP_FORM_BUILDER_*` constants in `wp-config.php` or with WP-CLI. Constants lock the field; secrets are encrypted and never shown.
 * Notification mail with Reply-To set to the sender, optional Confirmation mail, HTML mail layout and Body templates with preview, test mail.

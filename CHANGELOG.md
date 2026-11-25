@@ -10,6 +10,9 @@ extracts it as the GitHub release notes and fails without it.
 
 ## [Unreleased]
 
+### Added
+- Date Field: visitors type a date in the Form language's format (`TT.MM.JJJJ` in German, `YYYY-MM-DD` otherwise) with live validation, or pick it from the browser's calendar behind an icon. Editors can set the earliest and latest selectable date and the date the calendar opens on, each as a fixed date or relative to today (`now`, `-1y`, `+30d`, `+2w`, `6m`). Offsets use the site timezone and are checked on the server; mails show the date in the Form language's format.
+
 ## [1.4.0] - 2026-11-24
 
 ### Added

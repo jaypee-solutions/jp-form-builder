@@ -63,6 +63,8 @@ require_once __DIR__ . '/includes/class-form-repository.php';
 require_once __DIR__ . '/includes/class-countries.php';
 require_once __DIR__ . '/includes/class-text.php';
 require_once __DIR__ . '/includes/class-phone-normalizer.php';
+require_once __DIR__ . '/includes/class-date-offset.php';
+require_once __DIR__ . '/includes/class-date-format.php';
 require_once __DIR__ . '/includes/class-field-validator.php';
 require_once __DIR__ . '/includes/class-client-ip.php';
 require_once __DIR__ . '/includes/class-rate-limiter.php';

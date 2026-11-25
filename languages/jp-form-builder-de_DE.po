@@ -2033,3 +2033,96 @@ msgstr "Text"
 msgctxt "block title"
 msgid "Textarea"
 msgstr "Mehrzeiliger Text"
+
+#: includes/class-field-labels.php:28 blocks/address/index.js:1
+#: blocks/checkbox/index.js:1 blocks/conditional/index.js:1
+#: blocks/consent/index.js:1 blocks/date/index.js:1 blocks/email/index.js:1
+#: blocks/embed/index.js:1 blocks/form/index.js:1 blocks/name/index.js:1
+#: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1
+msgid "Date"
+msgstr "Datum"
+
+#. translators: %s: expected date format, for example YYYY-MM-DD.
+#: includes/class-field-validator.php:194 blocks/embed/view.js:2
+#, php-format
+msgid "Please enter a valid date (%s)."
+msgstr "Bitte geben Sie ein gültiges Datum ein (%s)."
+
+#. translators: %s: earliest allowed date.
+#. translators: %s: the earliest allowed date.
+#: includes/class-field-validator.php:202 blocks/embed/view.js:3
+#, php-format
+msgid "Date must not be before %s."
+msgstr "Das Datum darf nicht vor dem %s liegen."
+
+#. translators: %s: latest allowed date.
+#. translators: %s: the latest allowed date.
+#: includes/class-field-validator.php:206 blocks/embed/view.js:4
+#, php-format
+msgid "Date must not be after %s."
+msgstr "Das Datum darf nicht nach dem %s liegen."
+
+#: includes/class-form-renderer.php:161
+msgid "Choose date from calendar"
+msgstr "Datum im Kalender auswählen"
+
+#: blocks/date/index.js:1
+msgid ""
+"Invalid date or offset. Use YYYY-MM-DD or an offset such as now, -1y, +30d, "
+"+2w, 6m."
+msgstr "Ungültiges Datum oder ungültiger Datumsversatz. Verwenden Sie JJJJ-MM-TT oder einen Datumsversatz wie now, -1y, +30d, +2w, 6m."
+
+#. translators: %s: a date in the display format
+#: blocks/date/index.js:2
+msgid "Resolves to %s today."
+msgstr "Entspricht heute dem %s."
+
+#: blocks/date/index.js:2
+msgid "Empty: no limit."
+msgstr "Leer: keine Begrenzung."
+
+#: blocks/date/index.js:2
+msgid ""
+"Each date is a fixed date (YYYY-MM-DD) or an offset from today: now, -1y, "
+"+30d, +2w, 6m (d days, w weeks, m months, y years)."
+msgstr "Jedes Datum ist ein festes Datum (JJJJ-MM-TT) oder ein Datumsversatz ab heute: now, -1y, +30d, +2w, 6m (d Tage, w Wochen, m Monate, y Jahre)."
+
+#: blocks/date/index.js:2
+msgid "Earliest selectable date"
+msgstr "Frühestes wählbares Datum"
+
+#: blocks/date/index.js:2
+msgid "Latest selectable date"
+msgstr "Spätestes wählbares Datum"
+
+#: blocks/date/index.js:2
+msgid ""
+"The earliest date is later than the latest date: no date can be selected."
+msgstr "Das früheste Datum liegt nach dem spätesten Datum: Es kann kein Datum ausgewählt werden."
+
+#: blocks/date/index.js:2
+msgid "Opening date"
+msgstr "Startdatum"
+
+#. translators: 1: earliest date, 2: latest date
+#: blocks/date/index.js:3
+msgid "%1$s to %2$s"
+msgstr "%1$s bis %2$s"
+
+#: blocks/date/index.js:3
+msgid "From %s"
+msgstr "Ab %s"
+
+#: blocks/date/index.js:3
+msgid "Until %s"
+msgstr "Bis %s"
+
+#: blocks/date/index.js:3
+msgid "No date can be selected."
+msgstr "Es kann kein Datum ausgewählt werden."
+
+#: blocks/date/block.json
+msgctxt "block title"
+msgid "Date"
+msgstr "Datum"
