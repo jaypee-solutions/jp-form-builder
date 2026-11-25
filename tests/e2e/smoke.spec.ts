@@ -1,13 +1,14 @@
-import { login } from './support/auth';
 import { test, expect } from './support/fixtures';
+import { login } from './support/auth';
 
 test.describe( 'JayPee Solutions Form Builder — smoke', () => {
 	test( 'the plugin is active and its Updates page loads', async ( { page } ) => {
 		await login( page );
 
 		await page.goto( '/wp-admin/plugins.php' );
+		// `:not(.plugin-update-tr)`: an available update adds a second, also `.active` row.
 		await expect(
-			page.locator( 'tr.active', { hasText: 'JayPee Solutions Form Builder' } )
+			page.locator( 'tr.active:not(.plugin-update-tr)', { hasText: 'JayPee Solutions Form Builder' } )
 		).toBeVisible();
 
 		await page.goto( '/wp-admin/options-general.php?page=jp-form-builder-updates' );

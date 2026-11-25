@@ -1,4 +1,4 @@
-import type { Locator } from '@playwright/test';
+import type { Frame, Locator } from '@playwright/test';
 import { login } from './support/auth';
 import { test, expect, type Page } from './support/fixtures';
 import { wpCli } from './support/wp-cli';
@@ -68,6 +68,50 @@ async function box( locator: Locator ): Promise<Box> {
 function sideBySide( first: Box, second: Box ): boolean {
 	return Math.abs( first.y - second.y ) < 2 && second.x > first.x + first.width - 1;
 }
+
+// What a classic theme or wp-admin's forms.css sets on bare form controls.
+const HOSTILE_CONTROL_RULES = `
+	input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+		margin: 9px; padding: 2px; min-height: 0; border: 3px solid rgb(255, 0, 0); border-radius: 0;
+		background: rgb(255, 255, 0) none; box-shadow: 0 0 0 4px rgb(0, 0, 255);
+		font-size: 9px; line-height: 1; color: rgb(0, 128, 0);
+	}
+`;
+const CONTROL_PROPERTIES = [
+	'margin-top',
+	'padding-top',
+	'padding-left',
+	'min-height',
+	'border-top-width',
+	'border-top-color',
+	'border-top-left-radius',
+	'background-color',
+	'background-image',
+	'box-shadow',
+	'font-size',
+	'line-height',
+	'color',
+];
+
+async function controlStyles( controls: Locator ): Promise<Record<string, string>[]> {
+	return controls.evaluateAll(
+		( elements, properties ) =>
+			elements.map( ( element ) => {
+				const style = getComputedStyle( element );
+				return Object.fromEntries( properties.map( ( property ) => [ property, style.getPropertyValue( property ) ] ) );
+			} ),
+		CONTROL_PROPERTIES
+	);
+}
+
+// Loads wp-admin's own forms.css plus classic theme rules, as a non-iframed editor or a theme would.
+async function addHostileControlRules( scope: Page | Frame ): Promise<void> {
+	await scope.addStyleTag( { url: '/wp-admin/css/forms.css' } );
+	await scope.addStyleTag( { content: HOSTILE_CONTROL_RULES } );
+	await scope.evaluate( () => document.body.classList.add( 'wp-core-ui' ) );
+}
+
+const FIELD_CONTROLS = '.jp-form-builder__field :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea)';
 
 test.describe( 'Form styling', () => {
 	test( 'a style variation, a Field color and Field widths reach the front end', async ( { page } ) => {
@@ -148,6 +192,28 @@ test.describe( 'Form styling', () => {
 		await expect( page.getByRole( 'button', { name: 'Card', exact: true } ) ).toBeVisible();
 		await expect( page.getByRole( 'button', { name: 'Liquid Glass', exact: true } ) ).toBeVisible();
 		await expect( page.getByRole( 'heading', { name: 'Typography' } ) ).toBeVisible();
+	} );
+
+	test( 'theme and wp-admin control rules cannot reshape Fields on the page or in the editor', async ( { page } ) => {
+		await page.goto( FORM_PAGE );
+		const pageControls = page.locator( FIELD_CONTROLS );
+		const onPage = await controlStyles( pageControls );
+		expect( onPage.length ).toBeGreaterThan( 2 );
+		await addHostileControlRules( page );
+		expect( await controlStyles( pageControls ) ).toEqual( onPage );
+
+		await login( page );
+		const pageId = wpCli( 'post', 'list', '--post_type=page', '--name=e2e-contact-page', '--field=ID' );
+		await openInEditor( page, pageId, 'jp-form-builder/embed' );
+		const canvasElement = page.locator( 'iframe[name="editor-canvas"]' );
+		await expect( canvasElement ).toBeVisible();
+		const canvas = ( await ( await canvasElement.elementHandle() )?.contentFrame() ) as Frame;
+		const editorControls = canvas.locator( FIELD_CONTROLS );
+		// The embed renders server-side; wait for its Fields, not only the block.
+		await expect( editorControls.first() ).toBeVisible();
+		const inEditor = await controlStyles( editorControls );
+		await addHostileControlRules( canvas );
+		expect( await controlStyles( editorControls ) ).toEqual( inEditor );
 	} );
 
 	for ( const variation of VARIATIONS ) {

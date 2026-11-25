@@ -1,17 +1,17 @@
 node_modules/
-vendor/
-build/
+/vendor/
+/build/
 /blocks/
 /admin/build/
-playwright-report/
-test-results/
-.wp-env/
-.phpunit.cache/
+/playwright-report/
+/test-results/
+/.wp-env/
+/.phpunit.cache/
 .phpunit.result.cache
 languages/*.mo
 *.log
 .DS_Store
-.agents/
+/.agents/
 
 # APM dependencies
 apm_modules/
