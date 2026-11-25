@@ -205,12 +205,14 @@ test.describe( 'Form styling', () => {
 		await login( page );
 		const pageId = wpCli( 'post', 'list', '--post_type=page', '--name=e2e-contact-page', '--field=ID' );
 		await openInEditor( page, pageId, 'jp-form-builder/embed' );
-		const canvas = page.frame( { name: 'editor-canvas' } );
-		expect( canvas ).not.toBeNull();
-		const editorControls = ( canvas as Frame ).locator( FIELD_CONTROLS );
+		const canvasElement = page.locator( 'iframe[name="editor-canvas"]' );
+		await expect( canvasElement ).toBeVisible();
+		const canvas = ( await ( await canvasElement.elementHandle() )?.contentFrame() ) as Frame;
+		const editorControls = canvas.locator( FIELD_CONTROLS );
+		// The embed renders server-side; wait for its Fields, not only the block.
 		await expect( editorControls.first() ).toBeVisible();
 		const inEditor = await controlStyles( editorControls );
-		await addHostileControlRules( canvas as Frame );
+		await addHostileControlRules( canvas );
 		expect( await controlStyles( editorControls ) ).toEqual( inEditor );
 	} );
 
