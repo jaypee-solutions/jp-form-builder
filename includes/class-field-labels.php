@@ -25,6 +25,7 @@ final class Field_Labels {
             'email'    => __( 'Email', 'jp-form-builder' ),
             'phone'    => __( 'Phone', 'jp-form-builder' ),
             'address'  => __( 'Address', 'jp-form-builder' ),
+            'postcode' => __( 'Postcode', 'jp-form-builder' ),
             'country'  => __( 'Country', 'jp-form-builder' ),
             'text'     => __( 'Text', 'jp-form-builder' ),
             'select'   => __( 'Select', 'jp-form-builder' ),

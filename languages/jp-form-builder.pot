@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-25T11:10:24+00:00\n"
+"POT-Creation-Date: 2026-11-25T11:14:42+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: jp-form-builder\n"
@@ -164,7 +164,7 @@ msgid "United Kingdom"
 msgstr ""
 
 #: includes/class-field-labels.php:24
-#: includes/class-mail-preview-controller.php:177
+#: includes/class-mail-preview-controller.php:179
 #: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
@@ -176,6 +176,7 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -184,7 +185,7 @@ msgid "Name"
 msgstr ""
 
 #: includes/class-field-labels.php:25
-#: includes/class-mail-preview-controller.php:178
+#: includes/class-mail-preview-controller.php:180
 #: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
@@ -196,6 +197,7 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -214,6 +216,7 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -232,6 +235,7 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -240,7 +244,7 @@ msgid "Address"
 msgstr ""
 
 #: includes/class-field-labels.php:28
-#: includes/class-field-labels.php:53
+#: includes/class-field-labels.php:50
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
@@ -251,29 +255,32 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
+#: blocks/radio/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Postcode"
+msgstr ""
+
+#: includes/class-field-labels.php:29
+#: includes/class-field-labels.php:54
+#: blocks/address/index.js:1
+#: blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/country/index.js:1
+#: blocks/email/index.js:1
+#: blocks/embed/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
 #: blocks/textarea/index.js:1
 msgid "Country"
-msgstr ""
-
-#: includes/class-field-labels.php:29
-#: blocks/address/index.js:1
-#: blocks/checkbox/index.js:1
-#: blocks/conditional/index.js:1
-#: blocks/consent/index.js:1
-#: blocks/country/index.js:1
-#: blocks/email/index.js:1
-#: blocks/embed/index.js:1
-#: blocks/form/index.js:1
-#: blocks/name/index.js:1
-#: blocks/phone/index.js:1
-#: blocks/radio/index.js:1
-#: blocks/select/index.js:1
-#: blocks/text/index.js:1
-#: blocks/textarea/index.js:1
-msgid "Text"
 msgstr ""
 
 #: includes/class-field-labels.php:30
@@ -287,11 +294,12 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
 #: blocks/textarea/index.js:1
-msgid "Select"
+msgid "Text"
 msgstr ""
 
 #: includes/class-field-labels.php:31
@@ -305,11 +313,12 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
 #: blocks/textarea/index.js:1
-msgid "Radio buttons"
+msgid "Select"
 msgstr ""
 
 #: includes/class-field-labels.php:32
@@ -323,6 +332,26 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
+#: blocks/radio/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Radio buttons"
+msgstr ""
+
+#: includes/class-field-labels.php:33
+#: blocks/address/index.js:1
+#: blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/country/index.js:1
+#: blocks/email/index.js:1
+#: blocks/embed/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -330,8 +359,8 @@ msgstr ""
 msgid "Checkboxes"
 msgstr ""
 
-#: includes/class-field-labels.php:33
-#: includes/class-mail-preview-controller.php:179
+#: includes/class-field-labels.php:34
+#: includes/class-mail-preview-controller.php:181
 #: admin/build/settings.js:1
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
@@ -343,6 +372,7 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -350,7 +380,7 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: includes/class-field-labels.php:34
+#: includes/class-field-labels.php:35
 #: blocks/address/index.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
@@ -361,6 +391,7 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -368,80 +399,76 @@ msgstr ""
 msgid "Consent"
 msgstr ""
 
-#: includes/class-field-labels.php:43
+#: includes/class-field-labels.php:44
 #: blocks/name/index.js:1
 msgid "First name"
 msgstr ""
 
-#: includes/class-field-labels.php:45
+#: includes/class-field-labels.php:46
 #: blocks/name/index.js:1
 msgid "Last name"
 msgstr ""
 
-#: includes/class-field-labels.php:47
+#: includes/class-field-labels.php:48
 #: blocks/address/index.js:1
 msgid "Street and number"
 msgstr ""
 
-#: includes/class-field-labels.php:49
-#: blocks/address/index.js:1
-msgid "Postcode"
-msgstr ""
-
-#: includes/class-field-labels.php:51
+#: includes/class-field-labels.php:52
 #: blocks/address/index.js:1
 msgid "City"
 msgstr ""
 
-#: includes/class-field-validator.php:118
-#: includes/class-field-validator.php:128
-msgid "Please choose only from the available options."
-msgstr ""
-
-#: includes/class-field-validator.php:166
-#: blocks/embed/view.js:4
-msgid "Please enter a valid phone number."
-msgstr ""
-
-#: includes/class-field-validator.php:171
-#: includes/class-field-validator.php:268
-msgid "Please choose a valid country."
-msgstr ""
-
-#: includes/class-field-validator.php:176
-#: blocks/embed/view.js:4
-msgid "Please choose one of the available options."
-msgstr ""
-
-#: includes/class-field-validator.php:190
-#: blocks/embed/view.js:4
-msgid "Please accept to continue."
-msgstr ""
-
-#: includes/class-field-validator.php:195
-#: blocks/embed/view.js:3
-msgid "Please enter a valid email address."
-msgstr ""
-
-#: includes/class-field-validator.php:276
+#: includes/class-field-validator.php:192
+#: includes/class-field-validator.php:364
 #: blocks/embed/view.js:4
 msgid "Please enter a valid postcode."
 msgstr ""
 
-#: includes/class-field-validator.php:375
+#: includes/class-field-validator.php:206
+#: includes/class-field-validator.php:216
+msgid "Please choose only from the available options."
+msgstr ""
+
+#: includes/class-field-validator.php:254
+#: blocks/embed/view.js:4
+msgid "Please enter a valid phone number."
+msgstr ""
+
+#: includes/class-field-validator.php:259
+#: includes/class-field-validator.php:356
+msgid "Please choose a valid country."
+msgstr ""
+
+#: includes/class-field-validator.php:264
+#: blocks/embed/view.js:4
+msgid "Please choose one of the available options."
+msgstr ""
+
+#: includes/class-field-validator.php:278
+#: blocks/embed/view.js:4
+msgid "Please accept to continue."
+msgstr ""
+
+#: includes/class-field-validator.php:283
+#: blocks/embed/view.js:3
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: includes/class-field-validator.php:463
 #: blocks/embed/view.js:1
 msgid "This field"
 msgstr ""
 
 #. translators: %s: field label.
-#: includes/class-field-validator.php:380
+#: includes/class-field-validator.php:468
 #: blocks/embed/view.js:3
 #, php-format,js-format
 msgid "%s is required."
 msgstr ""
 
 #. translators: 1: field label, 2: maximum number of characters.
-#: includes/class-field-validator.php:385
+#: includes/class-field-validator.php:473
 #: blocks/embed/view.js:4
 #, php-format,js-format
 msgid "%1$s must not be longer than %2$d characters."
@@ -688,31 +715,31 @@ msgid_plural "%s Forms restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-form-renderer.php:47
+#: includes/class-form-renderer.php:52
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
 msgid "Submit"
 msgstr ""
 
-#: includes/class-form-renderer.php:48
+#: includes/class-form-renderer.php:53
 msgid "Leave this field empty"
 msgstr ""
 
-#: includes/class-form-renderer.php:52
+#: includes/class-form-renderer.php:57
 msgid "JavaScript is required to submit this form."
 msgstr ""
 
-#: includes/class-form-renderer.php:201
+#: includes/class-form-renderer.php:222
 #: blocks/consent/index.js:1
 msgid "privacy policy"
 msgstr ""
 
-#: includes/class-form-renderer.php:202
+#: includes/class-form-renderer.php:223
 #: blocks/consent/index.js:1
 msgid "I agree to the {privacy_policy}."
 msgstr ""
 
-#: includes/class-form-renderer.php:220
+#: includes/class-form-renderer.php:249
 #: blocks/country/index.js:1
 msgid "Please choose…"
 msgstr ""
@@ -751,23 +778,23 @@ msgstr ""
 msgid "Sampletown"
 msgstr ""
 
-#: includes/class-mail-preview-controller.php:161
 #: includes/class-mail-preview-controller.php:163
+#: includes/class-mail-preview-controller.php:165
 msgid "Sample option"
 msgstr ""
 
-#: includes/class-mail-preview-controller.php:163
+#: includes/class-mail-preview-controller.php:165
 msgid "Another option"
 msgstr ""
 
 #. translators: %s: UTC timestamp of the Submission.
-#: includes/class-mail-preview-controller.php:168
+#: includes/class-mail-preview-controller.php:170
 #: includes/class-submission-handler.php:222
 #, php-format
 msgid "Yes (%s)"
 msgstr ""
 
-#: includes/class-mail-preview-controller.php:170
+#: includes/class-mail-preview-controller.php:172
 msgid "Sample text"
 msgstr ""
 
@@ -1293,6 +1320,7 @@ msgstr ""
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1372,6 +1400,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1386,6 +1415,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1400,6 +1430,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1414,6 +1445,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1428,6 +1460,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1442,6 +1475,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1456,6 +1490,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1470,6 +1505,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1484,6 +1520,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1498,6 +1535,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1512,6 +1550,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1526,6 +1565,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1540,6 +1580,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -1554,6 +1595,7 @@ msgstr ""
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
 #: blocks/radio/index.js:1
 #: blocks/select/index.js:1
 #: blocks/text/index.js:1
@@ -2068,6 +2110,11 @@ msgstr ""
 #: blocks/phone/block.json
 msgctxt "block title"
 msgid "Phone"
+msgstr ""
+
+#: blocks/postcode/block.json
+msgctxt "block title"
+msgid "Postcode"
 msgstr ""
 
 #: blocks/radio/block.json

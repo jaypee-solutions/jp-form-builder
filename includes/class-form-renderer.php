@@ -19,6 +19,9 @@ final class Form_Renderer {
 
     private Condition_Evaluator $evaluator;
 
+    /** @var array<string,string> Country Field key by Postcode Field key for the Form being rendered (ADR 0018). */
+    private array $country_sources = [];
+
     public function __construct( ?Condition_Evaluator $evaluator = null ) {
         $this->evaluator = $evaluator ?? new Condition_Evaluator();
     }
@@ -32,6 +35,8 @@ final class Form_Renderer {
         if ( $instance < 1 ) {
             $instance = ++self::$instances;
         }
+
+        $this->country_sources = Postcode_Country::sources( $form->fields() );
 
         $attrs = $form->attributes;
         $html  = '<form method="post" class="jp-form-builder" data-form-id="' . esc_attr( (string) $form->id ) . '" data-rev="' . esc_attr( $form->rev ) . '" data-locale="' . esc_attr( determine_locale() ) . '" data-rest-root="' . esc_url( rest_url( 'jp-form-builder/v1/' ) ) . '" data-min-fill="' . esc_attr( (string) $min_fill ) . '"';
@@ -147,6 +152,22 @@ final class Form_Renderer {
         return $html . '</fieldset>';
     }
 
+    /**
+     * The attributes that carry a Postcode's rule: the key of its Country Field and every Country's pattern for view.js
+     * to pick from, or the German rule when the Form has no Country Field.
+     */
+    private function postcode_rule_attributes( Field_Definition $field ): string {
+        $source = $this->country_sources[ $field->key ] ?? '';
+        if ( '' === $source ) {
+            return ' pattern="' . esc_attr( Countries::postcode_pattern( 'DE' ) ) . '" maxlength="' . Field_Validator::GERMAN_POSTCODE_LENGTH . '" inputmode="numeric"';
+        }
+        $patterns = [];
+        foreach ( array_keys( Countries::all() ) as $code ) {
+            $patterns[ $code ] = Countries::postcode_pattern( $code );
+        }
+        return ' data-country-source="' . esc_attr( $source ) . '" data-postcode-patterns="' . esc_attr( (string) wp_json_encode( $patterns ) ) . '" maxlength="' . Field_Validator::MAX_POSTCODE_LENGTH . '"';
+    }
+
     private function render_field( int $form_id, int $instance, Field_Definition $field ): string {
         $attributes = $field->attributes;
         $id         = 'jpfb-' . $form_id . '-' . $instance . '-' . $field->key;
@@ -211,6 +232,14 @@ final class Form_Renderer {
                 $html .= '<option value="' . esc_attr( (string) ( $option['value'] ?? '' ) ) . '">' . esc_html( (string) ( $option['label'] ?? '' ) ) . '</option>';
             }
             $html .= '</select>';
+        } elseif ( 'postcode' === $field->type ) {
+            $html .= '<label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . $indicator . '</label>';
+            $html .= '<input type="text" id="' . esc_attr( $id ) . '" name="' . esc_attr( $field->key ) . '"' . $required_attribute . ' autocomplete="postal-code"';
+            $html .= $this->postcode_rule_attributes( $field );
+            if ( ! empty( $attributes['placeholder'] ) ) {
+                $html .= ' placeholder="' . esc_attr( (string) $attributes['placeholder'] ) . '"';
+            }
+            $html .= ' aria-describedby="' . esc_attr( $described ) . '">';
         } elseif ( 'country' === $field->type ) {
             // An empty default country offers a placeholder; a Field that is not required may then stay empty.
             $selected = (string) ( $attributes['defaultCountry'] ?? 'DE' );

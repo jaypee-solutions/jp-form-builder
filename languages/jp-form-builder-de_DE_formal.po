@@ -173,7 +173,7 @@ msgstr "Vereinigtes Königreich"
 #: blocks/conditional/index.js:1 blocks/consent/index.js:1
 #: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
 #: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/radio/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Name"
 msgstr "Name"
 
@@ -183,7 +183,7 @@ msgstr "Name"
 #: blocks/conditional/index.js:1 blocks/consent/index.js:1
 #: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
 #: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/radio/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Email"
 msgstr "E-Mail"
 
@@ -192,7 +192,7 @@ msgstr "E-Mail"
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
 #: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Phone"
 msgstr "Telefon"
 
@@ -201,7 +201,7 @@ msgstr "Telefon"
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
 #: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Address"
 msgstr "Adresse"
 
@@ -210,7 +210,7 @@ msgstr "Adresse"
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
 #: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Text"
 msgstr "Text"
 
@@ -219,7 +219,7 @@ msgstr "Text"
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
 #: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Select"
 msgstr "Auswahl"
 
@@ -228,7 +228,7 @@ msgstr "Auswahl"
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
 #: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Radio buttons"
 msgstr "Optionsfelder"
 
@@ -237,7 +237,7 @@ msgstr "Optionsfelder"
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
 #: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Checkboxes"
 msgstr "Kontrollkästchen"
 
@@ -247,7 +247,7 @@ msgstr "Kontrollkästchen"
 #: blocks/conditional/index.js:1 blocks/consent/index.js:1
 #: blocks/email/index.js:1 blocks/embed/index.js:1 blocks/form/index.js:1
 #: blocks/name/index.js:1 blocks/phone/index.js:1 blocks/radio/index.js:1
-#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/select/index.js:1 blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Message"
 msgstr "Nachricht"
 
@@ -256,7 +256,7 @@ msgstr "Nachricht"
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/embed/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
 #: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Consent"
 msgstr "Einwilligung"
 
@@ -272,7 +272,7 @@ msgstr "Nachname"
 msgid "Street and number"
 msgstr "Straße und Hausnummer"
 
-#: includes/class-field-labels.php:48 blocks/address/index.js:1
+#: includes/class-field-labels.php:48 blocks/address/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Postcode"
 msgstr "Postleitzahl"
 
@@ -280,7 +280,7 @@ msgstr "Postleitzahl"
 msgid "City"
 msgstr "Ort"
 
-#: includes/class-field-labels.php:52 blocks/address/index.js:1
+#: includes/class-field-labels.php:52 blocks/address/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Country"
 msgstr "Land"
 
@@ -1320,7 +1320,7 @@ msgstr "Wert"
 #: blocks/checkbox/index.js:1 blocks/consent/index.js:1 blocks/email/index.js:1
 #: blocks/form/index.js:1 blocks/name/index.js:1 blocks/phone/index.js:1
 #: blocks/radio/index.js:1 blocks/select/index.js:1 blocks/text/index.js:1
-#: blocks/textarea/index.js:1
+#: blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Label"
 msgstr "Beschriftung"
 
@@ -1404,21 +1404,21 @@ msgstr ""
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Field"
 msgstr "Feld"
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Field key"
 msgstr "Feldschlüssel"
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Another Field in this Form already uses this key. Choose a unique one."
 msgstr ""
 "Ein anderes Feld in diesem Formular verwendet diesen Schlüssel bereits. "
@@ -1427,7 +1427,7 @@ msgstr ""
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid ""
 "Used in mail placeholders. Lowercase letters, numbers and underscores; "
 "unique within this Form."
@@ -1438,63 +1438,63 @@ msgstr ""
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Required"
 msgstr "Pflichtfeld"
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "A consent checkbox is always required."
 msgstr "Ein Einwilligungs-Kontrollkästchen ist immer ein Pflichtfeld."
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Help text"
 msgstr "Hilfetext"
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Placeholder"
 msgstr "Platzhaltertext"
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Width"
 msgstr "Breite"
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Full width"
 msgstr "Volle Breite"
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Half width"
 msgstr "Halbe Breite"
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "One third"
 msgstr "Ein Drittel"
 
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Narrower Fields sit side by side and stack on narrow screens."
 msgstr ""
 "Schmalere Felder stehen nebeneinander und werden auf schmalen Bildschirmen "
@@ -1503,7 +1503,7 @@ msgstr ""
 #: blocks/address/index.js:1 blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1 blocks/email/index.js:1 blocks/name/index.js:1
 #: blocks/phone/index.js:1 blocks/radio/index.js:1 blocks/select/index.js:1
-#: blocks/text/index.js:1 blocks/textarea/index.js:1
+#: blocks/text/index.js:1 blocks/textarea/index.js:1 blocks/country/index.js:1 blocks/postcode/index.js:1
 msgid "Field options"
 msgstr "Feldoptionen"
 
@@ -1967,6 +1967,11 @@ msgctxt "block title"
 msgid "Consent"
 msgstr "Einwilligung"
 
+#: blocks/country/block.json
+msgctxt "block title"
+msgid "Country"
+msgstr "Land"
+
 #: blocks/email/block.json
 msgctxt "block title"
 msgid "Email"
@@ -2021,6 +2026,11 @@ msgstr "Name"
 msgctxt "block title"
 msgid "Phone"
 msgstr "Telefon"
+
+#: blocks/postcode/block.json
+msgctxt "block title"
+msgid "Postcode"
+msgstr "Postleitzahl"
 
 #: blocks/radio/block.json
 msgctxt "block title"

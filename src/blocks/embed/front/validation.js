@@ -1,6 +1,13 @@
 import { __, sprintf } from '@wordpress/i18n';
-import { fieldControls, fieldWrappers, isInHiddenGroup, labelOf } from './dom';
+import {
+	countryValueOf,
+	fieldControls,
+	fieldWrappers,
+	isInHiddenGroup,
+	labelOf,
+} from './dom';
 import { isPlausiblePhoneNumber } from './phone';
+import { isValidPostcode } from './postcode';
 import { choiceKind, controlValue } from './values';
 
 const codePoints = ( text ) => [ ...text ].length;
@@ -36,6 +43,13 @@ function invalidValueMessage( form, control, value, postcodePatterns ) {
 		! isPlausiblePhoneNumber( value, control.dataset.defaultRegion || 'DE' )
 	) {
 		return __( 'Please enter a valid phone number.', 'jp-form-builder' );
+	}
+	if (
+		! isValidPostcode( control, value, ( key ) =>
+			countryValueOf( form, key )
+		)
+	) {
+		return __( 'Please enter a valid postcode.', 'jp-form-builder' );
 	}
 	if ( control.tagName === 'SELECT' ) {
 		const isOption = [ ...control.options ].some(

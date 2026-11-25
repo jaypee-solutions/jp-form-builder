@@ -571,6 +571,31 @@ final class Test_Submissions extends WP_UnitTestCase {
         $this->assertStringNotContainsString( '>AT<', $body );
     }
 
+    public function test_a_postcode_is_checked_against_the_country_of_the_form(): void {
+        $form_id = $this->create_form(
+            '<!-- wp:jp-form-builder/form {"recipients":"team@example.test"} -->'
+            . '<!-- wp:jp-form-builder/postcode {"fieldName":"plz","label":"Postcode","required":true} /-->'
+            . '<!-- wp:jp-form-builder/text {"fieldName":"city"} /-->'
+            . '<!-- wp:jp-form-builder/country {"fieldName":"land","defaultCountry":""} /-->'
+            . '<!-- /wp:jp-form-builder/form -->'
+        );
+
+        $markup = do_blocks( '<!-- wp:jp-form-builder/embed {"formId":' . $form_id . '} /-->' );
+        $this->assertStringContainsString( 'name="plz" required autocomplete="postal-code" data-country-source="land"', $markup );
+
+        $wrong = $this->submit_group_form( $form_id, [ 'plz' => '86150', 'city' => 'Wien', 'land' => 'AT' ] );
+        $this->assertSame( 422, $wrong->get_status() );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $wrong->get_data()['data']['errors'] );
+        $this->assertCount( 0, $this->mails() );
+
+        $austrian = $this->submit_group_form( $form_id, [ 'plz' => '1010', 'city' => 'Wien', 'land' => 'AT' ] );
+        $this->assertSame( 200, $austrian->get_status() );
+        $this->assertStringContainsString( '1010', $this->mails()[0]['body'] );
+
+        $german_fallback = $this->submit_group_form( $form_id, [ 'plz' => '86150', 'city' => 'Augsburg', 'land' => '' ] );
+        $this->assertSame( 200, $german_fallback->get_status(), 'An empty Country counts as absent, so the German rule applies.' );
+    }
+
     public function test_the_mail_shows_the_option_labels_not_the_values(): void {
         $form_id = $this->create_form( self::GROUP_CONTENT );
 

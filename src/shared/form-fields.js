@@ -13,6 +13,7 @@ export const FIELD_TYPES = [
 	'email',
 	'phone',
 	'address',
+	'postcode',
 	'country',
 	'text',
 	'select',

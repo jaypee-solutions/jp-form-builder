@@ -154,6 +154,141 @@ final class FieldValidatorTest extends TestCase {
         $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $this->validate_one( $field, [ 'land' => 'XX' ] )['errors'] );
     }
 
+    /** @return array<string,array{string,string,bool}> The cases of tests/fixtures/postcodes.json, which tests/js/postcode.test.mjs also uses. */
+    public function postcode_cases(): array {
+        $cases = [];
+        foreach ( (array) json_decode( (string) file_get_contents( __DIR__ . '/fixtures/postcodes.json' ), true )['cases'] as $case ) {
+            $cases[ $case[0] . ' ' . $case[1] ] = $case;
+        }
+        return $cases;
+    }
+
+    public function test_the_postcode_fixture_lists_the_pattern_of_every_country(): void {
+        $patterns = (array) json_decode( (string) file_get_contents( __DIR__ . '/fixtures/postcodes.json' ), true )['patterns'];
+
+        $this->assertSame( array_keys( Countries::all() ), array_keys( $patterns ) );
+        foreach ( $patterns as $code => $pattern ) {
+            $this->assertSame( Countries::postcode_pattern( $code ), $pattern, $code );
+        }
+    }
+
+    /** @dataProvider postcode_cases */
+    public function test_postcode_follows_the_pattern_of_its_country( string $country, string $postcode, bool $valid ): void {
+        $form   = $this->form(
+            [
+                $this->field( 'postcode', 'plz' ),
+                $this->field( 'country', 'land', [ 'required' => false ] ),
+            ]
+        );
+        $result = $this->validator->validate_form( $form, [ 'plz' => $postcode, 'land' => $country ] );
+
+        if ( ! isset( Countries::all()[ $country ] ) && '' !== $country ) {
+            $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $result['errors'], 'An invalid Country skips the Postcode pattern.' );
+            return;
+        }
+        $this->assertSame( $valid ? [] : [ 'plz' => 'Please enter a valid postcode.' ], $result['errors'] );
+    }
+
+    public function test_postcode_without_a_country_field_uses_the_german_rule(): void {
+        $field = $this->field( 'postcode', 'plz', [ 'required' => true ] );
+
+        $this->assertSame( [ 'plz' => '86150' ], $this->validate_one( $field, [ 'plz' => ' 86150 ' ] )['values'] );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->validate_one( $field, [ 'plz' => '8615' ] )['errors'] );
+        $this->assertSame( [ 'plz' => 'Plz is required.' ], $this->validate_one( $field, [ 'plz' => '' ] )['errors'] );
+        $this->assertSame( [], $this->validator->validate_form( $this->form( [ $field ] ), [ 'plz' => '86150' ] )['errors'] );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->validator->validate_form( $this->form( [ $field ] ), [ 'plz' => 'AB1 2CD' ] )['errors'] );
+    }
+
+    public function test_optional_empty_postcode_is_accepted(): void {
+        $result = $this->validate_one( $this->field( 'postcode', 'plz' ), [] );
+
+        $this->assertSame( [], $result['errors'] );
+        $this->assertSame( [ 'plz' => '' ], $result['values'] );
+    }
+
+    /**
+     * @param array<int,Field_Definition|Conditional_Group> $items
+     * @param array<string,mixed>                           $submitted
+     * @return string[] Errors of the Form keyed by Field key.
+     */
+    private function postcode_errors( array $items, array $submitted ): array {
+        return $this->validator->validate_form( $this->form( $items ), $submitted )['errors'];
+    }
+
+    public function test_postcode_follows_a_preceding_country(): void {
+        $items = [ $this->field( 'country', 'land' ), $this->field( 'postcode', 'plz' ) ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'land' => 'AT', 'plz' => '1010' ] ) );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->postcode_errors( $items, [ 'land' => 'AT', 'plz' => '86150' ] ) );
+    }
+
+    public function test_postcode_follows_a_following_country(): void {
+        $items = [ $this->field( 'postcode', 'plz' ), $this->field( 'text', 'city' ), $this->field( 'country', 'land' ) ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'land' => 'CH', 'plz' => '8001' ] ) );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->postcode_errors( $items, [ 'land' => 'CH', 'plz' => '86150' ] ) );
+    }
+
+    public function test_postcode_follows_the_nearest_of_two_countries(): void {
+        $items = [
+            $this->field( 'country', 'bill_land' ),
+            $this->field( 'postcode', 'bill_plz' ),
+            $this->field( 'country', 'ship_land' ),
+            $this->field( 'postcode', 'ship_plz' ),
+        ];
+        $submitted = [ 'bill_land' => 'DE', 'bill_plz' => '86150', 'ship_land' => 'AT', 'ship_plz' => '1010' ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, $submitted ) );
+        $this->assertSame(
+            [ 'bill_plz' => 'Please enter a valid postcode.', 'ship_plz' => 'Please enter a valid postcode.' ],
+            $this->postcode_errors( $items, [ 'bill_plz' => '1010', 'ship_plz' => '86150' ] + $submitted )
+        );
+    }
+
+    public function test_a_hidden_country_counts_as_absent(): void {
+        $items = [
+            $this->field( 'radio', 'topic', [ 'options' => [ [ 'label' => 'Abroad', 'value' => 'abroad' ], [ 'label' => 'Home', 'value' => 'home' ] ] ] ),
+            $this->field( 'postcode', 'plz' ),
+            $this->trigger_group( 'abroad', $this->field( 'country', 'land' ) ),
+        ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'topic' => 'abroad', 'land' => 'AT', 'plz' => '1010' ] ), 'A shown Country applies.' );
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'topic' => 'home', 'land' => 'AT', 'plz' => '86150' ] ), 'A hidden Country falls back to Germany.' );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->postcode_errors( $items, [ 'topic' => 'home', 'land' => 'AT', 'plz' => '1010' ] ) );
+    }
+
+    public function test_an_invalid_country_skips_the_pattern_and_reports_its_own_error(): void {
+        $items = [ $this->field( 'postcode', 'plz' ), $this->field( 'country', 'land' ) ];
+
+        $this->assertSame( [ 'land' => 'Please choose a valid country.' ], $this->postcode_errors( $items, [ 'land' => 'US', 'plz' => '12345-6789' ] ) );
+        $this->assertSame(
+            [ 'land' => 'Please choose a valid country.', 'plz' => 'Plz must not be longer than 10 characters.' ],
+            $this->postcode_errors( $items, [ 'land' => 'US', 'plz' => '12345678901' ] )
+        );
+    }
+
+    public function test_an_empty_country_counts_as_absent(): void {
+        $items = [ $this->field( 'postcode', 'plz' ), $this->field( 'country', 'land' ) ];
+
+        $this->assertSame( [], $this->postcode_errors( $items, [ 'land' => '', 'plz' => '86150' ] ) );
+        $this->assertSame( [ 'plz' => 'Please enter a valid postcode.' ], $this->postcode_errors( $items, [ 'land' => '', 'plz' => '1010' ] ) );
+
+        $second = [ $this->field( 'postcode', 'plz' ), $this->field( 'country', 'empty_land' ), $this->field( 'country', 'land' ) ];
+        $this->assertSame( [], $this->postcode_errors( $second, [ 'empty_land' => '', 'land' => 'AT', 'plz' => '1010' ] ), 'The next Country takes over.' );
+    }
+
+    public function test_a_postcode_in_a_hidden_group_is_not_checked_and_a_condition_sees_a_valid_one(): void {
+        $items = [
+            $this->field( 'country', 'land' ),
+            $this->field( 'postcode', 'plz' ),
+            new Conditional_Group( new Condition( 'plz', 'is_filled', [] ), [ $this->field( 'text', 'note', [ 'required' => true ] ) ] ),
+        ];
+
+        $filled = $this->validator->validate_form( $this->form( $items ), [ 'land' => 'AT', 'plz' => '1010' ] );
+        $this->assertSame( [ 'note' => 'Note is required.' ], $filled['errors'] );
+        $this->assertSame( '1010', $filled['values']['plz'] );
+    }
+
     public function test_address(): void {
         $field = $this->address();
         $valid = [ 'street' => 'Hauptstr. 1', 'postcode' => '86150', 'city' => 'Augsburg', 'country' => 'DE' ];

@@ -18,6 +18,7 @@ final class Field_Validator {
     public const MAX_STREET_LENGTH     = 200;
     public const MAX_CITY_LENGTH       = 100;
     public const MAX_POSTCODE_LENGTH   = 10;
+    public const GERMAN_POSTCODE_LENGTH = 5;
     public const DEFAULT_TEXT_LENGTH   = 200;
     public const DEFAULT_TEXTAREA_LENGTH = 5000;
 
@@ -41,14 +42,15 @@ final class Field_Validator {
      *
      * @param Field_Definition[]  $fields    Fields of the Form.
      * @param array<string,mixed> $submitted Submitted `fields` map.
+     * @param array<string,string> $countries Country code by Postcode Field key; '' skips the pattern check, a Postcode that is not listed follows the German rule.
      * @return array{values: array<string,string|array<int|string,string>>, errors: array<string,string>}
      */
-    public function validate( array $fields, array $submitted ): array {
+    public function validate( array $fields, array $submitted, array $countries = [] ): array {
         $values = [];
         $errors = [];
 
         foreach ( $fields as $field ) {
-            $result = $this->validate_field( $field, $submitted[ $field->key ] ?? null );
+            $result = $this->validate_field( $field, $submitted[ $field->key ] ?? null, $countries[ $field->key ] ?? 'DE' );
 
             if ( [] === $result['errors'] ) {
                 $values[ $field->key ] = $result['value'];
@@ -67,31 +69,94 @@ final class Field_Validator {
 
     /**
      * Validates a Form: Fields inside a hidden Conditional group are neither required nor validated, and their
-     * values and errors are dropped. A Condition looks at the cleaned values of the Fields before it.
+     * values and errors are dropped. A Condition looks at the cleaned values of the Fields before it. A Postcode is
+     * checked against the Country Field it follows (ADR 0018), which needs the cleaned values of the whole Form.
      *
      * @param array<string,mixed> $submitted Submitted `fields` map.
      * @return array{values: array<string,string|array<int|string,string>>, errors: array<string,string>}
      */
     public function validate_form( Form_Definition $form, array $submitted ): array {
-        $checked  = $this->validate( $form->fields(), $submitted );
-        $resolved = $this->evaluator->resolve( $form->groups(), $checked['values'] );
-        $hidden   = array_flip( $resolved['hidden'] );
+        $fields    = $form->fields();
+        $postcodes = array_filter( $fields, static fn( Field_Definition $field ): bool => 'postcode' === $field->type );
+        // Conditions may look at a Postcode, and a Country may sit in a hidden group, so the Form is checked once without
+        // the Postcode patterns, then the Postcodes are checked against the Countries that are left.
+        $checked   = $this->validate( $fields, $submitted, array_fill_keys( array_column( $postcodes, 'key' ), '' ) );
+        $resolved  = $this->evaluator->resolve( $form->groups(), $checked['values'] );
+        $hidden    = array_flip( $resolved['hidden'] );
+
+        $values = $resolved['values'];
+        $errors = array_filter(
+            $checked['errors'],
+            static fn( string $error_key ): bool => ! isset( $hidden[ explode( '.', $error_key )[0] ] ),
+            ARRAY_FILTER_USE_KEY
+        );
+
+        if ( [] !== $postcodes ) {
+            $countries = $this->postcode_countries( $fields, $hidden, $submitted );
+            foreach ( $postcodes as $field ) {
+                if ( isset( $hidden[ $field->key ] ) ) {
+                    continue;
+                }
+                $result = $this->validate_postcode( $field, $this->scalar( $submitted[ $field->key ] ?? null ), $countries[ $field->key ] );
+                unset( $errors[ $field->key ], $values[ $field->key ] );
+                if ( [] === $result['errors'] ) {
+                    $values[ $field->key ] = $result['value'];
+                } else {
+                    $errors[ $field->key ] = $result['errors'][''];
+                }
+            }
+        }
 
         return [
-            'values' => $resolved['values'],
-            'errors' => array_filter(
-                $checked['errors'],
-                static fn( string $error_key ): bool => ! isset( $hidden[ explode( '.', $error_key )[0] ] ),
-                ARRAY_FILTER_USE_KEY
-            ),
+            'values' => $values,
+            'errors' => $errors,
         ];
     }
 
     /**
-     * @param mixed $raw Submitted value of the Field.
+     * The Country code each Postcode is checked against: that of its nearest usable Country Field, Germany without one,
+     * and '' (no pattern check) when that Country's value is invalid, because the Country reports its own error.
+     *
+     * @param Field_Definition[]  $fields    Every Field of the Form in document order.
+     * @param array<string,int>   $hidden    Keys of the Fields in hidden Conditional groups, as array keys.
+     * @param array<string,mixed> $submitted Submitted `fields` map.
+     * @return array<string,string> Country code by Postcode Field key.
+     */
+    private function postcode_countries( array $fields, array $hidden, array $submitted ): array {
+        // A Country Field that is hidden or left empty counts as absent.
+        $chosen = [];
+        $absent = [];
+        foreach ( $fields as $field ) {
+            if ( 'country' !== $field->type ) {
+                continue;
+            }
+            $chosen[ $field->key ] = Text::single_line( $this->scalar( $submitted[ $field->key ] ?? null ) );
+            if ( isset( $hidden[ $field->key ] ) || '' === $chosen[ $field->key ] ) {
+                $absent[ $field->key ] = true;
+            }
+        }
+
+        $sources   = Postcode_Country::sources( $fields, $absent );
+        $countries = [];
+        foreach ( $fields as $field ) {
+            if ( 'postcode' !== $field->type ) {
+                continue;
+            }
+            $code                     = isset( $sources[ $field->key ] ) ? $chosen[ $sources[ $field->key ] ] : 'DE';
+            $countries[ $field->key ] = isset( Countries::all()[ $code ] ) ? $code : '';
+        }
+        return $countries;
+    }
+
+    /**
+     * @param mixed  $raw     Submitted value of the Field.
+     * @param string $country Country code a Postcode is checked against; '' skips the pattern.
      * @return array{value: string|array<int|string,string>, errors: array<string,string>}
      */
-    private function validate_field( Field_Definition $field, $raw ): array {
+    private function validate_field( Field_Definition $field, $raw, string $country ): array {
+        if ( 'postcode' === $field->type ) {
+            return $this->validate_postcode( $field, $this->scalar( $raw ), $country );
+        }
         if ( 'checkbox' === $field->type ) {
             return $this->validate_checkbox( $field, $raw );
         }
@@ -102,6 +167,29 @@ final class Field_Validator {
             return $this->validate_address( $field, is_array( $raw ) ? $raw : [] );
         }
         return $this->validate_split_name( $field, is_array( $raw ) ? $raw : [] );
+    }
+
+    /** @param mixed $raw Submitted value; anything but a string counts as empty. */
+    private function scalar( $raw ): string {
+        return is_string( $raw ) ? $raw : '';
+    }
+
+    /**
+     * A Postcode matches the pattern of its Country; an unknown or empty code skips the pattern and limits the length.
+     *
+     * @return array{value: string, errors: array<string,string>}
+     */
+    private function validate_postcode( Field_Definition $field, string $raw, string $country ): array {
+        $value = Text::single_line( $raw );
+        if ( '' === $value ) {
+            return $this->is_required( $field ) ? $this->failure( '', $this->required_message( $this->label( $field ) ) ) : $this->success( '' );
+        }
+        if ( ! isset( Countries::all()[ $country ] ) ) {
+            return $this->check_length( $value, self::MAX_POSTCODE_LENGTH, $this->label( $field ) );
+        }
+        return 1 === preg_match( '~' . Countries::postcode_pattern( $country ) . '~D', $value )
+            ? $this->success( $value )
+            : $this->failure( '', __( 'Please enter a valid postcode.', 'jp-form-builder' ) );
     }
 
     /**

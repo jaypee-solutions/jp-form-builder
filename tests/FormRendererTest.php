@@ -99,6 +99,46 @@ final class FormRendererTest extends TestCase {
         self::assertSame( 1, preg_match_all( '~<option value="DE" selected=.selected.>~', $markup ) );
     }
 
+    public function test_postcode_names_its_nearest_country_field_and_carries_every_pattern(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'postcode', 'plz', [ 'label' => 'PLZ', 'required' => true, 'placeholder' => '86150' ] ),
+            new Field_Definition( 'country', 'land', [ 'label' => 'Land' ] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( '<label for="jpfb-12-1-plz">PLZ <span class="jp-form-builder__required"', $markup );
+        self::assertStringContainsString( '<input type="text" id="jpfb-12-1-plz" name="plz" required autocomplete="postal-code" data-country-source="land" data-postcode-patterns="', $markup );
+        self::assertStringContainsString( '&quot;AT&quot;:&quot;^\\\\d{4}$&quot;', $markup );
+        self::assertSame( 32, substr_count( $markup, '&quot;:&quot;^' ) );
+        self::assertStringContainsString( 'maxlength="' . Field_Validator::MAX_POSTCODE_LENGTH . '" placeholder="86150" aria-describedby="jpfb-12-1-plz-error">', $markup );
+        self::assertStringNotContainsString( 'inputmode', $markup );
+        self::assertStringNotContainsString( ' pattern=', $markup );
+    }
+
+    public function test_postcode_binds_to_the_nearest_country_of_each_block(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'country', 'bill_land', [] ),
+            new Field_Definition( 'postcode', 'bill_plz', [] ),
+            new Field_Definition( 'country', 'ship_land', [] ),
+            new Field_Definition( 'postcode', 'ship_plz', [] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertMatchesRegularExpression( '~name="bill_plz"[^>]*data-country-source="bill_land"~', $markup );
+        self::assertMatchesRegularExpression( '~name="ship_plz"[^>]*data-country-source="ship_land"~', $markup );
+    }
+
+    public function test_postcode_without_a_country_field_carries_the_german_rule(): void {
+        $form = new Form_Definition( 12, 'Contact', '1234567890abcdef', [], [
+            new Field_Definition( 'postcode', 'plz', [ 'label' => 'PLZ' ] ),
+        ] );
+        $markup = ( new Form_Renderer() )->render( $form, 1 );
+
+        self::assertStringContainsString( 'autocomplete="postal-code" pattern="^\\d{5}$" maxlength="5" inputmode="numeric"', $markup );
+        self::assertStringNotContainsString( 'data-country-source', $markup );
+        self::assertStringNotContainsString( 'data-postcode-patterns', $markup );
+    }
+
     public function test_empty_label_uses_a_translated_default(): void {
         $form = new Form_Definition( 12, 'Kontakt', '1234567890abcdef', [], [
             new Field_Definition( 'email', 'email_1', [ 'label' => '' ] ),
