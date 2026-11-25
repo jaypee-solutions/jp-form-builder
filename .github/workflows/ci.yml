@@ -73,6 +73,10 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: Install gettext
+        # compile-translations.sh builds languages/*.mo before integration and E2E runs.
+        run: sudo apt-get update && sudo apt-get install --yes gettext
+
       - name: Install Node dependencies
         run: npm ci
 
