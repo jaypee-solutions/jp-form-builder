@@ -12,6 +12,7 @@ final class Backup_Handler_Denied extends Exception {}
 final class Backup_Handler_Redirect extends Exception {}
 
 final class Test_Form_Backup extends WP_UnitTestCase {
+    use Plugin_Test_Helpers;
 
     private const FORM_CONTENT = '<!-- wp:jp-form-builder/form {"recipients":"team@example.test"} -->'
         . '<!-- wp:jp-form-builder/name {"fieldName":"name","required":true} /-->'
@@ -121,18 +122,16 @@ final class Test_Form_Backup extends WP_UnitTestCase {
         $published = $this->create_form( self::FORM_CONTENT, 'publish', 'Published' );
         $draft     = $this->create_form( self::OTHER_CONTENT, 'draft', 'Draft' );
         $trashed   = $this->create_form( self::FORM_CONTENT, 'trash', 'Trashed' );
-        $box       = new \JayPee\FormBuilder\Secret_Box();
-        update_option(
-            'jp_form_builder_settings',
+        $this->save_settings(
             [
                 'smtp_host'            => 'mail.example.test',
                 'smtp_port'            => 999,
-                'smtp_password'        => $box->encrypt( 'hunter2' ),
-                'turnstile_secret_key' => $box->encrypt( 'cf-secret' ),
+                'smtp_password'        => 'hunter2',
+                'turnstile_secret_key' => 'cf-secret',
             ]
         );
 
-        $document = json_decode( ( new \JayPee\FormBuilder\Form_Backup() )->export_json(), true );
+        $document = json_decode( ( new \JayPee\FormBuilder\Form_Backup() )->export_json(), true ); // test-seam: the download handler echoes export_json() and then exits.
 
         $this->assertSame( 'jp-form-builder-backup', $document['format'] );
         $this->assertSame( 1, $document['version'] );
@@ -148,7 +147,7 @@ final class Test_Form_Backup extends WP_UnitTestCase {
     public function test_export_delete_restore_keeps_the_id_so_the_embed_renders_again(): void {
         $form_id = $this->create_form();
         $page_id = self::factory()->post->create( [ 'post_type' => 'page', 'post_content' => $this->embed_markup( $form_id ) ] );
-        $json    = ( new \JayPee\FormBuilder\Form_Backup() )->export_json();
+        $json    = ( new \JayPee\FormBuilder\Form_Backup() )->export_json(); // test-seam: the download handler echoes export_json() and then exits.
         $this->assertStringContainsString( '"settings": {}', $json );
         $this->assertStringContainsString( '<form', do_blocks( get_post( $page_id )->post_content ) );
 
@@ -267,7 +266,7 @@ final class Test_Form_Backup extends WP_UnitTestCase {
             [ 'smtp_host' => 'dry.example.test' ]
         );
 
-        $report = ( new \JayPee\FormBuilder\Form_Backup() )->restore( $json, true, true );
+        $report = ( new \JayPee\FormBuilder\Form_Backup() )->restore( $json, true, true ); // test-seam: dry runs exist only in WP-CLI, which PHPUnit does not load.
 
         $this->assertTrue( $report['dry_run'] );
         $this->assertSame( [ $existing, 910020 ], array_column( $report['restored'], 'id' ) );
@@ -279,7 +278,7 @@ final class Test_Form_Backup extends WP_UnitTestCase {
     }
 
     public function test_settings_restore_leaves_secrets_locked_and_unknown_keys_alone(): void {
-        ( new \JayPee\FormBuilder\Settings() )->save( [ 'smtp_host' => 'old.example.test', 'smtp_password' => 'keep-me' ] );
+        $this->save_settings( [ 'smtp_host' => 'old.example.test', 'smtp_password' => 'keep-me' ] );
 
         $report = $this->upload(
             $this->document(
@@ -297,7 +296,7 @@ final class Test_Form_Backup extends WP_UnitTestCase {
             )
         );
 
-        $settings = new \JayPee\FormBuilder\Settings();
+        $settings = new \JayPee\FormBuilder\Settings(); // test-seam: reads the decrypted values the mailer would use.
         $stored   = get_option( 'jp_form_builder_settings' );
         $this->assertSame( [ 'smtp_host', 'smtp_user', 'smtp_encryption' ], $report['settings']['restored'] );
         $this->assertSame( [ 'smtp_password', 'turnstile_secret_key', 'm365_client_secret', 'smtp_port', 'unknown_key' ], array_keys( $report['settings']['skipped'] ) );
