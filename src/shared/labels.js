@@ -14,6 +14,8 @@ export function defaultLabel( type ) {
 			return __( 'Postcode', 'jp-form-builder' );
 		case 'country':
 			return __( 'Country', 'jp-form-builder' );
+		case 'date':
+			return __( 'Date', 'jp-form-builder' );
 		case 'text':
 			return __( 'Text', 'jp-form-builder' );
 		case 'select':

@@ -15,4 +15,4 @@ A Postcode Field validates against the postcode rule of a Country, and a Country
 
 # Citations
 
-[1] ADR file: `docs/adr/0018-postcode-follows-nearest-country-field.md`
+[1] ADR file: `docs/adr/0019-postcode-follows-nearest-country-field.md`

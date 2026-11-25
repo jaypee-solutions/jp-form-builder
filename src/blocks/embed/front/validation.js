@@ -1,4 +1,5 @@
 import { __, sprintf } from '@wordpress/i18n';
+import { dateIssueMessage } from './date';
 import {
 	countryValueOf,
 	fieldControls,
@@ -50,6 +51,9 @@ function invalidValueMessage( form, control, value ) {
 		)
 	) {
 		return __( 'Please enter a valid postcode.', 'jp-form-builder' );
+	}
+	if ( control.dataset.dateFormat ) {
+		return dateIssueMessage( control );
 	}
 	if ( control.tagName === 'SELECT' ) {
 		const isOption = [ ...control.options ].some(

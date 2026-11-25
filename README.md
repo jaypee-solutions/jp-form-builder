@@ -4,7 +4,7 @@ A privacy-first WordPress plugin for contact-style forms, built as a lean replac
 
 ## What it does
 
-- **Forms as blocks.** Forms are edited in the block editor under **Forms** and placed on pages with the **Form** block. Fields: Name (single or first/last), Email, Phone (normalised to E.164), Postcode (checked against the nearest Country), Country (32 countries), Text, Select, Radio buttons, Checkboxes, Textarea and Consent with a privacy-policy link. The core Columns and Group blocks lay Fields out. A [Conditional group](#conditional-groups) shows Fields only while an earlier answer calls for them. Every Field has a label, required flag, help text and, where it fits, a placeholder.
+- **Forms as blocks.** Forms are edited in the block editor under **Forms** and placed on pages with the **Form** block. Fields: Name (single or first/last), Email, Phone (normalised to E.164), Postcode (checked against the nearest Country), Country (32 countries), Text, Select, Radio buttons, Checkboxes, Date, Textarea and Consent with a privacy-policy link. The core Columns and Group blocks lay Fields out. A [Conditional group](#conditional-groups) shows Fields only while an earlier answer calls for them. Every Field has a label, required flag, help text and, where it fits, a placeholder.
 - **Postcode and Country.** A Postcode Field is checked against the rule of the Country Field nearest to it: the closest one before it in the Form, else the closest one after it (so a Country that comes last in an [address in German order](#address-in-german-order) still counts). A Country that is hidden by a Conditional group or left empty does not count; without a usable Country the Postcode must be five digits, the German rule. The Country Field is a select of 32 countries with a default country (or a "Please choose…" entry) and drives Conditions like a Select.
 - **Accessible and theme-friendly.** Labels, fieldsets, `aria-describedby`/`aria-invalid`, a focused error summary with links, a `role="status"` success message, full keyboard use. The CSS inherits fonts and colours; the button uses `wp-element-button`. Four styles, the core design tools and Field widths let you adapt the look (see [Styling](#styling)).
 - **Mail by SMTP.** Notification to the Recipients with Reply-To set to the Submitter, an optional Confirmation to the Submitter, HTML mail with a plain-text alternative, editable Mail layout and Body templates, test mail, redacted failure log.
@@ -142,6 +142,20 @@ There is no Address Field: with the core **Columns** and **Group** layout blocks
 3. **Country**, with *Default country* Germany.
 
 Because the Country comes after the Postcode, the Postcode follows it; put a Country before the Postcode instead for another order. A Condition can look at any of these Fields.
+
+## Date field
+
+The **Date** Field takes a typed date, checked while typing, or a date picked from the browser's calendar behind the icon. The expected format is the placeholder: `TT.MM.JJJJ` when the Form's language is German, `YYYY-MM-DD` otherwise. The Submission carries the ISO date; mails show it in the format of the Form's language. Years run from 1900 to 2100. Without browser support for the calendar (`showPicker`), the icon is hidden and typing still works.
+
+In the Form editor a Date Field has three optional settings. Each takes a fixed date (`2026-12-31`) or a **date offset** relative to today:
+
+| Setting | Meaning |
+| --- | --- |
+| Earliest selectable date | Dates before it are rejected |
+| Latest selectable date | Dates after it are rejected |
+| Opening date | The date the calendar opens on while the Field is empty; it never fills the Field and is moved into the allowed range |
+
+Date offsets are `now` (or `today`) and `+`/`-` a number with one unit: `d` days, `w` weeks, `m` months, `y` years, for example `-1y`, `+30d`, `+2w`, `6m`. Offsets do not chain; month and year steps stop at the month end (31 Jan + 1 month = 28 Feb). "Today" is the date in the site's timezone (Settings → General). The server checks every window itself, with the offsets resolved when the Submission arrives, so cached pages never hold stale limits. A window whose earliest date is later than its latest date rejects every value; the editor warns about it. Date Fields cannot be the source of a Condition.
 
 ## Conditional groups
 

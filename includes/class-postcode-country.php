@@ -1,6 +1,6 @@
 <?php
 /**
- * Binds each Postcode Field to its Country Field (ADR 0018).
+ * Binds each Postcode Field to its Country Field (ADR 0019).
  *
  * @package JayPee\FormBuilder
  */

@@ -55,7 +55,7 @@ final class Form_Definition_Parser {
      *
      * @param array<string,mixed> $block  The group block.
      * @param array<string,int>   $counts Fields seen per type; updated.
-     * @param array<string,true>  $keys   Field keys taken so far; updated.
+     * @param array<string,string>  $keys   Field type per Field key taken so far; updated.
      */
     private function parse_group( array $block, array &$counts, array &$keys ): Conditional_Group {
         $attrs    = $this->defaults->merge( Form_Blocks::CONDITIONAL, $block['attrs'] ?? [] );
@@ -63,7 +63,7 @@ final class Form_Definition_Parser {
         $source   = Field_Key::normalize( (string) ( $attrs['sourceField'] ?? '' ) );
         $operator = (string) ( $attrs['operator'] ?? '' );
         $values   = is_array( $attrs['values'] ?? null ) ? array_values( array_filter( $attrs['values'], 'is_string' ) ) : [];
-        $valid    = '' !== $source && isset( $earlier[ $source ] ) && in_array( $operator, Condition::OPERATORS, true );
+        $valid    = '' !== $source && isset( $earlier[ $source ] ) && 'date' !== $earlier[ $source ] && in_array( $operator, Condition::OPERATORS, true );
 
         $items = [];
         foreach ( $block['innerBlocks'] ?? [] as $child ) {
@@ -79,7 +79,7 @@ final class Form_Definition_Parser {
      * @param array<string,mixed> $block        Any child of the Form, of a group or of a layout block.
      * @param bool                $allow_groups Whether a Conditional group may sit here; only the Form itself allows it.
      * @param array<string,int>   $counts       Fields seen per type; updated.
-     * @param array<string,true>  $keys         Field keys taken so far; updated.
+     * @param array<string,string>  $keys         Field type per Field key taken so far; updated.
      * @return Field_Definition|Conditional_Group|Layout_Block|array<string,mixed>|null
      */
     private function parse_child( array $block, bool $allow_groups, array &$counts, array &$keys ) {
@@ -99,7 +99,7 @@ final class Form_Definition_Parser {
      *
      * @param array<string,mixed> $block  The layout block.
      * @param array<string,int>   $counts Fields seen per type; updated.
-     * @param array<string,true>  $keys   Field keys taken so far; updated.
+     * @param array<string,string>  $keys   Field type per Field key taken so far; updated.
      */
     private function parse_layout( array $block, array &$counts, array &$keys ): Layout_Block {
         $children = $block['innerBlocks'] ?? [];
@@ -124,7 +124,7 @@ final class Form_Definition_Parser {
     /**
      * @param array<string,mixed> $block  A Field block or a pass-through block; any other block yields null.
      * @param array<string,int>   $counts Fields seen per type; updated.
-     * @param array<string,true>  $keys   Field keys taken so far; updated.
+     * @param array<string,string>  $keys   Field type per Field key taken so far; updated.
      * @return Field_Definition|array<string,mixed>|null
      */
     private function parse_item( array $block, array &$counts, array &$keys ) {
@@ -149,7 +149,7 @@ final class Form_Definition_Parser {
             $key = $base . '_' . $suffix;
             ++$suffix;
         }
-        $keys[ $key ] = true;
+        $keys[ $key ] = $type;
         if ( 'consent' === $type ) {
             $attrs['required'] = true;
         }

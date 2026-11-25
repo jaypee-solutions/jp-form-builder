@@ -16,6 +16,7 @@ extracts it as the GitHub release notes and fails without it.
 - Postcode Field: one text input, checked on the server and in the browser against the postcode rule of the Country Field nearest to it (the closest one before it, else the closest one after it). A Country that is hidden by a Conditional group or left empty does not count; without a usable Country the German five-digit rule applies.
 - Country Field: a select of the 32 supported countries with a default country (or a "Please choose…" entry); the mail shows the country name.
 - Country Conditions: a Conditional group can test a Country Field with *is*, *is not* and *is one of*.
+- Date Field: visitors type a date in the Form language's format (`TT.MM.JJJJ` in German, `YYYY-MM-DD` otherwise) with live validation, or pick it from the browser's calendar behind an icon. Editors can set the earliest and latest selectable date and the date the calendar opens on, each as a fixed date or relative to today (`now`, `-1y`, `+30d`, `+2w`, `6m`). Offsets use the site timezone and are checked on the server; mails show the date in the Form language's format.
 
 ### Removed
 - **Breaking:** the Address Field. Build an address from Text, Postcode and Country Fields, arranged with the Columns and Group layout blocks (see the "Address in German order" recipe in the README). Saved Forms lose their address block; there is no migration.

@@ -10,5 +10,5 @@ A Postcode Field validates against the postcode rule of a Country, and a Country
 
 - An explicit "Country field" setting on the Postcode: rejected for now. It needs an inspector control and handling of dangling keys, and the nearest rule covers a single address and side-by-side billing and shipping blocks. Add it if the nearest rule proves too implicit.
 - Preceding Country only: rejected. It breaks the usual order of Postcode, City, Country.
-- Keeping the composite Address Field: rejected, see ADR 0019.
+- Keeping the composite Address Field: rejected, see ADR 0020.
 - Germany only, no Country binding: rejected. Address already validated per Country, and dropping that would be a regression.

@@ -217,6 +217,9 @@ final class Submission_Handler {
         if ( 'country' === $field->type ) {
             return Countries::all()[ $value ] ?? $value;
         }
+        if ( 'date' === $field->type ) {
+            return Date_Format::for_locale( determine_locale() )->format( $value );
+        }
         return in_array( $field->type, [ 'select', 'radio' ], true ) ? $this->option_label( $field, $value ) : $value;
     }
 

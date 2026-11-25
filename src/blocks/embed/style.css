@@ -290,6 +290,64 @@
 	border-color: var(--jpfb-focus-color);
 }
 
+/*
+ * Date field: the text input with the calendar icon button inside its end
+ * edge. The icon button only exists for browsers that can open a native date
+ * picker; the native input stays invisible below the field so the picker
+ * opens next to it.
+ */
+.jp-form-builder__date {
+	position: relative;
+}
+
+.wp-block-jp-form-builder-embed .jp-form-builder .jp-form-builder__field .jp-form-builder__date:has(.jp-form-builder__date-picker:not([hidden])) > input[type="text"] {
+	padding-inline-end: 3em;
+}
+
+.jp-form-builder .jp-form-builder__date-picker {
+	position: absolute;
+	inset-block: 0;
+	inset-inline-end: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: 3em;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: var(--jpfb-field-radius);
+	background: transparent;
+	box-shadow: none;
+	color: var(--jpfb-text-color);
+	cursor: pointer;
+}
+
+.jp-form-builder .jp-form-builder__date-picker[hidden] {
+	display: none;
+}
+
+.jp-form-builder .jp-form-builder__date-picker svg {
+	width: 1.25em;
+	height: 1.25em;
+	fill: none;
+	stroke: currentcolor;
+	pointer-events: none;
+}
+
+.jp-form-builder .jp-form-builder__date-native {
+	position: absolute;
+	inset-block-end: 0;
+	inset-inline-start: 0;
+	width: 100%;
+	height: 1px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+
 .jp-form-builder__field :where(input, textarea)::placeholder {
 	color: color-mix(in srgb, currentcolor 70%, transparent);
 	opacity: 1;

@@ -34,3 +34,12 @@ add_filter(
     10,
     2
 );
+
+// WPLANG rejects locales without an installed language pack; tests pick the Form language through this option instead.
+add_filter(
+    'determine_locale',
+    static function ( $locale ) {
+        $override = get_option( 'jp_form_builder_e2e_locale' );
+        return is_string( $override ) && '' !== $override ? $override : $locale;
+    }
+);

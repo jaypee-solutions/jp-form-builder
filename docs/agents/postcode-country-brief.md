@@ -1,6 +1,6 @@
 # Brief: Postcode and Country Fields, drop Address (issue #10)
 
-Decisions: `docs/adr/0018-postcode-follows-nearest-country-field.md`, `docs/adr/0019-drop-address-field.md`. Terms: `GLOSSARY.md` (Postcode, Country). Read `docs/agents/testing.md` before running wp-env, integration or E2E. Template for a new single-control Field: `phone` (every place it is registered; grep `phone` in `includes/`, `src/`, `tests/`, `README.md`).
+Decisions: `docs/adr/0019-postcode-follows-nearest-country-field.md`, `docs/adr/0020-drop-address-field.md`. Terms: `GLOSSARY.md` (Postcode, Country). Read `docs/agents/testing.md` before running wp-env, integration or E2E. Template for a new single-control Field: `phone` (every place it is registered; grep `phone` in `includes/`, `src/`, `tests/`, `README.md`).
 
 Work in the checkout at the absolute path you were given. Another agent may be idle in a different task, so do not touch `apm.lock.yaml` and never `git add -A`; commit only your own files after each green step (`git add <paths>` then `git commit`).
 

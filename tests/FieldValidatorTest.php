@@ -523,4 +523,59 @@ final class FieldValidatorTest extends TestCase {
 
         $this->assertSame( [ 'budget' => 'Budget is required.' ], $this->validator->validate_form( $form, [] )['errors'] );
     }
+
+    /** @param array<string,mixed> $attributes Date field attributes. */
+    private function validate_date( array $attributes, string $value, string $today = '2026-11-25', string $locale = 'en_US' ): array {
+        $GLOBALS['jp_form_builder_test_locale'] = $locale;
+        try {
+            $validator = new Field_Validator( null, null, null, new \DateTimeImmutable( $today ) );
+            return $validator->validate( [ $this->field( 'date', 'when', $attributes ) ], [ 'when' => $value ] );
+        } finally {
+            $GLOBALS['jp_form_builder_test_locale'] = 'en_US';
+        }
+    }
+
+    public function test_date_accepts_only_real_iso_dates_and_keeps_the_iso_value(): void {
+        $this->assertSame( [ 'when' => '2024-02-29' ], $this->validate_date( [], ' 2024-02-29 ' )['values'] );
+        $this->assertSame( [ 'when' => '' ], $this->validate_date( [], '' )['values'] );
+
+        foreach ( [ '29.02.2024', '2024-2-29', '2023-02-29', '1899-12-31', '2101-01-01', 'tomorrow' ] as $bad ) {
+            $this->assertSame( [ 'when' => 'Please enter a valid date (YYYY-MM-DD).' ], $this->validate_date( [], $bad )['errors'], $bad );
+        }
+        $this->assertSame( [ 'when' => 'Please enter a valid date (TT.MM.JJJJ).' ], $this->validate_date( [], '2024-02-30', '2026-11-25', 'de_DE' )['errors'] );
+    }
+
+    public function test_date_required_uses_the_required_message(): void {
+        $this->assertSame( [ 'when' => 'When is required.' ], $this->validate_date( [ 'required' => true ], '' )['errors'] );
+        $this->assertSame( [], $this->validate_date( [ 'required' => false ], '' )['errors'] );
+    }
+
+    public function test_date_window_resolves_offsets_against_today_and_includes_both_bounds(): void {
+        $window = [ 'earliest' => '-1y', 'latest' => '+1m' ];
+
+        $this->assertSame( [], $this->validate_date( $window, '2025-11-25' )['errors'] );
+        $this->assertSame( [], $this->validate_date( $window, '2026-12-25' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be before 2025-11-25.' ], $this->validate_date( $window, '2025-11-24' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be after 2026-12-25.' ], $this->validate_date( $window, '2026-12-26' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be after 25.12.2026.' ], $this->validate_date( $window, '2026-12-26', '2026-11-25', 'de_DE' )['errors'] );
+    }
+
+    public function test_a_window_bound_is_clamped_to_the_supported_years(): void {
+        $this->assertSame( [], $this->validate_date( [ 'earliest' => '+999y' ], '2100-12-31' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be before 2100-12-31.' ], $this->validate_date( [ 'earliest' => '+999y' ], '2100-12-30' )['errors'] );
+        $this->assertSame( [], $this->validate_date( [ 'latest' => '+999y' ], '2100-12-31' )['errors'] );
+        $this->assertSame( [], $this->validate_date( [ 'earliest' => '-999y' ], '1900-01-01' )['errors'] );
+    }
+
+    public function test_an_invalid_bound_expression_is_ignored(): void {
+        $this->assertSame( [], $this->validate_date( [ 'earliest' => 'soon', 'latest' => '2026-02-30' ], '2026-11-25' )['errors'] );
+    }
+
+    public function test_an_inverted_window_rejects_every_date(): void {
+        $inverted = [ 'earliest' => '2026-12-01', 'latest' => '2026-01-01' ];
+
+        $this->assertSame( [ 'when' => 'Date must not be before 2026-12-01.' ], $this->validate_date( $inverted, '2026-06-15' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be before 2026-12-01.' ], $this->validate_date( $inverted, '2026-01-01' )['errors'] );
+        $this->assertSame( [ 'when' => 'Date must not be after 2026-01-01.' ], $this->validate_date( $inverted, '2027-01-01' )['errors'] );
+    }
 }

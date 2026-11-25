@@ -83,6 +83,22 @@ final class Test_Mail_Preview extends WP_UnitTestCase {
         $this->assertStringNotContainsString( 'sample message', $data['html'] );
     }
 
+    public function test_preview_shows_a_date_in_the_display_format_of_the_locale(): void {
+        wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+        $params = [
+            'body'   => '{arrival}',
+            'fields' => [ [ 'key' => 'arrival', 'label' => 'Arrival', 'type' => 'date' ] ],
+        ];
+
+        $this->assertStringContainsString( '2026-03-14', $this->preview( $params )->get_data()['html'] );
+
+        $german = static fn(): string => 'de_DE';
+        add_filter( 'locale', $german );
+        $html = $this->preview( $params )->get_data()['html'];
+        remove_filter( 'locale', $german );
+        $this->assertStringContainsString( '14.03.2026', $html );
+    }
+
     public function test_preview_with_fields_drops_invalid_entries_and_duplicate_keys(): void {
         wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
 

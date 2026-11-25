@@ -18,6 +18,8 @@ export function operatorsForType( type ) {
 			return [ 'includes', 'is_filled', 'is_empty' ];
 		case 'consent':
 			return [ 'is_checked', 'is_not_checked' ];
+		case 'date':
+			return [];
 		default:
 			return [ 'is_filled', 'is_empty' ];
 	}

@@ -17,6 +17,19 @@ function markedControls( control ) {
 	return fieldControls( control.closest( '[data-field-key]' ) );
 }
 
+// Marks one control and fills its error container without touching the error summary (live checks while typing).
+export function setFieldError( control, message ) {
+	const text = document.createElement( 'p' );
+	text.textContent = message;
+	control.setAttribute( 'aria-invalid', 'true' );
+	errorContainerOf( control ).replaceChildren( text );
+}
+
+export function clearFieldError( control ) {
+	control.removeAttribute( 'aria-invalid' );
+	errorContainerOf( control ).replaceChildren();
+}
+
 export function clearErrors( form ) {
 	form.querySelectorAll( '[aria-invalid]' ).forEach( ( control ) =>
 		control.removeAttribute( 'aria-invalid' )

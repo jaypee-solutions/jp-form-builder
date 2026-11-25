@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-25T11:20:30+00:00\n"
+"POT-Creation-Date: 2026-11-25T13:04:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: jp-form-builder\n"
@@ -164,12 +164,13 @@ msgid "United Kingdom"
 msgstr ""
 
 #: includes/class-field-labels.php:24
-#: includes/class-mail-preview-controller.php:172
+#: includes/class-mail-preview-controller.php:174
 #: admin/build/settings.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -184,12 +185,13 @@ msgid "Name"
 msgstr ""
 
 #: includes/class-field-labels.php:25
-#: includes/class-mail-preview-controller.php:173
+#: includes/class-mail-preview-controller.php:175
 #: admin/build/settings.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -208,6 +210,7 @@ msgstr ""
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -226,6 +229,7 @@ msgstr ""
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -244,6 +248,7 @@ msgstr ""
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -262,6 +267,26 @@ msgstr ""
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
+#: blocks/email/index.js:1
+#: blocks/embed/index.js:1
+#: blocks/form/index.js:1
+#: blocks/name/index.js:1
+#: blocks/phone/index.js:1
+#: blocks/postcode/index.js:1
+#: blocks/radio/index.js:1
+#: blocks/select/index.js:1
+#: blocks/text/index.js:1
+#: blocks/textarea/index.js:1
+msgid "Date"
+msgstr ""
+
+#: includes/class-field-labels.php:30
+#: blocks/checkbox/index.js:1
+#: blocks/conditional/index.js:1
+#: blocks/consent/index.js:1
+#: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -275,11 +300,12 @@ msgstr ""
 msgid "Text"
 msgstr ""
 
-#: includes/class-field-labels.php:30
+#: includes/class-field-labels.php:31
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -293,11 +319,12 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: includes/class-field-labels.php:31
+#: includes/class-field-labels.php:32
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -311,11 +338,12 @@ msgstr ""
 msgid "Radio buttons"
 msgstr ""
 
-#: includes/class-field-labels.php:32
+#: includes/class-field-labels.php:33
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -329,13 +357,14 @@ msgstr ""
 msgid "Checkboxes"
 msgstr ""
 
-#: includes/class-field-labels.php:33
-#: includes/class-mail-preview-controller.php:174
+#: includes/class-field-labels.php:34
+#: includes/class-mail-preview-controller.php:176
 #: admin/build/settings.js:1
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -349,11 +378,12 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: includes/class-field-labels.php:34
+#: includes/class-field-labels.php:35
 #: blocks/checkbox/index.js:1
 #: blocks/conditional/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/embed/index.js:1
 #: blocks/form/index.js:1
@@ -367,65 +397,88 @@ msgstr ""
 msgid "Consent"
 msgstr ""
 
-#: includes/class-field-labels.php:43
+#: includes/class-field-labels.php:44
 #: blocks/name/index.js:1
 msgid "First name"
 msgstr ""
 
-#: includes/class-field-labels.php:45
+#: includes/class-field-labels.php:46
 #: blocks/name/index.js:1
 msgid "Last name"
 msgstr ""
 
-#: includes/class-field-validator.php:187
-#: blocks/embed/view.js:4
+#: includes/class-field-validator.php:191
+#: blocks/embed/view.js:7
 msgid "Please enter a valid postcode."
 msgstr ""
 
-#: includes/class-field-validator.php:201
-#: includes/class-field-validator.php:211
+#: includes/class-field-validator.php:205
+#: includes/class-field-validator.php:215
 msgid "Please choose only from the available options."
 msgstr ""
 
-#: includes/class-field-validator.php:249
-#: blocks/embed/view.js:4
+#: includes/class-field-validator.php:253
+#: blocks/embed/view.js:7
 msgid "Please enter a valid phone number."
 msgstr ""
 
-#: includes/class-field-validator.php:254
+#: includes/class-field-validator.php:258
 msgid "Please choose a valid country."
 msgstr ""
 
-#: includes/class-field-validator.php:259
-#: blocks/embed/view.js:4
+#: includes/class-field-validator.php:265
+#: blocks/embed/view.js:7
 msgid "Please choose one of the available options."
 msgstr ""
 
-#: includes/class-field-validator.php:273
+#. translators: %s: expected date format, for example YYYY-MM-DD.
+#: includes/class-field-validator.php:281
+#: blocks/embed/view.js:2
+#, php-format,js-format
+msgid "Please enter a valid date (%s)."
+msgstr ""
+
+#. translators: %s: earliest allowed date.
+#. translators: %s: the earliest allowed date.
+#: includes/class-field-validator.php:289
+#: blocks/embed/view.js:3
+#, php-format,js-format
+msgid "Date must not be before %s."
+msgstr ""
+
+#. translators: %s: latest allowed date.
+#. translators: %s: the latest allowed date.
+#: includes/class-field-validator.php:293
 #: blocks/embed/view.js:4
+#, php-format,js-format
+msgid "Date must not be after %s."
+msgstr ""
+
+#: includes/class-field-validator.php:306
+#: blocks/embed/view.js:7
 msgid "Please accept to continue."
 msgstr ""
 
-#: includes/class-field-validator.php:278
-#: blocks/embed/view.js:3
+#: includes/class-field-validator.php:311
+#: blocks/embed/view.js:6
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: includes/class-field-validator.php:404
+#: includes/class-field-validator.php:437
 #: blocks/embed/view.js:1
 msgid "This field"
 msgstr ""
 
 #. translators: %s: field label.
-#: includes/class-field-validator.php:409
-#: blocks/embed/view.js:3
+#: includes/class-field-validator.php:442
+#: blocks/embed/view.js:6
 #, php-format,js-format
 msgid "%s is required."
 msgstr ""
 
 #. translators: 1: field label, 2: maximum number of characters.
-#: includes/class-field-validator.php:414
-#: blocks/embed/view.js:4
+#: includes/class-field-validator.php:447
+#: blocks/embed/view.js:7
 #, php-format,js-format
 msgid "%1$s must not be longer than %2$d characters."
 msgstr ""
@@ -685,17 +738,21 @@ msgstr ""
 msgid "JavaScript is required to submit this form."
 msgstr ""
 
-#: includes/class-form-renderer.php:199
+#: includes/class-form-renderer.php:182
+msgid "Choose date from calendar"
+msgstr ""
+
+#: includes/class-form-renderer.php:214
 #: blocks/consent/index.js:1
 msgid "privacy policy"
 msgstr ""
 
-#: includes/class-form-renderer.php:200
+#: includes/class-form-renderer.php:215
 #: blocks/consent/index.js:1
 msgid "I agree to the {privacy_policy}."
 msgstr ""
 
-#: includes/class-form-renderer.php:226
+#: includes/class-form-renderer.php:244
 #: blocks/country/index.js:1
 msgid "Please choose…"
 msgstr ""
@@ -726,23 +783,23 @@ msgstr ""
 msgid "Sample form"
 msgstr ""
 
-#: includes/class-mail-preview-controller.php:156
 #: includes/class-mail-preview-controller.php:158
+#: includes/class-mail-preview-controller.php:160
 msgid "Sample option"
 msgstr ""
 
-#: includes/class-mail-preview-controller.php:158
+#: includes/class-mail-preview-controller.php:160
 msgid "Another option"
 msgstr ""
 
 #. translators: %s: UTC timestamp of the Submission.
-#: includes/class-mail-preview-controller.php:163
+#: includes/class-mail-preview-controller.php:165
 #: includes/class-submission-handler.php:215
 #, php-format
 msgid "Yes (%s)"
 msgstr ""
 
-#: includes/class-mail-preview-controller.php:165
+#: includes/class-mail-preview-controller.php:167
 msgid "Sample text"
 msgstr ""
 
@@ -1116,7 +1173,7 @@ msgstr ""
 msgid "The spam protection check failed. Please try again."
 msgstr ""
 
-#: includes/class-submission-handler.php:251
+#: includes/class-submission-handler.php:254
 msgid "Thank you! Your message has been sent."
 msgstr ""
 
@@ -1263,6 +1320,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/form/index.js:1
 #: blocks/name/index.js:1
@@ -1343,6 +1401,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1357,6 +1416,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1371,6 +1431,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1385,6 +1446,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1399,6 +1461,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1413,6 +1476,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1427,6 +1491,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1441,6 +1506,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1455,6 +1521,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1469,6 +1536,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1483,6 +1551,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1497,6 +1566,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1511,6 +1581,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1525,6 +1596,7 @@ msgstr ""
 #: blocks/checkbox/index.js:1
 #: blocks/consent/index.js:1
 #: blocks/country/index.js:1
+#: blocks/date/index.js:1
 #: blocks/email/index.js:1
 #: blocks/name/index.js:1
 #: blocks/phone/index.js:1
@@ -1776,6 +1848,60 @@ msgstr ""
 msgid "Choose “Please choose…” to make visitors pick a country themselves."
 msgstr ""
 
+#: blocks/date/index.js:1
+msgid "Invalid date or offset. Use YYYY-MM-DD or an offset such as now, -1y, +30d, +2w, 6m."
+msgstr ""
+
+#. translators: %s: a date in the display format
+#: blocks/date/index.js:2
+#, js-format
+msgid "Resolves to %s today."
+msgstr ""
+
+#: blocks/date/index.js:2
+msgid "Empty: no limit."
+msgstr ""
+
+#: blocks/date/index.js:2
+msgid "Each date is a fixed date (YYYY-MM-DD) or an offset from today: now, -1y, +30d, +2w, 6m (d days, w weeks, m months, y years)."
+msgstr ""
+
+#: blocks/date/index.js:2
+msgid "Earliest selectable date"
+msgstr ""
+
+#: blocks/date/index.js:2
+msgid "Latest selectable date"
+msgstr ""
+
+#: blocks/date/index.js:2
+msgid "The earliest date is later than the latest date: no date can be selected."
+msgstr ""
+
+#: blocks/date/index.js:2
+msgid "Opening date"
+msgstr ""
+
+#. translators: 1: earliest date, 2: latest date
+#: blocks/date/index.js:3
+#, js-format
+msgid "%1$s to %2$s"
+msgstr ""
+
+#: blocks/date/index.js:3
+#, js-format
+msgid "From %s"
+msgstr ""
+
+#: blocks/date/index.js:3
+#, js-format
+msgid "Until %s"
+msgstr ""
+
+#: blocks/date/index.js:3
+msgid "No date can be selected."
+msgstr ""
+
 #: blocks/email/index.js:1
 msgid "Use as Reply-To address"
 msgstr ""
@@ -1840,19 +1966,19 @@ msgstr ""
 msgid "The chosen Form no longer exists or is not published. Choose another one or remove this block."
 msgstr ""
 
-#: blocks/embed/view.js:4
+#: blocks/embed/view.js:7
 msgid "Please wait…"
 msgstr ""
 
-#: blocks/embed/view.js:4
+#: blocks/embed/view.js:7
 msgid "The spam protection check could not be loaded. Please reload the page and try again."
 msgstr ""
 
-#: blocks/embed/view.js:4
+#: blocks/embed/view.js:7
 msgid "Your message could not be sent. Please check your connection and try again."
 msgstr ""
 
-#: blocks/embed/view.js:4
+#: blocks/embed/view.js:7
 msgid "Your session could not be verified. Please submit the form again."
 msgstr ""
 
@@ -1982,6 +2108,11 @@ msgstr ""
 #: blocks/country/block.json
 msgctxt "block title"
 msgid "Country"
+msgstr ""
+
+#: blocks/date/block.json
+msgctxt "block title"
+msgid "Date"
 msgstr ""
 
 #: blocks/email/block.json

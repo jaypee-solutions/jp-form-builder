@@ -59,7 +59,11 @@ final class Rest_Controller {
         if ( null === $this->repository->find( $form_id ) ) {
             return $this->respond( new \WP_Error( 'jpfb_form_not_found', __( 'This form does not exist.', 'jp-form-builder' ), [ 'status' => 404 ] ) );
         }
-        return $this->respond( [ 'token' => $this->token->issue( $form_id, time(), wp_salt( 'nonce' ) ) ] );
+        return $this->respond( [
+            'token' => $this->token->issue( $form_id, time(), wp_salt( 'nonce' ) ),
+            // The site-timezone date view.js resolves Date offsets against; the browser clock is never used.
+            'today' => Date_Offset::today()->format( 'Y-m-d' ),
+        ] );
     }
 
     /** @return \WP_REST_Response */

@@ -1,6 +1,6 @@
 // The rule of a Postcode Field. Form_Renderer writes the Country Field's key (`data-country-source`) and every
 // Country's pattern (`data-postcode-patterns`) into the markup; the server alone resolves which Country Field that is
-// (ADR 0018). Without a Country Field the markup carries the German `pattern` instead.
+// (ADR 0019). Without a Country Field the markup carries the German `pattern` instead.
 
 const FALLBACK_COUNTRY = 'DE';
 

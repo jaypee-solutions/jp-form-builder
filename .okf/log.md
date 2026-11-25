@@ -23,6 +23,7 @@
 * **Releases 1.0.1–1.2.0**: Form labels instead of Post labels (1.0.1, core fact 9); styling per ADR 0015 (1.1.0); cleaner Standard, Card and Liquid Glass styles, class-qualified Field selectors (1.2.0).
 * **Conditional groups decision**: ADR 0016: one Condition per group on an earlier Field, no nesting, server-side evaluation; Radio buttons and Checkboxes Fields; glossary terms Conditional group and Condition.
 * **Layout blocks decision**: ADR 0017: core Columns/Group (Row, Stack, Grid) allowed in Forms and Conditional groups, Conditional groups stay top-level; rendered by core with `pre_render_block` slots; glossary term Layout block.
+* **Date field decision**: ADR 0018 (issue #9): typed input plus native `showPicker()` icon, Form-language display format with ISO wire value, Date offsets resolved server-side in the site timezone with `today` in the token response, years 1900-2100; glossary terms Date offset, Date window, Opening date.
 
 ## 2026-11-25
-* **Postcode and Country decision**: issue #10 grilled into ADR 0018 (Postcode follows the nearest Country field, Germany fallback, 5 digits) and ADR 0019 (Address Field dropped in 2.0.0, no migration); glossary terms Postcode and Country.
+* **Postcode and Country decision**: issue #10 grilled into ADR 0019 (Postcode follows the nearest Country field, Germany fallback, 5 digits) and ADR 0020 (Address Field dropped in 2.0.0, no migration); glossary terms Postcode and Country.

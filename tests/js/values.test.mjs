@@ -126,6 +126,50 @@ describe( 'cleanFieldValue', () => {
 		} );
 	} );
 
+	describe( 'a date Field', () => {
+		const dateControl = ( value, format ) =>
+			control( 'text', 'when', value, {
+				dataset: { dateFormat: format },
+			} );
+
+		it( 'is sent as ISO from the German display format', () => {
+			assert.equal(
+				cleanFieldValue( 'when', [
+					dateControl( ' 5.3.2026 ', 'dmy' ),
+				] ),
+				'2026-03-05'
+			);
+		} );
+
+		it( 'is sent unchanged from the ISO display format', () => {
+			assert.equal(
+				cleanFieldValue( 'when', [
+					dateControl( '2026-03-05', 'iso' ),
+				] ),
+				'2026-03-05'
+			);
+		} );
+
+		it( 'sends unparseable text as typed, so the server reports it', () => {
+			assert.equal(
+				cleanFieldValue( 'when', [
+					dateControl( '31.02.2026', 'dmy' ),
+				] ),
+				'31.02.2026'
+			);
+			assert.equal(
+				cleanFieldValue( 'when', [ dateControl( 'soon', 'iso' ) ] ),
+				'soon'
+			);
+		} );
+
+		it( 'stays empty when empty', () => {
+			assert.equal(
+				cleanFieldValue( 'when', [ dateControl( '  ', 'dmy' ) ] ),
+				''
+			);
+		} );
+	} );
 	it( 'reads a Field without controls as empty', () => {
 		assert.equal( cleanFieldValue( 'ghost', [] ), '' );
 	} );
